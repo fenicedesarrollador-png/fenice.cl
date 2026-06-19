@@ -1,11 +1,16 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import {
+  getSupabasePublicConfig,
+  getSupabaseServiceConfig,
+} from "@/lib/supabase/config";
 
 export async function createClient() {
   const cookieStore = await cookies();
+  const { url, anonKey } = getSupabasePublicConfig();
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    url,
+    anonKey,
     {
       cookies: {
         getAll() {
@@ -25,9 +30,10 @@ export async function createClient() {
 
 export async function createServiceClient() {
   const cookieStore = await cookies();
+  const { url, serviceRoleKey } = getSupabaseServiceConfig();
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    url,
+    serviceRoleKey,
     {
       cookies: {
         getAll() {

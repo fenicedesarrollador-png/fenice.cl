@@ -349,8 +349,21 @@
     color:var(--ink);
     font-weight:600;
     margin-bottom:clamp(12px, 2vh, 18px);
-    min-height:1.4em;
-    transition:opacity 0.3s ease;
+    min-height:2.8em;
+    line-height:1.35;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    opacity:1;
+    visibility:visible;
+    transition:opacity 0.16s ease, visibility 0s linear 0.16s;
+    will-change:opacity;
+    backface-visibility:hidden;
+  }
+  .phrase.is-hidden{
+    opacity:0;
+    visibility:hidden;
   }
   .bar-outer{
     position:relative;
@@ -584,13 +597,23 @@
   ];
   let pIdx = 0;
   const phraseEl = document.getElementById('phraseText');
+  let phraseBusy = false;
   function rotatePhrase(){
-    pIdx = (pIdx+1) % phrases.length;
-    phraseEl.style.opacity = 0;
+    if(phraseBusy) return;
+    phraseBusy = true;
+    phraseEl.classList.add('is-hidden');
     setTimeout(()=>{
+      pIdx = (pIdx+1) % phrases.length;
       phraseEl.textContent = phrases[pIdx];
-      phraseEl.style.opacity = 1;
-    }, 220);
+      requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>{
+          phraseEl.classList.remove('is-hidden');
+          setTimeout(()=>{
+            phraseBusy = false;
+          }, 180);
+        });
+      });
+    }, 180);
   }
   setInterval(rotatePhrase, 2600);
 

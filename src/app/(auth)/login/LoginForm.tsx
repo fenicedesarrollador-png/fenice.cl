@@ -8,18 +8,48 @@ import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
 
-function hasSupabaseConfigError() {
+function hasPlaceholderConfig() {
   return (
-    !supabaseUrl ||
-    !supabaseAnonKey ||
     supabaseUrl.includes("YOUR_PROJECT") ||
     supabaseAnonKey.includes("YOUR_ANON_KEY")
   );
 }
 
-function getLoginErrorMessage(message?: string) {
-  if (hasSupabaseConfigError()) {
+function getSupabaseUrlError() {
+  if (!supabaseUrl) return "Falta NEXT_PUBLIC_SUPABASE_URL.";
+  if (hasPlaceholderConfig()) {
     return "La app no está conectada a tu proyecto Supabase. Revisa NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_ANON_KEY.";
+  }
+
+  try {
+    const parsed = new URL(supabaseUrl);
+
+    if (parsed.protocol !== "https:") {
+      return "NEXT_PUBLIC_SUPABASE_URL debe usar https.";
+    }
+
+    if (!parsed.hostname.endsWith(".supabase.co") && !parsed.hostname.endsWith(".supabase.in")) {
+      return "NEXT_PUBLIC_SUPABASE_URL debe ser el dominio base de Supabase.";
+    }
+  } catch {
+    return "NEXT_PUBLIC_SUPABASE_URL no es una URL valida.";
+  }
+
+  return "";
+}
+
+function hasSupabaseConfigError() {
+  return !supabaseAnonKey || !!getSupabaseUrlError();
+}
+
+function getLoginErrorMessage(message?: string) {
+  const urlError = getSupabaseUrlError();
+  if (urlError) {
+    return urlError;
+  }
+
+  if (!supabaseAnonKey) {
+    return "Falta NEXT_PUBLIC_SUPABASE_ANON_KEY.";
   }
 
   const normalized = (message ?? "").toLowerCase();
