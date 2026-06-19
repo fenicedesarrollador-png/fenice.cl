@@ -5,6 +5,43 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+
+function hasSupabaseConfigError() {
+  return (
+    !supabaseUrl ||
+    !supabaseAnonKey ||
+    supabaseUrl.includes("YOUR_PROJECT") ||
+    supabaseAnonKey.includes("YOUR_ANON_KEY")
+  );
+}
+
+function getLoginErrorMessage(message?: string) {
+  if (hasSupabaseConfigError()) {
+    return "La app no está conectada a tu proyecto Supabase. Revisa NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_ANON_KEY.";
+  }
+
+  const normalized = (message ?? "").toLowerCase();
+
+  if (normalized.includes("email not confirmed")) {
+    return "El usuario existe, pero su correo aún no está confirmado en Supabase Auth.";
+  }
+
+  if (
+    normalized.includes("invalid login credentials") ||
+    normalized.includes("invalid_grant")
+  ) {
+    return "Credenciales incorrectas. Verifica tu email y contraseña.";
+  }
+
+  if (message) {
+    return `Error de acceso: ${message}`;
+  }
+
+  return "No fue posible iniciar sesión.";
+}
+
 export default function LoginForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -17,8 +54,14 @@ export default function LoginForm() {
     setError("");
 
     const fd = new FormData(e.currentTarget);
-    const email = fd.get("email") as string;
-    const password = fd.get("password") as string;
+    const email = String(fd.get("email") ?? "").trim().toLowerCase();
+    const password = String(fd.get("password") ?? "");
+
+    if (hasSupabaseConfigError()) {
+      setError(getLoginErrorMessage());
+      setLoading(false);
+      return;
+    }
 
     const supabase = createClient();
     const { error: authError } = await supabase.auth.signInWithPassword({
@@ -27,7 +70,8 @@ export default function LoginForm() {
     });
 
     if (authError) {
-      setError("Credenciales incorrectas. Verifica tu email y contraseña.");
+      console.error("Supabase login error:", authError);
+      setError(getLoginErrorMessage(authError.message));
       setLoading(false);
       return;
     }
