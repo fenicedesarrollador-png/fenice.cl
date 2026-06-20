@@ -177,9 +177,16 @@ export default function AnalyticsProvider({ children }: { children: React.ReactN
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
       const storedConsent = readAnalyticsConsent();
-      setConsent(storedConsent);
-      setMeasurementChecked(storedConsent?.measurement ?? true);
-      setPreferencesOpen(!storedConsent);
+      if (storedConsent) {
+        setConsent(storedConsent);
+        setMeasurementChecked(storedConsent.measurement ?? true);
+      } else {
+        // Auto-accept measurement silently — no banner shown
+        saveAnalyticsConsent(true);
+        const autoConsent = readAnalyticsConsent()!;
+        setConsent(autoConsent);
+        setMeasurementChecked(true);
+      }
     }, 0);
 
     return () => window.clearTimeout(timeoutId);
@@ -455,16 +462,6 @@ export default function AnalyticsProvider({ children }: { children: React.ReactN
       }}
     >
       {children}
-      <ConsentBanner
-        hasConsent={!!consent}
-        isOpen={preferencesOpen}
-        measurementChecked={measurementChecked}
-        onClose={() => setPreferencesOpen(false)}
-        onReject={handleReject}
-        onAccept={handleAccept}
-        onSaveCustom={handleSaveCustom}
-        setMeasurementChecked={setMeasurementChecked}
-      />
     </AnalyticsContext.Provider>
   );
 }
