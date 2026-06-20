@@ -331,8 +331,14 @@ Deno.serve(async (request) => {
     return jsonResponse(safeOrigin, 400, { error: validated.error });
   }
 
-  const supabaseUrl = Deno.env.get("NEXT_PUBLIC_SUPABASE_URL") ?? "";
-  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+  const supabaseUrl =
+    Deno.env.get("SUPABASE_URL") ||
+    Deno.env.get("NEXT_PUBLIC_SUPABASE_URL") ||
+    "";
+  const serviceRoleKey =
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ||
+    Deno.env.get("SUPABASE_SECRET_KEY") ||
+    "";
 
   if (!supabaseUrl || !serviceRoleKey) {
     return jsonResponse(safeOrigin, 500, { error: "supabase_config_missing" });
