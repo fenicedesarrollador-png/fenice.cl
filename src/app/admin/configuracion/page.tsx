@@ -7,7 +7,7 @@ import { Users, ArrowRight } from "lucide-react";
 export const metadata: Metadata = { title: "Configuración del sitio" };
 
 export default async function ConfiguracionPage() {
-  let config: Record<string, string> = {};
+  const config: Record<string, string> = {};
   try {
     const supabase = await createClient();
     const { data } = await supabase.from("configuracion_sitio").select("clave, valor");

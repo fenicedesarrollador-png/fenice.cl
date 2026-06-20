@@ -18,6 +18,7 @@ import {
   Fuel,
   ChevronRight,
   Users,
+  ChartColumn,
 } from "lucide-react";
 
 const links = [
@@ -30,6 +31,7 @@ const links = [
   { href: "/admin/blog", label: "Blog", icon: FileText },
   { href: "/admin/eventos", label: "Eventos", icon: CalendarDays },
   { href: "/admin/promociones", label: "Promociones", icon: Tag },
+  { href: "/admin/metricas", label: "Métricas", icon: ChartColumn },
 ];
 
 const bottomLinks = [

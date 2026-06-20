@@ -25,7 +25,7 @@ export default function NuevaPromoPage() {
         <div><label className="block text-sm font-medium text-gray-700 mb-1">Título *</label><input name="titulo" type="text" required className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" /></div>
         <div><label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label><textarea name="descripcion" rows={3} className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none" /></div>
         <div className="grid sm:grid-cols-2 gap-4">
-          <div><label className="block text-sm font-medium text-gray-700 mb-1">Texto de descuento (ej. "10% OFF")</label><input name="descuento_texto" type="text" className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" /></div>
+          <div><label className="block text-sm font-medium text-gray-700 mb-1">Texto de descuento (ej. &quot;10% OFF&quot;)</label><input name="descuento_texto" type="text" className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" /></div>
           <div><label className="block text-sm font-medium text-gray-700 mb-1">Código</label><input name="codigo" type="text" className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" /></div>
         </div>
         <div className="grid sm:grid-cols-2 gap-4">

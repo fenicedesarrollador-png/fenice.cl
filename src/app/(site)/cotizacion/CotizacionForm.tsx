@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { useRef, useState } from "react";
 import { CheckCircle2, AlertCircle, ArrowRight, Loader2 } from "lucide-react";
+import { useAnalytics } from "@/components/analytics/AnalyticsProvider";
 
 const SERVICIOS_OPS = [
   "Petróleo a domicilio (empresa)",
@@ -35,9 +35,25 @@ export default function CotizacionForm() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const startedRef = useRef(false);
+  const { sessionId, trackEvent, trackFormStart, visitorId } = useAnalytics();
+
+  async function ensureFormStartTracked() {
+    if (startedRef.current) {
+      return;
+    }
+
+    startedRef.current = true;
+    await trackFormStart("cotizacion");
+    await trackEvent({
+      eventType: "quote_started",
+      formName: "cotizacion",
+    });
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    await ensureFormStartTracked();
     setLoading(true);
     setError("");
 
@@ -63,12 +79,51 @@ export default function CotizacionForm() {
       return;
     }
 
+    let trackedFailure = false;
+
     try {
-      const supabase = createClient();
-      const { error: dbErr } = await supabase.from("cotizaciones").insert([payload]);
-      if (dbErr) throw new Error(dbErr.message);
+      const response = await fetch("/api/public/cotizacion", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          ...(visitorId ? { "x-fenice-visitor-id": visitorId } : {}),
+          ...(sessionId ? { "x-fenice-session-id": sessionId } : {}),
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        await trackEvent({
+          eventType: "form_submit_error",
+          formName: "cotizacion",
+          metadata: {
+            error_code: `http_${response.status}`,
+          },
+        });
+        trackedFailure = true;
+        throw new Error(result.error ?? "No se pudo crear la cotización.");
+      }
+
+      await trackEvent({
+        eventType: "form_submit_success",
+        formName: "cotizacion",
+      });
+      await trackEvent({
+        eventType: "quote_submitted",
+        formName: "cotizacion",
+      });
       setSuccess(true);
     } catch (err: unknown) {
+      if (!trackedFailure) {
+        await trackEvent({
+          eventType: "form_submit_error",
+          formName: "cotizacion",
+          metadata: {
+            error_code: "request_failed",
+          },
+        });
+      }
       const msg = err instanceof Error ? err.message : "Error inesperado. Intenta de nuevo.";
       setError(msg);
     } finally {
@@ -92,7 +147,7 @@ export default function CotizacionForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} onFocusCapture={ensureFormStartTracked} className="space-y-6">
       {/* Datos de contacto */}
       <div>
         <h3 className="text-sm font-bold text-[#0a1628] uppercase tracking-wider mb-4 flex items-center gap-2">

@@ -1,0 +1,5 @@
+project_id = "fenice"
+
+[functions.track-analytics-event]
+verify_jwt = false
+

@@ -60,7 +60,7 @@ export default async function AdminPreciosCombustiblePage() {
       <div className="mt-8 bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-sm text-slate-500">
         <p className="font-semibold text-slate-600 mb-1">¿Cómo funciona?</p>
         <ul className="list-disc list-inside space-y-0.5">
-          <li>Deja el campo <strong>Precio vacío</strong> para mostrar "Consultar disponibilidad".</li>
+          <li>Deja el campo <strong>Precio vacío</strong> para mostrar &quot;Consultar disponibilidad&quot;.</li>
           <li>Desactiva <strong>Visible en el sitio</strong> para ocultar un producto sin eliminarlo.</li>
           <li>Desactiva <strong>Disponible</strong> para mostrar la tarjeta pero marcarla sin stock.</li>
           <li>Al guardar se publica inmediatamente en el sitio web.</li>

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 import { COMUNAS } from "@/lib/config";
+import { useAnalytics } from "@/components/analytics/AnalyticsProvider";
 
 const TIPOS = [
   "Petróleo a domicilio",
@@ -24,9 +24,21 @@ export default function ContactForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const startedRef = useRef(false);
+  const { sessionId, trackEvent, trackFormStart, visitorId } = useAnalytics();
+
+  async function ensureFormStartTracked() {
+    if (startedRef.current) {
+      return;
+    }
+
+    startedRef.current = true;
+    await trackFormStart("contacto");
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    await ensureFormStartTracked();
     setLoading(true);
     setError("");
 
@@ -42,19 +54,57 @@ export default function ContactForm() {
       estado: "nuevo",
     };
 
+    let trackedFailure = false;
+
     try {
-      const supabase = createClient();
-      const { error: dbError } = await supabase.from("leads").insert(payload);
-      if (dbError) throw dbError;
+      const response = await fetch("/api/public/contacto", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          ...(visitorId ? { "x-fenice-visitor-id": visitorId } : {}),
+          ...(sessionId ? { "x-fenice-session-id": sessionId } : {}),
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        await trackEvent({
+          eventType: "form_submit_error",
+          formName: "contacto",
+          metadata: {
+            error_code: `http_${response.status}`,
+          },
+        });
+        trackedFailure = true;
+        throw new Error(result.error ?? "No se pudo enviar el formulario.");
+      }
+
+      await trackEvent(
+        {
+          eventType: "form_submit_success",
+          formName: "contacto",
+        },
+        { preferBeacon: true },
+      );
       router.push("/gracias");
     } catch {
+      if (!trackedFailure) {
+        await trackEvent({
+          eventType: "form_submit_error",
+          formName: "contacto",
+          metadata: {
+            error_code: "request_failed",
+          },
+        });
+      }
       setError("Hubo un problema al enviar el formulario. Por favor, contáctanos por WhatsApp.");
       setLoading(false);
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} onFocusCapture={ensureFormStartTracked} className="space-y-4">
       <div className="grid sm:grid-cols-2 gap-4">
         <div>
           <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-1">

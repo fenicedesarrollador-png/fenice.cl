@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ConsentPreferencesButton from "@/components/analytics/ConsentPreferencesButton";
 import { SITE_CONFIG } from "@/lib/config";
 
 export const metadata: Metadata = {
@@ -59,9 +60,18 @@ export default function PoliticaPrivacidadPage() {
 
         <h2>7. Cookies y analítica</h2>
         <p>
-          Este sitio utiliza Google Analytics 4 y Google Ads para medir el rendimiento y las
-          conversiones. Estos servicios pueden recopilar datos anónimos de navegación. Puedes
-          gestionar tus preferencias de cookies a través de la configuración de tu navegador.
+          Este sitio utiliza un sistema propio de medición de primera parte para registrar páginas,
+          secciones visibles, profundidad de scroll, clics importantes y conversiones reales
+          después de tu consentimiento explícito. No guardamos datos personales dentro de los
+          eventos analíticos ni exponemos la IP a los administradores.
+        </p>
+        <p>
+          Puedes cambiar tu decisión en cualquier momento desde aquí:
+          {" "}
+          <ConsentPreferencesButton className="font-semibold text-[#1a6b3c] underline underline-offset-4">
+            administrar preferencias de medición
+          </ConsentPreferencesButton>
+          .
         </p>
 
         <h2>8. Contacto</h2>

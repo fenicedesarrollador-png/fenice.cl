@@ -48,7 +48,7 @@ export default function NosotrosPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-slate-950 text-white py-20 relative overflow-hidden">
+      <section className="bg-slate-950 text-white py-20 relative overflow-hidden" data-analytics-section="nosotros_hero">
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
         <div className="absolute bottom-0 left-1/4 w-96 h-64 bg-orange-500/10 rounded-full blur-3xl" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -67,7 +67,7 @@ export default function NosotrosPage() {
       </section>
 
       {/* Sobre nosotros */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white" data-analytics-section="nosotros">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-5 gap-12 items-start">
             <div className="lg:col-span-3 space-y-5">
@@ -136,7 +136,7 @@ export default function NosotrosPage() {
       </section>
 
       {/* Valores */}
-      <section className="py-16 bg-slate-50 border-y border-slate-100">
+      <section className="py-16 bg-slate-50 border-y border-slate-100" data-analytics-section="valores">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="text-2xl font-bold text-slate-900 mb-2">Nuestros valores</h2>

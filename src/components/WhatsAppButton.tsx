@@ -7,12 +7,9 @@ interface Props {
   className?: string;
   children?: React.ReactNode;
   label?: string;
-}
-
-declare global {
-  interface Window {
-    gtag?: (...args: unknown[]) => void;
-  }
+  analyticsId?: string;
+  analyticsLabel?: string;
+  analyticsSection?: string;
 }
 
 export default function WhatsAppButton({
@@ -20,25 +17,19 @@ export default function WhatsAppButton({
   className = "",
   children,
   label = "Solicitar por WhatsApp",
+  analyticsId = "whatsapp_button",
+  analyticsLabel,
+  analyticsSection,
 }: Props) {
-  function handleClick() {
-    if (typeof window !== "undefined" && window.gtag) {
-      window.gtag("event", "conversion", {
-        send_to: "AW-XXXXXXXXX/AbCdEfGhIjK_WHATSAPP",
-        event_callback: function () {},
-      });
-      window.gtag("event", "click_whatsapp", {
-        page_location: window.location.href,
-      });
-    }
-  }
-
   return (
     <a
       href={whatsappUrl(mensaje)}
       target="_blank"
       rel="noopener noreferrer"
-      onClick={handleClick}
+      data-analytics-id={analyticsId}
+      data-analytics-label={analyticsLabel ?? label}
+      data-analytics-cta="whatsapp"
+      data-analytics-section={analyticsSection}
       className={`inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors ${className}`}
     >
       <svg
@@ -57,20 +48,12 @@ export default function WhatsAppButton({
 }
 
 export function PhoneLink({ className = "" }: { className?: string }) {
-  function handleClick() {
-    if (typeof window !== "undefined" && window.gtag) {
-      window.gtag("event", "conversion", {
-        send_to: "AW-XXXXXXXXX/AbCdEfGhIjK_LLAMADA",
-      });
-      window.gtag("event", "click_telefono", {
-        page_location: window.location.href,
-      });
-    }
-  }
   return (
     <a
       href={`tel:${SITE_CONFIG.telefono}`}
-      onClick={handleClick}
+      data-analytics-id="contact_phone_link"
+      data-analytics-label={SITE_CONFIG.telefono}
+      data-analytics-cta="phone"
       className={className}
     >
       {SITE_CONFIG.telefono}

@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
 import { getSiteConfig } from "@/lib/getSiteConfig";
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -36,19 +37,14 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
 
   return (
     <>
-      {/* GTM — replace GTM-XXXXXXX */}
-      <script dangerouslySetInnerHTML={{ __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-XXXXXXX');` }} />
-      {/* gtag.js */}
-      <script async src="https://www.googletagmanager.com/gtag/js?id=AW-XXXXXXXXX" />
-      <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-XXXXXXXXX');gtag('config','G-XXXXXXXXXX');` }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }} />
-      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0" style={{ display: "none", visibility: "hidden" }} /></noscript>
-
-      <div className="min-h-full flex flex-col bg-white text-gray-900">
-        <Header config={config} />
-        <main className="flex-1">{children}</main>
-        <Footer config={config} />
-      </div>
+      <AnalyticsProvider>
+        <div className="min-h-full flex flex-col bg-white text-gray-900">
+          <Header config={config} />
+          <main className="flex-1">{children}</main>
+          <Footer config={config} />
+        </div>
+      </AnalyticsProvider>
     </>
   );
 }

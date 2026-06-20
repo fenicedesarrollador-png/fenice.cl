@@ -88,7 +88,7 @@ export default function FAQPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
 
       {/* Hero */}
-      <section className="bg-slate-950 text-white py-20 relative overflow-hidden">
+      <section className="bg-slate-950 text-white py-20 relative overflow-hidden" data-analytics-section="faq_hero">
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
         <div className="absolute bottom-0 right-1/4 w-80 h-64 bg-orange-500/10 rounded-full blur-3xl" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -107,7 +107,7 @@ export default function FAQPage() {
       </section>
 
       {/* FAQ accordion */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white" data-analytics-section="faq">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-2">
             {faqs.map((faq, i) => (
@@ -141,12 +141,18 @@ export default function FAQPage() {
                 href={`https://wa.me/56939579658?text=${encodeURIComponent("Hola, tengo una consulta sobre petróleo a domicilio.")}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-analytics-id="faq_whatsapp"
+                data-analytics-label="WhatsApp"
+                data-analytics-cta="whatsapp"
                 className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors"
               >
                 WhatsApp
               </a>
               <a
                 href="/contacto"
+                data-analytics-id="faq_formulario_contacto"
+                data-analytics-label="Formulario de contacto"
+                data-analytics-cta="lead_form"
                 className="inline-flex items-center justify-center gap-2 bg-white border border-slate-200 hover:border-orange-300 text-slate-700 font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors"
               >
                 Formulario de contacto

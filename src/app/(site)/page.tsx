@@ -136,7 +136,7 @@ export default function HomePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
 
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#0a1628]">
+      <section className="relative overflow-hidden bg-[#0a1628]" data-analytics-section="hero">
 
         {/* Imagen de fondo — desktop centrada al camión, móvil apuntada a izquierda */}
         <img
@@ -177,10 +177,10 @@ export default function HomePage() {
                 combustibles, con flota especializada, control operativo y compromiso con cada cliente.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 mb-7">
-                <Link href="/cotizacion" className="inline-flex items-center justify-center gap-2 bg-[#f5a623] hover:bg-[#d4891a] text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-lg shadow-[#f5a623]/25 text-sm">
+                <Link href="/cotizacion" data-analytics-id="hero_cotizar" data-analytics-label="Solicitar cotización" data-analytics-cta="quote" className="inline-flex items-center justify-center gap-2 bg-[#f5a623] hover:bg-[#d4891a] text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-lg shadow-[#f5a623]/25 text-sm">
                   Solicitar cotización <ArrowRight className="w-4 h-4" />
                 </Link>
-                <a href={WA_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2.5 bg-[#1a6b3c] hover:bg-[#145530] text-white font-semibold px-7 py-3.5 rounded-xl transition-all text-sm border border-[#1a6b3c]/50">
+                <a href={WA_URL} target="_blank" rel="noopener noreferrer" data-analytics-id="hero_whatsapp" data-analytics-label="Cotizar por WhatsApp" data-analytics-cta="whatsapp" className="inline-flex items-center justify-center gap-2.5 bg-[#1a6b3c] hover:bg-[#145530] text-white font-semibold px-7 py-3.5 rounded-xl transition-all text-sm border border-[#1a6b3c]/50">
                   {WA_ICON} Cotizar por WhatsApp
                 </a>
               </div>
@@ -230,7 +230,7 @@ export default function HomePage() {
       <PreciosCombustible />
 
       {/* ── QUIÉNES SOMOS ────────────────────────────────────────────────────── */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white" data-analytics-section="nosotros">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-14 items-center">
             {/* Medidor de combustible interactivo */}
@@ -266,7 +266,7 @@ export default function HomePage() {
                   </span>
                 ))}
               </div>
-              <Link href="/nosotros" className="inline-flex items-center gap-2 text-sm font-bold text-[#1a6b3c] hover:text-[#0d4a28] transition-colors">
+              <Link href="/nosotros" data-analytics-id="home_nosotros" data-analytics-label="Conocer más sobre nosotros" data-analytics-cta="secondary_navigation" className="inline-flex items-center gap-2 text-sm font-bold text-[#1a6b3c] hover:text-[#0d4a28] transition-colors">
                 Conocer más sobre nosotros <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -275,7 +275,7 @@ export default function HomePage() {
       </section>
 
       {/* ── NUESTROS SERVICIOS ───────────────────────────────────────────────── */}
-      <section className="py-20 bg-[#0a1628]">
+      <section className="py-20 bg-[#0a1628]" data-analytics-section="servicios">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <div className="flex items-center justify-center gap-3 mb-4">
@@ -290,6 +290,9 @@ export default function HomePage() {
               <Link
                 key={title}
                 href={href}
+                data-analytics-id={`home_service_${title.toLowerCase().replaceAll(" ", "_").replaceAll("/", "_")}`}
+                data-analytics-label={title}
+                data-analytics-cta="service_card"
                 className="group bg-white/5 border border-white/10 hover:border-[#f5a623]/40 rounded-2xl p-6 transition-all hover:bg-white/8"
               >
                 <div className="w-14 h-14 rounded-2xl bg-[#1a6b3c]/20 border border-[#1a6b3c]/30 group-hover:bg-[#1a6b3c]/30 flex items-center justify-center mb-5 transition-colors">
@@ -303,7 +306,7 @@ export default function HomePage() {
           </div>
 
           <div className="text-center mt-10">
-            <Link href="/servicios/petroleo-a-domicilio-santiago" className="inline-flex items-center gap-2 text-sm font-semibold text-[#f5a623] hover:text-[#d4891a] transition-colors">
+            <Link href="/servicios/petroleo-a-domicilio-santiago" data-analytics-id="home_ver_servicios" data-analytics-label="Ver todos los servicios" data-analytics-cta="service_navigation" className="inline-flex items-center gap-2 text-sm font-semibold text-[#f5a623] hover:text-[#d4891a] transition-colors">
               Ver todos los servicios <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -311,7 +314,7 @@ export default function HomePage() {
       </section>
 
       {/* ── ¿POR QUÉ ELEGIRNOS? ──────────────────────────────────────────────── */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white" data-analytics-section="beneficios">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <div className="flex items-center justify-center gap-3 mb-4">
@@ -336,7 +339,7 @@ export default function HomePage() {
       </section>
 
       {/* ── ¿CÓMO TRABAJAMOS? ────────────────────────────────────────────────── */}
-      <section className="py-20 bg-slate-50">
+      <section className="py-20 bg-slate-50" data-analytics-section="proceso">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <div className="flex items-center justify-center gap-3 mb-4">
@@ -365,7 +368,7 @@ export default function HomePage() {
       </section>
 
       {/* ── COMPROMISO CON LA SEGURIDAD ──────────────────────────────────────── */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white" data-analytics-section="seguridad">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -380,7 +383,7 @@ export default function HomePage() {
                 Cumplimos toda la normativa SEC exigida para el transporte e instalación
                 de combustibles en Chile.
               </p>
-              <Link href="/nosotros" className="inline-flex items-center gap-2 bg-[#0a1628] hover:bg-[#0d2040] text-white font-semibold px-6 py-3 rounded-xl text-sm transition-colors">
+              <Link href="/nosotros" data-analytics-id="home_seguridad_mas_info" data-analytics-label="Conocer más" data-analytics-cta="secondary_navigation" className="inline-flex items-center gap-2 bg-[#0a1628] hover:bg-[#0d2040] text-white font-semibold px-6 py-3 rounded-xl text-sm transition-colors">
                 Conocer más <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -400,7 +403,7 @@ export default function HomePage() {
       </section>
 
       {/* ── COBERTURA ────────────────────────────────────────────────────────── */}
-      <section className="py-20 bg-[#0a1628]">
+      <section className="py-20 bg-[#0a1628]" data-analytics-section="cobertura">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
             <div>
@@ -410,7 +413,7 @@ export default function HomePage() {
               </div>
               <h2 className="text-3xl font-extrabold text-white">Despacho en toda la Región Metropolitana</h2>
             </div>
-            <Link href="/cobertura" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#f5a623] hover:text-[#d4891a] whitespace-nowrap transition-colors">
+            <Link href="/cobertura" data-analytics-id="home_ver_cobertura" data-analytics-label="Ver todas las zonas" data-analytics-cta="secondary_navigation" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#f5a623] hover:text-[#d4891a] whitespace-nowrap transition-colors">
               Ver todas las zonas <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
@@ -420,6 +423,9 @@ export default function HomePage() {
               <Link
                 key={c.slug}
                 href={`/cobertura/petroleo-a-domicilio-${c.slug}`}
+                data-analytics-id={`home_cobertura_${c.slug}`}
+                data-analytics-label={c.nombre}
+                data-analytics-cta="coverage_navigation"
                 className="group flex items-center justify-between bg-white/5 hover:bg-[#1a6b3c]/20 border border-white/10 hover:border-[#1a6b3c]/40 rounded-xl px-4 py-3 transition-all"
               >
                 <div className="flex items-center gap-2.5">
@@ -434,7 +440,7 @@ export default function HomePage() {
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────────────────────────── */}
-      <section className="py-20 bg-slate-50">
+      <section className="py-20 bg-slate-50" data-analytics-section="faq">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-3 mb-4">
@@ -455,7 +461,7 @@ export default function HomePage() {
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link href="/preguntas-frecuentes" className="inline-flex items-center gap-1.5 text-sm font-bold text-[#1a6b3c] hover:text-[#0d4a28] transition-colors">
+            <Link href="/preguntas-frecuentes" data-analytics-id="home_ver_faq" data-analytics-label="Ver todas las preguntas" data-analytics-cta="secondary_navigation" className="inline-flex items-center gap-1.5 text-sm font-bold text-[#1a6b3c] hover:text-[#0d4a28] transition-colors">
               Ver todas las preguntas <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -463,7 +469,7 @@ export default function HomePage() {
       </section>
 
       {/* ── CTA FINAL ────────────────────────────────────────────────────────── */}
-      <section className="py-16 bg-gradient-to-br from-[#0a1628] via-[#0d2040] to-[#0a1628] relative overflow-hidden">
+      <section className="py-16 bg-gradient-to-br from-[#0a1628] via-[#0d2040] to-[#0a1628] relative overflow-hidden" data-analytics-section="contacto">
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1a6b3c] via-[#f5a623] to-[#1a6b3c]" />
 
@@ -482,6 +488,9 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-4 lg:justify-end">
               <Link
                 href="/cotizacion"
+                data-analytics-id="home_final_cotizacion"
+                data-analytics-label="Solicitar cotización"
+                data-analytics-cta="quote"
                 className="inline-flex items-center justify-center gap-2 bg-[#f5a623] hover:bg-[#d4891a] text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg shadow-[#f5a623]/20 text-sm"
               >
                 Solicitar cotización <ArrowRight className="w-4 h-4" />
@@ -490,6 +499,9 @@ export default function HomePage() {
                 href={WA_URL}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-analytics-id="home_final_whatsapp"
+                data-analytics-label="Hablar con un asesor"
+                data-analytics-cta="whatsapp"
                 className="inline-flex items-center justify-center gap-2.5 bg-white/10 hover:bg-white/15 border border-white/20 text-white font-semibold px-8 py-4 rounded-xl transition-all text-sm"
               >
                 {WA_ICON}
