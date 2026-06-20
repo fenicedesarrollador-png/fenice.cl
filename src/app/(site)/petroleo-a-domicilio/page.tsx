@@ -8,7 +8,7 @@ import CTASection from "@/components/CTASection";
 import { COMUNAS, SITE_CONFIG } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Petróleo a Domicilio en Santiago | Despacho Rápido RM | Fenice SPA",
+  title: "Petróleo a Domicilio en Santiago | Despacho Rápido RM",
   description:
     "Despacho de petróleo diesel a domicilio para empresas en Santiago y la RM. Coordinación directa, despacho programado o urgente, factura electrónica. Cotiza al instante.",
   alternates: { canonical: "https://fenice.cl/petroleo-a-domicilio" },

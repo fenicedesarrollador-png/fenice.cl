@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Cobertura de Despacho de Petróleo | Comunas RM",
   description:
     "Fenice SPA despacha petróleo a domicilio en las principales comunas de la Región Metropolitana de Santiago y en Valparaíso y Rancagua. Consulta si llegamos a tu zona.",
-  alternates: { canonical: "https://fenice.cl/cobertura/" },
+  alternates: { canonical: "https://fenice.cl/cobertura" },
 };
 
 const comunaDescriptions: Record<string, string> = {

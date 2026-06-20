@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Aviso Legal | Fenice SPA",
+  title: "Aviso Legal",
   description: "Aviso legal y términos de uso del sitio web de Fenice SPA.",
   alternates: { canonical: "https://fenice.cl/aviso-legal" },
 };

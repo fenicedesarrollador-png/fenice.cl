@@ -3,7 +3,7 @@ import CTASection from "@/components/CTASection";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
-  title: "Testimonios y Clientes | Fenice SPA",
+  title: "Testimonios y Clientes",
   description:
     "Empresas que confían en Fenice SPA para el despacho de petróleo a domicilio y la instalación de estanques certificados en la Región Metropolitana de Santiago.",
   alternates: { canonical: "https://fenice.cl/testimonios" },
@@ -16,7 +16,6 @@ const staticClients = [
 ];
 
 export default async function TestimoniosPage() {
-  let clients = staticClients;
   let dbClients: { nombre: string; testimonio?: string; logo_url?: string }[] = [];
   try {
     const supabase = await createClient();
@@ -46,7 +45,7 @@ export default async function TestimoniosPage() {
       <section className="py-14 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {(dbClients.length > 0 ? dbClients : clients).map((c, i) => (
+            {(dbClients.length > 0 ? dbClients : staticClients).map((c, i) => (
               <div
                 key={i}
                 className="bg-gray-50 border border-gray-100 rounded-2xl p-6 flex flex-col"

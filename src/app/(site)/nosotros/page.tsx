@@ -4,7 +4,7 @@ import { SITE_CONFIG } from "@/lib/config";
 import { Shield, Users, Truck, Award, CheckCircle2, Building2, Phone, Mail, MapPin, Clock } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Quiénes Somos | Fenice SPA – Distribución de Petróleo RM",
+  title: "Quiénes Somos | Distribución de Petróleo RM",
   description:
     "Fenice SPA es una empresa chilena especializada en distribución de petróleo diesel e instalación de estanques certificados para la industria en la Región Metropolitana.",
   alternates: { canonical: "https://fenice.cl/nosotros" },

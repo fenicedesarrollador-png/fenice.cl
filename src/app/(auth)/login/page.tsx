@@ -3,17 +3,18 @@ import LoginForm from "./LoginForm";
 import { Fuel } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Acceso Admin | Fenice SPA",
+  title: "Acceso Admin",
   robots: { index: false, follow: false, noarchive: true, nosnippet: true },
 };
 
-export default function LoginPage({
+export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: { error?: string };
+  searchParams: Promise<{ error?: string }>;
 }) {
+  const resolvedSearchParams = await searchParams;
   const errorMsg =
-    searchParams.error === "acceso_denegado"
+    resolvedSearchParams.error === "acceso_denegado"
       ? "Tu cuenta no tiene acceso activo al panel. Contacta al administrador."
       : undefined;
 

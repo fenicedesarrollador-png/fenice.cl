@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import FirstVisitLoader from "@/components/FirstVisitLoader";
 import { getSiteConfig } from "@/lib/getSiteConfig";
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -10,7 +9,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: "Fenice SPA",
-    image: "https://fenice.cl/img/icon1.png",
+    image: "https://fenice.cl/images/imagen_camion_de_combustible.png",
     url: "https://fenice.cl/",
     telephone: config.telefono,
     email: config.email,
@@ -37,7 +36,6 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
 
   return (
     <>
-      <FirstVisitLoader />
       {/* GTM — replace GTM-XXXXXXX */}
       <script dangerouslySetInnerHTML={{ __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-XXXXXXX');` }} />
       {/* gtag.js */}

@@ -9,7 +9,7 @@ import CTASection from "@/components/CTASection";
 import { SITE_CONFIG } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Combustible para Empresas, Faenas y Flotas | Fenice SPA",
+  title: "Combustible para Empresas, Faenas y Flotas",
   description:
     "Abastecimiento de petróleo diesel para empresas, faenas industriales y flotas de vehículos en la Región Metropolitana. Contratos de suministro, factura electrónica y atención comercial directa. Cotiza ahora.",
   alternates: { canonical: "https://fenice.cl/empresas-faenas-flotas" },

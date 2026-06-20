@@ -3,7 +3,7 @@ import Link from "next/link";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export const metadata: Metadata = {
-  title: "Gracias por tu mensaje | Fenice SPA",
+  title: "Gracias por tu mensaje",
   description: "Recibimos tu cotización. Te contactaremos a la brevedad.",
   robots: { index: false, follow: false },
 };

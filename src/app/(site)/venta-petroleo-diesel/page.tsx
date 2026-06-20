@@ -8,7 +8,7 @@ import CTASection from "@/components/CTASection";
 import { COMUNAS, SITE_CONFIG } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Venta de Petróleo Diésel para Empresas en Santiago | Fenice SPA",
+  title: "Venta de Petróleo Diésel para Empresas en Santiago",
   description:
     "Compra petróleo diesel de calidad para tu empresa en Santiago y la RM. Distribución directa con factura electrónica, certificación SEC y despacho rápido. Cotiza sin compromiso.",
   alternates: { canonical: "https://fenice.cl/venta-petroleo-diesel" },

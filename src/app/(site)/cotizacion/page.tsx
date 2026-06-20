@@ -4,7 +4,7 @@ import CotizacionForm from "./CotizacionForm";
 import { SITE_CONFIG } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Solicitar Cotización de Combustible | Fenice SPA",
+  title: "Solicitar Cotización de Combustible",
   description:
     "Cotiza petróleo diesel para tu empresa, faena o flota. Respuesta rápida, factura electrónica y trato directo. Completa el formulario y te contactamos en minutos.",
   alternates: { canonical: "https://fenice.cl/cotizacion" },

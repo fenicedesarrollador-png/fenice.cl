@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidad | Fenice SPA",
+  title: "Política de Privacidad",
   description: "Política de privacidad y tratamiento de datos personales de Fenice SPA.",
   alternates: { canonical: "https://fenice.cl/politica-de-privacidad" },
 };

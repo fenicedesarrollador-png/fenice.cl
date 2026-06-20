@@ -11,10 +11,10 @@ import {
 import { COMUNAS, SERVICIOS, SITE_CONFIG } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Transporte de Combustible con Seguridad y Eficiencia | Fenice SPA",
+  title: "Transporte de Combustible con Seguridad y Eficiencia",
   description:
     "Fenice SPA — Soluciones confiables para el traslado y abastecimiento de combustibles con flota especializada, control operativo y compromiso con cada cliente. Cobertura RM, Valparaíso y Rancagua.",
-  alternates: { canonical: "https://fenice.cl/" },
+  alternates: { canonical: "https://fenice.cl" },
   keywords: "petróleo a domicilio santiago, transporte combustible RM, venta petróleo diesel empresas, abastecimiento combustible industria, estanques combustible SEC",
 };
 

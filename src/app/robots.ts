@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin/", "/gracias"],
+        disallow: ["/admin/"],
       },
     ],
     sitemap: "https://fenice.cl/sitemap.xml",

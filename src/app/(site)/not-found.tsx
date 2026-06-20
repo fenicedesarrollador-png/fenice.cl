@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SERVICIOS } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Página no encontrada | Fenice SPA",
+  title: "Página no encontrada",
   robots: { index: false, follow: true },
 };
 

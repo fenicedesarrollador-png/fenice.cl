@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "Blog sobre Petróleo y Combustible Industrial",
   description:
     "Artículos técnicos sobre petróleo diesel, instalación de estanques, normativa SEC y gestión de combustible para empresas e industria en Chile.",
-  alternates: { canonical: "https://fenice.cl/blog/" },
+  alternates: { canonical: "https://fenice.cl/blog" },
 };
 
 const staticPosts = [

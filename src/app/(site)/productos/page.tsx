@@ -8,7 +8,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Productos | Combustibles y Servicios",
   description: "Catálogo de productos y servicios de Fenice SPA para despacho de combustible e instalación de estanques en la Región Metropolitana.",
-  alternates: { canonical: "https://fenice.cl/productos/" },
+  alternates: { canonical: "https://fenice.cl/productos" },
 };
 
 export default async function ProductosPage() {
