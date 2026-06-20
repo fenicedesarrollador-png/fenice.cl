@@ -1,8 +1,25 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
-import { getSupabasePublicConfig } from "@/lib/supabase/config";
+import {
+  getSupabasePublicConfig,
+  hasUsableSupabasePublicConfig,
+} from "@/lib/supabase/config";
 
 export async function updateSession(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+  const isAdminRoute = pathname.startsWith("/admin");
+  const isLoginPage = pathname === "/login";
+
+  if (!hasUsableSupabasePublicConfig()) {
+    if (isAdminRoute) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      return NextResponse.redirect(url);
+    }
+
+    return NextResponse.next({ request });
+  }
+
   let supabaseResponse = NextResponse.next({ request });
   const { url, anonKey } = getSupabasePublicConfig();
 
@@ -30,10 +47,6 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const pathname = request.nextUrl.pathname;
-  const isAdminRoute = pathname.startsWith("/admin");
-  const isLoginPage = pathname === "/login";
 
   // Redirect unauthenticated users away from /admin
   if (isAdminRoute && !user) {

@@ -22,6 +22,8 @@ import {
 
 const links = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { href: "/admin/precios-combustible", label: "Precios combustible", icon: Fuel },
+  { href: "/admin/cotizaciones", label: "Cotizaciones", icon: Tag },
   { href: "/admin/leads", label: "Leads", icon: Inbox },
   { href: "/admin/productos", label: "Productos", icon: Package },
   { href: "/admin/clientes", label: "Clientes", icon: Building2 },

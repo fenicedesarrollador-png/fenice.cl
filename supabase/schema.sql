@@ -128,6 +128,26 @@ create table if not exists leads (
 );
 
 -- ============================================================
+-- COTIZACIONES (formulario de cotización empresarial)
+-- ============================================================
+create table if not exists cotizaciones (
+  id uuid primary key default gen_random_uuid(),
+  nombre text not null,
+  empresa text not null,
+  rut_empresa text,
+  email text not null,
+  telefono text not null,
+  comuna text,
+  servicio_solicitado text not null,
+  volumen_estimado text,
+  frecuencia text,
+  mensaje text,
+  estado text default 'nuevo', -- nuevo | en_proceso | cotizado | cerrado
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+-- ============================================================
 -- PERFILES ADMIN
 -- ============================================================
 create table if not exists admin_profiles (
@@ -146,6 +166,7 @@ alter table blog_posts enable row level security;
 alter table eventos enable row level security;
 alter table promociones enable row level security;
 alter table configuracion_sitio enable row level security;
+alter table cotizaciones enable row level security;
 alter table leads enable row level security;
 alter table admin_profiles enable row level security;
 
@@ -168,6 +189,10 @@ create policy "lectura_publica_promociones" on promociones
 create policy "lectura_publica_configuracion" on configuracion_sitio
   for select using (true);
 
+-- Formulario público puede insertar cotizaciones (sin leer)
+create policy "cualquiera_crea_cotizacion" on cotizaciones
+  for insert with check (true);
+
 -- Formulario público puede insertar leads (sin leer)
 create policy "cualquiera_crea_lead" on leads
   for insert with check (true);
@@ -189,6 +214,9 @@ create policy "admin_gestiona_promociones" on promociones
   for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 
 create policy "admin_gestiona_configuracion" on configuracion_sitio
+  for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+
+create policy "admin_gestiona_cotizaciones" on cotizaciones
   for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 
 create policy "admin_lee_leads" on leads

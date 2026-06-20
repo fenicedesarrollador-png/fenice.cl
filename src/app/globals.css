@@ -68,6 +68,12 @@ body.loader-active {
 }
 .animate-fade-up { animation: fadeUp 0.45s ease both; }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fadeIn 0.4s ease both; }
+
 /* Details summary custom */
 details summary::-webkit-details-marker { display: none; }
 

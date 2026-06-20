@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { hasUsableSupabasePublicConfig } from "@/lib/supabase/config";
 import { SITE_CONFIG } from "@/lib/config";
 
 export type SiteConfig = typeof SITE_CONFIG & Record<string, string>;
@@ -9,6 +10,10 @@ const CACHE_TTL = 60_000; // 1 minute
 
 export async function getSiteConfig(): Promise<SiteConfig> {
   if (cache && Date.now() - cacheTime < CACHE_TTL) return cache;
+  if (!hasUsableSupabasePublicConfig()) {
+    return { ...SITE_CONFIG } as SiteConfig;
+  }
+
   try {
     const supabase = await createClient();
     const { data } = await supabase.from("configuracion_sitio").select("clave, valor");
