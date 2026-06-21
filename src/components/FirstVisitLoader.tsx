@@ -1,72 +1,3 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
-
-const fallbackHtml = `<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cargando - Fenice SPA</title>
-<style>
-  html,body{width:100%;height:100%;margin:0}
-  body{
-    display:grid;
-    place-items:center;
-    background:linear-gradient(180deg,#eef3f8 0%,#d7e2ec 55%,#c3d3e3 100%);
-    font-family:'Segoe UI',Roboto,Arial,sans-serif;
-    color:#1c2430;
-  }
-  .card{
-    width:min(92vw,420px);
-    padding:28px;
-    border-radius:28px;
-    background:rgba(255,255,255,0.84);
-    box-shadow:0 24px 60px rgba(28,36,48,0.16);
-    border:1px solid rgba(255,255,255,0.7);
-  }
-  .brand{
-    letter-spacing:3px;
-    font-size:13px;
-    font-weight:700;
-    text-transform:uppercase;
-    color:#1f9c5a;
-    margin-bottom:16px;
-  }
-  .title{
-    font-size:28px;
-    font-weight:700;
-    margin:0 0 14px;
-  }
-</style>
-</head>
-<body>
-  <div class="card">
-    <div class="brand">Sociedad Fenice SPA</div>
-    <h1 class="title">Estamos preparando tu camion...</h1>
-  </div>
-  <script>
-    setTimeout(function(){
-      if(window.parent !== window){
-        window.parent.postMessage({ type: 'fenice-loader-complete' }, '*');
-      }
-    }, 2200);
-  </script>
-</body>
-</html>`;
-
-function getLoaderHtml() {
-  try {
-    return readFileSync(
-      join(process.cwd(), "public", "loader", "fenice-loader.html"),
-      "utf8",
-    );
-  } catch {
-    return fallbackHtml;
-  }
-}
-
-const loaderHtml = getLoaderHtml();
-
 const shellCss = `
 html.fenice-loader-active,
 body.fenice-loader-active {
@@ -103,6 +34,12 @@ const shellScript = `
   var shell = document.getElementById('fenice-loader-shell');
   if (!shell) return;
 
+  // No mostrar el loader dentro del panel de administración.
+  if (window.location.pathname.indexOf('/admin') === 0) {
+    shell.remove();
+    return;
+  }
+
   var closed = false;
 
   document.documentElement.classList.add('fenice-loader-active');
@@ -117,7 +54,7 @@ const shellScript = `
     window.removeEventListener('message', onMessage);
     window.setTimeout(function () {
       shell.remove();
-    }, 380);
+    }, 420);
   }
 
   function onMessage(event) {
@@ -127,6 +64,20 @@ const shellScript = `
   }
 
   window.addEventListener('message', onMessage);
+
+  // Cierre de respaldo: cuando la página termina de cargar (mínimo visible 1.4s)
+  // y un tope duro de 9s por si el iframe no responde.
+  var started = Date.now();
+  function onPageReady() {
+    var elapsed = Date.now() - started;
+    var wait = Math.max(0, 1400 - elapsed);
+    window.setTimeout(closeLoader, wait);
+  }
+  if (document.readyState === 'complete') {
+    onPageReady();
+  } else {
+    window.addEventListener('load', onPageReady);
+  }
   window.setTimeout(closeLoader, 9000);
 })();
 `;
@@ -139,7 +90,7 @@ export default function FirstVisitLoader() {
         <iframe
           id="fenice-loader-frame"
           title="Cargando Fenice SPA"
-          srcDoc={loaderHtml}
+          src="/loader/fenice-loader.html"
         />
       </div>
       <script dangerouslySetInnerHTML={{ __html: shellScript }} />
