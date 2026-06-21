@@ -65,20 +65,21 @@ const shellScript = `
 
   window.addEventListener('message', onMessage);
 
-  // Cierre de respaldo: cuando la página termina de cargar (mínimo visible 1.4s)
-  // y un tope duro de 9s por si el iframe no responde.
-  var started = Date.now();
-  function onPageReady() {
-    var elapsed = Date.now() - started;
-    var wait = Math.max(0, 1400 - elapsed);
-    window.setTimeout(closeLoader, wait);
+  // El loader se cierra ÚNICAMENTE cuando la animación interna llega al 100%
+  // y el iframe envía 'fenice-loader-complete'. No cerramos al cargar la
+  // página para que la barra de progreso siempre alcance el 100% y se vea
+  // completa.
+  var frame = document.getElementById('fenice-loader-frame');
+
+  // Si el iframe falla al cargar, cerramos enseguida (no dejamos pantalla colgada).
+  if (frame) {
+    frame.addEventListener('error', function () {
+      window.setTimeout(closeLoader, 600);
+    });
   }
-  if (document.readyState === 'complete') {
-    onPageReady();
-  } else {
-    window.addEventListener('load', onPageReady);
-  }
-  window.setTimeout(closeLoader, 9000);
+
+  // Tope de seguridad por si el iframe nunca envía el mensaje de completado.
+  window.setTimeout(closeLoader, 12000);
 })();
 `;
 
