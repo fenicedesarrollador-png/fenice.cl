@@ -27,22 +27,27 @@ export default function ContactForm() {
   const startedRef = useRef(false);
   const { sessionId, trackEvent, trackFormStart, visitorId } = useAnalytics();
 
-  async function ensureFormStartTracked() {
+  function ensureFormStartTracked() {
     if (startedRef.current) {
       return;
     }
 
     startedRef.current = true;
-    await trackFormStart("contacto");
+    // Fire-and-forget: el tracking nunca debe bloquear ni romper el formulario.
+    void trackFormStart("contacto");
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    await ensureFormStartTracked();
+
+    // Leer el formulario de forma SÍNCRONA antes de cualquier await:
+    // React recicla el evento tras el primer await y e.currentTarget pasa a null.
+    const fd = new FormData(e.currentTarget);
+
+    ensureFormStartTracked();
     setLoading(true);
     setError("");
 
-    const fd = new FormData(e.currentTarget);
     const payload = {
       nombre: fd.get("nombre") as string,
       telefono: fd.get("telefono") as string,
@@ -69,7 +74,7 @@ export default function ContactForm() {
 
       const result = (await response.json()) as { error?: string };
       if (!response.ok) {
-        await trackEvent({
+        void trackEvent({
           eventType: "form_submit_error",
           formName: "contacto",
           metadata: {
@@ -80,7 +85,7 @@ export default function ContactForm() {
         throw new Error(result.error ?? "No se pudo enviar el formulario.");
       }
 
-      await trackEvent(
+      void trackEvent(
         {
           eventType: "form_submit_success",
           formName: "contacto",
@@ -90,7 +95,7 @@ export default function ContactForm() {
       router.push("/gracias");
     } catch {
       if (!trackedFailure) {
-        await trackEvent({
+        void trackEvent({
           eventType: "form_submit_error",
           formName: "contacto",
           metadata: {
