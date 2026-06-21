@@ -54,7 +54,11 @@ export default function ProductoForm({ producto }: { producto?: Producto }) {
       ? await supabase.from("productos").update(payload).eq("id", producto.id)
       : await supabase.from("productos").insert(payload);
     if (dbError) { setError(dbError.message); setLoading(false); return; }
-    await fetch("/api/revalidate?path=/productos", { method: "POST" }).catch(() => {});
+    // Revalidar el catálogo y la home (que ahora también muestra productos)
+    await Promise.allSettled([
+      fetch("/api/revalidate?path=/productos", { method: "POST" }),
+      fetch("/api/revalidate?path=/", { method: "POST" }),
+    ]);
     router.push("/admin/productos");
     router.refresh();
   }

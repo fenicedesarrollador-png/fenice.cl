@@ -39,6 +39,17 @@ function formatUpdatedAt(iso: string): string {
   return isToday ? `Actualizado hoy, ${time}` : `Actualizado ${d.toLocaleDateString("es-CL", { day: "numeric", month: "short" })}, ${time}`;
 }
 
+type Producto = {
+  id: string;
+  slug: string;
+  nombre: string;
+  descripcion_corta: string | null;
+  imagen_url: string | null;
+  categoria: string | null;
+  precio_referencial: number | null;
+  destacado: boolean;
+};
+
 async function getFuelPrices(): Promise<FuelPrice[] | null> {
   if (!hasUsableSupabasePublicConfig()) return null;
   try {
@@ -55,13 +66,30 @@ async function getFuelPrices(): Promise<FuelPrice[] | null> {
   }
 }
 
+async function getProductos(): Promise<Producto[]> {
+  if (!hasUsableSupabasePublicConfig()) return [];
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("productos")
+      .select("id, slug, nombre, descripcion_corta, imagen_url, categoria, precio_referencial, destacado")
+      .eq("activo", true)
+      .order("destacado", { ascending: false })
+      .order("nombre", { ascending: true });
+    if (error) return [];
+    return (data as Producto[]) ?? [];
+  } catch {
+    return [];
+  }
+}
+
 export default async function PreciosCombustible() {
-  const prices = await getFuelPrices();
+  const [prices, productos] = await Promise.all([getFuelPrices(), getProductos()]);
 
   const WA_URL = `https://wa.me/${SITE_CONFIG.whatsapp_numero}?text=${encodeURIComponent("Hola, quiero solicitar un despacho de combustible.")}`;
 
   return (
-    <section className="bg-white border-b border-slate-100" aria-label="Precios de combustible vigentes">
+    <section className="bg-white border-b border-slate-100" aria-label="Productos y precios de combustible">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
         {/* Header */}
@@ -115,8 +143,100 @@ export default async function PreciosCombustible() {
         <p className="text-[11px] text-slate-400 text-center mt-6 max-w-2xl mx-auto leading-relaxed">
           Valores referenciales. Confirma cobertura, condiciones y disponibilidad antes de solicitar despacho.
         </p>
+
+        {/* ── CATÁLOGO DE PRODUCTOS ─────────────────────────────────── */}
+        {productos.length > 0 && (
+          <div className="mt-12 pt-10 border-t border-slate-100">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-7">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="h-px w-6 bg-[#1a6b3c]" />
+                  <p className="text-[11px] font-bold text-[#1a6b3c] uppercase tracking-widest">Catálogo</p>
+                </div>
+                <h2 className="text-xl font-extrabold text-[#0a1628] leading-tight">
+                  Nuestros productos
+                </h2>
+              </div>
+              <Link
+                href="/productos"
+                className="inline-flex items-center gap-1.5 text-sm font-bold text-[#1a6b3c] hover:text-[#0d4a28] transition-colors shrink-0 w-fit"
+              >
+                Ver catálogo completo
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {productos.map((p, i) => (
+                <ProductoCard key={p.id} producto={p} index={i} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
+  );
+}
+
+function ProductoCard({ producto, index }: { producto: Producto; index: number }) {
+  return (
+    <Link
+      href={`/productos/${producto.slug}`}
+      className="group bg-white border border-slate-200 hover:border-[#1a6b3c]/40 rounded-2xl overflow-hidden transition-all hover:shadow-md flex flex-col animate-fade-in"
+      style={{ animationDelay: `${index * 80}ms` }}
+      aria-label={`Producto: ${producto.nombre}`}
+    >
+      {/* Imagen o placeholder */}
+      <div className="aspect-[4/3] bg-slate-50 overflow-hidden relative">
+        {producto.imagen_url ? (
+          <img
+            src={producto.imagen_url}
+            alt={producto.nombre}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+            width={300}
+            height={225}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <Fuel className="w-9 h-9 text-slate-300" strokeWidth={1.5} aria-hidden="true" />
+          </div>
+        )}
+        {producto.destacado && (
+          <span className="absolute top-2 left-2 bg-[#f5a623] text-white text-[9px] font-black uppercase tracking-wide px-2 py-0.5 rounded-full">
+            Destacado
+          </span>
+        )}
+      </div>
+
+      {/* Contenido */}
+      <div className="p-4 flex flex-col flex-1">
+        {producto.categoria && (
+          <span className="text-[10px] font-bold text-[#1a6b3c] uppercase tracking-wider mb-1">
+            {producto.categoria}
+          </span>
+        )}
+        <h3 className="font-extrabold text-[#0a1628] text-sm leading-tight mb-1 group-hover:text-[#1a6b3c] transition-colors">
+          {producto.nombre}
+        </h3>
+        {producto.descripcion_corta && (
+          <p className="text-[11px] text-slate-400 leading-relaxed line-clamp-2 mb-2">
+            {producto.descripcion_corta}
+          </p>
+        )}
+        <div className="mt-auto pt-2 flex items-center justify-between gap-2">
+          {producto.precio_referencial !== null ? (
+            <span className="text-sm font-black text-[#0a1628]">{formatPrice(producto.precio_referencial)}</span>
+          ) : (
+            <span className="text-[11px] font-semibold text-slate-400 italic">Consultar precio</span>
+          )}
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#1a6b3c] group-hover:gap-1.5 transition-all">
+            Ver más
+            <ArrowRight className="w-3 h-3" aria-hidden="true" />
+          </span>
+        </div>
+      </div>
+    </Link>
   );
 }
 

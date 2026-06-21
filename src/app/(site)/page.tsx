@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import { COMUNAS, SERVICIOS, SITE_CONFIG } from "@/lib/config";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Transporte de Combustible con Seguridad y Eficiencia",
   description:
