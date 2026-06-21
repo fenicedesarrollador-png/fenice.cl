@@ -261,6 +261,22 @@ export function serviceSchema({
   };
 }
 
+// AboutPage (página Nosotros). El BreadcrumbList lo emite el componente Breadcrumb.
+export function aboutPageSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "@id": `${BASE}/nosotros/#aboutpage`,
+    url: `${BASE}/nosotros`,
+    name: "Sobre Fenice SPA — Distribuidor de combustible en la Región Metropolitana",
+    description:
+      "Conoce a Fenice SPA: empresa dedicada a la distribución de diésel, kerosene y gas envasado residencial para empresas, operaciones y hogares en Santiago y la Región Metropolitana.",
+    inLanguage: "es-CL",
+    about: { "@id": `${BASE}/#organization` },
+    isPartOf: { "@id": `${BASE}/#website` },
+  };
+}
+
 // FAQ
 export function faqSchema(items: { q: string; a: string }[]) {
   return {
