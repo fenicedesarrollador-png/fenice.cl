@@ -55,11 +55,11 @@ export default async function SessionDetailPage({
     <div className="space-y-6 p-6 lg:p-8">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <Link href="/admin/metricas" className="text-sm font-semibold text-orange-600 hover:text-orange-700">
+          <Link href="/admin/metricas" className="text-sm font-semibold text-[#2bbe6a] hover:text-[#5fe39a]">
             Volver a métricas
           </Link>
-          <h1 className="mt-2 text-2xl font-bold text-slate-900">{session.visitor_label}</h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <h1 className="mt-2 text-2xl font-bold text-[#e8eef7]">{session.visitor_label}</h1>
+          <p className="mt-1 text-sm text-[#94a7c2]">
             {session.identified ? "Visitante identificado" : "Visitante anónimo"} · {formatDuration(session.duration_seconds)}
           </p>
         </div>
@@ -76,105 +76,105 @@ export default async function SessionDetailPage({
           { label: "Dispositivo", value: session.device_type || "unknown" },
           { label: "Navegador / SO", value: `${session.browser_name || "Desconocido"} · ${session.os_name || "Desconocido"}` },
         ].map((item) => (
-          <div key={item.label} className="rounded-2xl border border-slate-200 bg-white p-5">
-            <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">{item.label}</p>
-            <p className="mt-3 text-sm font-semibold text-slate-900">{item.value}</p>
+          <div key={item.label} className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#94a7c2]">{item.label}</p>
+            <p className="mt-3 text-sm font-semibold text-[#e8eef7]">{item.value}</p>
           </div>
         ))}
       </div>
 
       <div className="grid gap-6 xl:grid-cols-2">
-        <div className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h2 className="text-lg font-bold text-slate-900">Páginas visitadas</h2>
+        <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
+          <h2 className="text-lg font-bold text-[#e8eef7]">Páginas visitadas</h2>
           <div className="mt-4 space-y-3">
             {((data.pages ?? []) as Array<{ path: string; page_title: string | null; occurred_at: string }>).length ? (
               ((data.pages ?? []) as Array<{ path: string; page_title: string | null; occurred_at: string }>).map((page, index) => (
-                <div key={`${page.path}-${page.occurred_at}-${index}`} className="rounded-xl bg-slate-50 px-4 py-3">
-                  <p className="font-semibold text-slate-900">{page.path}</p>
-                  <p className="text-xs text-slate-500">{page.page_title || "Sin título"}</p>
-                  <p className="mt-1 text-xs text-slate-400">{new Date(page.occurred_at).toLocaleString("es-CL")}</p>
+                <div key={`${page.path}-${page.occurred_at}-${index}`} className="rounded-xl bg-white/[0.03] px-4 py-3">
+                  <p className="font-semibold text-[#e8eef7]">{page.path}</p>
+                  <p className="text-xs text-[#94a7c2]">{page.page_title || "Sin título"}</p>
+                  <p className="mt-1 text-xs text-[#94a7c2]">{new Date(page.occurred_at).toLocaleString("es-CL")}</p>
                 </div>
               ))
             ) : (
-              <p className="text-sm text-slate-500">Sin páginas registradas.</p>
+              <p className="text-sm text-[#94a7c2]">Sin páginas registradas.</p>
             )}
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h2 className="text-lg font-bold text-slate-900">Secciones y scroll</h2>
+        <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
+          <h2 className="text-lg font-bold text-[#e8eef7]">Secciones y scroll</h2>
           <div className="mt-4 space-y-3">
             {((data.sections ?? []) as Array<{ path: string; section_id: string; occurred_at: string }>).map((section, index) => (
-              <div key={`${section.path}-${section.section_id}-${index}`} className="rounded-xl bg-slate-50 px-4 py-3">
-                <p className="font-semibold text-slate-900">{section.section_id}</p>
-                <p className="text-xs text-slate-500">{section.path}</p>
-                <p className="mt-1 text-xs text-slate-400">{new Date(section.occurred_at).toLocaleString("es-CL")}</p>
+              <div key={`${section.path}-${section.section_id}-${index}`} className="rounded-xl bg-white/[0.03] px-4 py-3">
+                <p className="font-semibold text-[#e8eef7]">{section.section_id}</p>
+                <p className="text-xs text-[#94a7c2]">{section.path}</p>
+                <p className="mt-1 text-xs text-[#94a7c2]">{new Date(section.occurred_at).toLocaleString("es-CL")}</p>
               </div>
             ))}
             {((data.scrolls ?? []) as Array<{ path: string; max_scroll_depth: number }>).map((scroll) => (
-              <div key={`${scroll.path}-${scroll.max_scroll_depth}`} className="rounded-xl border border-dashed border-slate-200 px-4 py-3">
-                <p className="font-semibold text-slate-900">{scroll.path}</p>
-                <p className="text-xs text-slate-500">Scroll máximo: {scroll.max_scroll_depth}%</p>
+              <div key={`${scroll.path}-${scroll.max_scroll_depth}`} className="rounded-xl border border-dashed border-white/12 px-4 py-3">
+                <p className="font-semibold text-[#e8eef7]">{scroll.path}</p>
+                <p className="text-xs text-[#94a7c2]">Scroll máximo: {scroll.max_scroll_depth}%</p>
               </div>
             ))}
             {!(data.sections?.length || data.scrolls?.length) ? (
-              <p className="text-sm text-slate-500">Sin secciones ni scroll registrados.</p>
+              <p className="text-sm text-[#94a7c2]">Sin secciones ni scroll registrados.</p>
             ) : null}
           </div>
         </div>
       </div>
 
       <div className="grid gap-6 xl:grid-cols-2">
-        <div className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h2 className="text-lg font-bold text-slate-900">Clics y CTA</h2>
+        <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
+          <h2 className="text-lg font-bold text-[#e8eef7]">Clics y CTA</h2>
           <div className="mt-4 space-y-3">
             {((data.clicks ?? []) as Array<{ path: string; element_id: string | null; element_label: string | null; event_type: string; occurred_at: string }>).length ? (
               ((data.clicks ?? []) as Array<{ path: string; element_id: string | null; element_label: string | null; event_type: string; occurred_at: string }>).map((click, index) => (
-                <div key={`${click.path}-${click.element_id}-${index}`} className="rounded-xl bg-slate-50 px-4 py-3">
-                  <p className="font-semibold text-slate-900">{click.element_label || click.element_id || "Sin etiqueta"}</p>
-                  <p className="text-xs text-slate-500">{click.event_type} · {click.path}</p>
-                  <p className="mt-1 text-xs text-slate-400">{new Date(click.occurred_at).toLocaleString("es-CL")}</p>
+                <div key={`${click.path}-${click.element_id}-${index}`} className="rounded-xl bg-white/[0.03] px-4 py-3">
+                  <p className="font-semibold text-[#e8eef7]">{click.element_label || click.element_id || "Sin etiqueta"}</p>
+                  <p className="text-xs text-[#94a7c2]">{click.event_type} · {click.path}</p>
+                  <p className="mt-1 text-xs text-[#94a7c2]">{new Date(click.occurred_at).toLocaleString("es-CL")}</p>
                 </div>
               ))
             ) : (
-              <p className="text-sm text-slate-500">Sin clics relevantes registrados.</p>
+              <p className="text-sm text-[#94a7c2]">Sin clics relevantes registrados.</p>
             )}
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h2 className="text-lg font-bold text-slate-900">Formularios y conversión</h2>
+        <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
+          <h2 className="text-lg font-bold text-[#e8eef7]">Formularios y conversión</h2>
           <div className="mt-4 space-y-3">
             {((data.forms ?? []) as Array<{ event_type: string; form_name: string | null; occurred_at: string }>).length ? (
               ((data.forms ?? []) as Array<{ event_type: string; form_name: string | null; occurred_at: string }>).map((form, index) => (
-                <div key={`${form.event_type}-${form.occurred_at}-${index}`} className="rounded-xl bg-slate-50 px-4 py-3">
-                  <p className="font-semibold text-slate-900">{form.form_name || "Formulario"}</p>
-                  <p className="text-xs text-slate-500">{form.event_type}</p>
-                  <p className="mt-1 text-xs text-slate-400">{new Date(form.occurred_at).toLocaleString("es-CL")}</p>
+                <div key={`${form.event_type}-${form.occurred_at}-${index}`} className="rounded-xl bg-white/[0.03] px-4 py-3">
+                  <p className="font-semibold text-[#e8eef7]">{form.form_name || "Formulario"}</p>
+                  <p className="text-xs text-[#94a7c2]">{form.event_type}</p>
+                  <p className="mt-1 text-xs text-[#94a7c2]">{new Date(form.occurred_at).toLocaleString("es-CL")}</p>
                 </div>
               ))
             ) : (
-              <p className="text-sm text-slate-500">Sin formularios registrados.</p>
+              <p className="text-sm text-[#94a7c2]">Sin formularios registrados.</p>
             )}
           </div>
         </div>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-5">
-        <h2 className="text-lg font-bold text-slate-900">Vinculación real</h2>
+      <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
+        <h2 className="text-lg font-bold text-[#e8eef7]">Vinculación real</h2>
         <div className="mt-4 space-y-3">
           {identityLinks.length ? (
             identityLinks.map((link, index) => (
-              <div key={`${link.identified_at}-${index}`} className="rounded-xl bg-slate-50 px-4 py-3">
-                <p className="font-semibold text-slate-900">
+              <div key={`${link.identified_at}-${index}`} className="rounded-xl bg-white/[0.03] px-4 py-3">
+                <p className="font-semibold text-[#e8eef7]">
                   {link.cotizacion_id ? "Cotización vinculada" : link.lead_id ? "Lead vinculado" : "Registro vinculado"}
                 </p>
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-[#94a7c2]">
                   {link.cotizacion_id ? `Cotización: ${link.cotizacion_id}` : null}
                   {link.lead_id ? ` ${link.cotizacion_id ? "·" : ""} Lead: ${link.lead_id}` : null}
                   {link.client_id ? ` ${(link.cotizacion_id || link.lead_id) ? "·" : ""} Cliente: ${link.client_id}` : null}
                 </p>
-                <div className="mt-2 flex gap-3 text-xs font-semibold text-orange-600">
+                <div className="mt-2 flex gap-3 text-xs font-semibold text-[#2bbe6a]">
                   {link.lead_id ? <Link href="/admin/leads">Ir a Leads</Link> : null}
                   {link.cotizacion_id ? <Link href="/admin/cotizaciones">Ir a Cotizaciones</Link> : null}
                   {link.client_id ? <Link href="/admin/clientes">Ir a Clientes</Link> : null}
@@ -182,7 +182,7 @@ export default async function SessionDetailPage({
               </div>
             ))
           ) : (
-            <p className="text-sm text-slate-500">Esta sesión aún no está vinculada a un lead, cotización o cliente real.</p>
+            <p className="text-sm text-[#94a7c2]">Esta sesión aún no está vinculada a un lead, cotización o cliente real.</p>
           )}
         </div>
       </div>

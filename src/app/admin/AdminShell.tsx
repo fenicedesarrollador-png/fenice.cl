@@ -16,7 +16,7 @@ export default function AdminShell({
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="admin-scope flex bg-slate-50/80" style={{ minHeight: "100dvh" }}>
+    <div className="admin-scope flex" style={{ minHeight: "100dvh" }}>
       <AdminSidebar userEmail={userEmail} userRol={userRol} />
       <AdminSidebarMobile
         userEmail={userEmail}

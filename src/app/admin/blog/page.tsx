@@ -29,13 +29,13 @@ export default async function AdminBlogPage() {
 
       <div className="grid grid-cols-3 gap-3 mb-4">
         {[
-          { label: "Total", value: posts.length, color: "text-[#0a1628]" },
-          { label: "Publicados", value: publicados, color: "text-[#1a6b3c]" },
-          { label: "Borradores", value: borradores, color: "text-[#d98a0e]" },
+          { label: "Total", value: posts.length, color: "text-[#e8eef7]" },
+          { label: "Publicados", value: publicados, color: "text-[#2bbe6a]" },
+          { label: "Borradores", value: borradores, color: "text-[#f5a623]" },
         ].map((s) => (
           <div key={s.label} className="admin-card px-4 py-3 text-center">
             <p className={`text-[26px] leading-none font-black tabular-nums ${s.color}`}>{s.value}</p>
-            <p className="text-[11px] text-slate-500 font-bold mt-1.5">{s.label}</p>
+            <p className="text-[11px] text-[#94a7c2] font-bold mt-1.5">{s.label}</p>
           </div>
         ))}
       </div>
@@ -46,21 +46,21 @@ export default async function AdminBlogPage() {
         <div className="space-y-2.5">
           {posts.map((p) => (
             <div key={p.id} className={`admin-card p-3.5 flex items-center gap-3 transition-all hover:shadow-md ${!p.publicado ? "opacity-75" : ""}`}>
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${p.publicado ? "bg-[#ecfdf3] text-[#1a6b3c]" : "bg-[#fff7ec] text-[#d98a0e]"}`}>
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${p.publicado ? "bg-[#2bbe6a]/12 text-[#2bbe6a]" : "bg-[#f5a623]/12 text-[#f5a623]"}`}>
                 {p.publicado ? <Eye className="w-4.5 h-4.5" /> : <EyeOff className="w-4.5 h-4.5" />}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-black text-[#0a1628] text-sm line-clamp-1">{p.titulo}</p>
+                <p className="font-black text-[#e8eef7] text-sm line-clamp-1">{p.titulo}</p>
                 <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                   {p.categoria && <span className="text-[10px] bg-indigo-50 text-indigo-600 font-bold px-1.5 py-0.5 rounded-md">{p.categoria}</span>}
-                  {p.fecha_publicacion && <span className="text-[11px] text-slate-400">{new Date(p.fecha_publicacion).toLocaleDateString("es-CL", { dateStyle: "medium" })}</span>}
+                  {p.fecha_publicacion && <span className="text-[11px] text-[#94a7c2]">{new Date(p.fecha_publicacion).toLocaleDateString("es-CL", { dateStyle: "medium" })}</span>}
                 </div>
               </div>
               <div className="hidden sm:block shrink-0">
                 <Badge tone={p.publicado ? "green" : "amber"} dot>{p.publicado ? "Publicado" : "Borrador"}</Badge>
               </div>
               <div className="flex items-center gap-1 shrink-0">
-                <Link href={`/admin/blog/${p.id}/editar`} className="p-2 rounded-lg text-slate-400 hover:text-[#1a6b3c] hover:bg-[#ecfdf3] transition-all" title="Editar"><Edit2 className="w-4 h-4" /></Link>
+                <Link href={`/admin/blog/${p.id}/editar`} className="p-2 rounded-lg text-[#94a7c2] hover:text-[#2bbe6a] hover:bg-[#2bbe6a]/12 transition-all" title="Editar"><Edit2 className="w-4 h-4" /></Link>
                 {p.publicado && <SiteLink href={`/blog/${p.slug}`} />}
                 <DeleteButton table="blog_posts" id={p.id} />
               </div>

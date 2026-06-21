@@ -35,27 +35,27 @@ export default function NuevoUsuarioForm() {
       <FormSection title="Datos del usuario">
         <Field label="Nombre completo" required>
           <div className="relative">
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94a7c2]" />
             <input name="nombre" type="text" required placeholder="Ej: Erika Pierattini" className="admin-input !pl-9" />
           </div>
         </Field>
         <Field label="Correo electrónico" required>
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94a7c2]" />
             <input name="email" type="email" required placeholder="usuario@fenice.cl" className="admin-input !pl-9" />
           </div>
         </Field>
         <Field label="Contraseña" required hint="Mínimo 8 caracteres. Usa mayúsculas, números y símbolos.">
           <div className="relative">
             <input name="password" type={showPwd ? "text" : "password"} required minLength={8} placeholder="Mínimo 8 caracteres" className="admin-input !pr-10" />
-            <button type="button" tabIndex={-1} onClick={() => setShowPwd(!showPwd)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+            <button type="button" tabIndex={-1} onClick={() => setShowPwd(!showPwd)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94a7c2] hover:text-[#cdd9ea]">
               {showPwd ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
         </Field>
         <Field label="Rol" required>
           <div className="relative">
-            <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 z-10" />
+            <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94a7c2] z-10" />
             <select name="rol" defaultValue="admin" className="admin-input !pl-9">
               <option value="admin">Admin — acceso completo al panel</option>
               <option value="editor">Editor — solo blog y productos</option>
@@ -65,7 +65,7 @@ export default function NuevoUsuarioForm() {
         </Field>
       </FormSection>
 
-      {success && <div className="bg-[#ecfdf3] border border-[#1a6b3c]/20 rounded-xl px-4 py-3 text-[#1a6b3c] text-sm font-medium">{success}</div>}
+      {success && <div className="bg-[#2bbe6a]/12 border border-[#1a6b3c]/20 rounded-xl px-4 py-3 text-[#2bbe6a] text-sm font-medium">{success}</div>}
       <FormActions submitLabel="Crear usuario" loading={loading} onCancel={() => router.back()} error={error} />
     </form>
   );

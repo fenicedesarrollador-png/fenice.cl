@@ -25,7 +25,7 @@ export default function SeoFieldsCounter({ name, label, defaultValue = "", maxLe
         <label className="admin-label !mb-0">
           {label} {required && <span className="text-red-500">*</span>}
         </label>
-        <span className={`text-[11px] font-bold tabular-nums ${over ? "text-red-600" : close ? "text-[#d98a0e]" : "text-slate-400"}`}>
+        <span className={`text-[11px] font-bold tabular-nums ${over ? "text-red-600" : close ? "text-[#f5a623]" : "text-[#94a7c2]"}`}>
           {value.length}/{maxLength}
         </span>
       </div>
@@ -35,10 +35,10 @@ export default function SeoFieldsCounter({ name, label, defaultValue = "", maxLe
         <input type="text" name={name} value={value} onChange={(e) => setValue(e.target.value)} required={required} className="admin-input" />
       )}
       {/* Barra de progreso */}
-      <div className="mt-1.5 h-1 bg-slate-100 rounded-full overflow-hidden">
+      <div className="mt-1.5 h-1 bg-white/8 rounded-full overflow-hidden">
         <div className={`h-full rounded-full transition-all ${over ? "bg-red-500" : close ? "bg-[#f5a623]" : "bg-[#1a6b3c]"}`} style={{ width: `${pct}%` }} />
       </div>
-      {hint && !over && <p className="text-[11px] text-slate-400 mt-1">{hint}</p>}
+      {hint && !over && <p className="text-[11px] text-[#94a7c2] mt-1">{hint}</p>}
       {over && <p className="text-[11px] text-red-600 mt-1 font-medium">Excede el límite recomendado para SEO.</p>}
     </div>
   );

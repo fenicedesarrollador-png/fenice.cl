@@ -31,24 +31,24 @@ const ESTADOS_CONTACTO = ["nuevo", "contactado", "cerrado"] as const;
 const ESTADOS_COTIZACION = ["nuevo", "en_proceso", "cotizado", "cerrado"] as const;
 
 const ESTADO_CFG: Record<string, { label: string; chip: string; dot: string }> = {
-  nuevo: { label: "Nuevo", chip: "bg-red-50 text-red-700 border-red-200", dot: "bg-red-500" },
-  contactado: { label: "Contactado", chip: "bg-[#fff7ec] text-[#b87608] border-[#f5a623]/30", dot: "bg-[#f5a623]" },
-  en_proceso: { label: "En proceso", chip: "bg-blue-50 text-blue-700 border-blue-200", dot: "bg-blue-500" },
-  cotizado: { label: "Cotizado", chip: "bg-purple-50 text-purple-700 border-purple-200", dot: "bg-purple-500" },
-  cerrado: { label: "Cerrado", chip: "bg-[#ecfdf3] text-[#1a6b3c] border-[#1a6b3c]/20", dot: "bg-[#1a6b3c]" },
+  nuevo: { label: "Nuevo", chip: "bg-red-500/12 text-red-300 border-red-500/25", dot: "bg-red-500" },
+  contactado: { label: "Contactado", chip: "bg-[#f5a623]/12 text-[#f8c46a] border-[#f5a623]/25", dot: "bg-[#f5a623]" },
+  en_proceso: { label: "En proceso", chip: "bg-blue-400/12 text-blue-200 border-blue-400/25", dot: "bg-blue-500" },
+  cotizado: { label: "Cotizado", chip: "bg-purple-400/12 text-purple-200 border-purple-400/25", dot: "bg-purple-500" },
+  cerrado: { label: "Cerrado", chip: "bg-[#2bbe6a]/12 text-[#5fe39a] border-[#2bbe6a]/25", dot: "bg-[#2bbe6a]" },
 };
 
 const ORIGEN_CFG = {
   cotizacion: {
     label: "Cotización",
-    badge: "bg-[#fff7ec] text-[#b87608] border-[#f5a623]/30",
-    avatar: "from-[#fff7ec] to-[#fde9c8] text-[#d98a0e]",
+    badge: "bg-[#f5a623]/12 text-[#f8c46a] border-[#f5a623]/25",
+    avatar: "from-[#f5a623]/20 to-[#f5a623]/5 text-[#f5a623]",
     icon: DollarSign,
   },
   contacto: {
     label: "Contacto",
-    badge: "bg-[#ecfdf3] text-[#1a6b3c] border-[#1a6b3c]/20",
-    avatar: "from-[#ecfdf3] to-[#d1fae0] text-[#1a6b3c]",
+    badge: "bg-[#2bbe6a]/12 text-[#5fe39a] border-[#2bbe6a]/25",
+    avatar: "from-[#2bbe6a]/20 to-[#2bbe6a]/5 text-[#2bbe6a]",
     icon: Mail,
   },
 } as const;
@@ -136,10 +136,10 @@ export default function SolicitudesTable({
 
   const count = (predicate: (s: Solicitud) => boolean) => solicitudes.filter(predicate).length;
   const stats = [
-    { label: "Total", value: solicitudes.length, color: "text-[#0a1628]", onClick: () => { setOrigenFilter("todos"); setEstadoFilter("todos"); } },
-    { label: "Cotizaciones", value: count((s) => s.origen === "cotizacion"), color: "text-[#d98a0e]", onClick: () => setOrigenFilter("cotizacion") },
-    { label: "Contactos", value: count((s) => s.origen === "contacto"), color: "text-[#1a6b3c]", onClick: () => setOrigenFilter("contacto") },
-    { label: "Nuevos sin atender", value: count((s) => s.estado === "nuevo"), color: "text-red-600", onClick: () => setEstadoFilter("nuevo") },
+    { label: "Total", value: solicitudes.length, color: "text-[#e8eef7]", onClick: () => { setOrigenFilter("todos"); setEstadoFilter("todos"); } },
+    { label: "Cotizaciones", value: count((s) => s.origen === "cotizacion"), color: "text-[#f5a623]", onClick: () => setOrigenFilter("cotizacion") },
+    { label: "Contactos", value: count((s) => s.origen === "contacto"), color: "text-[#2bbe6a]", onClick: () => setOrigenFilter("contacto") },
+    { label: "Nuevos sin atender", value: count((s) => s.estado === "nuevo"), color: "text-red-400", onClick: () => setEstadoFilter("nuevo") },
   ];
 
   return (
@@ -147,9 +147,9 @@ export default function SolicitudesTable({
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {stats.map((s) => (
-          <button key={s.label} onClick={s.onClick} className="admin-card px-4 py-3 text-left hover:border-slate-200 transition-all">
+          <button key={s.label} onClick={s.onClick} className="admin-card px-4 py-3 text-left hover:border-white/15 transition-all">
             <p className={`text-[26px] leading-none font-black tabular-nums ${s.color}`}>{s.value}</p>
-            <p className="text-[11px] text-slate-500 font-bold mt-1.5">{s.label}</p>
+            <p className="text-[11px] text-[#94a7c2] font-bold mt-1.5">{s.label}</p>
           </button>
         ))}
       </div>
@@ -158,9 +158,9 @@ export default function SolicitudesTable({
       <div className="flex flex-col gap-2.5">
         <div className="flex flex-col sm:flex-row gap-2.5">
           <div className="relative flex-1">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94a7c2]" />
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar nombre, empresa, email, teléfono…" className="admin-input !pl-10 !pr-9" />
-            {search && <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"><X className="w-4 h-4" /></button>}
+            {search && <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94a7c2] hover:text-[#cdd9ea]"><X className="w-4 h-4" /></button>}
           </div>
           <button onClick={() => exportCSV(filtered)} className="admin-btn-ghost shrink-0"><Download className="w-4 h-4" /><span className="hidden sm:inline">Exportar</span></button>
         </div>
@@ -175,7 +175,7 @@ export default function SolicitudesTable({
             <button
               key={o.key}
               onClick={() => setOrigenFilter(o.key)}
-              className={`px-3.5 py-2 rounded-xl text-[12px] font-bold transition-all border ${origenFilter === o.key ? "bg-[#1a6b3c] text-white border-[#1a6b3c] shadow-sm shadow-[#1a6b3c]/20" : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"}`}
+              className={`px-3.5 py-2 rounded-xl text-[12px] font-bold transition-all border ${origenFilter === o.key ? "bg-[#2bbe6a] text-[#042312] border-[#2bbe6a] shadow-sm shadow-[#2bbe6a]/25" : "bg-white/[0.04] border-white/12 text-[#94a7c2] hover:border-white/25 hover:text-white"}`}
             >
               {o.label}
             </button>
@@ -184,13 +184,13 @@ export default function SolicitudesTable({
       </div>
 
       <div className="flex items-center justify-between">
-        <p className="text-[12px] text-slate-400 font-medium">
+        <p className="text-[12px] text-[#94a7c2] font-medium">
           {filtered.length} solicitud{filtered.length !== 1 ? "es" : ""}
           {origenFilter !== "todos" && ` · ${ORIGEN_CFG[origenFilter].label}`}
           {estadoFilter !== "todos" && ` · ${ESTADO_CFG[estadoFilter]?.label}`}
         </p>
         {(origenFilter !== "todos" || estadoFilter !== "todos" || search) && (
-          <button onClick={() => { setOrigenFilter("todos"); setEstadoFilter("todos"); setSearch(""); }} className="text-[12px] text-[#1a6b3c] font-bold hover:underline flex items-center gap-1">
+          <button onClick={() => { setOrigenFilter("todos"); setEstadoFilter("todos"); setSearch(""); }} className="text-[12px] text-[#2bbe6a] font-bold hover:underline flex items-center gap-1">
             <Filter className="w-3 h-3" /> Limpiar filtros
           </button>
         )}
@@ -199,11 +199,11 @@ export default function SolicitudesTable({
       {/* Lista */}
       {filtered.length === 0 ? (
         <div className="text-center py-16 admin-card border-dashed">
-          <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center mx-auto mb-3">
-            <Inbox className="w-6 h-6 text-slate-300" />
+          <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-3">
+            <Inbox className="w-6 h-6 text-[#5f739a]" />
           </div>
-          <p className="text-[#0a1628] font-bold text-sm">{solicitudes.length === 0 ? "Aún no hay solicitudes" : "Sin resultados"}</p>
-          <p className="text-slate-400 text-xs mt-1">
+          <p className="text-[#e8eef7] font-bold text-sm">{solicitudes.length === 0 ? "Aún no hay solicitudes" : "Sin resultados"}</p>
+          <p className="text-[#94a7c2] text-xs mt-1">
             {solicitudes.length === 0 ? "Las cotizaciones y mensajes de contacto aparecerán aquí." : "Ajusta la búsqueda o los filtros."}
           </p>
         </div>
@@ -219,13 +219,13 @@ export default function SolicitudesTable({
             return (
               <div key={`${s.origen}-${s.id}`} className="admin-card overflow-hidden transition-all hover:shadow-md">
                 {/* Header */}
-                <button onClick={() => setExpanded(isOpen ? null : s.id)} className="w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-slate-50/60 transition-colors">
+                <button onClick={() => setExpanded(isOpen ? null : s.id)} className="w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-white/[0.03] transition-colors">
                   <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${origen.avatar} flex items-center justify-center text-[12px] font-black shrink-0`}>
                     {(s.empresa ?? s.nombre).slice(0, 2).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="font-black text-[#0a1628] text-sm truncate">{s.empresa ?? s.nombre}</p>
+                      <p className="font-black text-[#e8eef7] text-sm truncate">{s.empresa ?? s.nombre}</p>
                       {/* Etiqueta de ORIGEN (lo que pediste) */}
                       <span className={`inline-flex items-center gap-1 text-[10px] font-black px-2 py-0.5 rounded-full border ${origen.badge}`}>
                         <OrigenIcon className="w-2.5 h-2.5" />
@@ -234,41 +234,41 @@ export default function SolicitudesTable({
                       {s.notas && <StickyNote className="w-3 h-3 text-[#f5a623] shrink-0" />}
                     </div>
                     <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                      {s.empresa && <span className="text-[11px] text-slate-500 truncate">{s.nombre}</span>}
-                      {s.comuna && <span className="text-[11px] text-slate-500 flex items-center gap-1"><MapPin className="w-3 h-3 text-slate-400" />{s.comuna}</span>}
-                      <span className="text-[11px] text-slate-400 flex items-center gap-1"><Clock className="w-3 h-3" />{new Date(s.created_at).toLocaleDateString("es-CL", { day: "2-digit", month: "short" })}</span>
+                      {s.empresa && <span className="text-[11px] text-[#94a7c2] truncate">{s.nombre}</span>}
+                      {s.comuna && <span className="text-[11px] text-[#94a7c2] flex items-center gap-1"><MapPin className="w-3 h-3 text-[#94a7c2]" />{s.comuna}</span>}
+                      <span className="text-[11px] text-[#94a7c2] flex items-center gap-1"><Clock className="w-3 h-3" />{new Date(s.created_at).toLocaleDateString("es-CL", { day: "2-digit", month: "short" })}</span>
                     </div>
                   </div>
                   <span className={`inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-lg border shrink-0 ${cfg.chip}`}>
                     <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} /><span className="hidden sm:inline">{cfg.label}</span>
                   </span>
-                  <ChevronDown className={`w-4 h-4 text-slate-300 shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown className={`w-4 h-4 text-[#5f739a] shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`} />
                 </button>
 
                 {/* Detalle */}
                 {isOpen && (
-                  <div className="px-4 pb-4 pt-1 border-t border-slate-50">
+                  <div className="px-4 pb-4 pt-1 border-t border-white/[0.06]">
                     {s.servicio && (
-                      <div className="inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 text-[11px] font-bold px-2.5 py-1 rounded-lg my-3">
+                      <div className="inline-flex items-center gap-1.5 bg-white/8 text-[#cdd9ea] text-[11px] font-bold px-2.5 py-1 rounded-lg my-3">
                         <Package className="w-3 h-3" />{s.servicio}
                       </div>
                     )}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
-                      {s.email && <a href={`mailto:${s.email}`} className="flex items-center gap-2 text-[12px] text-slate-600 hover:text-[#1a6b3c] min-w-0"><Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" /><span className="truncate">{s.email}</span></a>}
-                      {s.telefono && <a href={`tel:${s.telefono}`} className="flex items-center gap-2 text-[12px] text-slate-600 hover:text-[#1a6b3c]"><Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />{s.telefono}</a>}
-                      {s.rut_empresa && <div className="flex items-center gap-2 text-[12px] text-slate-600"><Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />{s.rut_empresa}</div>}
-                      {s.volumen && <div className="flex items-center gap-2 text-[12px] text-slate-600"><DollarSign className="w-3.5 h-3.5 text-slate-400 shrink-0" />Volumen: {s.volumen}</div>}
-                      {s.frecuencia && <div className="flex items-center gap-2 text-[12px] text-slate-600"><Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />Frecuencia: {s.frecuencia}</div>}
+                      {s.email && <a href={`mailto:${s.email}`} className="flex items-center gap-2 text-[12px] text-[#cdd9ea] hover:text-[#2bbe6a] min-w-0"><Mail className="w-3.5 h-3.5 text-[#94a7c2] shrink-0" /><span className="truncate">{s.email}</span></a>}
+                      {s.telefono && <a href={`tel:${s.telefono}`} className="flex items-center gap-2 text-[12px] text-[#cdd9ea] hover:text-[#2bbe6a]"><Phone className="w-3.5 h-3.5 text-[#94a7c2] shrink-0" />{s.telefono}</a>}
+                      {s.rut_empresa && <div className="flex items-center gap-2 text-[12px] text-[#cdd9ea]"><Building2 className="w-3.5 h-3.5 text-[#94a7c2] shrink-0" />{s.rut_empresa}</div>}
+                      {s.volumen && <div className="flex items-center gap-2 text-[12px] text-[#cdd9ea]"><DollarSign className="w-3.5 h-3.5 text-[#94a7c2] shrink-0" />Volumen: {s.volumen}</div>}
+                      {s.frecuencia && <div className="flex items-center gap-2 text-[12px] text-[#cdd9ea]"><Clock className="w-3.5 h-3.5 text-[#94a7c2] shrink-0" />Frecuencia: {s.frecuencia}</div>}
                     </div>
                     {s.mensaje && (
-                      <div className="flex items-start gap-2.5 bg-slate-50 border border-slate-100 rounded-xl px-3.5 py-3 mb-3">
-                        <MessageSquare className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" /><p className="text-[12px] text-slate-600 leading-relaxed">{s.mensaje}</p>
+                      <div className="flex items-start gap-2.5 bg-white/[0.03] border border-white/[0.06] rounded-xl px-3.5 py-3 mb-3">
+                        <MessageSquare className="w-3.5 h-3.5 text-[#94a7c2] shrink-0 mt-0.5" /><p className="text-[12px] text-[#cdd9ea] leading-relaxed">{s.mensaje}</p>
                       </div>
                     )}
 
                     {/* Nota interna (solo contactos) */}
                     {s.origen === "contacto" && (noteOpen ? (
-                      <div className="bg-[#fff7ec] border border-[#f5a623]/30 rounded-xl p-3 mb-3">
+                      <div className="bg-[#f5a623]/8 border border-[#f5a623]/25 rounded-xl p-3 mb-3">
                         <label className="text-[10px] font-black text-[#b87608] uppercase tracking-wide">Nota interna</label>
                         <textarea value={noteText[s.id] ?? ""} onChange={(e) => setNoteText((p) => ({ ...p, [s.id]: e.target.value }))} rows={2} placeholder="Anota seguimiento…" className="admin-input mt-1.5 !text-[12px] !py-2" />
                         <div className="flex gap-2 mt-2">
@@ -277,9 +277,9 @@ export default function SolicitudesTable({
                         </div>
                       </div>
                     ) : s.notas ? (
-                      <div className="flex items-start gap-2 bg-[#fff7ec]/70 border border-[#f5a623]/20 rounded-lg px-3 py-2 mb-3">
+                      <div className="flex items-start gap-2 bg-[#f5a623]/8 border border-[#f5a623]/20 rounded-lg px-3 py-2 mb-3">
                         <StickyNote className="w-3 h-3 text-[#f5a623] shrink-0 mt-0.5" />
-                        <p className="text-[11px] text-[#92600a] leading-relaxed flex-1">{s.notas}</p>
+                        <p className="text-[11px] text-[#f8c46a] leading-relaxed flex-1">{s.notas}</p>
                       </div>
                     ) : null)}
 
@@ -290,7 +290,7 @@ export default function SolicitudesTable({
                       )}
                       {s.email && <a href={`mailto:${s.email}`} className="admin-btn-ghost !text-[12px] !py-2"><Mail className="w-3.5 h-3.5" /> Email</a>}
                       {s.origen === "contacto" && (
-                        <button onClick={() => toggleNote(s)} className={`inline-flex items-center gap-1.5 text-[12px] font-bold px-3 py-2 rounded-xl border transition-all ${s.notas ? "border-[#f5a623]/30 bg-[#fff7ec] text-[#b87608]" : "border-slate-200 bg-white text-slate-500 hover:bg-slate-50"}`}>
+                        <button onClick={() => toggleNote(s)} className={`inline-flex items-center gap-1.5 text-[12px] font-bold px-3 py-2 rounded-xl border transition-all ${s.notas ? "border-[#f5a623]/30 bg-[#f5a623]/10 text-[#f8c46a]" : "border-white/12 bg-white/[0.04] text-[#94a7c2] hover:bg-white/[0.08]"}`}>
                           <StickyNote className="w-3.5 h-3.5" /><span className="hidden sm:inline">{s.notas ? "Editar nota" : "Nota"}</span>
                         </button>
                       )}

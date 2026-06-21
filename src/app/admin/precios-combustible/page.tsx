@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminPreciosCombustiblePage() {
   if (!hasUsableSupabasePublicConfig()) {
     return (
-      <div className="p-10 text-center text-slate-400">
+      <div className="p-10 text-center text-[#94a7c2]">
         Supabase no configurado. Agrega las variables de entorno para usar esta sección.
       </div>
     );
@@ -29,12 +29,12 @@ export default async function AdminPreciosCombustiblePage() {
     <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-7 admin-rise">
       {/* Page header */}
       <div className="flex items-center gap-3.5 mb-6">
-        <div className="w-11 h-11 rounded-2xl bg-[#fff7ec] border border-[#f5a623]/20 flex items-center justify-center shrink-0">
-          <Fuel className="w-5 h-5 text-[#d98a0e]" />
+        <div className="w-11 h-11 rounded-2xl bg-[#f5a623]/12 border border-[#f5a623]/20 flex items-center justify-center shrink-0">
+          <Fuel className="w-5 h-5 text-[#f5a623]" />
         </div>
         <div>
-          <h1 className="text-xl sm:text-2xl font-black text-[#0a1628] tracking-tight leading-tight">Precios de combustible</h1>
-          <p className="text-[13px] text-slate-500 mt-0.5 font-medium">Edita y publica los precios que se muestran en el sitio.</p>
+          <h1 className="text-xl sm:text-2xl font-black text-[#e8eef7] tracking-tight leading-tight">Precios de combustible</h1>
+          <p className="text-[13px] text-[#94a7c2] mt-0.5 font-medium">Edita y publica los precios que se muestran en el sitio.</p>
         </div>
       </div>
 
@@ -57,8 +57,8 @@ export default async function AdminPreciosCombustiblePage() {
       )}
 
       {/* How-to note */}
-      <div className="mt-8 bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-sm text-slate-500">
-        <p className="font-semibold text-slate-600 mb-1">¿Cómo funciona?</p>
+      <div className="mt-8 bg-white/[0.03] border border-white/12 rounded-xl px-5 py-4 text-sm text-[#94a7c2]">
+        <p className="font-semibold text-[#cdd9ea] mb-1">¿Cómo funciona?</p>
         <ul className="list-disc list-inside space-y-0.5">
           <li>Deja el campo <strong>Precio vacío</strong> para mostrar &quot;Consultar disponibilidad&quot;.</li>
           <li>Desactiva <strong>Visible en el sitio</strong> para ocultar un producto sin eliminarlo.</li>

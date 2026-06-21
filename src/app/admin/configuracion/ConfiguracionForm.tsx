@@ -46,7 +46,7 @@ export default function ConfiguracionForm({ config }: { config: Record<string, s
           {FIELDS.map(({ key, label, placeholder, hint, type, icon: Icon }) => (
             <Field key={key} label={label} hint={hint} className={key === "direccion" ? "sm:col-span-2" : ""}>
               <div className="relative">
-                <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94a7c2]" />
                 <input name={key} type={type} defaultValue={config[key] || ""} placeholder={placeholder} className="admin-input !pl-9" />
               </div>
             </Field>
@@ -57,7 +57,7 @@ export default function ConfiguracionForm({ config }: { config: Record<string, s
       <FormSection title="Páginas que se actualizan" description="Estas rutas se revalidan automáticamente al guardar.">
         <div className="flex flex-wrap gap-2">
           {PATHS_TO_REVALIDATE.map((path) => (
-            <a key={path} href={path} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[11px] bg-slate-50 border border-slate-200 hover:border-[#1a6b3c]/30 text-slate-600 hover:text-[#1a6b3c] px-2.5 py-1 rounded-lg transition-all font-medium">
+            <a key={path} href={path} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[11px] bg-white/[0.03] border border-white/12 hover:border-[#2bbe6a]/40 text-[#cdd9ea] hover:text-[#2bbe6a] px-2.5 py-1 rounded-lg transition-all font-medium">
               {path === "/" ? "Inicio" : path.replace("/", "")}
               <ExternalLink className="w-3 h-3" />
             </a>
@@ -66,13 +66,13 @@ export default function ConfiguracionForm({ config }: { config: Record<string, s
       </FormSection>
 
       {success && (
-        <div className="flex items-center gap-3 bg-[#ecfdf3] border border-[#1a6b3c]/20 rounded-xl px-5 py-4 text-[#1a6b3c]">
+        <div className="flex items-center gap-3 bg-[#2bbe6a]/12 border border-[#1a6b3c]/20 rounded-xl px-5 py-4 text-[#2bbe6a]">
           <CheckCircle2 className="w-5 h-5 shrink-0" />
-          <div><p className="font-bold text-sm">Configuración guardada</p><p className="text-xs text-[#1a6b3c]/80 mt-0.5">Todos los cambios están activos en el sitio.</p></div>
+          <div><p className="font-bold text-sm">Configuración guardada</p><p className="text-xs text-[#2bbe6a]/80 mt-0.5">Todos los cambios están activos en el sitio.</p></div>
         </div>
       )}
       {error && (
-        <div className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl px-5 py-4 text-red-700">
+        <div className="flex items-center gap-3 bg-red-500/10 border border-red-500/25 rounded-xl px-5 py-4 text-red-300">
           <AlertCircle className="w-5 h-5 shrink-0" /><p className="text-sm font-medium">{error}</p>
         </div>
       )}

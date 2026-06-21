@@ -38,7 +38,7 @@ export default function DeleteButton({ table, id }: Props) {
         <span className="text-red-200">|</span>
         <button
           onClick={() => setConfirming(false)}
-          className="text-slate-400 hover:text-slate-600 transition-colors"
+          className="text-[#94a7c2] hover:text-[#cdd9ea] transition-colors"
         >
           <X className="w-3 h-3" />
         </button>
@@ -49,7 +49,7 @@ export default function DeleteButton({ table, id }: Props) {
   return (
     <button
       onClick={() => setConfirming(true)}
-      className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all"
+      className="p-1.5 rounded-lg text-[#94a7c2] hover:text-red-500 hover:bg-red-50 transition-all"
       title="Eliminar"
     >
       <Trash2 className="w-3.5 h-3.5" />
