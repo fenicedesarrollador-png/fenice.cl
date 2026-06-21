@@ -1,15 +1,21 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import CTASection from "@/components/CTASection";
 import { COMUNAS } from "@/lib/config";
+import { buildMetadata } from "@/lib/seo";
 import { MapPin, ChevronRight } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Cobertura de Despacho de Petróleo | Comunas RM",
+export const metadata = buildMetadata({
+  title: "Cobertura de Despacho de Petróleo | Comunas de Santiago y RM",
   description:
-    "Fenice SPA despacha petróleo a domicilio en las principales comunas de la Región Metropolitana de Santiago y en Valparaíso y Rancagua. Consulta si llegamos a tu zona.",
-  alternates: { canonical: "https://fenice.cl/cobertura" },
-};
+    "Fenice SPA despacha petróleo diesel a domicilio en las principales comunas de la Región Metropolitana de Santiago, además de Valparaíso y Rancagua. Consulta si llegamos a tu zona y cotiza por WhatsApp.",
+  path: "/cobertura",
+  keywords: [
+    "cobertura petróleo a domicilio santiago",
+    "comunas despacho de combustible RM",
+    "petróleo a domicilio región metropolitana",
+    "distribuidor de combustible santiago",
+  ],
+});
 
 const comunaDescriptions: Record<string, string> = {
   "maipu": "Zona industrial y residencial de alto consumo en el poniente de Santiago.",

@@ -1,14 +1,17 @@
 import type { MetadataRoute } from "next";
+import { SITE_CONFIG } from "@/lib/config";
 
 export default function robots(): MetadataRoute.Robots {
+  const base = SITE_CONFIG.site_url;
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin/"],
+        disallow: ["/admin/", "/api/", "/login", "/gracias"],
       },
     ],
-    sitemap: "https://fenice.cl/sitemap.xml",
+    sitemap: `${base}/sitemap.xml`,
+    host: base,
   };
 }

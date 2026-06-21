@@ -1,14 +1,20 @@
-import type { Metadata } from "next";
 import { CheckCircle2, Phone, Clock, Shield } from "lucide-react";
 import CotizacionForm from "./CotizacionForm";
 import { SITE_CONFIG } from "@/lib/config";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Solicitar Cotización de Combustible",
+export const metadata = buildMetadata({
+  title: "Cotizar Petróleo y Combustible para Empresas | Santiago RM",
   description:
-    "Cotiza petróleo diesel para tu empresa, faena o flota. Respuesta rápida, factura electrónica y trato directo. Completa el formulario y te contactamos en minutos.",
-  alternates: { canonical: "https://fenice.cl/cotizacion" },
-};
+    "Cotiza petróleo diesel a domicilio para tu empresa, faena o flota en la Región Metropolitana. Respuesta el mismo día, factura electrónica y trato directo. Completa el formulario y te contactamos en minutos.",
+  path: "/cotizacion",
+  keywords: [
+    "cotizar petróleo diesel empresas",
+    "cotización combustible santiago",
+    "precio petróleo a domicilio RM",
+    "abastecimiento combustible faena flota",
+  ],
+});
 
 const GARANTIAS = [
   { icon: Clock, text: "Respuesta en el mismo día hábil" },

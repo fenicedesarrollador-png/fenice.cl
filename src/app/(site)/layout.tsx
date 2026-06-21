@@ -3,43 +3,31 @@ import Footer from "@/components/Footer";
 import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
 import FirstVisitLoader from "@/components/FirstVisitLoader";
 import { getSiteConfig } from "@/lib/getSiteConfig";
+import { organizationSchema, websiteSchema, localBusinessSchema, jsonLd } from "@/lib/seo";
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   const config = await getSiteConfig();
 
-  const localBusinessSchema = {
+  // Grafo de schemas que sostiene todo el SEO del sitio.
+  const seoGraph = {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: "Fenice SPA",
-    image: "https://fenice.cl/images/imagen_camion_de_combustible.png",
-    url: "https://fenice.cl/",
-    telephone: config.telefono,
-    email: config.email,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "La Granja",
-      addressRegion: "Región Metropolitana",
-      addressCountry: "CL",
-    },
-    geo: { "@type": "GeoCoordinates", latitude: config.lat, longitude: config.lng },
-    openingHoursSpecification: {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "09:00",
-      closes: "19:00",
-    },
-    areaServed: [
-      "Región Metropolitana", "Maipú", "Pudahuel", "Quilicura", "Puente Alto",
-      "San Bernardo", "Lampa", "Buin", "Colina", "Las Condes", "Providencia",
-      "Valparaíso", "Rancagua", "Santa Cruz",
+    "@graph": [
+      organizationSchema(),
+      websiteSchema(),
+      localBusinessSchema({
+        telefono: config.telefono,
+        email: config.email,
+        instagram_url: config.instagram_url,
+        lat: config.lat,
+        lng: config.lng,
+      }),
     ],
-    sameAs: [config.instagram_url],
   };
 
   return (
     <>
       <FirstVisitLoader />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(seoGraph)} />
       <AnalyticsProvider>
         <div className="min-h-full flex flex-col bg-white text-gray-900">
           <Header config={config} />

@@ -1,26 +1,29 @@
-import type { Metadata } from "next";
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Link from "next/link";
 import { COMUNAS } from "@/lib/config";
+import { buildMetadata, serviceSchema as buildServiceSchema } from "@/lib/seo";
 import { CheckCircle2, MapPin, Clock, FileText, Truck, Building2 } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Petróleo a Domicilio Santiago | Despacho para Empresas",
+export const metadata = buildMetadata({
+  title: "Petróleo a Domicilio Santiago | Despacho de Diesel para Empresas",
   description:
-    "Despacho de petróleo a domicilio en Santiago para empresas e industria. Coordinación por WhatsApp, despacho rápido y cobertura en toda la Región Metropolitana. Cotiza ahora.",
-  alternates: { canonical: "https://fenice.cl/servicios/petroleo-a-domicilio-santiago" },
-};
+    "Despacho de petróleo diesel a domicilio en Santiago para empresas e industria. Coordinación por WhatsApp, despacho rápido y cobertura en toda la Región Metropolitana. Cotiza ahora.",
+  path: "/servicios/petroleo-a-domicilio-santiago",
+  keywords: [
+    "petróleo a domicilio santiago",
+    "despacho de diesel empresas santiago",
+    "petróleo industrial región metropolitana",
+    "distribuidor de combustible RM",
+  ],
+});
 
-const serviceSchema = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  serviceType: "Despacho de petróleo a domicilio",
-  provider: { "@type": "LocalBusiness", name: "Fenice SPA", url: "https://fenice.cl/" },
-  areaServed: "Región Metropolitana, Chile",
-  description: "Despacho programado y urgente de petróleo para empresas e industria en la Región Metropolitana de Santiago.",
-};
+const serviceSchema = buildServiceSchema({
+  name: "Petróleo a Domicilio Santiago",
+  description: "Despacho programado y urgente de petróleo diesel para empresas e industria en la Región Metropolitana de Santiago.",
+  slug: "petroleo-a-domicilio-santiago",
+});
 
 const clientes = [
   "Empresas de construcción con maquinaria pesada y generadores",

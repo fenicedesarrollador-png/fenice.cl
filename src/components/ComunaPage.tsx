@@ -3,7 +3,8 @@ import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Link from "next/link";
-import { SERVICIOS } from "@/lib/config";
+import { SERVICIOS, SITE_CONFIG } from "@/lib/config";
+import { buildMetadata, comunaKeywords } from "@/lib/seo";
 
 interface ComunaConfig {
   nombre: string;
@@ -15,21 +16,30 @@ interface ComunaConfig {
 }
 
 export function buildComunaMetadata(c: ComunaConfig): Metadata {
-  return {
-    title: `Petróleo a Domicilio en ${c.nombre} | Despacho para Empresas`,
-    description: `Despachamos petróleo a domicilio en ${c.nombre} para empresas e industria. Coordinación por WhatsApp, horarios flexibles y entrega confiable. Cotiza ahora.`,
-    alternates: { canonical: `https://fenice.cl/cobertura/petroleo-a-domicilio-${c.slug}` },
-  };
+  return buildMetadata({
+    title: `Petróleo a Domicilio en ${c.nombre} | Despacho de Diesel para Empresas`,
+    description: `Distribuidor de petróleo diesel a domicilio en ${c.nombre}, Región Metropolitana. Despacho rápido para empresas e industria, coordinación por WhatsApp y factura electrónica. Cotiza ahora.`,
+    path: `/cobertura/petroleo-a-domicilio-${c.slug}`,
+    keywords: comunaKeywords(c.nombre),
+  });
 }
 
 export function buildComunaSchema(c: ComunaConfig) {
+  const base = SITE_CONFIG.site_url;
   return {
     "@context": "https://schema.org",
     "@type": "Service",
+    name: `Petróleo a domicilio en ${c.nombre}`,
     serviceType: `Despacho de petróleo a domicilio en ${c.nombre}`,
-    provider: { "@type": "LocalBusiness", name: "Fenice SPA", url: "https://fenice.cl/" },
-    areaServed: c.nombre,
-    description: `Despacho de petróleo para empresas e industria en ${c.nombre}, Región Metropolitana.`,
+    url: `${base}/cobertura/petroleo-a-domicilio-${c.slug}`,
+    provider: { "@id": `${base}/#localbusiness` },
+    areaServed: { "@type": "City", name: c.nombre, containedInPlace: { "@type": "AdministrativeArea", name: "Región Metropolitana de Santiago" } },
+    description: `Despacho de petróleo diesel para empresas e industria en ${c.nombre}, Región Metropolitana.`,
+    availableChannel: {
+      "@type": "ServiceChannel",
+      serviceUrl: `${base}/cotizacion`,
+      servicePhone: SITE_CONFIG.telefono,
+    },
   };
 }
 
@@ -47,14 +57,19 @@ export default function ComunaPage({ config }: { config: ComunaConfig }) {
         ]} />
       </div>
 
-      <section className="bg-gray-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl lg:text-5xl font-extrabold mb-4">
+      <section className="bg-[#0a1628] text-white py-16 relative overflow-hidden">
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1a6b3c] via-[#f5a623] to-[#1a6b3c]" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="inline-flex items-center gap-2 bg-[#f5a623]/10 border border-[#f5a623]/25 text-[#f5a623] text-xs font-bold px-3 py-1.5 rounded-full mb-5 uppercase tracking-wider">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#f5a623]" />
+            Cobertura · {config.nombre}
+          </div>
+          <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">
             Petróleo a domicilio en {config.nombre} para empresas e industria
           </h1>
-          <p className="text-xl text-gray-300 max-w-3xl">
-            Fenice SPA despacha petróleo a domicilio en {config.nombre} para clientes empresariales
-            e industriales con despachos programados o puntuales según tus requerimientos.
+          <p className="text-xl text-slate-300 max-w-3xl">
+            Fenice SPA despacha petróleo diesel a domicilio en {config.nombre} para clientes empresariales
+            e industriales, con despachos programados o puntuales según tus requerimientos.
           </p>
         </div>
       </section>
@@ -81,7 +96,7 @@ export default function ComunaPage({ config }: { config: ComunaConfig }) {
           <ul className="space-y-2 text-gray-600 mb-6">
             {config.beneficios.map((b) => (
               <li key={b} className="flex items-start gap-2">
-                <span className="text-orange-500 mt-1 shrink-0">→</span>
+                <span className="text-[#1a6b3c] mt-1 shrink-0">→</span>
                 <span>{b}</span>
               </li>
             ))}
@@ -96,14 +111,14 @@ export default function ComunaPage({ config }: { config: ComunaConfig }) {
             Te respondemos con precio y disponibilidad en minutos, en horario Lun-Vie 09:00–19:00.
           </p>
 
-          <div className="bg-orange-50 border border-orange-100 rounded-xl p-6 mb-8">
-            <h3 className="font-bold text-gray-900 mb-3">
+          <div className="bg-[#ecfdf3] border border-[#1a6b3c]/15 rounded-xl p-6 mb-8">
+            <h3 className="font-bold text-[#0a1628] mb-3">
               Servicios disponibles en {config.nombre}
             </h3>
             <ul className="space-y-2">
               {SERVICIOS.map((s) => (
                 <li key={s.slug}>
-                  <Link href={`/servicios/${s.slug}`} className="text-orange-600 hover:underline font-medium">
+                  <Link href={`/servicios/${s.slug}`} className="text-[#1a6b3c] hover:text-[#145530] hover:underline font-semibold">
                     {s.nombre}
                   </Link>
                 </li>

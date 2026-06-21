@@ -1,14 +1,20 @@
-import type { Metadata } from "next";
 import ContactForm from "./ContactForm";
 import { SITE_CONFIG } from "@/lib/config";
+import { buildMetadata } from "@/lib/seo";
 import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Contacto | Cotiza Petróleo a Domicilio",
+export const metadata = buildMetadata({
+  title: "Contacto | Cotiza Petróleo a Domicilio en Santiago",
   description:
-    "Contacta a Fenice SPA para cotizar petróleo a domicilio o instalación de estanques. WhatsApp +56 9 3957 9658 · Lun-Vie 09:00–19:00 · Región Metropolitana.",
-  alternates: { canonical: "https://fenice.cl/contacto" },
-};
+    "Contacta a Fenice SPA para cotizar petróleo diesel a domicilio o instalación de estanques en la Región Metropolitana. WhatsApp directo, respuesta en minutos, Lun-Vie 09:00–19:00.",
+  path: "/contacto",
+  keywords: [
+    "contacto petróleo a domicilio santiago",
+    "cotizar combustible RM",
+    "teléfono distribuidor de petróleo santiago",
+    "whatsapp petróleo a domicilio",
+  ],
+});
 
 const contactItems = [
   {

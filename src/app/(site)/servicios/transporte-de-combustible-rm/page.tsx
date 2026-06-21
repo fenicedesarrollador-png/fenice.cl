@@ -1,25 +1,28 @@
-import type { Metadata } from "next";
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Link from "next/link";
+import { buildMetadata, serviceSchema as buildServiceSchema } from "@/lib/seo";
 import { Shield, ClipboardCheck, MapPin, Calendar, FileText, Truck, CheckCircle2 } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Transporte de Combustible RM | Flota Certificada",
+export const metadata = buildMetadata({
+  title: "Transporte de Combustible RM | Flota Certificada en Santiago",
   description:
-    "Transporte de combustible en la Región Metropolitana con flota certificada. Servicio para empresas e industria en Santiago. Coordinación rápida y segura. Cotiza por WhatsApp.",
-  alternates: { canonical: "https://fenice.cl/servicios/transporte-de-combustible-rm" },
-};
+    "Transporte de combustible en la Región Metropolitana con flota certificada SEC. Servicio para empresas e industria en Santiago. Coordinación rápida y segura. Cotiza por WhatsApp.",
+  path: "/servicios/transporte-de-combustible-rm",
+  keywords: [
+    "transporte de combustible santiago",
+    "transporte de combustible región metropolitana",
+    "flota certificada combustible RM",
+    "traslado de petróleo diesel empresas",
+  ],
+});
 
-const serviceSchema = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  serviceType: "Transporte de combustible",
-  provider: { "@type": "LocalBusiness", name: "Fenice SPA", url: "https://fenice.cl/" },
-  areaServed: "Región Metropolitana, Chile",
-  description: "Transporte seguro y certificado de combustible para industria y empresas en la Región Metropolitana.",
-};
+const serviceSchema = buildServiceSchema({
+  name: "Transporte de Combustible RM",
+  description: "Transporte seguro y certificado de combustible para industria y empresas en la Región Metropolitana de Santiago.",
+  slug: "transporte-de-combustible-rm",
+});
 
 const caracteristicas = [
   {

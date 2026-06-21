@@ -1,25 +1,28 @@
-import type { Metadata } from "next";
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Link from "next/link";
+import { buildMetadata, serviceSchema as buildServiceSchema } from "@/lib/seo";
 import { Shield, AlertTriangle, CheckCircle2, Wrench, ClipboardCheck, BookOpen, RotateCcw } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Instalación de Estanques de Petróleo Certificados | SEC",
+export const metadata = buildMetadata({
+  title: "Instalación de Estanques de Petróleo Certificados SEC | Santiago",
   description:
-    "Instalación de estanques de petróleo certificados por la SEC en Santiago y Región Metropolitana. Cumplimiento normativo, seguridad y calidad garantizada para tu empresa. Cotiza.",
-  alternates: { canonical: "https://fenice.cl/servicios/instalacion-de-estanques" },
-};
+    "Instalación de estanques de petróleo certificados por la SEC en Santiago y la Región Metropolitana. Cumplimiento normativo, seguridad y calidad garantizada para tu empresa. Cotiza ahora.",
+  path: "/servicios/instalacion-de-estanques",
+  keywords: [
+    "instalación de estanques de combustible santiago",
+    "estanques de petróleo certificados SEC",
+    "estanque diesel empresas región metropolitana",
+    "almacenamiento de combustible normativa SEC",
+  ],
+});
 
-const serviceSchema = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  serviceType: "Instalación de estanques de petróleo",
-  provider: { "@type": "LocalBusiness", name: "Fenice SPA", url: "https://fenice.cl/" },
-  areaServed: "Región Metropolitana, Chile",
-  description: "Instalación de estanques de almacenamiento de petróleo certificados por la Superintendencia de Electricidad y Combustibles (SEC) para empresas en Chile.",
-};
+const serviceSchema = buildServiceSchema({
+  name: "Instalación de Estanques de Petróleo",
+  description: "Instalación de estanques de almacenamiento de petróleo certificados por la Superintendencia de Electricidad y Combustibles (SEC) para empresas en la Región Metropolitana.",
+  slug: "instalacion-de-estanques",
+});
 
 const incluye = [
   { icon: ClipboardCheck, text: "Asesoría en selección de capacidad y tipo de estanque según tu consumo" },

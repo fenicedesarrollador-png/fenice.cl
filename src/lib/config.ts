@@ -1,15 +1,26 @@
 // Fallback config — overridden at runtime by configuracion_sitio table values
 export const SITE_CONFIG = {
   nombre: "Fenice SPA",
+  razon_social: "Sociedad Fenice SPA",
   whatsapp_numero: "56939579658",
   telefono: "+56939579658",
   email: "Erika.pierattini@fenicespa.cl",
   horario: "Lun-Vie 09:00–19:00",
   direccion: "La Granja, Santiago, Región Metropolitana",
+  region: "Región Metropolitana",
+  ciudad: "Santiago",
+  pais: "Chile",
   instagram_url: "https://www.instagram.com/fenice.combustible/",
   site_url: "https://fenice.cl",
   lat: -33.5447,
   lng: -70.6354,
+  // Rango de precio referencial para schema (no muestra valores, solo nivel)
+  price_range: "$$",
+  // Reseñas — ACTUALIZAR con valores reales de Google Business Profile.
+  // Mientras no haya reseñas verificables, dejar review_count en 0 para
+  // que el schema NO incluya estrellas (Google penaliza ratings inventados).
+  rating_value: 5.0,
+  review_count: 0,
 } as const;
 
 export const COMUNAS = [

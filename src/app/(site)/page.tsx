@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PreciosCombustible from "@/components/PreciosCombustible";
+import TrustSignals from "@/components/TrustSignals";
 import FuelGauge from "@/components/FuelGauge";
 import {
   Fuel, Truck, Container, ArrowRight, Phone, CheckCircle2,
@@ -9,16 +10,17 @@ import {
   Route, Shield, BarChart3, HeadphonesIcon
 } from "lucide-react";
 import { COMUNAS, SERVICIOS, SITE_CONFIG } from "@/lib/config";
+import { buildMetadata, faqSchema, jsonLd, CORE_KEYWORDS } from "@/lib/seo";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Transporte de Combustible con Seguridad y Eficiencia",
+export const metadata: Metadata = buildMetadata({
+  title: "Petróleo a Domicilio Santiago | Distribuidor de Combustible RM — Fenice SPA",
   description:
-    "Fenice SPA — Soluciones confiables para el traslado y abastecimiento de combustibles con flota especializada, control operativo y compromiso con cada cliente. Cobertura RM, Valparaíso y Rancagua.",
-  alternates: { canonical: "https://fenice.cl" },
-  keywords: "petróleo a domicilio santiago, transporte combustible RM, venta petróleo diesel empresas, abastecimiento combustible industria, estanques combustible SEC",
-};
+    "Distribuidor de petróleo diesel a domicilio para empresas e industria en Santiago y toda la Región Metropolitana. Despacho rápido, flota especializada y respuesta en minutos por WhatsApp. Cobertura RM, Valparaíso y Rancagua.",
+  path: "/",
+  keywords: CORE_KEYWORDS,
+});
 
 const faqItems = [
   { q: "¿Hacen despacho de petróleo a domicilio en Santiago?", a: "Sí. Realizamos despacho de petróleo a domicilio en toda la Región Metropolitana para empresas e industria, con despachos programados o urgentes según sus necesidades." },
@@ -27,15 +29,7 @@ const faqItems = [
   { q: "¿Cómo cotizo el precio del petróleo?", a: "Por WhatsApp al +56 9 3957 9658, mediante el formulario de cotización o contacto. Respondemos en minutos Lun-Vie 09:00–19:00." },
 ];
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqItems.map((item) => ({
-    "@type": "Question",
-    name: item.q,
-    acceptedAnswer: { "@type": "Answer", text: item.a },
-  })),
-};
+const homeFaqSchema = faqSchema(faqItems);
 
 const STATS = [
   { value: "12+", label: "Comunas RM", icon: MapPin },
@@ -135,7 +129,7 @@ const WA_ICON = (
 export default function HomePage() {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(homeFaqSchema)} />
 
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#0a1628]" data-analytics-section="hero">
@@ -228,7 +222,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── PRECIOS DE COMBUSTIBLE ───────────────────────────────────────────── */}
+      {/* ── SEÑALES DE CONFIANZA ─────────────────────────────────────────────── */}
+      <TrustSignals />
+
+      {/* ── PRECIOS DE COMBUSTIBLE Y PRODUCTOS ───────────────────────────────── */}
       <PreciosCombustible />
 
       {/* ── QUIÉNES SOMOS ────────────────────────────────────────────────────── */}
