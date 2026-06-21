@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
+import FirstVisitLoader from "@/components/FirstVisitLoader";
 import { getSiteConfig } from "@/lib/getSiteConfig";
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -37,6 +38,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
 
   return (
     <>
+      <FirstVisitLoader />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }} />
       <AnalyticsProvider>
         <div className="min-h-full flex flex-col bg-white text-gray-900">

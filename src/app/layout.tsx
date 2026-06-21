@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { SITE_CONFIG } from "@/lib/config";
-import FirstVisitLoader from "@/components/FirstVisitLoader";
 import "./globals.css";
 
 const inter = Inter({
@@ -40,7 +39,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es-CL" className={`${inter.variable} h-full`}>
       <body className="min-h-full antialiased" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
-        <FirstVisitLoader />
         {children}
       </body>
     </html>

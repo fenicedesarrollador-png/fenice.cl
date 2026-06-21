@@ -14,6 +14,14 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        // La pantalla de carga se incrusta en un <iframe> del mismo origen.
+        // Debe permitir embebido same-origin; DENY global lo bloquearía.
+        source: "/loader/:path*",
+        headers: [
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+        ],
+      },
+      {
         // Admin routes — no-cache, no-index, strict CSP
         source: "/admin(.*)",
         headers: [
