@@ -7,14 +7,13 @@ import { useState } from "react";
 import {
   LayoutDashboard, Inbox, Package, Building2, FileText,
   CalendarDays, Tag, Settings, Globe, LogOut, Fuel,
-  Users, ChartColumn, X, DollarSign, ArrowUpRight,
+  Users, ChartColumn, X, ArrowUpRight,
 } from "lucide-react";
 
 const links = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/precios-combustible", label: "Precios combustible", icon: Fuel },
-  { href: "/admin/cotizaciones", label: "Cotizaciones", icon: DollarSign },
-  { href: "/admin/leads", label: "Leads", icon: Inbox },
+  { href: "/admin/leads", label: "Solicitudes", icon: Inbox },
   { href: "/admin/productos", label: "Productos", icon: Package },
   { href: "/admin/clientes", label: "Clientes", icon: Building2 },
   { href: "/admin/blog", label: "Blog", icon: FileText },

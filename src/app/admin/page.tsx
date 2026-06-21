@@ -69,8 +69,8 @@ export default async function AdminDashboard() {
   };
 
   const kpis = [
-    { label: "Leads totales", value: stats.leads, sub: `${stats.leadsNuevos} nuevos`, href: "/admin/leads", icon: Inbox, color: "green", alert: stats.leadsNuevos > 0 },
-    { label: "Cotizaciones", value: stats.cotizaciones, sub: `${stats.cotizacionesNuevas} sin procesar`, href: "/admin/cotizaciones", icon: DollarSign, color: "amber", alert: stats.cotizacionesNuevas > 0 },
+    { label: "Contactos", value: stats.leads, sub: `${stats.leadsNuevos} nuevos`, href: "/admin/leads?origen=contacto", icon: Inbox, color: "green", alert: stats.leadsNuevos > 0 },
+    { label: "Cotizaciones", value: stats.cotizaciones, sub: `${stats.cotizacionesNuevas} sin procesar`, href: "/admin/leads?origen=cotizacion", icon: DollarSign, color: "amber", alert: stats.cotizacionesNuevas > 0 },
     { label: "Productos activos", value: stats.productos, sub: "en catálogo", href: "/admin/productos", icon: Package, color: "navy", alert: false },
     { label: "Tasa de cierre", value: `${tasaCierre}%`, sub: `${stats.leadsCerrados} cerrados`, href: "/admin/leads", icon: TrendingUp, color: "green", alert: false },
   ];
@@ -134,7 +134,7 @@ export default async function AdminDashboard() {
               </Link>
             )}
             {stats.cotizacionesNuevas > 0 && (
-              <Link href="/admin/cotizaciones" className="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/15 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-colors border border-white/15">
+              <Link href="/admin/leads?origen=cotizacion" className="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/15 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-colors border border-white/15">
                 Ver cotizaciones <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             )}
@@ -209,7 +209,7 @@ export default async function AdminDashboard() {
                 </Link>
               ))}
               {recentCotizaciones.map((cot) => (
-                <Link key={`c-${cot.id}`} href="/admin/cotizaciones" className="flex items-center gap-3 px-5 py-3 hover:bg-slate-50/70 transition-colors">
+                <Link key={`c-${cot.id}`} href="/admin/leads?origen=cotizacion" className="flex items-center gap-3 px-5 py-3 hover:bg-slate-50/70 transition-colors">
                   <div className="w-9 h-9 rounded-xl bg-[#fff7ec] flex items-center justify-center shrink-0">
                     <DollarSign className="w-4 h-4 text-[#d98a0e]" />
                   </div>
