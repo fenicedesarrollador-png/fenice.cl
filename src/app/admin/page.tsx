@@ -2,101 +2,26 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import {
-  Inbox,
-  Package,
-  FileText,
-  CalendarDays,
-  Tag,
-  ArrowRight,
-  AlertCircle,
-  Plus,
-  ExternalLink,
-  Settings,
-  TrendingUp,
-  TrendingDown,
-  DollarSign,
-  Users,
-  Activity,
-  Zap,
-  CheckCircle2,
-  Clock,
+  Inbox, Package, FileText, CalendarDays, Tag, ArrowRight,
+  Plus, DollarSign, Users, Activity, Zap, Fuel, Settings,
+  TrendingUp, Sparkles, Clock,
 } from "lucide-react";
 
 export const metadata: Metadata = { title: "Dashboard | Admin Fenice" };
 
-function StatCard({
-  label,
-  value,
-  sub,
-  href,
-  icon: Icon,
-  alert,
-  trend,
-  trendLabel,
-}: {
-  label: string;
-  value: number;
-  sub: string;
-  href: string;
-  icon: React.ElementType;
-  alert?: boolean;
-  trend?: "up" | "down" | "neutral";
-  trendLabel?: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="group bg-white border border-slate-100 hover:border-orange-200 hover:shadow-lg hover:shadow-orange-500/5 rounded-2xl p-5 transition-all duration-200 relative overflow-hidden"
-    >
-      {alert && (
-        <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full m-3 animate-pulse" />
-      )}
-      <div className="flex items-start justify-between mb-4">
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
-          alert
-            ? "bg-red-50 group-hover:bg-red-100"
-            : "bg-slate-50 group-hover:bg-orange-50"
-        }`}>
-          <Icon className={`w-5 h-5 ${alert ? "text-red-500" : "text-slate-500 group-hover:text-orange-500"} transition-colors`} />
-        </div>
-        {trend && trendLabel && (
-          <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full ${
-            trend === "up"
-              ? "bg-green-50 text-green-600"
-              : trend === "down"
-              ? "bg-red-50 text-red-600"
-              : "bg-slate-50 text-slate-500"
-          }`}>
-            {trend === "up" ? <TrendingUp className="w-3 h-3" /> : trend === "down" ? <TrendingDown className="w-3 h-3" /> : null}
-            {trendLabel}
-          </span>
-        )}
-      </div>
-      <p className="text-3xl font-black text-slate-900 tabular-nums mb-1">{value}</p>
-      <p className="text-xs font-semibold text-slate-600">{label}</p>
-      <p className="text-[11px] text-slate-400 mt-0.5">{sub}</p>
-      <div className="mt-3 flex items-center gap-1 text-[11px] font-semibold text-slate-400 group-hover:text-orange-500 transition-colors">
-        Ver detalle <ArrowRight className="w-3 h-3" />
-      </div>
-    </Link>
-  );
-}
-
 export default async function AdminDashboard() {
   let stats = {
-    leads: 0, leadsNuevos: 0, leadsContactados: 0,
+    leads: 0, leadsNuevos: 0, leadsContactados: 0, leadsCerrados: 0,
     cotizaciones: 0, cotizacionesNuevas: 0,
-    productos: 0, posts: 0, eventosActivos: 0,
-    promoActivas: 0, clientes: 0,
+    productos: 0, posts: 0, eventosActivos: 0, promoActivas: 0, clientes: 0,
   };
-
-  let recentLeads: { id: string; nombre: string; email?: string; estado: string; created_at: string; comuna?: string }[] = [];
+  let recentLeads: { id: string; nombre: string; estado: string; created_at: string; comuna?: string }[] = [];
   let recentCotizaciones: { id: string; nombre: string; empresa: string; estado: string; created_at: string }[] = [];
 
   try {
     const supabase = await createClient();
     const [
-      leadsRes, leadsNuevosRes, leadsContactadosRes,
+      leadsRes, leadsNuevosRes, leadsContactadosRes, leadsCerradosRes,
       cotRes, cotNuevasRes,
       prodRes, blogRes, eventosRes, promosRes, clientesRes,
       recentLeadsRes, recentCotRes,
@@ -104,6 +29,7 @@ export default async function AdminDashboard() {
       supabase.from("leads").select("id", { count: "exact", head: true }),
       supabase.from("leads").select("id", { count: "exact", head: true }).eq("estado", "nuevo"),
       supabase.from("leads").select("id", { count: "exact", head: true }).eq("estado", "contactado"),
+      supabase.from("leads").select("id", { count: "exact", head: true }).eq("estado", "cerrado"),
       supabase.from("cotizaciones").select("id", { count: "exact", head: true }),
       supabase.from("cotizaciones").select("id", { count: "exact", head: true }).eq("estado", "nuevo"),
       supabase.from("productos").select("id", { count: "exact", head: true }).eq("activo", true),
@@ -111,14 +37,14 @@ export default async function AdminDashboard() {
       supabase.from("eventos").select("id", { count: "exact", head: true }).eq("activo", true),
       supabase.from("promociones").select("id", { count: "exact", head: true }).eq("activo", true),
       supabase.from("clientes").select("id", { count: "exact", head: true }).eq("activo", true),
-      supabase.from("leads").select("id, nombre, email, estado, created_at, comuna").order("created_at", { ascending: false }).limit(5),
-      supabase.from("cotizaciones").select("id, nombre, empresa, estado, created_at").order("created_at", { ascending: false }).limit(5),
+      supabase.from("leads").select("id, nombre, estado, created_at, comuna").order("created_at", { ascending: false }).limit(4),
+      supabase.from("cotizaciones").select("id, nombre, empresa, estado, created_at").order("created_at", { ascending: false }).limit(3),
     ]);
-
     stats = {
       leads: leadsRes.count ?? 0,
       leadsNuevos: leadsNuevosRes.count ?? 0,
       leadsContactados: leadsContactadosRes.count ?? 0,
+      leadsCerrados: leadsCerradosRes.count ?? 0,
       cotizaciones: cotRes.count ?? 0,
       cotizacionesNuevas: cotNuevasRes.count ?? 0,
       productos: prodRes.count ?? 0,
@@ -127,142 +53,89 @@ export default async function AdminDashboard() {
       promoActivas: promosRes.count ?? 0,
       clientes: clientesRes.count ?? 0,
     };
-
     if (recentLeadsRes.data) recentLeads = recentLeadsRes.data;
     if (recentCotRes.data) recentCotizaciones = recentCotRes.data;
   } catch {}
 
   const totalAlertas = stats.leadsNuevos + stats.cotizacionesNuevas;
+  const tasaCierre = stats.leads > 0 ? Math.round((stats.leadsCerrados / stats.leads) * 100) : 0;
 
-  const kpis = [
-    {
-      label: "Leads nuevos",
-      value: stats.leadsNuevos,
-      sub: `${stats.leads} total · ${stats.leadsContactados} en seguimiento`,
-      href: "/admin/leads",
-      icon: Inbox,
-      alert: stats.leadsNuevos > 0,
-      trend: stats.leadsNuevos > 0 ? ("up" as const) : ("neutral" as const),
-      trendLabel: stats.leadsNuevos > 0 ? `${stats.leadsNuevos} sin atender` : "Al día",
-    },
-    {
-      label: "Cotizaciones nuevas",
-      value: stats.cotizacionesNuevas,
-      sub: `${stats.cotizaciones} total recibidas`,
-      href: "/admin/cotizaciones",
-      icon: DollarSign,
-      alert: stats.cotizacionesNuevas > 0,
-      trend: stats.cotizacionesNuevas > 0 ? ("up" as const) : ("neutral" as const),
-      trendLabel: stats.cotizacionesNuevas > 0 ? `${stats.cotizacionesNuevas} pendientes` : "Al día",
-    },
-    {
-      label: "Productos activos",
-      value: stats.productos,
-      sub: "en catálogo público",
-      href: "/admin/productos",
-      icon: Package,
-      trend: "neutral" as const,
-    },
-    {
-      label: "Posts publicados",
-      value: stats.posts,
-      sub: "artículos en blog",
-      href: "/admin/blog",
-      icon: FileText,
-      trend: "neutral" as const,
-    },
-    {
-      label: "Clientes activos",
-      value: stats.clientes,
-      sub: "logos en sitio",
-      href: "/admin/clientes",
-      icon: Users,
-      trend: "neutral" as const,
-    },
-    {
-      label: "Promociones activas",
-      value: stats.promoActivas,
-      sub: "campañas vigentes",
-      href: "/admin/promociones",
-      icon: Tag,
-      trend: stats.promoActivas > 0 ? ("up" as const) : ("neutral" as const),
-      trendLabel: stats.promoActivas > 0 ? "En curso" : undefined,
-    },
-  ];
-
-  const ESTADO_COLOR: Record<string, string> = {
-    nuevo: "bg-red-100 text-red-700",
-    contactado: "bg-amber-100 text-amber-700",
-    cerrado: "bg-green-100 text-green-700",
-    en_proceso: "bg-blue-100 text-blue-700",
-    cotizado: "bg-purple-100 text-purple-700",
+  const ESTADO_TONE: Record<string, string> = {
+    nuevo: "bg-red-50 text-red-600",
+    contactado: "bg-[#fff7ec] text-[#b87608]",
+    cerrado: "bg-[#ecfdf3] text-[#1a6b3c]",
+    en_proceso: "bg-blue-50 text-blue-600",
+    cotizado: "bg-purple-50 text-purple-600",
   };
 
+  const kpis = [
+    { label: "Leads totales", value: stats.leads, sub: `${stats.leadsNuevos} nuevos`, href: "/admin/leads", icon: Inbox, color: "green", alert: stats.leadsNuevos > 0 },
+    { label: "Cotizaciones", value: stats.cotizaciones, sub: `${stats.cotizacionesNuevas} sin procesar`, href: "/admin/cotizaciones", icon: DollarSign, color: "amber", alert: stats.cotizacionesNuevas > 0 },
+    { label: "Productos activos", value: stats.productos, sub: "en catálogo", href: "/admin/productos", icon: Package, color: "navy", alert: false },
+    { label: "Tasa de cierre", value: `${tasaCierre}%`, sub: `${stats.leadsCerrados} cerrados`, href: "/admin/leads", icon: TrendingUp, color: "green", alert: false },
+  ];
+
+  const colorMap: Record<string, { ring: string; iconBg: string; val: string }> = {
+    green: { ring: "ring-[#1a6b3c]/15", iconBg: "bg-[#ecfdf3] text-[#1a6b3c]", val: "text-[#0a1628]" },
+    amber: { ring: "ring-[#f5a623]/20", iconBg: "bg-[#fff7ec] text-[#d98a0e]", val: "text-[#0a1628]" },
+    navy: { ring: "ring-slate-200", iconBg: "bg-slate-100 text-slate-600", val: "text-[#0a1628]" },
+  };
+
+  const modules = [
+    { label: "Posts blog", value: stats.posts, href: "/admin/blog", icon: FileText },
+    { label: "Clientes activos", value: stats.clientes, href: "/admin/clientes", icon: Users },
+    { label: "Eventos activos", value: stats.eventosActivos, href: "/admin/eventos", icon: CalendarDays },
+    { label: "Promociones", value: stats.promoActivas, href: "/admin/promociones", icon: Tag },
+  ];
+
   const quickActions = [
-    { href: "/admin/leads", label: "Gestionar leads", icon: Inbox, badge: stats.leadsNuevos > 0 ? stats.leadsNuevos : undefined },
-    { href: "/admin/cotizaciones", label: "Ver cotizaciones", icon: DollarSign, badge: stats.cotizacionesNuevas > 0 ? stats.cotizacionesNuevas : undefined },
-    { href: "/admin/productos/nuevo", label: "Nuevo producto", icon: Plus, badge: undefined },
-    { href: "/admin/blog/nuevo", label: "Nuevo post", icon: Plus, badge: undefined },
-    { href: "/admin/precios-combustible", label: "Actualizar precios", icon: Zap, badge: undefined },
-    { href: "/admin/configuracion", label: "Configuración", icon: Settings, badge: undefined },
+    { href: "/admin/precios-combustible", label: "Actualizar precios", icon: Fuel },
+    { href: "/admin/productos/nuevo", label: "Nuevo producto", icon: Plus },
+    { href: "/admin/blog/nuevo", label: "Nuevo post", icon: Plus },
+    { href: "/admin/configuracion", label: "Configuración", icon: Settings },
   ];
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto space-y-6">
+    <div className="p-4 sm:p-6 lg:p-7 max-w-[1280px] mx-auto space-y-5 admin-rise">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Dashboard</h1>
-          <p className="text-slate-400 text-sm mt-0.5">
-            Resumen operativo · Fenice SPA ·{" "}
-            <span className="font-medium">
-              {new Date().toLocaleDateString("es-CL", { weekday: "long", day: "numeric", month: "long" })}
-            </span>
-          </p>
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#1a6b3c] to-[#145530] flex items-center justify-center shadow-lg shadow-[#1a6b3c]/25 shrink-0">
+            <Sparkles className="w-5 h-5 text-[#f5a623]" />
+          </div>
+          <div>
+            <h1 className="text-xl sm:text-2xl font-black text-[#0a1628] tracking-tight">Buen día 👋</h1>
+            <p className="text-slate-500 text-[13px] font-medium capitalize">
+              {new Date().toLocaleDateString("es-CL", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+            </p>
+          </div>
         </div>
-        <a
-          href="/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-xs text-slate-500 hover:text-slate-900 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 px-3.5 py-2 rounded-xl transition-all self-start sm:self-auto font-medium"
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-green-400 shrink-0" />
-          Ver sitio
-          <ExternalLink className="w-3 h-3" />
-        </a>
       </div>
 
-      {/* Alert banner */}
+      {/* Alert */}
       {totalAlertas > 0 && (
-        <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-3 shadow-lg shadow-orange-500/20">
-          <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
-            <AlertCircle className="w-5 h-5 text-white" />
+        <div className="bg-gradient-to-r from-[#0a1628] to-[#112137] rounded-2xl px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-4 shadow-lg shadow-[#0a1628]/15 relative overflow-hidden">
+          <div className="absolute -right-8 -top-8 w-32 h-32 bg-[#f5a623]/10 rounded-full blur-2xl" />
+          <div className="w-10 h-10 bg-[#f5a623] rounded-xl flex items-center justify-center shrink-0 relative">
+            <Zap className="w-5 h-5 text-[#0a1628]" fill="currentColor" />
           </div>
-          <div className="flex-1">
-            <p className="font-bold text-white text-sm">
-              {totalAlertas} solicitud{totalAlertas > 1 ? "es" : ""} requieren atención
-            </p>
-            <p className="text-orange-100 text-xs mt-0.5">
+          <div className="flex-1 relative">
+            <p className="font-black text-white text-sm">{totalAlertas} solicitud{totalAlertas > 1 ? "es" : ""} requieren tu atención</p>
+            <p className="text-slate-400 text-xs mt-0.5">
               {stats.leadsNuevos > 0 && `${stats.leadsNuevos} lead${stats.leadsNuevos > 1 ? "s" : ""} nuevo${stats.leadsNuevos > 1 ? "s" : ""}`}
               {stats.leadsNuevos > 0 && stats.cotizacionesNuevas > 0 && " · "}
-              {stats.cotizacionesNuevas > 0 && `${stats.cotizacionesNuevas} cotización${stats.cotizacionesNuevas > 1 ? "es" : ""} sin procesar`}
+              {stats.cotizacionesNuevas > 0 && `${stats.cotizacionesNuevas} cotización${stats.cotizacionesNuevas > 1 ? "es" : ""} pendiente${stats.cotizacionesNuevas > 1 ? "s" : ""}`}
             </p>
           </div>
-          <div className="flex gap-2 shrink-0 flex-wrap">
+          <div className="flex gap-2 shrink-0 relative flex-wrap">
             {stats.leadsNuevos > 0 && (
-              <Link
-                href="/admin/leads"
-                className="inline-flex items-center gap-1.5 bg-white text-orange-600 text-xs font-bold px-3.5 py-2 rounded-xl hover:bg-orange-50 transition-colors"
-              >
-                Ver leads <ArrowRight className="w-3 h-3" />
+              <Link href="/admin/leads" className="inline-flex items-center gap-1.5 bg-[#f5a623] hover:bg-[#d98a0e] text-[#0a1628] text-xs font-black px-3.5 py-2 rounded-xl transition-colors">
+                Ver leads <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             )}
             {stats.cotizacionesNuevas > 0 && (
-              <Link
-                href="/admin/cotizaciones"
-                className="inline-flex items-center gap-1.5 bg-white/20 text-white text-xs font-bold px-3.5 py-2 rounded-xl hover:bg-white/30 transition-colors border border-white/30"
-              >
-                Ver cotizaciones <ArrowRight className="w-3 h-3" />
+              <Link href="/admin/cotizaciones" className="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/15 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-colors border border-white/15">
+                Ver cotizaciones <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             )}
           </div>
@@ -270,212 +143,150 @@ export default async function AdminDashboard() {
       )}
 
       {/* KPI Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3 lg:gap-4">
-        {kpis.map((kpi) => (
-          <StatCard key={kpi.label} {...kpi} />
-        ))}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+        {kpis.map((kpi) => {
+          const c = colorMap[kpi.color];
+          return (
+            <Link
+              key={kpi.label}
+              href={kpi.href}
+              className={`admin-card p-5 hover:-translate-y-0.5 transition-all duration-200 group relative overflow-hidden ring-1 ${c.ring}`}
+            >
+              <div className="flex items-start justify-between mb-3.5">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${c.iconBg}`}>
+                  <kpi.icon className="w-5 h-5" strokeWidth={2.2} />
+                </div>
+                {kpi.alert && (
+                  <span className="flex h-2 w-2 relative">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+                  </span>
+                )}
+              </div>
+              <p className={`text-[28px] leading-none font-black tabular-nums ${c.val}`}>{kpi.value}</p>
+              <p className="text-[12.5px] font-bold text-slate-600 mt-2">{kpi.label}</p>
+              <p className="text-[11px] text-slate-400 mt-0.5">{kpi.sub}</p>
+              <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-[#1a6b3c] absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all -translate-x-1 group-hover:translate-x-0" />
+            </Link>
+          );
+        })}
       </div>
 
-      {/* Middle row: Recent activity + Quick actions */}
-      <div className="grid lg:grid-cols-5 gap-4 lg:gap-6">
-        {/* Recent leads */}
-        <div className="lg:col-span-3 bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
+      {/* Main grid */}
+      <div className="grid lg:grid-cols-3 gap-4">
+        {/* Actividad reciente */}
+        <div className="lg:col-span-2 admin-card overflow-hidden">
           <div className="px-5 py-4 border-b border-slate-50 flex items-center justify-between">
-            <div>
-              <h2 className="text-sm font-bold text-slate-900">Actividad reciente</h2>
-              <p className="text-[11px] text-slate-400 mt-0.5">Últimos leads y cotizaciones</p>
+            <div className="flex items-center gap-2.5">
+              <Activity className="w-4 h-4 text-[#1a6b3c]" />
+              <h2 className="text-sm font-black text-[#0a1628]">Actividad reciente</h2>
             </div>
-            <Activity className="w-4 h-4 text-slate-300" />
+            <Link href="/admin/leads" className="text-[12px] font-bold text-[#1a6b3c] hover:text-[#145530] flex items-center gap-1 transition-colors">
+              Ver todo <ArrowRight className="w-3 h-3" />
+            </Link>
           </div>
-
           {recentLeads.length === 0 && recentCotizaciones.length === 0 ? (
-            <div className="py-16 text-center">
-              <p className="text-slate-400 text-sm">Sin actividad reciente.</p>
+            <div className="py-14 text-center">
+              <Clock className="w-7 h-7 text-slate-200 mx-auto mb-2" />
+              <p className="text-slate-400 text-sm font-medium">Sin actividad reciente todavía.</p>
             </div>
           ) : (
             <div className="divide-y divide-slate-50">
-              {recentLeads.slice(0, 3).map((lead) => (
-                <Link
-                  key={`lead-${lead.id}`}
-                  href="/admin/leads"
-                  className="flex items-center gap-3 px-5 py-3.5 hover:bg-slate-50 transition-colors group"
-                >
-                  <div className="w-8 h-8 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-[11px] font-black text-orange-500 shrink-0">
+              {recentLeads.map((lead) => (
+                <Link key={`l-${lead.id}`} href="/admin/leads" className="flex items-center gap-3 px-5 py-3 hover:bg-slate-50/70 transition-colors">
+                  <div className="w-9 h-9 rounded-xl bg-[#ecfdf3] flex items-center justify-center text-[11px] font-black text-[#1a6b3c] shrink-0">
                     {lead.nombre.slice(0, 2).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-slate-800 truncate">{lead.nombre}</p>
+                    <p className="text-[13px] font-bold text-[#0a1628] truncate">{lead.nombre}</p>
                     <p className="text-[11px] text-slate-400 truncate">
-                      Lead{lead.comuna ? ` · ${lead.comuna}` : ""} ·{" "}
-                      {new Date(lead.created_at).toLocaleDateString("es-CL", { day: "2-digit", month: "short" })}
+                      Lead{lead.comuna ? ` · ${lead.comuna}` : ""} · {new Date(lead.created_at).toLocaleDateString("es-CL", { day: "2-digit", month: "short" })}
                     </p>
                   </div>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${ESTADO_COLOR[lead.estado] ?? "bg-slate-100 text-slate-500"}`}>
+                  <span className={`text-[10px] font-black px-2 py-0.5 rounded-full shrink-0 capitalize ${ESTADO_TONE[lead.estado] ?? "bg-slate-100 text-slate-500"}`}>
                     {lead.estado}
                   </span>
                 </Link>
               ))}
-              {recentCotizaciones.slice(0, 2).map((cot) => (
-                <Link
-                  key={`cot-${cot.id}`}
-                  href="/admin/cotizaciones"
-                  className="flex items-center gap-3 px-5 py-3.5 hover:bg-slate-50 transition-colors group"
-                >
-                  <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[11px] font-black text-blue-500 shrink-0">
-                    <DollarSign className="w-4 h-4" />
+              {recentCotizaciones.map((cot) => (
+                <Link key={`c-${cot.id}`} href="/admin/cotizaciones" className="flex items-center gap-3 px-5 py-3 hover:bg-slate-50/70 transition-colors">
+                  <div className="w-9 h-9 rounded-xl bg-[#fff7ec] flex items-center justify-center shrink-0">
+                    <DollarSign className="w-4 h-4 text-[#d98a0e]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-slate-800 truncate">{cot.empresa}</p>
+                    <p className="text-[13px] font-bold text-[#0a1628] truncate">{cot.empresa}</p>
                     <p className="text-[11px] text-slate-400 truncate">
-                      Cotización · {cot.nombre} ·{" "}
-                      {new Date(cot.created_at).toLocaleDateString("es-CL", { day: "2-digit", month: "short" })}
+                      Cotización · {cot.nombre} · {new Date(cot.created_at).toLocaleDateString("es-CL", { day: "2-digit", month: "short" })}
                     </p>
                   </div>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${ESTADO_COLOR[cot.estado] ?? "bg-slate-100 text-slate-500"}`}>
-                    {cot.estado}
+                  <span className={`text-[10px] font-black px-2 py-0.5 rounded-full shrink-0 capitalize ${ESTADO_TONE[cot.estado] ?? "bg-slate-100 text-slate-500"}`}>
+                    {cot.estado.replace("_", " ")}
                   </span>
                 </Link>
               ))}
             </div>
           )}
-
-          <div className="px-5 py-3 border-t border-slate-50">
-            <Link href="/admin/leads" className="text-xs text-orange-500 hover:text-orange-600 font-semibold flex items-center gap-1 transition-colors">
-              Ver todos los leads <ArrowRight className="w-3 h-3" />
-            </Link>
-          </div>
         </div>
 
-        {/* Quick actions */}
-        <div className="lg:col-span-2 bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
-          <div className="px-5 py-4 border-b border-slate-50 flex items-center justify-between">
-            <div>
-              <h2 className="text-sm font-bold text-slate-900">Acciones rápidas</h2>
-              <p className="text-[11px] text-slate-400 mt-0.5">Accesos directos</p>
+        {/* Acciones + pipeline */}
+        <div className="space-y-4">
+          {/* Pipeline mini */}
+          <div className="admin-card bg-gradient-to-br from-[#0a1628] to-[#112137] overflow-hidden p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#f5a623]" />
+              <h2 className="text-xs font-black text-white uppercase tracking-wider">Pipeline comercial</h2>
             </div>
-            <Zap className="w-4 h-4 text-slate-300" />
-          </div>
-          <div className="divide-y divide-slate-50">
-            {quickActions.map((action) => (
-              <Link
-                key={action.href}
-                href={action.href}
-                className="flex items-center gap-3 px-5 py-3 hover:bg-slate-50 transition-colors group"
-              >
-                <div className="w-7 h-7 rounded-lg bg-slate-50 group-hover:bg-orange-50 border border-slate-100 group-hover:border-orange-100 flex items-center justify-center transition-all shrink-0">
-                  <action.icon className="w-3.5 h-3.5 text-slate-400 group-hover:text-orange-500 transition-colors" />
+            <div className="grid grid-cols-3 gap-2.5">
+              {[
+                { label: "Nuevos", value: stats.leadsNuevos, color: "text-red-400" },
+                { label: "Contacto", value: stats.leadsContactados, color: "text-[#f5a623]" },
+                { label: "Cerrados", value: stats.leadsCerrados, color: "text-emerald-400" },
+              ].map((s) => (
+                <div key={s.label} className="bg-white/[0.05] rounded-xl p-2.5 text-center">
+                  <p className={`text-xl font-black tabular-nums ${s.color}`}>{s.value}</p>
+                  <p className="text-[9px] text-slate-400 font-bold mt-1 uppercase tracking-wide">{s.label}</p>
                 </div>
-                <span className="flex-1 text-sm font-medium text-slate-700 group-hover:text-slate-900 transition-colors">{action.label}</span>
-                {action.badge != null && (
-                  <span className="w-5 h-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center shrink-0">
-                    {action.badge > 9 ? "9+" : action.badge}
-                  </span>
-                )}
-                <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-orange-400 transition-colors shrink-0" />
-              </Link>
-            ))}
+              ))}
+            </div>
+            <Link href="/admin/leads" className="mt-4 flex items-center justify-center gap-1.5 text-[12px] font-bold text-[#f5a623] hover:text-[#d98a0e] transition-colors">
+              Gestionar pipeline <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          {/* Quick actions */}
+          <div className="admin-card overflow-hidden">
+            <div className="px-5 py-3.5 border-b border-slate-50 flex items-center gap-2.5">
+              <Zap className="w-4 h-4 text-[#f5a623]" />
+              <h2 className="text-sm font-black text-[#0a1628]">Acciones rápidas</h2>
+            </div>
+            <div className="divide-y divide-slate-50">
+              {quickActions.map((a) => (
+                <Link key={a.href} href={a.href} className="flex items-center gap-3 px-5 py-2.5 hover:bg-slate-50/70 transition-colors group">
+                  <div className="w-7 h-7 rounded-lg bg-slate-50 group-hover:bg-[#ecfdf3] flex items-center justify-center transition-colors shrink-0">
+                    <a.icon className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#1a6b3c] transition-colors" />
+                  </div>
+                  <span className="flex-1 text-[13px] font-semibold text-slate-700 group-hover:text-[#0a1628]">{a.label}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-[#1a6b3c] transition-colors" />
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom row: Status + Módulos summary */}
-      <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        {/* Estado sitio */}
-        <div className="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
-          <div className="px-5 py-4 border-b border-slate-50">
-            <h2 className="text-sm font-bold text-slate-900">Estado del sitio</h2>
-          </div>
-          <div className="px-5 py-3 space-y-2.5">
-            {[
-              { label: "Sitio público", href: "https://fenice.cl", status: "online" },
-              { label: "Sitemap", href: "https://fenice.cl/sitemap.xml", status: "online" },
-              { label: "Robots.txt", href: "https://fenice.cl/robots.txt", status: "online" },
-            ].map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between py-1 hover:text-orange-600 group transition-colors"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-green-400 shrink-0" />
-                  <span className="text-xs text-slate-600 group-hover:text-orange-600 transition-colors font-medium">{item.label}</span>
-                </div>
-                <ExternalLink className="w-3 h-3 text-slate-300 group-hover:text-orange-400 transition-colors" />
-              </a>
-            ))}
-            <div className="pt-1 border-t border-slate-50">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-green-500" />
-                <span className="text-[11px] text-slate-400 font-medium">Todos los sistemas operativos</span>
-              </div>
+      {/* Módulos resumen */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+        {modules.map((m) => (
+          <Link key={m.label} href={m.href} className="admin-card px-4 py-4 flex items-center gap-3.5 hover:border-[#1a6b3c]/20 transition-colors group">
+            <div className="w-10 h-10 rounded-xl bg-slate-50 group-hover:bg-[#ecfdf3] flex items-center justify-center shrink-0 transition-colors">
+              <m.icon className="w-5 h-5 text-slate-400 group-hover:text-[#1a6b3c] transition-colors" />
             </div>
-          </div>
-        </div>
-
-        {/* Content summary */}
-        <div className="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
-          <div className="px-5 py-4 border-b border-slate-50">
-            <h2 className="text-sm font-bold text-slate-900">Contenido publicado</h2>
-          </div>
-          <div className="px-5 py-3 space-y-2.5">
-            {[
-              { label: "Productos", value: stats.productos, href: "/admin/productos", icon: Package },
-              { label: "Posts blog", value: stats.posts, href: "/admin/blog", icon: FileText },
-              { label: "Eventos activos", value: stats.eventosActivos, href: "/admin/eventos", icon: CalendarDays },
-              { label: "Promociones", value: stats.promoActivas, href: "/admin/promociones", icon: Tag },
-            ].map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="flex items-center justify-between py-1 group"
-              >
-                <div className="flex items-center gap-2">
-                  <item.icon className="w-3.5 h-3.5 text-slate-400 group-hover:text-orange-500 transition-colors" />
-                  <span className="text-xs text-slate-600 group-hover:text-slate-900 transition-colors font-medium">{item.label}</span>
-                </div>
-                <span className="text-xs font-black text-slate-900 tabular-nums">{item.value}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Pipeline CRM */}
-        <div className="sm:col-span-2 bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-2xl overflow-hidden shadow-sm">
-          <div className="px-5 py-4 border-b border-slate-700/50">
-            <h2 className="text-sm font-bold text-white">Pipeline comercial</h2>
-            <p className="text-[11px] text-slate-400 mt-0.5">Estado global de oportunidades</p>
-          </div>
-          <div className="px-5 py-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {[
-              { label: "Leads nuevos", value: stats.leadsNuevos, color: "text-red-400", bg: "bg-red-500/10 border-red-500/20" },
-              { label: "En contacto", value: stats.leadsContactados, color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20" },
-              { label: "Cotizaciones", value: stats.cotizaciones, color: "text-blue-400", bg: "bg-blue-500/10 border-blue-500/20" },
-              { label: "Total leads", value: stats.leads, color: "text-green-400", bg: "bg-green-500/10 border-green-500/20" },
-            ].map((item) => (
-              <div key={item.label} className={`rounded-xl border p-3 ${item.bg}`}>
-                <p className={`text-2xl font-black tabular-nums ${item.color}`}>{item.value}</p>
-                <p className="text-[10px] text-slate-400 font-medium mt-1 leading-tight">{item.label}</p>
-              </div>
-            ))}
-          </div>
-          <div className="px-5 pb-4 flex items-center gap-3">
-            <Link
-              href="/admin/leads"
-              className="text-xs text-orange-400 hover:text-orange-300 font-semibold flex items-center gap-1 transition-colors"
-            >
-              Gestionar leads <ArrowRight className="w-3 h-3" />
-            </Link>
-            <span className="text-slate-700">·</span>
-            <Link
-              href="/admin/cotizaciones"
-              className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1 transition-colors"
-            >
-              Ver cotizaciones <ArrowRight className="w-3 h-3" />
-            </Link>
-          </div>
-        </div>
+            <div>
+              <p className="text-xl font-black text-[#0a1628] tabular-nums leading-none">{m.value}</p>
+              <p className="text-[11px] text-slate-500 font-semibold mt-1">{m.label}</p>
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   );

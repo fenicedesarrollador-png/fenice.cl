@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import ProductoForm from "../../_ProductoForm";
+import { FormPageHeader } from "../../../_components/ui";
 
 export const metadata: Metadata = { title: "Editar Producto" };
 
@@ -14,10 +15,9 @@ export default async function EditarProductoPage({ params }: { params: Promise<{
     if (data) producto = data;
   } catch {}
   if (!producto) notFound();
-
   return (
-    <div className="max-w-2xl">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Editar producto</h1>
+    <div className="p-4 sm:p-6 lg:p-7 max-w-3xl mx-auto admin-rise">
+      <FormPageHeader title="Editar producto" subtitle={producto.nombre} backHref="/admin/productos" />
       <ProductoForm producto={producto} />
     </div>
   );

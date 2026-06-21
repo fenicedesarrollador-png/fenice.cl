@@ -89,7 +89,7 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
                   <YAxis stroke="#64748b" />
                   <Tooltip />
                   <Line type="monotone" dataKey="visitors" stroke="#1a6b3c" strokeWidth={2} />
-                  <Line type="monotone" dataKey="sessions" stroke="#f59e0b" strokeWidth={2} />
+                  <Line type="monotone" dataKey="sessions" stroke="#f5a623" strokeWidth={2} />
                   <Line type="monotone" dataKey="page_views" stroke="#0f172a" strokeWidth={2} />
                 </LineChart>
               </ResponsiveContainer>
@@ -404,7 +404,7 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
                     <td className="py-3 pr-4 text-slate-700">{session.last_path}</td>
                     <td className="py-3 pr-4 text-slate-700">{formatDuration(session.duration_seconds)}</td>
                     <td className="py-3">
-                      <Link href={`/admin/metricas/${session.session_id}`} className="font-semibold text-orange-600 hover:text-orange-700">
+                      <Link href={`/admin/metricas/${session.session_id}`} className="font-semibold text-[#1a6b3c] hover:text-[#145530]">
                         Ver sesión
                       </Link>
                     </td>

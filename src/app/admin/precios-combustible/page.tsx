@@ -26,15 +26,15 @@ export default async function AdminPreciosCombustiblePage() {
     .order("display_order", { ascending: true });
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-7 admin-rise">
       {/* Page header */}
-      <div className="flex items-center gap-3 mb-8">
-        <div className="w-10 h-10 rounded-xl bg-[#f5a623]/10 border border-[#f5a623]/20 flex items-center justify-center">
-          <Fuel className="w-5 h-5 text-[#f5a623]" />
+      <div className="flex items-center gap-3.5 mb-6">
+        <div className="w-11 h-11 rounded-2xl bg-[#fff7ec] border border-[#f5a623]/20 flex items-center justify-center shrink-0">
+          <Fuel className="w-5 h-5 text-[#d98a0e]" />
         </div>
         <div>
-          <h1 className="text-2xl font-extrabold text-[#0a1628] leading-tight">Precios de combustible</h1>
-          <p className="text-sm text-slate-500 mt-0.5">Edita y publica los precios que se muestran en el sitio web.</p>
+          <h1 className="text-xl sm:text-2xl font-black text-[#0a1628] tracking-tight leading-tight">Precios de combustible</h1>
+          <p className="text-[13px] text-slate-500 mt-0.5 font-medium">Edita y publica los precios que se muestran en el sitio.</p>
         </div>
       </div>
 

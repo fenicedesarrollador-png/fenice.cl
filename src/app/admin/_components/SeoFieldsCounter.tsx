@@ -9,43 +9,37 @@ interface Props {
   maxLength: number;
   required?: boolean;
   isTextArea?: boolean;
+  hint?: string;
 }
 
-export default function SeoFieldsCounter({ name, label, defaultValue = "", maxLength, required, isTextArea }: Props) {
+export default function SeoFieldsCounter({ name, label, defaultValue = "", maxLength, required, isTextArea, hint }: Props) {
   const [value, setValue] = useState(defaultValue);
   const remaining = maxLength - value.length;
-  const isOverLimit = remaining < 0;
-  const isClose = remaining <= 15 && remaining >= 0;
-
-  const className = "w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent";
+  const over = remaining < 0;
+  const close = remaining <= 15 && remaining >= 0;
+  const pct = Math.min(100, (value.length / maxLength) * 100);
 
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
+      <div className="flex items-center justify-between mb-1.5">
+        <label className="admin-label !mb-0">
+          {label} {required && <span className="text-red-500">*</span>}
+        </label>
+        <span className={`text-[11px] font-bold tabular-nums ${over ? "text-red-600" : close ? "text-[#d98a0e]" : "text-slate-400"}`}>
+          {value.length}/{maxLength}
+        </span>
+      </div>
       {isTextArea ? (
-        <textarea
-          name={name}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          required={required}
-          rows={3}
-          className={className}
-        />
+        <textarea name={name} value={value} onChange={(e) => setValue(e.target.value)} required={required} rows={3} className="admin-input" />
       ) : (
-        <input
-          type="text"
-          name={name}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          required={required}
-          className={className}
-        />
+        <input type="text" name={name} value={value} onChange={(e) => setValue(e.target.value)} required={required} className="admin-input" />
       )}
-      <p className={`text-xs mt-1 ${isOverLimit ? "text-red-600" : isClose ? "text-yellow-600" : "text-gray-400"}`}>
-        {value.length}/{maxLength} caracteres{isOverLimit ? " — demasiado largo" : ""}
-      </p>
+      {/* Barra de progreso */}
+      <div className="mt-1.5 h-1 bg-slate-100 rounded-full overflow-hidden">
+        <div className={`h-full rounded-full transition-all ${over ? "bg-red-500" : close ? "bg-[#f5a623]" : "bg-[#1a6b3c]"}`} style={{ width: `${pct}%` }} />
+      </div>
+      {hint && !over && <p className="text-[11px] text-slate-400 mt-1">{hint}</p>}
+      {over && <p className="text-[11px] text-red-600 mt-1 font-medium">Excede el límite recomendado para SEO.</p>}
     </div>
   );
 }

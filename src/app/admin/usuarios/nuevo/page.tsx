@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import NuevoUsuarioForm from "./NuevoUsuarioForm";
+import { FormPageHeader } from "../../_components/ui";
 
 export const metadata: Metadata = { title: "Nuevo Usuario Admin" };
 
@@ -20,11 +21,8 @@ export default async function NuevoUsuarioPage() {
   }
 
   return (
-    <div className="p-6 lg:p-8 max-w-xl">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-900">Nuevo usuario</h1>
-        <p className="text-slate-500 text-sm mt-0.5">Crea un acceso al panel de administración</p>
-      </div>
+    <div className="p-4 sm:p-6 lg:p-7 max-w-2xl mx-auto admin-rise">
+      <FormPageHeader title="Nuevo usuario" subtitle="Crea un acceso al panel de administración" backHref="/admin/usuarios" />
       <NuevoUsuarioForm />
     </div>
   );

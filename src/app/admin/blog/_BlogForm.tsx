@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import SeoFieldsCounter from "../_components/SeoFieldsCounter";
 import ImageUpload from "../_components/ImageUpload";
+import { FormSection, Field, Toggle, FormActions } from "../_components/ui";
 
 function slugify(str: string) {
   return str.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -26,20 +27,12 @@ export default function BlogForm({ post }: { post?: Post }) {
     e.preventDefault();
     setLoading(true);
     setError("");
-
     const fd = new FormData(e.currentTarget);
     const metaTitle = fd.get("meta_title") as string;
     const metaDesc = fd.get("meta_description") as string;
     const publicado = fd.get("publicado") === "on";
-
-    if (publicado && (!metaTitle || metaTitle.length > 60)) {
-      setError("Para publicar, el Meta Title es obligatorio (máx. 60 caracteres).");
-      setLoading(false); return;
-    }
-    if (publicado && (!metaDesc || metaDesc.length > 155)) {
-      setError("Para publicar, la Meta Description es obligatoria (máx. 155 caracteres).");
-      setLoading(false); return;
-    }
+    if (publicado && (!metaTitle || metaTitle.length > 60)) { setError("Para publicar, el Meta Title es obligatorio (máx. 60 caracteres)."); setLoading(false); return; }
+    if (publicado && (!metaDesc || metaDesc.length > 155)) { setError("Para publicar, la Meta Description es obligatoria (máx. 155 caracteres)."); setLoading(false); return; }
 
     const payload = {
       titulo: fd.get("titulo") as string,
@@ -56,93 +49,63 @@ export default function BlogForm({ post }: { post?: Post }) {
       meta_description: metaDesc,
       updated_at: new Date().toISOString(),
     };
-
     const supabase = createClient();
     const { error: dbError } = post
       ? await supabase.from("blog_posts").update(payload).eq("id", post.id)
       : await supabase.from("blog_posts").insert(payload);
-
     if (dbError) { setError(dbError.message); setLoading(false); return; }
-
     if (publicado) {
       await fetch(`/api/revalidate?path=/blog/${payload.slug}`, { method: "POST" }).catch(() => {});
       await fetch("/api/revalidate?path=/blog", { method: "POST" }).catch(() => {});
     }
-
     router.push("/admin/blog");
     router.refresh();
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5 bg-white border border-gray-200 rounded-xl p-6">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Título *</label>
-        <input name="titulo" type="text" required value={titulo} onChange={(e) => setTitulo(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
-      </div>
+    <form onSubmit={handleSubmit} className="space-y-4 max-w-3xl">
+      <FormSection title="Contenido del artículo">
+        <Field label="Título" required>
+          <input name="titulo" type="text" required value={titulo} onChange={(e) => setTitulo(e.target.value)} className="admin-input" placeholder="Título del artículo" />
+        </Field>
+        <Field label="Extracto" hint="Resumen breve que aparece en el listado del blog.">
+          <textarea name="extracto" rows={2} defaultValue={post?.extracto} className="admin-input" />
+        </Field>
+        <Field label="Contenido" required hint="Markdown básico: ## Subtítulo, **negrita**, - lista">
+          <textarea name="contenido" rows={14} required defaultValue={post?.contenido} className="admin-input font-mono !text-[13px]" />
+        </Field>
+      </FormSection>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Extracto</label>
-        <textarea name="extracto" rows={2} defaultValue={post?.extracto}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none" />
-      </div>
+      <FormSection title="Imagen destacada">
+        <ImageUpload bucket="blog" name="imagen_destacada" defaultUrl={post?.imagen_destacada} label="Portada del artículo" />
+      </FormSection>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Contenido *</label>
-        <textarea name="contenido" rows={15} required defaultValue={post?.contenido}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 resize-y font-mono" />
-        <p className="text-xs text-gray-400 mt-1">Puedes usar Markdown básico: ## H2, **negrita**, - lista</p>
-      </div>
-
-      <ImageUpload bucket="blog" name="imagen_destacada" defaultUrl={post?.imagen_destacada} label="Imagen destacada" />
-
-      <div className="grid sm:grid-cols-3 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Autor</label>
-          <input name="autor" type="text" defaultValue={post?.autor || "Fenice SPA"}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+      <FormSection title="Detalles">
+        <div className="grid sm:grid-cols-3 gap-4">
+          <Field label="Autor">
+            <input name="autor" type="text" defaultValue={post?.autor || "Fenice SPA"} className="admin-input" />
+          </Field>
+          <Field label="Categoría">
+            <input name="categoria" type="text" defaultValue={post?.categoria} className="admin-input" placeholder="Ej: Industria" />
+          </Field>
+          <Field label="Fecha de publicación">
+            <input name="fecha_publicacion" type="date" defaultValue={post?.fecha_publicacion?.slice(0, 10)} className="admin-input" />
+          </Field>
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
-          <input name="categoria" type="text" defaultValue={post?.categoria}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+        <Field label="Palabras clave (SEO)" hint="Separadas por coma.">
+          <input name="palabras_clave" type="text" defaultValue={post?.palabras_clave} placeholder="petróleo a domicilio, combustible industrial, RM" className="admin-input" />
+        </Field>
+        <div className="pt-1">
+          <Toggle name="publicado" defaultChecked={post?.publicado ?? false} label="Publicar artículo" description="Visible en el sitio web público" />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de publicación</label>
-          <input name="fecha_publicacion" type="date" defaultValue={post?.fecha_publicacion?.slice(0, 10)}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
-        </div>
-      </div>
+      </FormSection>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Palabras clave (SEO)</label>
-        <input name="palabras_clave" type="text" defaultValue={post?.palabras_clave} placeholder="petróleo a domicilio, combustible industrial, RM"
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
-      </div>
+      <FormSection title="SEO" description="Obligatorio para publicar.">
+        <SeoFieldsCounter name="meta_title" label="Meta Title" defaultValue={post?.meta_title || titulo} maxLength={60} hint="Título para Google." />
+        <SeoFieldsCounter name="meta_description" label="Meta Description" defaultValue={post?.meta_description} maxLength={155} isTextArea hint="Resumen para buscadores." />
+      </FormSection>
 
-      <label className="flex items-center gap-2 text-sm cursor-pointer">
-        <input name="publicado" type="checkbox" defaultChecked={post?.publicado ?? false} className="w-4 h-4 rounded accent-orange-500" />
-        Publicar (visible en el sitio)
-      </label>
-
-      <hr className="border-gray-100" />
-      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">SEO (obligatorio para publicar)</p>
-
-      <SeoFieldsCounter name="meta_title" label="Meta Title" defaultValue={post?.meta_title || titulo} maxLength={60} />
-      <SeoFieldsCounter name="meta_description" label="Meta Description" defaultValue={post?.meta_description} maxLength={155} isTextArea />
-
-      {error && <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-sm">{error}</div>}
-
-      <div className="flex gap-3">
-        <button type="submit" disabled={loading}
-          className="bg-orange-600 hover:bg-orange-700 disabled:opacity-60 text-white font-semibold px-6 py-2.5 rounded-lg text-sm transition-colors">
-          {loading ? "Guardando..." : post ? "Guardar cambios" : "Crear post"}
-        </button>
-        <button type="button" onClick={() => router.back()}
-          className="border border-gray-300 text-gray-700 font-semibold px-6 py-2.5 rounded-lg text-sm hover:bg-gray-50 transition-colors">
-          Cancelar
-        </button>
-      </div>
+      <FormActions submitLabel={post ? "Guardar cambios" : "Crear post"} loading={loading} onCancel={() => router.back()} error={error} />
     </form>
   );
 }

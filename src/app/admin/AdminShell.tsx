@@ -16,22 +16,17 @@ export default function AdminShell({
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex" style={{ minHeight: "100dvh" }}>
-      {/* Desktop Sidebar */}
+    <div className="admin-scope flex bg-slate-50/80" style={{ minHeight: "100dvh" }}>
       <AdminSidebar userEmail={userEmail} userRol={userRol} />
-
-      {/* Mobile Sidebar Drawer */}
       <AdminSidebarMobile
         userEmail={userEmail}
         userRol={userRol}
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
       />
-
-      {/* Main content */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0">
         <AdminTopBar onMenuClick={() => setMobileOpen(true)} />
-        <main className="flex-1 overflow-auto">{children}</main>
+        <main className="flex-1">{children}</main>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import BlogForm from "../../_BlogForm";
+import { FormPageHeader } from "../../../_components/ui";
 
 export const metadata: Metadata = { title: "Editar Post" };
 
@@ -14,10 +15,9 @@ export default async function EditarPostPage({ params }: { params: Promise<{ id:
     if (data) post = data;
   } catch {}
   if (!post) notFound();
-
   return (
-    <div className="max-w-3xl">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Editar post</h1>
+    <div className="p-4 sm:p-6 lg:p-7 max-w-3xl mx-auto admin-rise">
+      <FormPageHeader title="Editar post" subtitle={post.titulo} backHref="/admin/blog" />
       <BlogForm post={post} />
     </div>
   );

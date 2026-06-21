@@ -37,8 +37,8 @@ export default async function MetricasPage({
     <div className="space-y-6 p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-orange-50 border border-orange-100 rounded-xl flex items-center justify-center shrink-0">
-            <BarChart3 className="w-5 h-5 text-orange-500" />
+          <div className="w-11 h-11 bg-[#fff7ec] border border-[#f5a623]/20 rounded-2xl flex items-center justify-center shrink-0">
+            <BarChart3 className="w-5 h-5 text-[#d98a0e]" />
           </div>
           <div>
             <h1 className="text-xl font-black text-slate-900">Métricas</h1>
@@ -73,7 +73,7 @@ export default async function MetricasPage({
             <select
               name="period"
               defaultValue={filters.period}
-              className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 outline-none transition-colors focus:border-orange-400"
+              className="admin-input"
             >
               <option value="today">Hoy</option>
               <option value="last_7_days">Últimos 7 días</option>
@@ -90,7 +90,7 @@ export default async function MetricasPage({
               type="date"
               name="date_from"
               defaultValue={filters.dateFrom}
-              className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 outline-none transition-colors focus:border-orange-400"
+              className="admin-input"
             />
           </label>
 
@@ -100,7 +100,7 @@ export default async function MetricasPage({
               type="date"
               name="date_to"
               defaultValue={filters.dateTo}
-              className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 outline-none transition-colors focus:border-orange-400"
+              className="admin-input"
             />
           </label>
 
@@ -109,7 +109,7 @@ export default async function MetricasPage({
             <select
               name="source"
               defaultValue={filters.source}
-              className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 outline-none transition-colors focus:border-orange-400"
+              className="admin-input"
             >
               <option value="">Todas</option>
               {(dashboard?.filterOptions.sources ?? []).map((source) => (
@@ -125,7 +125,7 @@ export default async function MetricasPage({
             <select
               name="device_type"
               defaultValue={filters.deviceType}
-              className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 outline-none transition-colors focus:border-orange-400"
+              className="admin-input"
             >
               <option value="">Todos</option>
               {(dashboard?.filterOptions.devices ?? []).map((device) => (
@@ -141,7 +141,7 @@ export default async function MetricasPage({
             <select
               name="path"
               defaultValue={filters.path}
-              className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 outline-none transition-colors focus:border-orange-400"
+              className="admin-input"
             >
               <option value="">Todas</option>
               {(dashboard?.filterOptions.paths ?? []).map((path) => (
@@ -157,7 +157,7 @@ export default async function MetricasPage({
             <select
               name="campaign"
               defaultValue={filters.campaign}
-              className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 outline-none transition-colors focus:border-orange-400"
+              className="admin-input"
             >
               <option value="">Todas</option>
               {(dashboard?.filterOptions.campaigns ?? []).map((campaign) => (
@@ -173,7 +173,7 @@ export default async function MetricasPage({
             <select
               name="identity_state"
               defaultValue={filters.identityState}
-              className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 outline-none transition-colors focus:border-orange-400"
+              className="admin-input"
             >
               <option value="all">Todos</option>
               <option value="anonymous">Anónimos</option>
@@ -185,7 +185,7 @@ export default async function MetricasPage({
         <div className="mt-5 flex justify-end">
           <button
             type="submit"
-            className="rounded-xl bg-orange-500 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-orange-600"
+            className="admin-btn-primary"
           >
             Aplicar filtros
           </button>

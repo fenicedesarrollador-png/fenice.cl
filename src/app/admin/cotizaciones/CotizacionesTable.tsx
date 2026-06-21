@@ -5,49 +5,33 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import {
   Mail, Phone, MapPin, Package, MessageSquare, Building2,
-  Search, Download, X, Clock, BarChart3, DollarSign,
+  Search, Download, X, Clock, DollarSign, ChevronDown, Filter,
 } from "lucide-react";
 
 type Cotizacion = {
-  id: string;
-  nombre: string;
-  empresa: string;
-  rut_empresa?: string;
-  email: string;
-  telefono: string;
-  comuna?: string;
-  servicio_solicitado: string;
-  volumen_estimado?: string;
-  frecuencia?: string;
-  mensaje?: string;
-  estado: string;
-  created_at: string;
+  id: string; nombre: string; empresa: string; rut_empresa?: string;
+  email: string; telefono: string; comuna?: string; servicio_solicitado: string;
+  volumen_estimado?: string; frecuencia?: string; mensaje?: string;
+  estado: string; created_at: string;
 };
 
-const ESTADOS = ["nuevo", "en_proceso", "cotizado", "cerrado"];
+const ESTADOS = ["nuevo", "en_proceso", "cotizado", "cerrado"] as const;
 
-const ESTADO_CONFIG: Record<string, { color: string; dot: string; label: string; pipeline: string }> = {
-  nuevo: { color: "bg-red-50 text-red-700 border-red-200", dot: "bg-red-500", label: "Nuevo", pipeline: "bg-red-500" },
-  en_proceso: { color: "bg-amber-50 text-amber-700 border-amber-200", dot: "bg-amber-400", label: "En proceso", pipeline: "bg-amber-400" },
-  cotizado: { color: "bg-blue-50 text-blue-700 border-blue-200", dot: "bg-blue-500", label: "Cotizado", pipeline: "bg-blue-500" },
-  cerrado: { color: "bg-green-50 text-green-700 border-green-200", dot: "bg-green-500", label: "Cerrado", pipeline: "bg-green-500" },
+const CFG: Record<string, { label: string; chip: string; dot: string; bar: string }> = {
+  nuevo: { label: "Nuevo", chip: "bg-red-50 text-red-700 border-red-200", dot: "bg-red-500", bar: "bg-red-500" },
+  en_proceso: { label: "En proceso", chip: "bg-[#fff7ec] text-[#b87608] border-[#f5a623]/30", dot: "bg-[#f5a623]", bar: "bg-[#f5a623]" },
+  cotizado: { label: "Cotizado", chip: "bg-blue-50 text-blue-700 border-blue-200", dot: "bg-blue-500", bar: "bg-blue-500" },
+  cerrado: { label: "Cerrado", chip: "bg-[#ecfdf3] text-[#1a6b3c] border-[#1a6b3c]/20", dot: "bg-[#1a6b3c]", bar: "bg-[#1a6b3c]" },
 };
 
 function exportCSV(items: Cotizacion[]) {
   const headers = ["Empresa", "Nombre", "RUT", "Email", "Teléfono", "Comuna", "Servicio", "Volumen", "Frecuencia", "Estado", "Fecha"];
-  const rows = items.map((c) => [
-    c.empresa, c.nombre, c.rut_empresa ?? "", c.email, c.telefono,
-    c.comuna ?? "", c.servicio_solicitado, c.volumen_estimado ?? "",
-    c.frecuencia ?? "", c.estado,
-    new Date(c.created_at).toLocaleDateString("es-CL"),
-  ]);
+  const rows = items.map((c) => [c.empresa, c.nombre, c.rut_empresa ?? "", c.email, c.telefono, c.comuna ?? "", c.servicio_solicitado, c.volumen_estimado ?? "", c.frecuencia ?? "", c.estado, new Date(c.created_at).toLocaleDateString("es-CL")]);
   const csv = [headers, ...rows].map((r) => r.map((v) => `"${v}"`).join(",")).join("\n");
   const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url;
-  a.download = `cotizaciones_fenice_${new Date().toISOString().slice(0, 10)}.csv`;
-  a.click();
+  a.href = url; a.download = `cotizaciones_fenice_${new Date().toISOString().slice(0, 10)}.csv`; a.click();
   URL.revokeObjectURL(url);
 }
 
@@ -65,71 +49,58 @@ export default function CotizacionesTable({ cotizaciones }: { cotizaciones: Coti
   const [filter, setFilter] = useState("todos");
   const [search, setSearch] = useState("");
   const [updating, setUpdating] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
-    let result = filter === "todos" ? cotizaciones : cotizaciones.filter((c) => c.estado === filter);
+    let r = filter === "todos" ? cotizaciones : cotizaciones.filter((c) => c.estado === filter);
     if (search.trim()) {
       const q = search.toLowerCase();
-      result = result.filter(
-        (c) =>
-          c.nombre.toLowerCase().includes(q) ||
-          c.empresa.toLowerCase().includes(q) ||
-          c.email.toLowerCase().includes(q) ||
-          c.telefono.includes(q) ||
-          c.comuna?.toLowerCase().includes(q) ||
-          c.servicio_solicitado.toLowerCase().includes(q) ||
-          c.rut_empresa?.includes(q)
-      );
+      r = r.filter((c) =>
+        c.nombre.toLowerCase().includes(q) || c.empresa.toLowerCase().includes(q) ||
+        c.email.toLowerCase().includes(q) || c.telefono.includes(q) ||
+        c.comuna?.toLowerCase().includes(q) || c.servicio_solicitado.toLowerCase().includes(q) ||
+        c.rut_empresa?.includes(q));
     }
-    return result;
+    return r;
   }, [cotizaciones, filter, search]);
 
   async function updateEstado(id: string, estado: string) {
     setUpdating(id);
-    const supabase = createClient();
-    await supabase.from("cotizaciones").update({ estado }).eq("id", id);
+    await createClient().from("cotizaciones").update({ estado }).eq("id", id);
     setUpdating(null);
     router.refresh();
   }
 
-  const countByEstado = (e: string) => cotizaciones.filter((c) => c.estado === e).length;
+  const count = (e: string) => cotizaciones.filter((c) => c.estado === e).length;
   const total = cotizaciones.length;
 
   return (
-    <div>
-      {/* Pipeline visual */}
-      <div className="bg-white border border-slate-100 rounded-2xl p-5 mb-5 shadow-sm">
+    <div className="space-y-4">
+      {/* Pipeline */}
+      <div className="admin-card p-4">
         <div className="flex items-center justify-between mb-3">
-          <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Pipeline de cotizaciones</p>
-          <span className="text-xs text-slate-400 font-medium">{total} total</span>
+          <p className="text-[11px] font-black text-slate-500 uppercase tracking-wide">Pipeline</p>
+          <span className="text-[11px] text-slate-400 font-bold">{total} en total</span>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
           {ESTADOS.map((e) => {
-            const cfg = ESTADO_CONFIG[e];
-            const count = countByEstado(e);
-            const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+            const cfg = CFG[e];
+            const c = count(e);
+            const pct = total > 0 ? Math.round((c / total) * 100) : 0;
             return (
               <button
                 key={e}
                 onClick={() => setFilter(filter === e ? "todos" : e)}
-                className={`text-left rounded-xl p-3 border-2 transition-all ${
-                  filter === e
-                    ? "border-slate-900 shadow-md"
-                    : "border-transparent bg-slate-50 hover:bg-slate-100"
-                }`}
+                className={`text-left rounded-xl p-3 border transition-all ${filter === e ? "border-[#1a6b3c]/30 ring-2 ring-[#1a6b3c]/15 bg-white" : "border-transparent bg-slate-50 hover:bg-slate-100"}`}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className={`w-2.5 h-2.5 rounded-full ${cfg.pipeline}`} />
-                  <span className="text-[10px] font-bold text-slate-400">{pct}%</span>
+                  <span className={`w-2 h-2 rounded-full ${cfg.dot}`} />
+                  <span className="text-[10px] font-black text-slate-400">{pct}%</span>
                 </div>
-                <p className="text-2xl font-black text-slate-900 tabular-nums">{count}</p>
-                <p className="text-[11px] font-semibold text-slate-500 mt-0.5">{cfg.label}</p>
-                {/* Progress bar */}
+                <p className="text-2xl font-black text-[#0a1628] tabular-nums">{c}</p>
+                <p className="text-[10px] font-bold text-slate-500 mt-0.5">{cfg.label}</p>
                 <div className="mt-2 h-1 bg-slate-200 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full rounded-full ${cfg.pipeline} transition-all duration-500`}
-                    style={{ width: `${pct}%` }}
-                  />
+                  <div className={`h-full rounded-full ${cfg.bar} transition-all duration-500`} style={{ width: `${pct}%` }} />
                 </div>
               </button>
             );
@@ -138,167 +109,79 @@ export default function CotizacionesTable({ cotizaciones }: { cotizaciones: Coti
       </div>
 
       {/* Toolbar */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-4">
+      <div className="flex flex-col sm:flex-row gap-2.5">
         <div className="relative flex-1">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar empresa, nombre, RUT, servicio…"
-            className="w-full pl-10 pr-9 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 transition-all placeholder:text-slate-400"
-          />
-          {search && (
-            <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-              <X className="w-4 h-4" />
-            </button>
-          )}
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar empresa, RUT, servicio…" className="admin-input !pl-10 !pr-9" />
+          {search && <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"><X className="w-4 h-4" /></button>}
         </div>
-        <div className="flex gap-2 flex-wrap">
-          <button
-            onClick={() => setFilter("todos")}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${
-              filter === "todos"
-                ? "bg-slate-900 text-white border-slate-900 shadow-sm"
-                : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
-            }`}
-          >
-            Todos ({total})
-          </button>
-        </div>
-        <button
-          onClick={() => exportCSV(filtered)}
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all bg-white shrink-0"
-        >
-          <Download className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Exportar</span>
-        </button>
+        <button onClick={() => exportCSV(filtered)} className="admin-btn-ghost shrink-0"><Download className="w-4 h-4" /><span className="hidden sm:inline">Exportar</span></button>
       </div>
 
-      <p className="text-xs text-slate-400 mb-3 font-medium">
-        {filtered.length} cotizacion{filtered.length !== 1 ? "es" : ""}
-        {search && ` para "${search}"`}
-        {filter !== "todos" && ` · Filtro: ${ESTADO_CONFIG[filter]?.label ?? filter}`}
-      </p>
+      <div className="flex items-center justify-between">
+        <p className="text-[12px] text-slate-400 font-medium">{filtered.length} cotizacion{filtered.length !== 1 ? "es" : ""}{filter !== "todos" && ` · ${CFG[filter]?.label}`}</p>
+        {filter !== "todos" && <button onClick={() => setFilter("todos")} className="text-[12px] text-[#1a6b3c] font-bold hover:underline flex items-center gap-1"><Filter className="w-3 h-3" /> Quitar filtro</button>}
+      </div>
 
       {filtered.length === 0 ? (
-        <div className="text-center py-20 bg-white border border-dashed border-slate-200 rounded-2xl">
-          <BarChart3 className="w-8 h-8 text-slate-300 mx-auto mb-3" />
-          <p className="text-slate-500 font-semibold text-sm">Sin cotizaciones en esta categoría</p>
-          <p className="text-slate-400 text-xs mt-1">Prueba cambiando los filtros</p>
+        <div className="text-center py-16 admin-card border-dashed">
+          <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center mx-auto mb-3"><DollarSign className="w-6 h-6 text-slate-300" /></div>
+          <p className="text-[#0a1628] font-bold text-sm">{total === 0 ? "Aún no hay cotizaciones" : "Sin resultados"}</p>
+          <p className="text-slate-400 text-xs mt-1">{total === 0 ? "Las solicitudes desde /cotizacion aparecerán aquí." : "Ajusta la búsqueda o los filtros."}</p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {filtered.map((cot) => {
-            const cfg = ESTADO_CONFIG[cot.estado] ?? ESTADO_CONFIG.nuevo;
+            const cfg = CFG[cot.estado] ?? CFG.nuevo;
+            const isOpen = expanded === cot.id;
             return (
-              <div
-                key={cot.id}
-                className="bg-white border border-slate-100 rounded-2xl overflow-hidden hover:border-slate-200 hover:shadow-md hover:shadow-slate-100 transition-all duration-200"
-              >
-                {/* Header */}
-                <div className="flex items-center justify-between px-5 py-4 border-b border-slate-50">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-100 flex items-center justify-center text-xs font-black text-blue-600 shrink-0">
-                      {cot.empresa.slice(0, 2).toUpperCase()}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="font-bold text-slate-900 text-sm truncate">{cot.nombre}</p>
-                      <div className="flex items-center gap-1.5 mt-0.5">
-                        <Building2 className="w-3 h-3 text-slate-400 shrink-0" />
-                        <span className="text-[11px] text-slate-500 font-medium truncate">{cot.empresa}</span>
-                        {cot.rut_empresa && (
-                          <span className="text-[11px] text-slate-400 hidden sm:inline">· {cot.rut_empresa}</span>
-                        )}
-                      </div>
+              <div key={cot.id} className="admin-card overflow-hidden transition-all hover:shadow-md">
+                <button onClick={() => setExpanded(isOpen ? null : cot.id)} className="w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-slate-50/60 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#fff7ec] to-[#fde9c8] flex items-center justify-center text-[12px] font-black text-[#d98a0e] shrink-0">
+                    {cot.empresa.slice(0, 2).toUpperCase()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-black text-[#0a1628] text-sm truncate">{cot.empresa}</p>
+                    <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                      <span className="text-[11px] text-slate-500 truncate">{cot.nombre}</span>
+                      <span className="text-[11px] text-slate-400 flex items-center gap-1"><Clock className="w-3 h-3" />{new Date(cot.created_at).toLocaleDateString("es-CL", { day: "2-digit", month: "short" })}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-slate-400">
-                      <Clock className="w-3 h-3" />
-                      {new Date(cot.created_at).toLocaleDateString("es-CL", { dateStyle: "short" })}
-                    </div>
-                    <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-xl border ${cfg.color}`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
-                      {cfg.label}
-                    </span>
-                  </div>
-                </div>
+                  <span className={`inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-lg border shrink-0 ${cfg.chip}`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} /><span className="hidden sm:inline">{cfg.label}</span>
+                  </span>
+                  <ChevronDown className={`w-4 h-4 text-slate-300 shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+                </button>
 
-                {/* Body */}
-                <div className="px-5 py-4">
-                  <div className="inline-flex items-center gap-1.5 bg-orange-50 border border-orange-100 text-orange-700 text-xs font-bold px-3 py-1.5 rounded-xl mb-4">
-                    <Package className="w-3.5 h-3.5" />
-                    {cot.servicio_solicitado}
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-4">
-                    <div className="flex items-center gap-2 text-xs text-slate-600 min-w-0">
-                      <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                      <a href={`mailto:${cot.email}`} className="hover:text-orange-600 truncate transition-colors">{cot.email}</a>
+                {isOpen && (
+                  <div className="px-4 pb-4 pt-1 border-t border-slate-50">
+                    <div className="inline-flex items-center gap-1.5 bg-[#ecfdf3] border border-[#1a6b3c]/15 text-[#1a6b3c] text-[11px] font-bold px-2.5 py-1 rounded-lg my-3">
+                      <Package className="w-3 h-3" />{cot.servicio_solicitado}
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-slate-600">
-                      <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                      <a href={`tel:${cot.telefono}`} className="hover:text-orange-600 transition-colors">{cot.telefono}</a>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
+                      <a href={`mailto:${cot.email}`} className="flex items-center gap-2 text-[12px] text-slate-600 hover:text-[#1a6b3c] min-w-0"><Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" /><span className="truncate">{cot.email}</span></a>
+                      <a href={`tel:${cot.telefono}`} className="flex items-center gap-2 text-[12px] text-slate-600 hover:text-[#1a6b3c]"><Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />{cot.telefono}</a>
+                      {cot.rut_empresa && <div className="flex items-center gap-2 text-[12px] text-slate-600"><Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />{cot.rut_empresa}</div>}
+                      {cot.comuna && <div className="flex items-center gap-2 text-[12px] text-slate-600"><MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />{cot.comuna}</div>}
+                      {cot.volumen_estimado && <div className="flex items-center gap-2 text-[12px] text-slate-600"><DollarSign className="w-3.5 h-3.5 text-slate-400 shrink-0" />Volumen: {cot.volumen_estimado}</div>}
+                      {cot.frecuencia && <div className="flex items-center gap-2 text-[12px] text-slate-600"><Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />Frecuencia: {cot.frecuencia}</div>}
                     </div>
-                    {cot.comuna && (
-                      <div className="flex items-center gap-2 text-xs text-slate-600">
-                        <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        <span>{cot.comuna}</span>
+                    {cot.mensaje && (
+                      <div className="flex items-start gap-2.5 bg-slate-50 border border-slate-100 rounded-xl px-3.5 py-3 mb-3">
+                        <MessageSquare className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" /><p className="text-[12px] text-slate-600 leading-relaxed">{cot.mensaje}</p>
                       </div>
                     )}
-                    {cot.volumen_estimado && (
-                      <div className="flex items-center gap-2 text-xs text-slate-600">
-                        <DollarSign className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        <span>Volumen: {cot.volumen_estimado}</span>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <a href={`https://wa.me/${cot.telefono.replace(/\D/g, "")}?text=${encodeURIComponent(`Hola ${cot.nombre}, recibimos tu solicitud de cotización en Fenice SPA para ${cot.empresa}. ¿Coordinamos los detalles?`)}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#1fb959] text-white text-[12px] font-bold px-3 py-2 rounded-xl transition-colors shadow-sm shadow-[#25D366]/25"><WaIcon /> WhatsApp</a>
+                      <a href={`mailto:${cot.email}?subject=Cotización Fenice SPA`} className="admin-btn-ghost !text-[12px] !py-2"><Mail className="w-3.5 h-3.5" /> Email</a>
+                      <div className="ml-auto">
+                        <select value={cot.estado} disabled={updating === cot.id} onChange={(e) => updateEstado(cot.id, e.target.value)} className="admin-input !w-auto !py-2 !text-[12px] font-bold">
+                          {ESTADOS.map((e) => <option key={e} value={e}>{CFG[e].label}</option>)}
+                        </select>
                       </div>
-                    )}
-                    {cot.frecuencia && (
-                      <div className="flex items-center gap-2 text-xs text-slate-600">
-                        <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        <span>Frecuencia: {cot.frecuencia}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {cot.mensaje && (
-                    <div className="flex items-start gap-2.5 bg-slate-50 border border-slate-100 rounded-xl px-3.5 py-3 mb-4">
-                      <MessageSquare className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
-                      <p className="text-xs text-slate-600 leading-relaxed">{cot.mensaje}</p>
-                    </div>
-                  )}
-
-                  {/* Actions */}
-                  <div className="flex flex-wrap items-center gap-2">
-                    <a
-                      href={`https://wa.me/${cot.telefono.replace(/\D/g, "")}?text=${encodeURIComponent(`Hola ${cot.nombre}, recibimos tu solicitud de cotización de combustible en Fenice SPA para ${cot.empresa}. ¿Podemos coordinar los detalles?`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 bg-green-500 hover:bg-green-600 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-colors shadow-sm shadow-green-500/20"
-                    >
-                      <WaIcon /> WhatsApp
-                    </a>
-                    <a
-                      href={`mailto:${cot.email}?subject=Cotización%20de%20combustible%20—%20Fenice%20SPA&body=Estimado%2Fa%20${encodeURIComponent(cot.nombre)}%2C%0A%0AEn%20respuesta%20a%20su%20solicitud%20de%20cotización...`}
-                      className="inline-flex items-center gap-1.5 border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 text-xs font-bold px-3.5 py-2 rounded-xl transition-all"
-                    >
-                      <Mail className="w-3.5 h-3.5" />
-                      Email
-                    </a>
-                    <div className="ml-auto flex items-center gap-2">
-                      <select
-                        value={cot.estado}
-                        disabled={updating === cot.id}
-                        onChange={(e) => updateEstado(cot.id, e.target.value)}
-                        className="text-xs border border-slate-200 rounded-xl px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 disabled:opacity-50 font-semibold transition-all cursor-pointer"
-                      >
-                        {ESTADOS.map((e) => (
-                          <option key={e} value={e}>{ESTADO_CONFIG[e]?.label ?? e}</option>
-                        ))}
-                      </select>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             );
           })}

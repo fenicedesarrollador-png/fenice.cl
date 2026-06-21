@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import ImageUpload from "../_components/ImageUpload";
+import { FormSection, Field, Toggle, FormActions } from "../_components/ui";
 
 interface Cliente { id: string; nombre: string; logo_url?: string; sitio_web?: string; testimonio?: string; orden: number; activo: boolean; }
 
@@ -33,43 +34,35 @@ export default function ClienteForm({ cliente }: { cliente?: Cliente }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5 bg-white border border-gray-200 rounded-xl p-6">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Nombre de la empresa *</label>
-        <input name="nombre" type="text" required defaultValue={cliente?.nombre}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
-      </div>
-      <ImageUpload bucket="clientes" name="logo_url" defaultUrl={cliente?.logo_url} label="Logo (JPG/PNG/WebP, máx. 2MB)" />
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Sitio web</label>
-        <input name="sitio_web" type="url" defaultValue={cliente?.sitio_web}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Testimonio</label>
-        <textarea name="testimonio" rows={3} defaultValue={cliente?.testimonio}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none" />
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Orden de aparición</label>
-          <input name="orden" type="number" defaultValue={cliente?.orden ?? 0}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+    <form onSubmit={handleSubmit} className="space-y-4 max-w-2xl">
+      <FormSection title="Datos de la empresa">
+        <Field label="Nombre de la empresa" required>
+          <input name="nombre" type="text" required defaultValue={cliente?.nombre} className="admin-input" placeholder="Ej: Constructora ABC" />
+        </Field>
+        <Field label="Sitio web" hint="Opcional. URL completa con https://">
+          <input name="sitio_web" type="url" defaultValue={cliente?.sitio_web} className="admin-input" placeholder="https://empresa.cl" />
+        </Field>
+        <Field label="Testimonio" hint="Cita opcional que aparece en la página de testimonios.">
+          <textarea name="testimonio" rows={3} defaultValue={cliente?.testimonio} className="admin-input" />
+        </Field>
+      </FormSection>
+
+      <FormSection title="Logo">
+        <ImageUpload bucket="clientes" name="logo_url" defaultUrl={cliente?.logo_url} label="Logo de la empresa" />
+      </FormSection>
+
+      <FormSection title="Configuración">
+        <div className="grid sm:grid-cols-2 gap-5 items-center">
+          <Field label="Orden de aparición" hint="Menor número aparece primero.">
+            <input name="orden" type="number" defaultValue={cliente?.orden ?? 0} className="admin-input" />
+          </Field>
+          <div className="sm:pt-6">
+            <Toggle name="activo" defaultChecked={cliente?.activo ?? true} label="Activo" description="Visible en el sitio web" />
+          </div>
         </div>
-        <div className="flex items-end pb-2.5">
-          <label className="flex items-center gap-2 text-sm cursor-pointer">
-            <input name="activo" type="checkbox" defaultChecked={cliente?.activo ?? true} className="w-4 h-4 rounded accent-orange-500" />
-            Activo (visible)
-          </label>
-        </div>
-      </div>
-      {error && <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-sm">{error}</div>}
-      <div className="flex gap-3">
-        <button type="submit" disabled={loading} className="bg-orange-600 hover:bg-orange-700 disabled:opacity-60 text-white font-semibold px-6 py-2.5 rounded-lg text-sm transition-colors">
-          {loading ? "Guardando..." : cliente ? "Guardar cambios" : "Agregar cliente"}
-        </button>
-        <button type="button" onClick={() => router.back()} className="border border-gray-300 text-gray-700 font-semibold px-6 py-2.5 rounded-lg text-sm hover:bg-gray-50 transition-colors">Cancelar</button>
-      </div>
+      </FormSection>
+
+      <FormActions submitLabel={cliente ? "Guardar cambios" : "Agregar cliente"} loading={loading} onCancel={() => router.back()} error={error} />
     </form>
   );
 }

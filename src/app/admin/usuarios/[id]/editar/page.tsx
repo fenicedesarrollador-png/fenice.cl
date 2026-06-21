@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import EditarUsuarioForm from "./EditarUsuarioForm";
+import { FormPageHeader } from "../../../_components/ui";
 
 export const metadata: Metadata = { title: "Editar Usuario" };
 
-export default async function EditarUsuarioPage({ params }: { params: { id: string } }) {
+export default async function EditarUsuarioPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -23,7 +25,7 @@ export default async function EditarUsuarioPage({ params }: { params: { id: stri
   const { data: profile } = await serviceClient
     .from("admin_profiles")
     .select("id, user_id, nombre, rol, activo")
-    .eq("id", params.id)
+    .eq("id", id)
     .single();
 
   if (!profile) redirect("/admin/usuarios");
@@ -32,11 +34,8 @@ export default async function EditarUsuarioPage({ params }: { params: { id: stri
   const authUser = authUsers?.users?.find((u) => u.id === profile.user_id);
 
   return (
-    <div className="p-6 lg:p-8 max-w-xl">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-900">Editar usuario</h1>
-        <p className="text-slate-500 text-sm mt-0.5">{authUser?.email ?? profile.user_id}</p>
-      </div>
+    <div className="p-4 sm:p-6 lg:p-7 max-w-2xl mx-auto admin-rise">
+      <FormPageHeader title="Editar usuario" subtitle={authUser?.email ?? profile.user_id} backHref="/admin/usuarios" />
       <EditarUsuarioForm profile={{ ...profile, email: authUser?.email ?? "" }} />
     </div>
   );
