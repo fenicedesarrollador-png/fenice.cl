@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import AdminSidebar from "./AdminSidebar";
+import AdminShell from "./AdminShell";
 
 export const metadata: Metadata = {
   title: { default: "Panel Admin | Fenice SPA", template: "%s | Admin Fenice" },
@@ -28,11 +28,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
-      <AdminSidebar userEmail={user.email ?? ""} userRol={profile.rol ?? "admin"} />
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <main className="flex-1">{children}</main>
-      </div>
-    </div>
+    <AdminShell userEmail={user.email ?? ""} userRol={profile.rol ?? "admin"}>
+      {children}
+    </AdminShell>
   );
 }

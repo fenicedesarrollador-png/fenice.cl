@@ -34,30 +34,31 @@ export default async function MetricasPage({
   const exportQuery = buildAnalyticsQueryString(filters);
 
   return (
-    <div className="space-y-6 p-6 lg:p-8">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <div className="flex items-center gap-2 text-orange-600">
-            <BarChart3 className="h-5 w-5" />
-            <span className="text-xs font-bold uppercase tracking-[0.25em]">Métricas</span>
+    <div className="space-y-6 p-4 sm:p-6 lg:p-8 max-w-[1400px] mx-auto">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-orange-50 border border-orange-100 rounded-xl flex items-center justify-center shrink-0">
+            <BarChart3 className="w-5 h-5 text-orange-500" />
           </div>
-          <h1 className="mt-2 text-2xl font-bold text-slate-900">Actividad real de fenice.cl</h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Páginas, secciones, clics, formularios y cotizaciones con tracking propio y datos de Supabase.
-          </p>
+          <div>
+            <h1 className="text-xl font-black text-slate-900">Métricas</h1>
+            <p className="text-slate-400 text-xs mt-0.5 font-medium">
+              Actividad real de fenice.cl · Tracking propio
+            </p>
+          </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
           <Link
             href={`/api/admin/metricas/export?${exportQuery}`}
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-slate-300 hover:bg-slate-50"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-50 shadow-sm"
           >
             <Download className="h-4 w-4" />
             Exportar CSV
           </Link>
           <Link
             href="/admin/metricas"
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-slate-300 hover:bg-slate-50"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-50 shadow-sm"
           >
             <FilterX className="h-4 w-4" />
             Limpiar filtros
@@ -65,7 +66,7 @@ export default async function MetricasPage({
         </div>
       </div>
 
-      <form method="get" className="rounded-2xl border border-slate-200 bg-white p-5">
+      <form method="get" className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <label className="space-y-2 text-sm">
             <span className="font-semibold text-slate-700">Período</span>
