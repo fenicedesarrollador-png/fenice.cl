@@ -48,6 +48,7 @@ export default async function AdminClientesPage() {
               <div className="bg-slate-50/80 h-24 flex items-center justify-center px-6 relative border-b border-slate-100">
                 <span className={`absolute top-2.5 right-2.5 w-2 h-2 rounded-full ${c.activo ? "bg-[#1a6b3c]" : "bg-slate-300"}`} title={c.activo ? "Activo" : "Inactivo"} />
                 {c.logo_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- logo en panel admin privado
                   <img src={c.logo_url} alt={c.nombre} className="max-h-14 max-w-full object-contain" width={160} height={56} />
                 ) : (
                   <div className="w-14 h-14 rounded-xl bg-[#ecfdf3] flex items-center justify-center"><span className="text-lg font-black text-[#1a6b3c]">{c.nombre.slice(0, 2).toUpperCase()}</span></div>

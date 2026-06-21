@@ -2,13 +2,17 @@ import type { Metadata } from "next";
 import { SITE_CONFIG, COMUNAS, SERVICIOS } from "@/lib/config";
 
 const BASE = SITE_CONFIG.site_url;
-const OG_IMAGE = "/images/imagen_camion_de_combustible.png";
+// Imagen para logo/Organization (la del camión, 1968x799).
+const BRAND_IMAGE = "/images/imagen_camion_de_combustible.png";
+// Imagen Open Graph dedicada 1200x630 (generada por Next en /opengraph-image).
+const OG_IMAGE = "/opengraph-image";
 
 /* ============================================================
    Helper central de metadata — uso consistente en todo el sitio
    ============================================================ */
 export function buildMetadata({
   title,
+  titleAbsolute = false,
   description,
   path = "/",
   keywords,
@@ -19,6 +23,8 @@ export function buildMetadata({
   modifiedTime,
 }: {
   title: string;
+  /** Si true, el título NO recibe el sufijo "| Fenice SPA" del template (evita duplicados). */
+  titleAbsolute?: boolean;
   description: string;
   path?: string;
   keywords?: string[];
@@ -32,7 +38,7 @@ export function buildMetadata({
   const absImage = image.startsWith("http") ? image : `${BASE}${image}`;
 
   return {
-    title,
+    title: titleAbsolute ? { absolute: title } : title,
     description,
     keywords: keywords?.join(", "),
     alternates: { canonical: url },
@@ -110,8 +116,8 @@ export function organizationSchema() {
     name: SITE_CONFIG.razon_social,
     alternateName: SITE_CONFIG.nombre,
     url: `${BASE}/`,
-    logo: { "@type": "ImageObject", url: `${BASE}${OG_IMAGE}`, width: 1200, height: 630 },
-    image: `${BASE}${OG_IMAGE}`,
+    logo: { "@type": "ImageObject", url: `${BASE}${BRAND_IMAGE}`, width: 1200, height: 630 },
+    image: `${BASE}${BRAND_IMAGE}`,
     email: SITE_CONFIG.email,
     telephone: SITE_CONFIG.telefono,
     address: {
@@ -174,8 +180,8 @@ export function localBusinessSchema(config?: {
     description:
       "Distribuidor de petróleo diesel y combustible a domicilio para empresas e industria en la Región Metropolitana de Santiago. Despacho rápido, flota especializada y cumplimiento normativo SEC.",
     url: `${BASE}/`,
-    image: `${BASE}${OG_IMAGE}`,
-    logo: `${BASE}${OG_IMAGE}`,
+    image: `${BASE}${BRAND_IMAGE}`,
+    logo: `${BASE}${BRAND_IMAGE}`,
     telephone: telefono,
     email,
     priceRange: SITE_CONFIG.price_range,

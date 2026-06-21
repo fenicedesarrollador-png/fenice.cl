@@ -92,6 +92,7 @@ export default function ProductosTable({ productos: initial }: { productos: Prod
             <div key={p.id} className={`admin-card overflow-hidden group transition-all hover:shadow-md ${!p.activo ? "opacity-70" : ""}`}>
               <div className="flex items-center gap-3 p-3.5">
                 {p.imagen_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- thumbnail en panel admin privado
                   <img src={p.imagen_url} alt={p.nombre} className="w-14 h-14 rounded-xl object-cover border border-slate-100 shrink-0" />
                 ) : (
                   <div className="w-14 h-14 rounded-xl bg-slate-50 flex items-center justify-center shrink-0"><Package className="w-5 h-5 text-slate-300" /></div>

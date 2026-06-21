@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
+import { fetchWithTimeout } from "@/lib/getSiteConfig";
+import { buildMetadata } from "@/lib/seo";
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -13,16 +16,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   try {
     const supabase = await createClient();
-    const { data } = await supabase.from("productos").select("nombre, descripcion_corta, meta_title, meta_description").eq("slug", slug).eq("activo", true).single();
+    const result = await fetchWithTimeout(
+      supabase.from("productos").select("nombre, descripcion_corta, imagen_url, meta_title, meta_description").eq("slug", slug).eq("activo", true).single(),
+      2500,
+    );
+    const data = result?.data;
     if (data) {
-      return {
-        title: data.meta_title || data.nombre,
-        description: data.meta_description || data.descripcion_corta,
-        alternates: { canonical: `https://fenice.cl/productos/${slug}` },
-      };
+      return buildMetadata({
+        title: data.meta_title || `${data.nombre} | Combustible para Empresas`,
+        description:
+          data.meta_description ||
+          data.descripcion_corta ||
+          `${data.nombre} disponible para despacho a domicilio en la Región Metropolitana de Santiago. Cotiza con Fenice SPA.`,
+        path: `/productos/${slug}`,
+        image: data.imagen_url || undefined,
+      });
     }
   } catch {}
-  return { title: "Producto" };
+  // Producto inexistente: no indexar.
+  return { title: "Producto no encontrado", robots: { index: false, follow: false } };
 }
 
 export async function generateStaticParams() {
@@ -47,20 +59,28 @@ export default async function ProductoPage({ params }: Props) {
 
   if (!producto) notFound();
 
-  const productSchema = {
+  // Solo declaramos Offer con precio cuando existe un precio real, para no
+  // generar datos estructurados pobres (Google los marca como incompletos).
+  const productSchema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: producto.nombre,
     description: producto.descripcion || producto.descripcion_corta,
     ...(producto.imagen_url ? { image: producto.imagen_url } : {}),
     brand: { "@type": "Brand", name: "Fenice SPA" },
-    offers: {
-      "@type": "Offer",
-      availability: "https://schema.org/InStock",
-      seller: { "@type": "Organization", name: "Fenice SPA" },
-      ...(producto.precio_referencial ? { price: producto.precio_referencial, priceCurrency: "CLP" } : {}),
-    },
+    ...(producto.categoria ? { category: producto.categoria } : {}),
   };
+
+  if (producto.precio_referencial) {
+    productSchema.offers = {
+      "@type": "Offer",
+      price: producto.precio_referencial,
+      priceCurrency: "CLP",
+      availability: "https://schema.org/InStock",
+      url: `https://fenice.cl/productos/${slug}`,
+      seller: { "@id": "https://fenice.cl/#localbusiness" },
+    };
+  }
 
   return (
     <>
@@ -78,19 +98,20 @@ export default async function ProductoPage({ params }: Props) {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             {producto.imagen_url && (
-              <div className="rounded-2xl overflow-hidden bg-gray-100">
-                <img
+              <div className="rounded-2xl overflow-hidden bg-slate-100 relative aspect-[4/3]">
+                <Image
                   src={producto.imagen_url}
-                  alt={producto.nombre}
-                  className="w-full object-cover"
-                  width={600}
-                  height={450}
+                  alt={`${producto.nombre} — Fenice SPA`}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
                 />
               </div>
             )}
             <div>
               {producto.categoria && (
-                <span className="text-xs font-semibold text-orange-600 uppercase tracking-wider">
+                <span className="text-xs font-semibold text-[#1a6b3c] uppercase tracking-wider">
                   {producto.categoria}
                 </span>
               )}

@@ -1,19 +1,25 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import {
-  ArrowRight, CheckCircle2, Truck, Shield, Clock,
-  MapPin, Phone, Zap, FileText, Building2, ChevronRight
+  ArrowRight, Truck, Shield, Clock,
+  MapPin, FileText, ChevronRight
 } from "lucide-react";
 import CTASection from "@/components/CTASection";
 import { COMUNAS, SITE_CONFIG } from "@/lib/config";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Petróleo a Domicilio en Santiago | Despacho Rápido RM",
+// Intención diferenciada de la home: despacho URGENTE/PROGRAMADO (no compite con la genérica).
+export const metadata = buildMetadata({
+  title: "Despacho Urgente de Petróleo a Domicilio en Santiago",
   description:
-    "Despacho de petróleo diesel a domicilio para empresas en Santiago y la RM. Coordinación directa, despacho programado o urgente, factura electrónica. Cotiza al instante.",
-  alternates: { canonical: "https://fenice.cl/petroleo-a-domicilio" },
-  keywords: "petróleo a domicilio santiago, diesel a domicilio empresas, despacho petróleo RM, petróleo domicilio Santiago, combustible a domicilio empresa",
-};
+    "Despacho urgente y programado de petróleo diesel a domicilio para empresas en Santiago y la RM. Coordinación directa por WhatsApp, entregas el mismo día y factura electrónica.",
+  path: "/petroleo-a-domicilio",
+  keywords: [
+    "despacho urgente de petróleo santiago",
+    "petróleo a domicilio mismo día RM",
+    "diesel a domicilio empresas urgente",
+    "despacho programado de combustible santiago",
+  ],
+});
 
 const pageSchema = {
   "@context": "https://schema.org",
@@ -81,8 +87,8 @@ export default function PetroleoADomicilioPage() {
               <span className="text-[#f5a623] text-xs font-bold uppercase tracking-widest">Despacho a domicilio · RM</span>
             </div>
             <h1 className="text-4xl lg:text-5xl font-extrabold text-white leading-[1.1] mb-5">
-              Petróleo a Domicilio<br />
-              <span className="text-[#f5a623]">para tu Empresa</span><br />
+              Despacho Urgente de<br />
+              <span className="text-[#f5a623]">Petróleo a Domicilio</span><br />
               en Santiago
             </h1>
             <p className="text-slate-300 leading-relaxed mb-8 text-base max-w-2xl">

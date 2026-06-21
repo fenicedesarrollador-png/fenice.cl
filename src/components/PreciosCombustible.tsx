@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { hasUsableSupabasePublicConfig } from "@/lib/supabase/config";
 import { SITE_CONFIG } from "@/lib/config";
@@ -189,13 +190,12 @@ function ProductoCard({ producto, index }: { producto: Producto; index: number }
       {/* Imagen o placeholder */}
       <div className="aspect-[4/3] bg-slate-50 overflow-hidden relative">
         {producto.imagen_url ? (
-          <img
+          <Image
             src={producto.imagen_url}
-            alt={producto.nombre}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            loading="lazy"
-            width={300}
-            height={225}
+            alt={`${producto.nombre} — Fenice SPA`}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">

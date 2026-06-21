@@ -1,19 +1,25 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight, CheckCircle2, Fuel, Shield, FileText,
-  MapPin, Phone, Truck, Award, Zap, TrendingUp
+  MapPin, Truck, Zap, TrendingUp
 } from "lucide-react";
 import CTASection from "@/components/CTASection";
 import { COMUNAS, SITE_CONFIG } from "@/lib/config";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+// Intención diferenciada: COMPRA / PRECIO / CALIDAD certificada (no "a domicilio" genérico).
+export const metadata = buildMetadata({
   title: "Venta de Petróleo Diésel para Empresas en Santiago",
   description:
-    "Compra petróleo diesel de calidad para tu empresa en Santiago y la RM. Distribución directa con factura electrónica, certificación SEC y despacho rápido. Cotiza sin compromiso.",
-  alternates: { canonical: "https://fenice.cl/venta-petroleo-diesel" },
-  keywords: "venta petróleo diesel santiago, comprar diesel empresas RM, distribuidor petróleo Santiago, precio diesel empresa Chile, petróleo certificado SEC",
-};
+    "Compra petróleo diesel certificado para tu empresa en Santiago y la RM. Distribución directa con factura electrónica, calidad SEC y precio competitivo. Cotiza sin compromiso.",
+  path: "/venta-petroleo-diesel",
+  keywords: [
+    "venta de petróleo diesel santiago",
+    "comprar diesel empresas RM",
+    "precio petróleo diesel empresa chile",
+    "distribuidor de petróleo diesel certificado",
+  ],
+});
 
 const pageSchema = {
   "@context": "https://schema.org",

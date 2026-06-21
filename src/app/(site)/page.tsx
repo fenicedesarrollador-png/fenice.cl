@@ -1,23 +1,24 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import PreciosCombustible from "@/components/PreciosCombustible";
 import TrustSignals from "@/components/TrustSignals";
 import FuelGauge from "@/components/FuelGauge";
 import {
-  Fuel, Truck, Container, ArrowRight, Phone, CheckCircle2,
-  MapPin, Clock, Building2, Zap, ShieldCheck, FileText,
-  ChevronRight, TrendingUp, Users, Award, Clipboard,
+  Truck, ArrowRight, Phone, CheckCircle2,
+  MapPin, Clock, Building2, ShieldCheck, FileText,
+  ChevronRight, Users, Award, Clipboard,
   Route, Shield, BarChart3, HeadphonesIcon
 } from "lucide-react";
-import { COMUNAS, SERVICIOS, SITE_CONFIG } from "@/lib/config";
+import { COMUNAS, SITE_CONFIG } from "@/lib/config";
 import { buildMetadata, faqSchema, jsonLd, CORE_KEYWORDS } from "@/lib/seo";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = buildMetadata({
-  title: "Petróleo a Domicilio Santiago | Distribuidor de Combustible RM — Fenice SPA",
+export const metadata = buildMetadata({
+  title: "Petróleo a Domicilio Santiago | Distribuidor de Combustible RM",
+  titleAbsolute: true,
   description:
-    "Distribuidor de petróleo diesel a domicilio para empresas e industria en Santiago y toda la Región Metropolitana. Despacho rápido, flota especializada y respuesta en minutos por WhatsApp. Cobertura RM, Valparaíso y Rancagua.",
+    "Distribuidor de petróleo diesel a domicilio para empresas en Santiago y la Región Metropolitana. Despacho rápido, flota especializada y cotización por WhatsApp en minutos.",
   path: "/",
   keywords: CORE_KEYWORDS,
 });
@@ -135,10 +136,14 @@ export default function HomePage() {
       <section className="relative overflow-hidden bg-[#0a1628]" data-analytics-section="hero">
 
         {/* Imagen de fondo — desktop centrada al camión, móvil apuntada a izquierda */}
-        <img
+        <Image
           src="/images/imagen_camion_de_combustible.png"
-          alt="Camión de combustible Fenice SPA"
-          className="absolute inset-0 w-full h-full object-cover sm:object-[55%_center] object-[20%_center]"
+          alt="Camión de despacho de petróleo a domicilio de Fenice SPA en Santiago"
+          fill
+          priority
+          fetchPriority="high"
+          sizes="100vw"
+          className="object-cover sm:object-[55%_center] object-[20%_center]"
         />
 
         {/* Overlay desktop: oscuro solo en la franja izquierda donde va el texto */}
@@ -163,14 +168,14 @@ export default function HomePage() {
                 Distribución industrial · Región Metropolitana
               </div>
               <h1 className="text-3xl sm:text-5xl lg:text-[3.2rem] font-extrabold text-white leading-[1.15] sm:leading-[1.1] tracking-tight mb-5">
-                Transporte de<br />
-                Combustible con<br />
-                <span className="text-[#f5a623]">Seguridad, Eficiencia</span><br />
-                <span className="text-[#f5a623]">y Respaldo</span>
+                Petróleo a Domicilio<br />
+                en <span className="text-[#f5a623]">Santiago</span> para<br />
+                <span className="text-[#f5a623]">Empresas e Industria</span>
               </h1>
               <p className="text-sm sm:text-base text-slate-300 leading-relaxed mb-7 max-w-xl">
-                En Fenice SPA entregamos soluciones confiables para el traslado y abastecimiento de
-                combustibles, con flota especializada, control operativo y compromiso con cada cliente.
+                Fenice SPA distribuye petróleo diesel a domicilio en toda la Región Metropolitana,
+                con flota especializada, despacho rápido y respaldo en cada entrega. Transporte y
+                abastecimiento de combustible para tu operación.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 mb-7">
                 <Link href="/cotizacion" data-analytics-id="hero_cotizar" data-analytics-label="Solicitar cotización" data-analytics-cta="quote" className="inline-flex items-center justify-center gap-2 bg-[#f5a623] hover:bg-[#d4891a] text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-lg shadow-[#f5a623]/25 text-sm">

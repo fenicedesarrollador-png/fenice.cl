@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight, CheckCircle2, Truck, Building2, Shield,
-  Zap, FileText, Users, MapPin, Phone, Clipboard,
+  Zap, FileText, Users, MapPin, Phone,
   HardHat, Factory, Cpu, Tractor, BarChart3
 } from "lucide-react";
 import CTASection from "@/components/CTASection";

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { UploadCloud, X, ImageIcon, Loader2 } from "lucide-react";
+import { UploadCloud, X, Loader2 } from "lucide-react";
 
 interface Props {
   bucket: string;
@@ -43,6 +43,7 @@ export default function ImageUpload({ bucket, name, defaultUrl = "", label = "Im
 
       {url ? (
         <div className="relative group rounded-xl overflow-hidden border border-slate-200">
+          {/* eslint-disable-next-line @next/next/no-img-element -- preview de subida en panel privado */}
           <img src={url} alt="Preview" className="w-full max-h-52 object-cover" />
           <div className="absolute inset-0 bg-[#0a1628]/0 group-hover:bg-[#0a1628]/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
             <button type="button" onClick={() => inputRef.current?.click()} className="bg-white text-[#0a1628] text-xs font-bold px-3 py-1.5 rounded-lg">Cambiar</button>

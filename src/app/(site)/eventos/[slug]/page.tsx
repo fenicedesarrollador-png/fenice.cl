@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import Breadcrumb from "@/components/Breadcrumb";
 import CTASection from "@/components/CTASection";
@@ -55,8 +56,8 @@ export default async function EventoPage({ params }: Props) {
       </div>
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         {evento.imagen_url && (
-          <div className="rounded-2xl overflow-hidden mb-8 bg-gray-100">
-            <img src={evento.imagen_url} alt={evento.titulo} className="w-full object-cover" width={800} height={400} />
+          <div className="rounded-2xl overflow-hidden mb-8 bg-slate-100 relative aspect-[2/1]">
+            <Image src={evento.imagen_url} alt={`${evento.titulo} — Fenice SPA`} fill priority sizes="(max-width: 896px) 100vw, 896px" className="object-cover" />
           </div>
         )}
         <h1 className="text-3xl font-extrabold text-gray-900 mb-4">{evento.titulo}</h1>

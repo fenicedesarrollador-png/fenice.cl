@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, Phone, Mail, Clock, ArrowUpRight, Fuel } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, ArrowUpRight } from "lucide-react";
 import ConsentPreferencesButton from "@/components/analytics/ConsentPreferencesButton";
 import { COMUNAS, SERVICIOS } from "@/lib/config";
 import type { SiteConfig } from "@/lib/getSiteConfig";

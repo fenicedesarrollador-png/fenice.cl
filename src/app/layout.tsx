@@ -13,11 +13,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.site_url),
   title: {
-    default: "Petróleo a Domicilio Santiago | Distribuidor de Combustible RM — Fenice SPA",
+    default: "Petróleo a Domicilio Santiago | Distribuidor de Combustible RM",
     template: "%s | Fenice SPA",
   },
   description:
-    "Distribuidor de petróleo a domicilio para empresas e industria en Santiago y toda la Región Metropolitana. Despacho rápido de diesel, flota especializada y respuesta en minutos por WhatsApp. Cobertura RM, Valparaíso y Rancagua.",
+    "Distribuidor de petróleo diesel a domicilio para empresas en Santiago y la Región Metropolitana. Despacho rápido y cotización por WhatsApp en minutos.",
   keywords: CORE_KEYWORDS,
   applicationName: "Fenice SPA",
   authors: [{ name: "Fenice SPA", url: SITE_CONFIG.site_url }],
@@ -47,10 +47,10 @@ export const metadata: Metadata = {
       "Despacho de petróleo diesel a domicilio para empresas e industria en toda la Región Metropolitana. Cotiza por WhatsApp y recibe respuesta en minutos.",
     images: [
       {
-        url: "/images/imagen_camion_de_combustible.png",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Camión de combustible de Fenice SPA en la Región Metropolitana",
+        alt: "Fenice SPA — Petróleo a domicilio para empresas en la Región Metropolitana",
       },
     ],
   },
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     title: "Petróleo a Domicilio Santiago | Fenice SPA",
     description:
       "Distribuidor de combustible a domicilio para empresas en la Región Metropolitana. Despacho rápido y cotización por WhatsApp.",
-    images: ["/images/imagen_camion_de_combustible.png"],
+    images: ["/opengraph-image"],
   },
   // Cuando tengas el código de Google Search Console, pégalo aquí:
   // verification: { google: "TU_CODIGO_DE_VERIFICACION" },

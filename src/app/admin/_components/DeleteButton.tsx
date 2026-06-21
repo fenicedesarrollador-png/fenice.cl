@@ -8,10 +8,9 @@ import { Trash2, AlertTriangle, X } from "lucide-react";
 interface Props {
   table: string;
   id: string;
-  label?: string;
 }
 
-export default function DeleteButton({ table, id, label }: Props) {
+export default function DeleteButton({ table, id }: Props) {
   const [confirming, setConfirming] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();

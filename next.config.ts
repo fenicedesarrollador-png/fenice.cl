@@ -1,6 +1,29 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      { protocol: "https", hostname: "*.supabase.co", pathname: "/storage/v1/object/public/**" },
+      { protocol: "https", hostname: "*.supabase.in", pathname: "/storage/v1/object/public/**" },
+    ],
+  },
+  async redirects() {
+    // URLs antiguas del sitio anterior → destinos canónicos (evita 404 y conserva link equity).
+    return [
+      { source: "/index.html", destination: "/", permanent: true },
+      { source: "/index", destination: "/", permanent: true },
+      { source: "/home", destination: "/", permanent: true },
+      { source: "/service.html", destination: "/servicios/petroleo-a-domicilio-santiago", permanent: true },
+      { source: "/service", destination: "/servicios/petroleo-a-domicilio-santiago", permanent: true },
+      { source: "/servicios", destination: "/servicios/petroleo-a-domicilio-santiago", permanent: true },
+      { source: "/contacto.html", destination: "/contacto", permanent: true },
+      { source: "/contact", destination: "/contacto", permanent: true },
+      { source: "/contact.html", destination: "/contacto", permanent: true },
+      { source: "/about.html", destination: "/nosotros", permanent: true },
+      { source: "/about", destination: "/nosotros", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

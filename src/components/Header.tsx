@@ -2,20 +2,11 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X, ChevronDown, Phone, Fuel, Truck, Container, MapPin, ArrowRight, Building2, Waves } from "lucide-react";
+import { Menu, X, ChevronDown, Phone, Fuel, Truck, Container, MapPin, ArrowRight, Waves } from "lucide-react";
 import { SERVICIOS } from "@/lib/config";
 import type { SiteConfig } from "@/lib/getSiteConfig";
 
 const SERVICIO_ICONS = [Fuel, Truck, Container];
-
-const NAV_LINKS = [
-  { href: "/", label: "Inicio" },
-  { href: "/nosotros", label: "Nosotros" },
-  { href: "/cobertura", label: "Cobertura" },
-  { href: "/empresas-faenas-flotas", label: "Empresas / Faenas / Flotas" },
-  { href: "/preguntas-frecuentes", label: "Preguntas frecuentes" },
-  { href: "/contacto", label: "Contacto" },
-];
 
 export default function Header({ config }: { config: SiteConfig }) {
   const [open, setOpen] = useState(false);

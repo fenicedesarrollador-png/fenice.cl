@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import Link from "next/link";
 import DeleteButton from "../_components/DeleteButton";
 import { PageHeader, PrimaryLink, Badge, EmptyState } from "../_components/ui";
 import { Plus, Tag, Star, Calendar } from "lucide-react";

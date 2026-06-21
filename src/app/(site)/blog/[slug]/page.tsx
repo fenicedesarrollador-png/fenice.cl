@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { fetchWithTimeout } from "@/lib/getSiteConfig";
+import { buildMetadata } from "@/lib/seo";
+import { SITE_CONFIG } from "@/lib/config";
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import Link from "next/link";
@@ -263,28 +266,39 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   try {
     const supabase = await createClient();
-    const { data } = await supabase
-      .from("blog_posts")
-      .select("titulo, extracto, meta_title, meta_description")
-      .eq("slug", slug)
-      .eq("publicado", true)
-      .single();
+    const result = await fetchWithTimeout(
+      supabase
+        .from("blog_posts")
+        .select("titulo, extracto, meta_title, meta_description, imagen_destacada, fecha_publicacion, updated_at")
+        .eq("slug", slug)
+        .eq("publicado", true)
+        .single(),
+      2500,
+    );
+    const data = result?.data;
     if (data) {
-      return {
+      return buildMetadata({
         title: data.meta_title || data.titulo,
         description: data.meta_description || data.extracto,
-        alternates: { canonical: `https://fenice.cl/blog/${slug}` },
-      };
+        path: `/blog/${slug}`,
+        type: "article",
+        image: data.imagen_destacada || undefined,
+        publishedTime: data.fecha_publicacion || undefined,
+        modifiedTime: data.updated_at || data.fecha_publicacion || undefined,
+      });
     }
   } catch {}
 
   const staticPost = staticPosts[slug];
-  if (!staticPost) return { title: "Post no encontrado" };
-  return {
+  if (!staticPost) return { title: "Post no encontrado", robots: { index: false, follow: false } };
+  return buildMetadata({
     title: staticPost.meta_title || staticPost.titulo,
     description: staticPost.meta_description || staticPost.extracto,
-    alternates: { canonical: `https://fenice.cl/blog/${slug}` },
-  };
+    path: `/blog/${slug}`,
+    type: "article",
+    publishedTime: staticPost.fecha_publicacion,
+    modifiedTime: staticPost.fecha_publicacion,
+  });
 }
 
 export async function generateStaticParams() {
@@ -301,17 +315,15 @@ export async function generateStaticParams() {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  let post: { titulo: string; contenido: string; extracto: string; fecha_publicacion: string; categoria: string; autor: string } | null = null;
+  let post: { titulo: string; contenido: string; extracto: string; fecha_publicacion: string; categoria: string; autor: string; imagen_destacada?: string; updated_at?: string } | null = null;
 
   try {
     const supabase = await createClient();
-    const { data } = await supabase
-      .from("blog_posts")
-      .select("*")
-      .eq("slug", slug)
-      .eq("publicado", true)
-      .single();
-    if (data) post = data;
+    const result = await fetchWithTimeout(
+      supabase.from("blog_posts").select("*").eq("slug", slug).eq("publicado", true).single(),
+      2500,
+    );
+    if (result?.data) post = result.data;
   } catch {}
 
   if (!post) {
@@ -320,15 +332,24 @@ export default async function BlogPostPage({ params }: Props) {
 
   if (!post) notFound();
 
+  const base = SITE_CONFIG.site_url;
+  const postUrl = `${base}/blog/${slug}`;
+  const postImage = post.imagen_destacada || `${base}/opengraph-image`;
+
   const blogSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.titulo,
     description: post.extracto,
-    author: { "@type": "Organization", name: post.autor || "Fenice SPA" },
-    publisher: { "@type": "Organization", name: "Fenice SPA", url: "https://fenice.cl/" },
+    image: postImage,
+    author: { "@type": "Organization", name: post.autor || "Fenice SPA", url: `${base}/` },
+    publisher: { "@id": `${base}/#organization` },
     datePublished: post.fecha_publicacion,
-    url: `https://fenice.cl/blog/${slug}`,
+    dateModified: post.updated_at || post.fecha_publicacion,
+    url: postUrl,
+    mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
+    inLanguage: "es-CL",
+    ...(post.categoria ? { articleSection: post.categoria } : {}),
   };
 
   return (

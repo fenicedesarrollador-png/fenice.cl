@@ -3,7 +3,6 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
-  clearAnalyticsStorage,
   getTrackingIdentity,
   hasTrackedScroll,
   hasTrackedSection,
@@ -26,126 +25,6 @@ interface AnalyticsContextValue {
 
 const AnalyticsContext = createContext<AnalyticsContextValue | null>(null);
 
-function ConsentBanner({
-  hasConsent,
-  isOpen,
-  measurementChecked,
-  onClose,
-  onReject,
-  onAccept,
-  onSaveCustom,
-  setMeasurementChecked,
-}: {
-  hasConsent: boolean;
-  isOpen: boolean;
-  measurementChecked: boolean;
-  onClose: () => void;
-  onReject: () => void;
-  onAccept: () => void;
-  onSaveCustom: () => void;
-  setMeasurementChecked: (value: boolean) => void;
-}) {
-  if (!isOpen) {
-    return null;
-  }
-
-  return (
-    <div className="fixed inset-0 z-[100] flex items-end justify-center bg-slate-950/40 p-4 sm:items-center">
-      <div className="w-full max-w-2xl rounded-3xl border border-slate-200 bg-white shadow-2xl">
-        <div className="border-b border-slate-100 px-6 py-5">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#1a6b3c]">
-                Privacidad
-              </p>
-              <h2 className="mt-2 text-2xl font-extrabold text-[#0a1628]">
-                Preferencias de medición
-              </h2>
-            </div>
-            {hasConsent ? (
-              <button
-                type="button"
-                onClick={onClose}
-                className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-800"
-              >
-                Cerrar
-              </button>
-            ) : null}
-          </div>
-          <p className="mt-3 text-sm leading-relaxed text-slate-600">
-            Siempre activamos las cookies necesarias para que el sitio funcione. La medición del
-            sitio es opcional y sirve para entender rutas, secciones, clics y formularios sin
-            guardar datos personales en los eventos analíticos.
-          </p>
-        </div>
-
-        <div className="space-y-4 px-6 py-5">
-          <div className="rounded-2xl border border-slate-200 p-4">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h3 className="font-bold text-[#0a1628]">Necesarias</h3>
-                <p className="mt-1 text-sm text-slate-500">
-                  Requeridas para navegación, seguridad y funcionamiento básico del sitio.
-                </p>
-              </div>
-              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">
-                Siempre activas
-              </span>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-slate-200 p-4">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h3 className="font-bold text-[#0a1628]">Medición del sitio</h3>
-                <p className="mt-1 text-sm text-slate-500">
-                  Crea un identificador anónimo, mide páginas, scroll, secciones, CTAs y
-                  conversiones reales para el panel interno de Fenice.
-                </p>
-              </div>
-              <label className="inline-flex cursor-pointer items-center gap-2">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 accent-[#1a6b3c]"
-                  checked={measurementChecked}
-                  onChange={(event) => setMeasurementChecked(event.target.checked)}
-                />
-                <span className="text-sm font-semibold text-slate-700">Activar</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-3 border-t border-slate-100 px-6 py-5 sm:flex-row sm:justify-end">
-          {!hasConsent ? (
-            <button
-              type="button"
-              onClick={onReject}
-              className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:border-slate-300 hover:bg-slate-50"
-            >
-              Solo necesarias
-            </button>
-          ) : null}
-          <button
-            type="button"
-            onClick={onSaveCustom}
-            className="rounded-xl border border-[#1a6b3c]/20 bg-[#f0faf4] px-5 py-3 text-sm font-semibold text-[#1a6b3c] transition-colors hover:bg-[#e6f5ed]"
-          >
-            Guardar preferencias
-          </button>
-          <button
-            type="button"
-            onClick={onAccept}
-            className="rounded-xl bg-[#f5a623] px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-[#d4891a]"
-          >
-            Aceptar medición
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function useAnalytics() {
   const context = useContext(AnalyticsContext);
   if (!context) {
@@ -162,8 +41,6 @@ export default function AnalyticsProvider({ children }: { children: React.ReactN
   const trackedFormsRef = useRef<Set<string>>(new Set());
 
   const [consent, setConsent] = useState<AnalyticsConsentState | null>(null);
-  const [preferencesOpen, setPreferencesOpen] = useState(false);
-  const [measurementChecked, setMeasurementChecked] = useState(true);
 
   const measurementEnabled = consent?.measurement === true;
   const identity = measurementEnabled ? getTrackingIdentity(pathname) : null;
@@ -179,29 +56,15 @@ export default function AnalyticsProvider({ children }: { children: React.ReactN
       const storedConsent = readAnalyticsConsent();
       if (storedConsent) {
         setConsent(storedConsent);
-        setMeasurementChecked(storedConsent.measurement ?? true);
       } else {
-        // Auto-accept measurement silently — no banner shown
+        // Medición auto-aceptada silenciosamente — sin banner.
         saveAnalyticsConsent(true);
-        const autoConsent = readAnalyticsConsent()!;
-        setConsent(autoConsent);
-        setMeasurementChecked(true);
+        setConsent(readAnalyticsConsent());
       }
     }, 0);
 
     return () => window.clearTimeout(timeoutId);
   }, []);
-
-  useEffect(() => {
-    const handler = () => {
-      const storedConsent = readAnalyticsConsent();
-      setMeasurementChecked(storedConsent?.measurement ?? measurementEnabled);
-      setPreferencesOpen(true);
-    };
-
-    window.addEventListener("fenice:open-consent-preferences", handler);
-    return () => window.removeEventListener("fenice:open-consent-preferences", handler);
-  }, [measurementEnabled]);
 
   useEffect(() => {
     if (!measurementEnabled) {
@@ -422,32 +285,6 @@ export default function AnalyticsProvider({ children }: { children: React.ReactN
       pageTitle: document.title,
       formName,
     }, pathRef.current);
-  }
-
-  function handleReject() {
-    const nextConsent = saveAnalyticsConsent(false);
-    clearAnalyticsStorage();
-    setConsent(nextConsent);
-    setMeasurementChecked(false);
-    setPreferencesOpen(false);
-    trackedFormsRef.current.clear();
-  }
-
-  function handleAccept() {
-    const nextConsent = saveAnalyticsConsent(true);
-    setConsent(nextConsent);
-    setMeasurementChecked(true);
-    setPreferencesOpen(false);
-  }
-
-  function handleSaveCustom() {
-    const nextConsent = saveAnalyticsConsent(measurementChecked);
-    setConsent(nextConsent);
-    setPreferencesOpen(false);
-
-    if (!measurementChecked) {
-      trackedFormsRef.current.clear();
-    }
   }
 
   return (
