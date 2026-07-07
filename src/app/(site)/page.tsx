@@ -137,7 +137,7 @@ export default function HomePage() {
 
         {/* Imagen de fondo — desktop centrada al camión, móvil apuntada a izquierda */}
         <Image
-          src="/images/imagen_camion_de_combustible.png"
+          src="/images/imagen_camion_de_combustible.webp"
           alt="Camión de despacho de petróleo a domicilio de Fenice SPA en Santiago"
           fill
           priority

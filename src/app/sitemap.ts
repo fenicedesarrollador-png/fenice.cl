@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/public";
 import { fetchWithTimeout } from "@/lib/getSiteConfig";
 import { COMUNAS, SERVICIOS, SITE_CONFIG } from "@/lib/config";
 

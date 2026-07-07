@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/public";
 import { hasUsableSupabasePublicConfig } from "@/lib/supabase/config";
 import { SITE_CONFIG } from "@/lib/config";
 import { Fuel, Flame, Home, ArrowRight, Clock, CheckCircle2, AlertCircle } from "lucide-react";

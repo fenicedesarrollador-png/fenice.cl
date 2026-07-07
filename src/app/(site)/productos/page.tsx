@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/public";
 import { fetchWithTimeout } from "@/lib/getSiteConfig";
 import CTASection from "@/components/CTASection";
 import { buildMetadata } from "@/lib/seo";

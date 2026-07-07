@@ -45,7 +45,7 @@ export const metadata = buildMetadata({
 });
 
 const corporateImage = {
-  src: "/images/imagen_camion_de_combustible.png",
+  src: "/images/imagen_camion_de_combustible.webp",
   alt: "Camión de distribución de combustible de Fenice SPA en operación en la Región Metropolitana",
 };
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/public";
 import { fetchWithTimeout } from "@/lib/getSiteConfig";
 import { buildMetadata } from "@/lib/seo";
 import CTASection from "@/components/CTASection";

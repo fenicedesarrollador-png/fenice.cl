@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import CTASection from "@/components/CTASection";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/public";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Testimonios y Clientes",

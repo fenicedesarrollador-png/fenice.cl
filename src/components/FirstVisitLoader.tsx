@@ -34,8 +34,16 @@ const shellScript = `
   var shell = document.getElementById('fenice-loader-shell');
   if (!shell) return;
 
-  // No mostrar el loader dentro del panel de administración.
-  if (window.location.pathname.indexOf('/admin') === 0) {
+  // Solo una vez por sesión y nunca en el panel de administración.
+  // En visitas repetidas se elimina el shell antes de descargar el iframe:
+  // costo cero para la navegación.
+  var alreadyShown = true;
+  try {
+    alreadyShown = sessionStorage.getItem('fenice-loader-shown') === '1';
+    if (!alreadyShown) sessionStorage.setItem('fenice-loader-shown', '1');
+  } catch (e) {}
+
+  if (alreadyShown || window.location.pathname.indexOf('/admin') === 0) {
     shell.remove();
     return;
   }
@@ -65,21 +73,20 @@ const shellScript = `
 
   window.addEventListener('message', onMessage);
 
-  // El loader se cierra ÚNICAMENTE cuando la animación interna llega al 100%
-  // y el iframe envía 'fenice-loader-complete'. No cerramos al cargar la
-  // página para que la barra de progreso siempre alcance el 100% y se vea
-  // completa.
+  // El iframe solo recibe src cuando confirmamos que hay que mostrarlo.
   var frame = document.getElementById('fenice-loader-frame');
-
-  // Si el iframe falla al cargar, cerramos enseguida (no dejamos pantalla colgada).
   if (frame) {
     frame.addEventListener('error', function () {
-      window.setTimeout(closeLoader, 600);
+      window.setTimeout(closeLoader, 300);
     });
+    frame.setAttribute('src', '/loader/fenice-loader.html');
+  } else {
+    closeLoader();
+    return;
   }
 
   // Tope de seguridad por si el iframe nunca envía el mensaje de completado.
-  window.setTimeout(closeLoader, 12000);
+  window.setTimeout(closeLoader, 5000);
 })();
 `;
 
@@ -88,11 +95,7 @@ export default function FirstVisitLoader() {
     <>
       <style dangerouslySetInnerHTML={{ __html: shellCss }} />
       <div id="fenice-loader-shell" aria-hidden="true">
-        <iframe
-          id="fenice-loader-frame"
-          title="Cargando Fenice SPA"
-          src="/loader/fenice-loader.html"
-        />
+        <iframe id="fenice-loader-frame" title="Cargando Fenice SPA" />
       </div>
       <script dangerouslySetInnerHTML={{ __html: shellScript }} />
     </>
