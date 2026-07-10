@@ -2,57 +2,20 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { getSupabasePublicConfigError } from "@/lib/supabase/config";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
-
-function hasPlaceholderConfig() {
-  return (
-    supabaseUrl.includes("YOUR_PROJECT") ||
-    supabaseAnonKey.includes("YOUR_ANON_KEY")
-  );
-}
-
-function getSupabaseUrlError() {
-  if (!supabaseUrl) return "Falta NEXT_PUBLIC_SUPABASE_URL.";
-  if (hasPlaceholderConfig()) {
-    return "La app no está conectada a tu proyecto Supabase. Revisa NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_ANON_KEY.";
-  }
-
-  try {
-    const parsed = new URL(supabaseUrl);
-
-    if (parsed.protocol !== "https:") {
-      return "NEXT_PUBLIC_SUPABASE_URL debe usar https.";
-    }
-
-    if (!parsed.hostname.endsWith(".supabase.co") && !parsed.hostname.endsWith(".supabase.in")) {
-      return "NEXT_PUBLIC_SUPABASE_URL debe ser el dominio base de Supabase.";
-    }
-  } catch {
-    return "NEXT_PUBLIC_SUPABASE_URL no es una URL valida.";
-  }
-
-  return "";
-}
-
-function hasSupabaseConfigError() {
-  return !supabaseAnonKey || !!getSupabaseUrlError();
-}
-
 function getLoginErrorMessage(message?: string) {
-  const urlError = getSupabaseUrlError();
-  if (urlError) {
-    return urlError;
+  const configError = getSupabasePublicConfigError();
+  if (configError) {
+    return configError;
   }
 
-  if (!supabaseAnonKey) {
-    return "Falta NEXT_PUBLIC_SUPABASE_ANON_KEY.";
-  }
+  const normalized = (message ?? "").trim().toLowerCase();
 
-  const normalized = (message ?? "").toLowerCase();
+  if (normalized === "acceso_denegado") {
+    return "Tu cuenta existe, pero no tiene acceso activo al panel.";
+  }
 
   if (normalized.includes("email not confirmed")) {
     return "El usuario existe, pero su correo aún no está confirmado en Supabase Auth.";
@@ -63,6 +26,10 @@ function getLoginErrorMessage(message?: string) {
     normalized.includes("invalid_grant")
   ) {
     return "Credenciales incorrectas. Verifica tu email y contraseña.";
+  }
+
+  if (normalized.includes("failed to fetch") || normalized.includes("fetch")) {
+    return "No fue posible conectar con el servidor de acceso. Verifica la red y la configuración de Supabase.";
   }
 
   if (message) {
@@ -87,21 +54,30 @@ export default function LoginForm() {
     const email = String(fd.get("email") ?? "").trim().toLowerCase();
     const password = String(fd.get("password") ?? "");
 
-    if (hasSupabaseConfigError()) {
+    if (getSupabasePublicConfigError()) {
       setError(getLoginErrorMessage());
       setLoading(false);
       return;
     }
 
-    const supabase = createClient();
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (authError) {
-      console.error("Supabase login error:", authError);
-      setError(getLoginErrorMessage(authError.message));
+      const payload = await res.json().catch(() => ({})) as { error?: string };
+
+      if (!res.ok) {
+        setError(getLoginErrorMessage(payload.error));
+        setLoading(false);
+        return;
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : undefined;
+      console.error("Login request error:", err);
+      setError(getLoginErrorMessage(message));
       setLoading(false);
       return;
     }

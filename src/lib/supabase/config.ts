@@ -24,28 +24,55 @@ function isPlaceholderSupabaseKey(value: string) {
   return /your_anon_key|your_service_role_key|example/i.test(value);
 }
 
-export function hasUsableSupabasePublicConfig() {
+function isLocalSupabaseHostname(hostname: string) {
+  return hostname === "localhost" || hostname === "127.0.0.1";
+}
+
+function isHostedSupabaseHostname(hostname: string) {
+  return hostname.endsWith(".supabase.co") || hostname.endsWith(".supabase.in");
+}
+
+export function getSupabasePublicConfigError() {
   const rawUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").trim();
   const rawAnonKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "").trim();
 
-  if (!rawUrl || !rawAnonKey) {
-    return false;
+  if (!rawUrl) {
+    return "Falta NEXT_PUBLIC_SUPABASE_URL.";
+  }
+
+  if (!rawAnonKey) {
+    return "Falta NEXT_PUBLIC_SUPABASE_ANON_KEY.";
   }
 
   if (isPlaceholderSupabaseUrl(rawUrl) || isPlaceholderSupabaseKey(rawAnonKey)) {
-    return false;
+    return "La app no está conectada a un proyecto Supabase real. Revisa las variables de entorno.";
   }
 
   try {
     const parsed = new URL(rawUrl);
-    return (
-      parsed.protocol === "https:" &&
-      (parsed.hostname.endsWith(".supabase.co") ||
-        parsed.hostname.endsWith(".supabase.in"))
-    );
+    const isLocal = isLocalSupabaseHostname(parsed.hostname);
+    const isHosted = isHostedSupabaseHostname(parsed.hostname);
+
+    if (!isLocal && !isHosted) {
+      return "NEXT_PUBLIC_SUPABASE_URL debe apuntar al dominio base de Supabase o a un entorno local.";
+    }
+
+    if (isHosted && parsed.protocol !== "https:") {
+      return "NEXT_PUBLIC_SUPABASE_URL debe usar https en Supabase hosted.";
+    }
+
+    if (isLocal && parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+      return "NEXT_PUBLIC_SUPABASE_URL local debe usar http o https.";
+    }
   } catch {
-    return false;
+    return "NEXT_PUBLIC_SUPABASE_URL no es una URL valida.";
   }
+
+  return "";
+}
+
+export function hasUsableSupabasePublicConfig() {
+  return !getSupabasePublicConfigError();
 }
 
 export function getSupabasePublicConfig() {
