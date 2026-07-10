@@ -1,6 +1,5 @@
 "use client";
 
-import { getSupabasePublicConfig } from "@/lib/supabase/config";
 import type {
   AnalyticsConsentState,
   AnalyticsEventPayload,
@@ -18,6 +17,7 @@ const SESSION_ACQUISITION_KEY = "fenice_session_acquisition";
 const SESSION_TRACKED_SECTIONS_KEY = "fenice_tracked_sections";
 const SESSION_TRACKED_SCROLL_KEY = "fenice_tracked_scroll_depth";
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
+const ANALYTICS_ROUTE = "/api/analytics/track";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -524,11 +524,6 @@ function logDevError(message: string, error: unknown) {
   console.error(`[analytics] ${message}`, error);
 }
 
-function getFunctionEndpoint() {
-  const { url } = getSupabasePublicConfig();
-  return `${url}/functions/v1/track-analytics-event`;
-}
-
 export async function sendAnalyticsEvent(
   input: AnalyticsTrackInput,
   pathname: string,
@@ -541,30 +536,21 @@ export async function sendAnalyticsEvent(
 
   const payload = toEventPayload(identity, input, pathname);
   const body = JSON.stringify(payload);
-  const endpoint = getFunctionEndpoint();
 
   try {
     if (options?.preferBeacon && isBrowser() && navigator.sendBeacon) {
       const blob = new Blob([body], { type: "application/json" });
-      const ok = navigator.sendBeacon(endpoint, blob);
+      const ok = navigator.sendBeacon(ANALYTICS_ROUTE, blob);
       if (ok) {
         return identity;
       }
     }
 
-    const { anonKey } = getSupabasePublicConfig();
-
-    await fetch(endpoint, {
+    await fetch(ANALYTICS_ROUTE, {
       method: "POST",
-      headers: {
-        "content-type": "application/json",
-        apikey: anonKey,
-        authorization: `Bearer ${anonKey}`,
-      },
+      headers: { "content-type": "application/json" },
       body,
       keepalive: true,
-      mode: "cors",
-      credentials: "omit",
     });
   } catch (error) {
     logDevError(`No se pudo enviar ${input.eventType}`, error);
