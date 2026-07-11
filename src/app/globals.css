@@ -56,6 +56,57 @@ body {
 .prose li { color: #475569; margin-bottom: 0.4rem; }
 .prose strong { color: #0f172a; font-weight: 600; }
 
+/* ============================================
+   SCROLL REVEAL — activado solo con JS (html.reveal-ready)
+   Variantes: data-reveal="up|left|right|zoom"
+   Delay opcional: data-reveal-delay="150" (ms)
+   ============================================ */
+@media (prefers-reduced-motion: no-preference) {
+  html.reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  html.reveal-ready [data-reveal="left"]  { transform: translateX(-36px); }
+  html.reveal-ready [data-reveal="right"] { transform: translateX(36px); }
+  html.reveal-ready [data-reveal="zoom"]  { transform: scale(0.93); }
+  html.reveal-ready [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+}
+
+/* Entrada del hero — CSS puro, sin esperar JS (LCP intacto) */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes heroRise {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-rise   { animation: heroRise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .hero-rise-1 { animation: heroRise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both; }
+  .hero-rise-2 { animation: heroRise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both; }
+  .hero-rise-3 { animation: heroRise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.32s both; }
+}
+
+/* Marquee de logos de clientes */
+@keyframes logoMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.logo-marquee {
+  display: flex;
+  width: max-content;
+  animation: logoMarquee 36s linear infinite;
+}
+.logo-marquee:hover { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .logo-marquee { animation: none; flex-wrap: wrap; width: 100%; justify-content: center; }
+}
+
 /* Animaciones suaves */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }

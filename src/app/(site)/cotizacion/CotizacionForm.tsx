@@ -1,8 +1,10 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { CheckCircle2, AlertCircle, ArrowRight, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { CheckCircle2, AlertCircle, ArrowRight, Loader2, Mail, Home } from "lucide-react";
 import { useAnalytics } from "@/components/analytics/AnalyticsProvider";
+import { COMUNAS, whatsappUrl } from "@/lib/config";
 
 const SERVICIOS_OPS = [
   "Petróleo a domicilio (empresa)",
@@ -137,15 +139,38 @@ export default function CotizacionForm() {
 
   if (success) {
     return (
-      <div className="bg-[#f0faf4] border border-[#1a6b3c]/20 rounded-2xl p-10 text-center">
+      <div className="bg-[#f0faf4] border border-[#1a6b3c]/20 rounded-2xl p-8 sm:p-10 text-center animate-fade-up">
         <div className="w-16 h-16 rounded-full bg-[#1a6b3c]/10 flex items-center justify-center mx-auto mb-5">
           <CheckCircle2 className="w-8 h-8 text-[#1a6b3c]" />
         </div>
         <h3 className="text-2xl font-extrabold text-[#0a1628] mb-3">¡Cotización enviada!</h3>
         <p className="text-slate-600 leading-relaxed max-w-md mx-auto">
-          Recibimos tu solicitud. Un asesor de Fenice SPA se comunicará contigo a la brevedad
-          en el horario Lun-Vie 09:00–19:00.
+          Recibimos tu solicitud y ya fue notificada a nuestro equipo comercial.
+          Un asesor de Fenice SPA se comunicará contigo a la brevedad en el horario
+          Lun-Vie 09:00–19:00.
         </p>
+        <p className="inline-flex items-center gap-2 text-sm text-slate-500 bg-white border border-slate-200 rounded-xl px-4 py-2.5 mt-5">
+          <Mail className="w-4 h-4 text-[#1a6b3c] shrink-0" />
+          Te enviamos un correo de confirmación con el resumen de tu solicitud.
+        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-7">
+          <a
+            href={whatsappUrl("Hola, acabo de enviar una cotización desde fenice.cl y quiero agilizar mi solicitud.")}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-analytics-id="cotizacion_exito_whatsapp"
+            data-analytics-cta="whatsapp"
+            className="inline-flex items-center justify-center gap-2 bg-[#1a6b3c] hover:bg-[#145530] text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors w-full sm:w-auto"
+          >
+            Agilizar por WhatsApp <ArrowRight className="w-4 h-4" />
+          </a>
+          <Link
+            href="/"
+            className="inline-flex items-center justify-center gap-2 border border-slate-200 hover:border-[#1a6b3c]/40 text-slate-600 font-semibold px-6 py-3 rounded-xl text-sm transition-colors w-full sm:w-auto"
+          >
+            <Home className="w-4 h-4" /> Volver al inicio
+          </Link>
+        </div>
       </div>
     );
   }
@@ -213,9 +238,13 @@ export default function CotizacionForm() {
             <input
               name="comuna"
               type="text"
+              list="comunas-cobertura"
               placeholder="Maipú, Pudahuel, Quilicura…"
               className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors"
             />
+            <datalist id="comunas-cobertura">
+              {COMUNAS.map((c) => <option key={c.slug} value={c.nombre} />)}
+            </datalist>
           </div>
         </div>
       </div>

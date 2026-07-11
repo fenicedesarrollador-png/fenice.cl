@@ -6,7 +6,17 @@ import { createClient } from "@/lib/supabase/client";
 import ImageUpload from "../_components/ImageUpload";
 import { FormSection, Field, Toggle, FormActions } from "../_components/ui";
 
-interface Cliente { id: string; nombre: string; logo_url?: string; sitio_web?: string; testimonio?: string; orden: number; activo: boolean; }
+interface Cliente { id: string; nombre: string; logo_url?: string; sitio_web?: string; testimonio?: string; sector?: string; descripcion?: string; orden: number; activo: boolean; }
+
+const SECTORES_SUGERIDOS = [
+  "Construcción e inmobiliaria",
+  "Manufactura e industria",
+  "Minería y faenas",
+  "Generación eléctrica",
+  "Flotas y maquinaria",
+  "Agroindustria",
+  "Transporte y logística",
+];
 
 export default function ClienteForm({ cliente }: { cliente?: Cliente }) {
   const router = useRouter();
@@ -21,6 +31,8 @@ export default function ClienteForm({ cliente }: { cliente?: Cliente }) {
       logo_url: fd.get("logo_url") as string,
       sitio_web: fd.get("sitio_web") as string,
       testimonio: fd.get("testimonio") as string,
+      sector: (fd.get("sector") as string).trim() || null,
+      descripcion: (fd.get("descripcion") as string).trim() || null,
       orden: Number(fd.get("orden")) || 0,
       activo: fd.get("activo") === "on",
     };
@@ -29,7 +41,11 @@ export default function ClienteForm({ cliente }: { cliente?: Cliente }) {
       ? await supabase.from("clientes").update(payload).eq("id", cliente.id)
       : await supabase.from("clientes").insert(payload);
     if (dbError) { setError(dbError.message); setLoading(false); return; }
-    await fetch("/api/revalidate?path=/testimonios", { method: "POST" }).catch(() => {});
+    await Promise.allSettled(
+      ["/testimonios", "/clientes", "/"].map((p) =>
+        fetch(`/api/revalidate?path=${encodeURIComponent(p)}`, { method: "POST" }),
+      ),
+    );
     router.push("/admin/clientes"); router.refresh();
   }
 
@@ -39,10 +55,21 @@ export default function ClienteForm({ cliente }: { cliente?: Cliente }) {
         <Field label="Nombre de la empresa" required>
           <input name="nombre" type="text" required defaultValue={cliente?.nombre} className="admin-input" placeholder="Ej: Constructora ABC" />
         </Field>
-        <Field label="Sitio web" hint="Opcional. URL completa con https://">
-          <input name="sitio_web" type="url" defaultValue={cliente?.sitio_web} className="admin-input" placeholder="https://empresa.cl" />
+        <div className="grid sm:grid-cols-2 gap-4">
+          <Field label="Sitio web" hint="Opcional. URL completa con https://">
+            <input name="sitio_web" type="url" defaultValue={cliente?.sitio_web} className="admin-input" placeholder="https://empresa.cl" />
+          </Field>
+          <Field label="Sector / rubro" hint="Se muestra como etiqueta en la página Clientes.">
+            <input name="sector" type="text" list="sectores-sugeridos" defaultValue={cliente?.sector} className="admin-input" placeholder="Ej: Construcción e inmobiliaria" />
+            <datalist id="sectores-sugeridos">
+              {SECTORES_SUGERIDOS.map((s) => <option key={s} value={s} />)}
+            </datalist>
+          </Field>
+        </div>
+        <Field label="Trabajos realizados" hint="Describe el servicio entregado (despachos, estanque instalado, carga periódica, etc.). Aparece en la página pública /clientes.">
+          <textarea name="descripcion" rows={3} defaultValue={cliente?.descripcion} className="admin-input" placeholder="Ej: Abastecimiento quincenal de 5.000 L de diesel para su flota de maquinaria e instalación de estanque de 10.000 L certificado SEC." />
         </Field>
-        <Field label="Testimonio" hint="Cita opcional que aparece en la página de testimonios.">
+        <Field label="Testimonio" hint="Cita opcional que aparece en /clientes y /testimonios.">
           <textarea name="testimonio" rows={3} defaultValue={cliente?.testimonio} className="admin-input" />
         </Field>
       </FormSection>

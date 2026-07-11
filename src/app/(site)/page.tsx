@@ -3,11 +3,13 @@ import Image from "next/image";
 import PreciosCombustible from "@/components/PreciosCombustible";
 import TrustSignals from "@/components/TrustSignals";
 import FuelGauge from "@/components/FuelGauge";
+import Certificaciones from "@/components/Certificaciones";
+import ClientesShowcase from "@/components/ClientesShowcase";
 import {
   Truck, ArrowRight, Phone, CheckCircle2,
   MapPin, Clock, Building2, ShieldCheck, FileText,
   ChevronRight, Users, Award, Clipboard,
-  Route, Shield, BarChart3, HeadphonesIcon
+  Route, Shield, BarChart3, HeadphonesIcon, Container
 } from "lucide-react";
 import { COMUNAS, SITE_CONFIG } from "@/lib/config";
 import { buildMetadata, faqSchema, jsonLd, CORE_KEYWORDS } from "@/lib/seo";
@@ -26,8 +28,10 @@ export const metadata = buildMetadata({
 const faqItems = [
   { q: "¿Hacen despacho de petróleo a domicilio en Santiago?", a: "Sí. Realizamos despacho de petróleo a domicilio en toda la Región Metropolitana para empresas e industria, con despachos programados o urgentes según sus necesidades." },
   { q: "¿En qué comunas de Santiago trabajan?", a: "Atendemos La Granja, Providencia, Las Condes, Maipú, Pudahuel, Quilicura, Puente Alto, San Bernardo, Lampa, Buin, Colina, además de Valparaíso y Rancagua." },
+  { q: "¿Instalan estanques de combustible?", a: "Sí. Instalamos estanques certificados SEC con autorización TC4 y coordinamos la carga periódica según la necesidad de tu operación: semanal, quincenal, mensual o a demanda." },
   { q: "¿Qué tipo de empresas pueden cotizar petróleo?", a: "Industria manufacturera, construcción, minería, faenas, generadores eléctricos, flotas de maquinaria y cualquier organización con requerimiento de combustible." },
-  { q: "¿Cómo cotizo el precio del petróleo?", a: "Por WhatsApp al +56 9 3957 9658, mediante el formulario de cotización o contacto. Respondemos en minutos Lun-Vie 09:00–19:00." },
+  { q: "¿Cumplen la normativa de transporte de combustible?", a: "Sí. Nuestra flota de camiones estanque opera con certificación TC10A y cumplimos el DS 160 y la normativa de transporte de carga peligrosa en cada despacho." },
+  { q: "¿Cómo cotizo el precio del petróleo?", a: "Por WhatsApp al +56 9 3957 9658, mediante el formulario de cotización o al correo ventas@fenice.cl. Respondemos en minutos Lun-Vie 09:00–19:00." },
 ];
 
 const homeFaqSchema = faqSchema(faqItems);
@@ -49,21 +53,21 @@ const TRUST_BADGES = [
 const SERVICIOS_HOME = [
   {
     icon: Truck,
-    title: "Transporte de combustible",
-    desc: "Traslado programado de combustibles con altos estándares de seguridad.",
-    href: "/servicios/transporte-de-combustible-rm",
+    title: "Petróleo diesel a domicilio",
+    desc: "Despacho de diesel para empresas, faenas y cualquier necesidad operativa en la RM.",
+    href: "/servicios/petroleo-a-domicilio-santiago",
+  },
+  {
+    icon: Container,
+    title: "Instalación de estanques SEC",
+    desc: "Estanques certificados con carga periódica según la necesidad de tu operación.",
+    href: "/servicios/instalacion-de-estanques",
   },
   {
     icon: Building2,
     title: "Abastecimiento a empresas",
     desc: "Soluciones adaptadas a la operación de industrias, flotas y clientes corporativos.",
     href: "/empresas-faenas-flotas",
-  },
-  {
-    icon: Clipboard,
-    title: "Logística operativa",
-    desc: "Planificación, coordinación y seguimiento para una entrega eficiente.",
-    href: "/servicios/petroleo-a-domicilio-santiago",
   },
   {
     icon: HeadphonesIcon,
@@ -163,21 +167,21 @@ export default function HomePage() {
 
             {/* Texto — ocupa todo el alto en móvil para que la imagen se vea abajo del overlay */}
             <div className="py-10 sm:py-20 lg:py-28 min-h-[70vw] sm:min-h-0 flex flex-col justify-center">
-              <div className="inline-flex items-center gap-2 bg-[#f5a623]/10 border border-[#f5a623]/25 text-[#f5a623] text-[11px] sm:text-xs font-bold px-3 sm:px-4 py-1.5 sm:py-2 rounded-full mb-5 uppercase tracking-wider w-fit">
+              <div className="hero-rise inline-flex items-center gap-2 bg-[#f5a623]/10 border border-[#f5a623]/25 text-[#f5a623] text-[11px] sm:text-xs font-bold px-3 sm:px-4 py-1.5 sm:py-2 rounded-full mb-5 uppercase tracking-wider w-fit">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#f5a623] animate-pulse" />
                 Distribución industrial · Región Metropolitana
               </div>
-              <h1 className="text-3xl sm:text-5xl lg:text-[3.2rem] font-extrabold text-white leading-[1.15] sm:leading-[1.1] tracking-tight mb-5">
+              <h1 className="hero-rise-1 text-3xl sm:text-5xl lg:text-[3.2rem] font-extrabold text-white leading-[1.15] sm:leading-[1.1] tracking-tight mb-5">
                 Petróleo a Domicilio<br />
                 en <span className="text-[#f5a623]">Santiago</span> para<br />
                 <span className="text-[#f5a623]">Empresas e Industria</span>
               </h1>
-              <p className="text-sm sm:text-base text-slate-300 leading-relaxed mb-7 max-w-xl">
-                Fenice SPA distribuye petróleo diesel a domicilio en toda la Región Metropolitana,
-                con flota especializada, despacho rápido y respaldo en cada entrega. Transporte y
-                abastecimiento de combustible para tu operación.
+              <p className="hero-rise-2 text-sm sm:text-base text-slate-300 leading-relaxed mb-7 max-w-xl">
+                Fenice SPA distribuye petróleo diesel a domicilio en toda la Región Metropolitana
+                e instala estanques certificados SEC con carga periódica según tu operación.
+                Flota especializada, despacho rápido y respaldo en cada entrega.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 mb-7">
+              <div className="hero-rise-3 flex flex-col sm:flex-row gap-3 mb-7">
                 <Link href="/cotizacion" data-analytics-id="hero_cotizar" data-analytics-label="Solicitar cotización" data-analytics-cta="quote" className="inline-flex items-center justify-center gap-2 bg-[#f5a623] hover:bg-[#d4891a] text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-lg shadow-[#f5a623]/25 text-sm">
                   Solicitar cotización <ArrowRight className="w-4 h-4" />
                 </Link>
@@ -185,7 +189,7 @@ export default function HomePage() {
                   {WA_ICON} Cotizar por WhatsApp
                 </a>
               </div>
-              <div className="grid grid-cols-3 gap-2 sm:gap-3 max-w-sm">
+              <div className="hero-rise-3 grid grid-cols-3 gap-2 sm:gap-3 max-w-sm">
                 {[
                   { icon: Truck, label: "Flota especializada" },
                   { icon: MapPin, label: "Cobertura operativa" },
@@ -201,7 +205,7 @@ export default function HomePage() {
 
             {/* Stats card — solo desktop */}
             <div className="hidden lg:block py-28">
-              <div className="bg-[#0d2040]/30 border border-white/15 rounded-2xl p-8 backdrop-blur-md">
+              <div className="hero-rise-3 bg-[#0d2040]/30 border border-white/15 rounded-2xl p-8 backdrop-blur-md">
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6">Cobertura operativa</p>
                 <div className="grid grid-cols-2 gap-4 mb-8">
                   {STATS.map(({ value, label, icon: Icon }) => (
@@ -230,6 +234,9 @@ export default function HomePage() {
       {/* ── SEÑALES DE CONFIANZA ─────────────────────────────────────────────── */}
       <TrustSignals />
 
+      {/* ── EMPRESAS QUE CONFÍAN (logos, editable en /admin/clientes) ────────── */}
+      <ClientesShowcase />
+
       {/* ── PRECIOS DE COMBUSTIBLE Y PRODUCTOS ───────────────────────────────── */}
       <PreciosCombustible />
 
@@ -238,7 +245,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-14 items-center">
             {/* Medidor de combustible interactivo */}
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center" data-reveal="left">
               <div className="w-full max-w-sm bg-[#f8fafc] border border-slate-100 rounded-3xl p-8 shadow-sm">
                 <div className="flex items-center gap-2 mb-5">
                   <div className="w-2 h-2 rounded-full bg-[#1a6b3c] animate-pulse" />
@@ -247,7 +254,7 @@ export default function HomePage() {
                 <FuelGauge />
               </div>
             </div>
-            <div>
+            <div data-reveal="right">
               <p className="text-xs font-bold text-[#1a6b3c] uppercase tracking-widest mb-3">Quiénes somos</p>
               <h2 className="text-3xl font-extrabold text-[#0a1628] mb-4 leading-tight">
                 Fenice SPA
@@ -290,14 +297,16 @@ export default function HomePage() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {SERVICIOS_HOME.map(({ icon: Icon, title, desc, href }) => (
+            {SERVICIOS_HOME.map(({ icon: Icon, title, desc, href }, i) => (
               <Link
                 key={title}
                 href={href}
+                data-reveal
+                data-reveal-delay={String(i * 90)}
                 data-analytics-id={`home_service_${title.toLowerCase().replaceAll(" ", "_").replaceAll("/", "_")}`}
                 data-analytics-label={title}
                 data-analytics-cta="service_card"
-                className="group bg-white/5 border border-white/10 hover:border-[#f5a623]/40 rounded-2xl p-6 transition-all hover:bg-white/8"
+                className="group bg-white/5 border border-white/10 hover:border-[#f5a623]/40 rounded-2xl p-6 transition-all hover:bg-white/8 hover:-translate-y-1"
               >
                 <div className="w-14 h-14 rounded-2xl bg-[#1a6b3c]/20 border border-[#1a6b3c]/30 group-hover:bg-[#1a6b3c]/30 flex items-center justify-center mb-5 transition-colors">
                   <Icon className="w-6 h-6 text-[#1a6b3c] group-hover:text-white transition-colors" strokeWidth={1.8} />
@@ -329,8 +338,8 @@ export default function HomePage() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {WHY_US.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="text-center group">
+            {WHY_US.map(({ icon: Icon, title, desc }, i) => (
+              <div key={title} className="text-center group" data-reveal data-reveal-delay={String(i * 90)}>
                 <div className="w-16 h-16 rounded-2xl bg-[#1a6b3c]/10 border border-[#1a6b3c]/20 group-hover:bg-[#1a6b3c]/20 flex items-center justify-center mx-auto mb-4 transition-colors">
                   <Icon className="w-7 h-7 text-[#1a6b3c]" strokeWidth={1.8} />
                 </div>
@@ -357,8 +366,8 @@ export default function HomePage() {
             {/* Connector line desktop */}
             <div className="hidden lg:block absolute top-10 left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-[#1a6b3c] via-[#f5a623] to-[#1a6b3c] z-0" style={{top: '2.5rem'}} />
 
-            {HOW_WE_WORK.map(({ n, icon: Icon, title, desc }) => (
-              <div key={n} className="relative z-10 flex flex-col items-center text-center">
+            {HOW_WE_WORK.map(({ n, icon: Icon, title, desc }, i) => (
+              <div key={n} className="relative z-10 flex flex-col items-center text-center" data-reveal data-reveal-delay={String(i * 110)}>
                 <div className="w-20 h-20 rounded-full bg-white border-2 border-[#1a6b3c] flex items-center justify-center mb-4 shadow-md relative">
                   <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#f5a623] text-white text-xs font-extrabold flex items-center justify-center">{n}</span>
                   <Icon className="w-8 h-8 text-[#1a6b3c]" strokeWidth={1.6} />
@@ -375,7 +384,7 @@ export default function HomePage() {
       <section className="py-16 bg-white" data-analytics-section="seguridad">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
+            <div data-reveal="left">
               <p className="text-xs font-bold text-[#f5a623] uppercase tracking-widest mb-3">Seguridad</p>
               <h2 className="text-3xl font-extrabold text-[#0a1628] mb-4 leading-tight">
                 Compromiso con<br />la seguridad
@@ -393,8 +402,8 @@ export default function HomePage() {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              {SECURITY_ITEMS.map(({ icon: Icon, label }) => (
-                <div key={label} className="flex flex-col items-center gap-3 bg-slate-50 border border-slate-200 hover:border-[#1a6b3c]/30 rounded-2xl p-6 text-center transition-colors">
+              {SECURITY_ITEMS.map(({ icon: Icon, label }, i) => (
+                <div key={label} data-reveal data-reveal-delay={String(i * 80)} className="flex flex-col items-center gap-3 bg-slate-50 border border-slate-200 hover:border-[#1a6b3c]/30 rounded-2xl p-6 text-center transition-colors">
                   <div className="w-12 h-12 rounded-xl bg-[#1a6b3c]/10 flex items-center justify-center">
                     <Icon className="w-6 h-6 text-[#1a6b3c]" strokeWidth={1.8} />
                   </div>
@@ -405,6 +414,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── CERTIFICACIONES Y CUMPLIMIENTO NORMATIVO ─────────────────────────── */}
+      <Certificaciones />
 
       {/* ── COBERTURA ────────────────────────────────────────────────────────── */}
       <section className="py-20 bg-[#0a1628]" data-analytics-section="cobertura">
@@ -422,7 +434,7 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" data-reveal>
             {COMUNAS.map((c) => (
               <Link
                 key={c.slug}
@@ -455,7 +467,7 @@ export default function HomePage() {
           </div>
           <div className="space-y-3">
             {faqItems.map((item, i) => (
-              <details key={i} className="group bg-white border border-slate-200 hover:border-[#1a6b3c]/30 rounded-2xl overflow-hidden transition-colors">
+              <details key={i} data-reveal data-reveal-delay={String(i * 60)} className="group bg-white border border-slate-200 hover:border-[#1a6b3c]/30 rounded-2xl overflow-hidden transition-colors">
                 <summary className="flex items-center justify-between px-6 py-5 cursor-pointer list-none select-none">
                   <span className="font-bold text-[#0a1628] text-sm pr-4">{item.q}</span>
                   <ChevronRight className="w-4 h-4 text-[#f5a623] shrink-0 group-open:rotate-90 transition-transform" />
@@ -517,7 +529,7 @@ export default function HomePage() {
           {/* Contact strip */}
           <div className="mt-12 pt-8 border-t border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
-              { icon: MapPin, label: "Sitio web", value: "www.fenicespa.cl" },
+              { icon: MapPin, label: "Sitio web", value: "www.fenice.cl" },
               { icon: FileText, label: "Correo corporativo", value: SITE_CONFIG.email },
               { icon: Phone, label: "Atención comercial", value: SITE_CONFIG.telefono },
             ].map(({ icon: Icon, label, value }) => (

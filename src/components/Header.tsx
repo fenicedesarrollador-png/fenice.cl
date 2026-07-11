@@ -129,6 +129,9 @@ export default function Header({ config }: { config: SiteConfig }) {
               <Link href="/nosotros" data-analytics-id="header_nav_nosotros" data-analytics-label="Nosotros" data-analytics-cta="primary_navigation" className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-[#0a1628] rounded-lg hover:bg-slate-50 transition-all whitespace-nowrap">
                 Nosotros
               </Link>
+              <Link href="/clientes" data-analytics-id="header_nav_clientes" data-analytics-label="Clientes" data-analytics-cta="primary_navigation" className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-[#0a1628] rounded-lg hover:bg-slate-50 transition-all whitespace-nowrap">
+                Clientes
+              </Link>
               <Link href="/cobertura" data-analytics-id="header_nav_cobertura" data-analytics-label="Cobertura" data-analytics-cta="primary_navigation" className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-[#0a1628] rounded-lg hover:bg-slate-50 transition-all whitespace-nowrap">
                 Cobertura
               </Link>
@@ -204,6 +207,7 @@ export default function Header({ config }: { config: SiteConfig }) {
               <div className="h-px bg-slate-100 my-2" />
               {[
                 { href: "/nosotros", label: "Nosotros" },
+                { href: "/clientes", label: "Clientes y proyectos" },
                 { href: "/cobertura", label: "Cobertura" },
                 { href: "/empresas-faenas-flotas", label: "Empresas / Faenas / Flotas" },
                 { href: "/preguntas-frecuentes", label: "Preguntas frecuentes" },

@@ -15,7 +15,7 @@ const FIELDS = [
 ];
 
 const PATHS_TO_REVALIDATE = [
-  "/", "/contacto", "/nosotros",
+  "/", "/contacto", "/nosotros", "/clientes",
   "/servicios/petroleo-a-domicilio-santiago",
   "/servicios/transporte-de-combustible-rm",
   "/servicios/instalacion-de-estanques",

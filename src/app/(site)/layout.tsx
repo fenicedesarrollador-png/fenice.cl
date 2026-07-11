@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
 import FirstVisitLoader from "@/components/FirstVisitLoader";
+import ScrollReveal from "@/components/ScrollReveal";
 import { getSiteConfig } from "@/lib/getSiteConfig";
 import { organizationSchema, websiteSchema, localBusinessSchema, jsonLd } from "@/lib/seo";
 
@@ -27,6 +28,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   return (
     <>
       <FirstVisitLoader />
+      <ScrollReveal />
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(seoGraph)} />
       <AnalyticsProvider>
         <div className="min-h-full flex flex-col bg-white text-gray-900">

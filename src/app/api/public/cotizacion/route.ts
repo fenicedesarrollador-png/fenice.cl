@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { linkAnalyticsIdentity } from "@/lib/analytics/server";
+import { sendEmail } from "@/lib/email/resend";
+import { cotizacionInternaEmail, cotizacionClienteEmail } from "@/lib/email/templates";
+import { NOTIFY_EMAILS } from "@/lib/config";
 
 function normalizeOptionalText(value: unknown) {
   if (typeof value !== "string") {
@@ -76,6 +79,23 @@ export async function POST(request: Request) {
     }
 
     await linkAnalyticsIdentity(serviceClient, request, { cotizacionId: data.id });
+
+    // Notificaciones por correo (Resend). Nunca bloquean la respuesta:
+    // la cotización ya quedó registrada en el panel administrativo.
+    const emailData = { ...payload, id: data.id };
+    await Promise.allSettled([
+      sendEmail({
+        to: [...NOTIFY_EMAILS],
+        subject: `Nueva cotización — ${payload.empresa} (${payload.servicio_solicitado})`,
+        html: cotizacionInternaEmail(emailData),
+        replyTo: payload.email,
+      }),
+      sendEmail({
+        to: [payload.email],
+        subject: "Recibimos tu solicitud de cotización — Fenice SPA",
+        html: cotizacionClienteEmail(emailData),
+      }),
+    ]);
 
     return NextResponse.json({ ok: true, id: data.id });
   } catch (error) {

@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { linkAnalyticsIdentity } from "@/lib/analytics/server";
+import { sendEmail } from "@/lib/email/resend";
+import { contactoInternoEmail } from "@/lib/email/templates";
+import { NOTIFY_EMAILS } from "@/lib/config";
 
 function normalizeOptionalText(value: unknown) {
   if (typeof value !== "string") {
@@ -71,6 +74,16 @@ export async function POST(request: Request) {
     }
 
     await linkAnalyticsIdentity(serviceClient, request, { leadId: data.id });
+
+    // Notificación interna por correo (Resend) — no bloquea la respuesta.
+    await Promise.allSettled([
+      sendEmail({
+        to: [...NOTIFY_EMAILS],
+        subject: `Nuevo contacto — ${payload.nombre} (${payload.tipo_operacion})`,
+        html: contactoInternoEmail(payload),
+        ...(payload.email ? { replyTo: payload.email } : {}),
+      }),
+    ]);
 
     return NextResponse.json({ ok: true, id: data.id });
   } catch (error) {

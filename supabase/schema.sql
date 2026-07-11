@@ -16,7 +16,7 @@ create table if not exists configuracion_sitio (
 insert into configuracion_sitio (clave, valor, descripcion) values
   ('whatsapp_numero', '56939579658', 'Solo números, sin + ni espacios, para wa.me'),
   ('telefono', '+56939579658', 'Teléfono de contacto, formato con +'),
-  ('email', 'Erika.pierattini@fenicespa.cl', 'Correo de contacto'),
+  ('email', 'ventas@fenice.cl', 'Correo de contacto corporativo'),
   ('horario', 'Lun-Vie 09:00-19:00', 'Horario de atención'),
   ('direccion', 'La Granja, Santiago', 'Dirección base operativa'),
   ('instagram_url', 'https://www.instagram.com/fenice.spa/', 'Instagram')

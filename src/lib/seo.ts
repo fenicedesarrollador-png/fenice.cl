@@ -81,14 +81,19 @@ export function buildMetadata({
 export const CORE_KEYWORDS = [
   "petróleo a domicilio santiago",
   "petróleo a domicilio región metropolitana",
+  "diesel a domicilio santiago",
   "venta de petróleo diesel empresas",
   "distribuidor de combustible santiago",
   "despacho de petróleo RM",
   "transporte de combustible santiago",
   "abastecimiento de combustible industrial",
   "petróleo diesel para empresas",
+  "petróleo diesel para faenas",
   "combustible a domicilio Santiago",
   "instalación de estanques de combustible SEC",
+  "estanques certificados SEC",
+  "carga periódica de estanques de combustible",
+  "camiones estanque TC10A",
 ];
 
 export function comunaKeywords(comuna: string): string[] {
@@ -128,13 +133,56 @@ export function organizationSchema() {
     },
     sameAs: [SITE_CONFIG.instagram_url],
     areaServed: { "@type": "AdministrativeArea", name: "Región Metropolitana de Santiago" },
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        email: "ventas@fenice.cl",
+        telephone: SITE_CONFIG.telefono,
+        areaServed: "CL",
+        availableLanguage: "es",
+      },
+    ],
     knowsAbout: [
       "Distribución de petróleo diesel",
+      "Petróleo diesel a domicilio",
       "Transporte de combustible",
       "Abastecimiento industrial de combustible",
-      "Instalación de estanques de combustible",
-      "Cumplimiento normativo SEC",
+      "Instalación de estanques de combustible certificados SEC",
+      "Carga periódica de estanques",
+      "Cumplimiento normativo SEC, TC4, TC10A y DS 160",
+      "Transporte de carga peligrosa",
     ],
+    hasCredential: [
+      { "@type": "EducationalOccupationalCredential", name: "Estanques certificados SEC", credentialCategory: "certification" },
+      { "@type": "EducationalOccupationalCredential", name: "Certificación TC4 para instalaciones de combustibles", credentialCategory: "certification" },
+      { "@type": "EducationalOccupationalCredential", name: "Certificación TC10A para camiones estanque", credentialCategory: "certification" },
+      { "@type": "EducationalOccupationalCredential", name: "Cumplimiento DS 160 — transporte de carga peligrosa", credentialCategory: "certification" },
+    ],
+  };
+}
+
+// Equipo directivo (página Nosotros) — Person schema para E-E-A-T
+export function teamSchema(
+  members: { nombre: string; cargo: string; email?: string | null; foto_url?: string | null }[],
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": `${BASE}/nosotros/#equipo`,
+    name: "Equipo directivo de Fenice SPA",
+    itemListElement: members.map((m, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "Person",
+        name: m.nombre,
+        jobTitle: m.cargo,
+        ...(m.email ? { email: m.email } : {}),
+        ...(m.foto_url ? { image: m.foto_url } : {}),
+        worksFor: { "@id": `${BASE}/#organization` },
+      },
+    })),
   };
 }
 

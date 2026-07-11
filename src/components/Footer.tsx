@@ -130,6 +130,7 @@ export default function Footer({ config }: { config: SiteConfig }) {
               {[
                 { href: "/", label: "Inicio" },
                 { href: "/nosotros", label: "Quiénes somos" },
+                { href: "/clientes", label: "Clientes y proyectos" },
                 { href: "/empresas-faenas-flotas", label: "Empresas / Faenas / Flotas" },
                 { href: "/cobertura", label: "Cobertura" },
                 { href: "/blog", label: "Blog técnico" },
@@ -162,6 +163,25 @@ export default function Footer({ config }: { config: SiteConfig }) {
         </div>
       </div>
 
+      {/* Certificaciones — franja de confianza */}
+      <div className="border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-wrap items-center justify-center gap-x-8 gap-y-2">
+          {[
+            "Estanques certificados SEC",
+            "TC4 instalaciones",
+            "TC10A camiones estanque",
+            "Cumplimiento DS 160",
+          ].map((cert) => (
+            <span key={cert} className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+              <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 shrink-0" fill="none" stroke="#1a6b3c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              {cert}
+            </span>
+          ))}
+        </div>
+      </div>
+
       {/* Bottom bar */}
       <div className="border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
@@ -172,7 +192,18 @@ export default function Footer({ config }: { config: SiteConfig }) {
             <ConsentPreferencesButton className="hover:text-slate-400 transition-colors">
               Cookies
             </ConsentPreferencesButton>
-            <span className="text-slate-700">fenicespa.cl</span>
+            <span className="text-slate-700">fenice.cl</span>
+            <a
+              href="https://www.zyteron.cl"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-analytics-id="footer_zyteron"
+              data-analytics-label="Zyteron"
+              data-analytics-cta="external"
+              className="text-slate-600 hover:text-[#f5a623] transition-colors whitespace-nowrap"
+            >
+              Web desarrollada por <span className="font-bold">Zyteron</span>
+            </a>
           </div>
         </div>
       </div>

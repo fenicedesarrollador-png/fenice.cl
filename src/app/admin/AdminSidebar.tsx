@@ -16,6 +16,7 @@ const links = [
   { href: "/admin/leads", label: "Solicitudes", icon: Inbox },
   { href: "/admin/productos", label: "Productos", icon: Package },
   { href: "/admin/clientes", label: "Clientes", icon: Building2 },
+  { href: "/admin/equipo", label: "Equipo", icon: Users },
   { href: "/admin/blog", label: "Blog", icon: FileText },
   { href: "/admin/eventos", label: "Eventos", icon: CalendarDays },
   { href: "/admin/promociones", label: "Promociones", icon: Tag },

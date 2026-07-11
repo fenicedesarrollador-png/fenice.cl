@@ -27,19 +27,24 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { SITE_CONFIG, whatsappUrl } from "@/lib/config";
-import { buildMetadata, aboutPageSchema, jsonLd } from "@/lib/seo";
+import { buildMetadata, aboutPageSchema, teamSchema, jsonLd } from "@/lib/seo";
+import { getEquipo, type MiembroEquipo } from "@/lib/getContent";
 import Breadcrumb from "@/components/Breadcrumb";
+import Certificaciones from "@/components/Certificaciones";
+
+export const revalidate = 60;
 
 export const metadata = buildMetadata({
-  title: "Nosotros | Distribuidor de Diésel, Kerosene y Gas en Santiago",
+  title: "Nosotros | Empresa de Petróleo Diesel y Estanques Certificados SEC",
   description:
-    "Conoce a Fenice SPA: distribuidor de diésel, kerosene y gas envasado residencial para empresas, operaciones y hogares en Santiago y la Región Metropolitana. Atención cercana y procesos claros.",
+    "Conoce a Fenice SPA: empresa de distribución de petróleo diesel a domicilio e instalación de estanques certificados SEC para empresas, faenas y flotas en Santiago y la Región Metropolitana. Equipo, valores y certificaciones.",
   path: "/nosotros",
   keywords: [
     "distribuidor de combustible santiago",
     "empresa de petróleo diesel región metropolitana",
+    "instalación de estanques certificados SEC",
+    "empresa transporte de combustible TC10A",
     "venta de kerosene santiago",
-    "gas envasado residencial RM",
     "quiénes somos fenice spa",
   ],
 });
@@ -62,6 +67,7 @@ const sectionNav = [
   { href: "#clientes", label: "A quién atendemos" },
   { href: "#valores", label: "Valores" },
   { href: "#equipo", label: "Equipo" },
+  { href: "#certificaciones", label: "Certificaciones" },
   { href: "#proceso", label: "Cómo trabajamos" },
 ];
 
@@ -208,44 +214,8 @@ const principles: IconCard[] = [
   },
 ];
 
-const teamMembers = [
-  {
-    id: "gerencia-general",
-    featured: true,
-    name: "Nombre por definir",
-    role: "Gerente General",
-    email: SITE_CONFIG.email,
-    image: "",
-    imageAlt: "Gerente General de Fenice SPA",
-    badge: "Dirección General",
-    description:
-      "Lidero la gestión estratégica y comercial de Fenice, procurando que cada cliente reciba una atención confiable y una solución adecuada para sus necesidades de combustible y energía.",
-  },
-  {
-    id: "jefatura-comercial",
-    featured: false,
-    name: "Nombre por definir",
-    role: "Jefatura Comercial",
-    email: SITE_CONFIG.email,
-    image: "",
-    imageAlt: "Jefatura Comercial de Fenice SPA",
-    badge: "Área Comercial",
-    description:
-      "Estoy a cargo de orientar las cotizaciones y requerimientos de nuestros clientes, entregando información clara sobre diésel, kerosene y gas envasado residencial.",
-  },
-  {
-    id: "operaciones-administracion",
-    featured: false,
-    name: "Nombre por definir",
-    role: "Operaciones y Administración",
-    email: SITE_CONFIG.email,
-    image: "",
-    imageAlt: "Operaciones y Administración de Fenice SPA",
-    badge: "Operaciones / Administración",
-    description:
-      "Coordino el seguimiento de cada solicitud y el respaldo administrativo del proceso, buscando una atención ordenada y alineada con las necesidades del cliente.",
-  },
-];
+/* El equipo se administra desde /admin/equipo (tabla `equipo` en Supabase).
+   Las fotos se cargan por URL. Fallback estático en EQUIPO_FALLBACK (config). */
 
 const processSteps = [
   {
@@ -312,67 +282,76 @@ function IconTile({ item }: { item: IconCard }) {
 function TeamCard({
   member,
   featured = false,
+  revealDelay = 0,
 }: {
-  member: (typeof teamMembers)[number];
+  member: MiembroEquipo;
   featured?: boolean;
+  revealDelay?: number;
 }) {
   return (
     <article
-      className={`overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md ${
+      data-reveal
+      data-reveal-delay={String(revealDelay)}
+      className={`group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:border-[#1a6b3c]/30 ${
         featured ? "mx-auto max-w-xl" : "h-full"
       }`}
     >
-      <div className={`relative ${featured ? "h-80" : "h-72"} bg-slate-100`}>
-        {member.image ? (
-          <Image
-            src={member.image}
-            alt={member.imageAlt}
-            fill
-            sizes={featured ? "(min-width: 1024px) 560px, 100vw" : "(min-width: 1024px) 480px, 100vw"}
-            className="object-cover object-center"
+      <div className={`relative overflow-hidden ${featured ? "h-80" : "h-72"} bg-slate-100`}>
+        {member.foto_url ? (
+          /* eslint-disable-next-line @next/next/no-img-element -- foto cargada por URL desde el admin (host variable) */
+          <img
+            src={member.foto_url}
+            alt={`${member.nombre}, ${member.cargo} de Fenice SPA`}
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
           />
         ) : (
           <div className="flex h-full flex-col items-center justify-center bg-gradient-to-br from-slate-100 via-white to-[#ecfdf3] text-slate-500">
             <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-sm">
               <UserRound className="h-10 w-10 text-[#1a6b3c]" />
             </div>
-            <p className="px-6 text-center text-sm font-medium">Fotografía real pendiente de cargar</p>
+            <p className="px-6 text-center text-sm font-medium">Fotografía pendiente de cargar</p>
           </div>
         )}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0a1628]/45 to-transparent" />
       </div>
       <div className={featured ? "p-7" : "p-6"}>
         <span className="mb-4 inline-flex rounded-full bg-[#1a6b3c]/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#1a6b3c]">
-          {member.badge}
+          {member.cargo}
         </span>
-        <h3 className="text-xl font-extrabold text-[#0a1628]">{member.name}</h3>
+        <h3 className="text-xl font-extrabold text-[#0a1628]">{member.nombre}</h3>
         <div className="mt-4 space-y-3 text-sm text-slate-600">
           <p className="flex items-center gap-2">
             <BriefcaseBusiness className="h-4 w-4 shrink-0 text-[#f5a623]" />
-            {member.role}
+            {member.cargo}
           </p>
-          <a
-            href={`mailto:${member.email}`}
-            aria-label={`Enviar correo a ${member.role} de Fenice SPA`}
-            className="flex items-center gap-2 break-all font-semibold text-slate-700 transition-colors hover:text-[#1a6b3c]"
-          >
-            <Mail className="h-4 w-4 shrink-0 text-[#f5a623]" />
-            {member.email}
-          </a>
+          {member.email && (
+            <a
+              href={`mailto:${member.email}`}
+              aria-label={`Enviar correo a ${member.nombre}, ${member.cargo} de Fenice SPA`}
+              className="flex items-center gap-2 break-all font-semibold text-slate-700 transition-colors hover:text-[#1a6b3c]"
+            >
+              <Mail className="h-4 w-4 shrink-0 text-[#f5a623]" />
+              {member.email}
+            </a>
+          )}
         </div>
-        <p className="mt-5 text-sm leading-relaxed text-slate-600">{member.description}</p>
+        {member.bio && <p className="mt-5 text-sm leading-relaxed text-slate-600">{member.bio}</p>}
       </div>
     </article>
   );
 }
 
-export default function NosotrosPage() {
-  const featuredMember = teamMembers.find((member) => member.featured);
-  const secondaryMembers = teamMembers.filter((member) => !member.featured).slice(0, 2);
-  const additionalMembers = teamMembers.filter((member) => !member.featured).slice(2);
+export default async function NosotrosPage() {
+  const equipo = await getEquipo();
+  const [featuredMember, ...restMembers] = equipo;
+  const secondaryMembers = restMembers.slice(0, 2);
+  const additionalMembers = restMembers.slice(2);
 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(aboutPageSchema())} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(teamSchema(equipo))} />
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#0a1628] text-white" data-analytics-section="nosotros_hero">
@@ -395,14 +374,15 @@ export default function NosotrosPage() {
               <Fuel className="h-4 w-4" />
               Sobre Fenice SPA
             </div>
-            <h1 className="text-4xl font-extrabold leading-[1.1] sm:text-5xl lg:text-[3.4rem]">
+            <h1 className="hero-rise text-4xl font-extrabold leading-[1.1] sm:text-5xl lg:text-[3.4rem]">
               Distribuidor de combustible y energía en la{" "}
               <span className="text-[#f5a623]">Región Metropolitana</span>
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
-              En Fenice SPA distribuimos diésel, kerosene y gas envasado residencial,
-              entregando una atención clara y cercana para empresas, operaciones y hogares
-              en Santiago y toda la Región Metropolitana.
+            <p className="hero-rise-1 mt-6 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
+              En Fenice SPA distribuimos petróleo diesel a domicilio para empresas, faenas
+              y flotas, e instalamos estanques certificados SEC con carga periódica según
+              la necesidad de cada operación. Complementamos con kerosene y gas envasado
+              residencial en Santiago y toda la Región Metropolitana.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -458,7 +438,7 @@ export default function NosotrosPage() {
       {/* ── QUIÉNES SOMOS ─────────────────────────────────────────────────── */}
       <section id="quienes-somos" className="scroll-mt-32 bg-white py-16 sm:py-20" data-analytics-section="quienes_somos">
         <div className="mx-auto grid max-w-7xl gap-12 px-5 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8">
-          <div>
+          <div data-reveal="left">
             <SectionEyebrow>Quiénes somos</SectionEyebrow>
             <h2 className="text-3xl font-extrabold leading-tight text-[#0a1628] sm:text-4xl">
               Una empresa orientada a soluciones de energía y combustible
@@ -487,7 +467,7 @@ export default function NosotrosPage() {
               ))}
             </div>
           </div>
-          <div className="relative min-h-[320px] overflow-hidden rounded-2xl bg-slate-100 shadow-sm lg:min-h-[440px]">
+          <div data-reveal="right" className="relative min-h-[320px] overflow-hidden rounded-2xl bg-slate-100 shadow-sm lg:min-h-[440px]">
             <Image
               src={corporateImage.src}
               alt="Operación de distribución de combustible de Fenice SPA en la Región Metropolitana"
@@ -652,7 +632,7 @@ export default function NosotrosPage() {
       {/* ── EQUIPO ────────────────────────────────────────────────────────── */}
       <section id="equipo" className="scroll-mt-32 border-y border-slate-100 bg-slate-50 py-16 sm:py-20" data-analytics-section="equipo">
         <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-          <div className="mx-auto mb-12 max-w-3xl text-center">
+          <div className="mx-auto mb-12 max-w-3xl text-center" data-reveal>
             <div className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#1a6b3c]">
               Equipo Fenice
             </div>
@@ -660,27 +640,31 @@ export default function NosotrosPage() {
               Las personas detrás de Fenice
             </h2>
             <p className="mt-5 text-base leading-relaxed text-slate-600">
-              En Fenice SPA contamos con un equipo comprometido con entregar una atención clara,
-              responsable y cercana. Trabajamos para orientar y coordinar soluciones de diésel,
-              kerosene y gas envasado residencial, según las necesidades de cada cliente,
-              empresa, hogar u operación.
+              Un equipo directivo con experiencia en distribución de combustible, gestión
+              comercial y administración, comprometido con la continuidad operacional de
+              cada cliente: desde el primer contacto hasta la carga periódica de su estanque.
             </p>
           </div>
           {featuredMember && <TeamCard member={featuredMember} featured />}
           <div className="mx-auto mt-8 grid max-w-5xl gap-8 lg:grid-cols-2">
-            {secondaryMembers.map((member) => (
-              <TeamCard key={member.id} member={member} />
+            {secondaryMembers.map((member, i) => (
+              <TeamCard key={member.id} member={member} revealDelay={i * 120} />
             ))}
           </div>
           {additionalMembers.length > 0 && (
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {additionalMembers.map((member) => (
-                <TeamCard key={member.id} member={member} />
+              {additionalMembers.map((member, i) => (
+                <TeamCard key={member.id} member={member} revealDelay={i * 100} />
               ))}
             </div>
           )}
         </div>
       </section>
+
+      {/* ── CERTIFICACIONES ───────────────────────────────────────────────── */}
+      <div id="certificaciones" className="scroll-mt-32">
+        <Certificaciones variant="dark" />
+      </div>
 
       {/* ── CÓMO TRABAJAMOS ───────────────────────────────────────────────── */}
       <section id="proceso" className="scroll-mt-32 bg-white py-16 sm:py-20" data-analytics-section="como_trabajamos">
