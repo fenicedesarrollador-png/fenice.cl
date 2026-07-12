@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { SITE_CONFIG, COMUNAS, SERVICIOS } from "@/lib/config";
 
 const BASE = SITE_CONFIG.site_url;
-// Imagen para logo/Organization (la del camión, 1968x799).
-const BRAND_IMAGE = "/images/imagen_camion_de_combustible.png";
+// Imagen para logo/Organization.
+const BRAND_IMAGE = "/brand/fenice-logo.png";
 // Imagen Open Graph dedicada 1200x630 (generada por Next en /opengraph-image).
 const OG_IMAGE = "/opengraph-image";
 
@@ -121,7 +121,7 @@ export function organizationSchema() {
     name: SITE_CONFIG.razon_social,
     alternateName: SITE_CONFIG.nombre,
     url: `${BASE}/`,
-    logo: { "@type": "ImageObject", url: `${BASE}${BRAND_IMAGE}`, width: 1200, height: 630 },
+    logo: { "@type": "ImageObject", url: `${BASE}${BRAND_IMAGE}`, width: 1491, height: 1055 },
     image: `${BASE}${BRAND_IMAGE}`,
     email: SITE_CONFIG.email,
     telephone: SITE_CONFIG.telefono,

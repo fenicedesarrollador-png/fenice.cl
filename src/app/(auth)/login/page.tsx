@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import LoginForm from "./LoginForm";
-import { Fuel } from "lucide-react";
+import BrandLogo from "@/components/BrandLogo";
 
 export const metadata: Metadata = {
   title: "Acceso Admin",
@@ -27,11 +27,10 @@ export default async function LoginPage({
       <div className="relative w-full max-w-sm">
         {/* Brand */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-[#1f7d47] to-[#1a6b3c] shadow-lg shadow-[#1a6b3c]/25 mb-4">
-            <Fuel className="w-6 h-6 text-white" strokeWidth={2.5} />
+          <div className="flex justify-center">
+            <BrandLogo className="h-16 w-[220px]" imageClassName="scale-[1.6]" priority />
           </div>
-          <h1 className="text-2xl font-bold text-[#0a1628]">Fenice SPA</h1>
-          <p className="text-slate-500 text-sm mt-1">Panel de administración</p>
+          <p className="text-slate-500 text-sm mt-3">Panel de administración</p>
         </div>
 
         <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-xl shadow-slate-900/5">

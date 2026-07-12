@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MapPin, Phone, Mail, Clock, ArrowUpRight } from "lucide-react";
 import ConsentPreferencesButton from "@/components/analytics/ConsentPreferencesButton";
+import BrandLogo from "@/components/BrandLogo";
 import { COMUNAS, SERVICIOS } from "@/lib/config";
 import type { SiteConfig } from "@/lib/getSiteConfig";
 
@@ -15,17 +16,8 @@ export default function Footer({ config }: { config: SiteConfig }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Brand — spans 2 cols on large */}
           <div className="lg:col-span-2">
-            <Link href="/" data-analytics-id="footer_logo" data-analytics-label="Fenice" data-analytics-cta="footer_navigation" className="flex items-center gap-3 mb-6 group">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1a6b3c] to-[#0d4a28] flex items-center justify-center shadow-md shrink-0">
-                <svg viewBox="0 0 24 30" className="w-5 h-6" fill="none">
-                  <path d="M12 2C12 2 5 10 5 16a7 7 0 0014 0C19 10 12 2 12 2z" fill="#f5a623"/>
-                  <path d="M12 11c0 0-3 3.5-3 5.5a3 3 0 006 0C15 14.5 12 11 12 11z" fill="white" opacity="0.85"/>
-                </svg>
-              </div>
-              <div className="leading-none">
-                <p className="text-lg font-extrabold text-white">Fenice</p>
-                <p className="text-[10px] font-bold text-[#f5a623] tracking-[0.2em] uppercase">SPA</p>
-              </div>
+            <Link href="/" data-analytics-id="footer_logo" data-analytics-label="Fenice" data-analytics-cta="footer_navigation" className="inline-flex items-center mb-6">
+              <BrandLogo className="h-14 w-[190px]" imageClassName="scale-[1.58]" onDark />
             </Link>
             <p className="text-sm leading-relaxed mb-6 max-w-xs">
               Distribución de petróleo diesel e instalación de estanques certificados para empresas

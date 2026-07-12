@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Menu, X, ChevronDown, Phone, Fuel, Truck, Container, MapPin, ArrowRight, Waves } from "lucide-react";
+import BrandLogo from "@/components/BrandLogo";
 import { SERVICIOS } from "@/lib/config";
 import type { SiteConfig } from "@/lib/getSiteConfig";
 
@@ -55,20 +56,8 @@ export default function Header({ config }: { config: SiteConfig }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-[70px]">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 shrink-0 group">
-              {/* Flame + drop logo mark */}
-              <div className="relative w-9 h-9 shrink-0">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1a6b3c] to-[#145530] flex items-center justify-center shadow-md group-hover:shadow-green-700/30 transition-shadow">
-                  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none">
-                    <path d="M12 2C12 2 7 8 7 13a5 5 0 0010 0C17 8 12 2 12 2z" fill="#f5a623"/>
-                    <path d="M12 10c0 0-2 2.5-2 4a2 2 0 004 0C14 12.5 12 10 12 10z" fill="white" opacity="0.8"/>
-                  </svg>
-                </div>
-              </div>
-              <div className="flex flex-col leading-none">
-                <span className="text-xl font-extrabold text-[#0a1628] tracking-tight">Fenice</span>
-                <span className="text-[10px] font-bold text-[#1a6b3c] tracking-[0.2em] uppercase leading-none">SPA</span>
-              </div>
+            <Link href="/" className="flex items-center shrink-0">
+              <BrandLogo className="h-11 w-[150px] sm:h-12 sm:w-[172px]" imageClassName="scale-[1.56]" priority />
             </Link>
 
             {/* Desktop nav */}

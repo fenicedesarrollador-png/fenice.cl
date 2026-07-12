@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
+import BrandLogo from "@/components/BrandLogo";
 import {
   LayoutDashboard, Inbox, Package, Building2, FileText,
   CalendarDays, Tag, Settings, Globe, LogOut, Fuel,
@@ -30,21 +31,6 @@ const bottomLinks = [
   { href: "/admin/usuarios", label: "Usuarios", icon: Users },
   { href: "/admin/configuracion", label: "Configuración", icon: Settings },
 ];
-
-/* Logo de marca: gota verde con llama ámbar */
-function BrandMark() {
-  return (
-    <div className="relative w-9 h-9 shrink-0">
-      <div className="absolute inset-0 rounded-xl bg-[#1a6b3c]/30 blur-md" />
-      <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-[#1a6b3c] to-[#0d4a28] flex items-center justify-center shadow-lg shadow-[#1a6b3c]/30">
-        <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none">
-          <path d="M12 2C12 2 7 8 7 13a5 5 0 0010 0C17 8 12 2 12 2z" fill="#f5a623" />
-          <path d="M12 10c0 0-2 2.5-2 4a2 2 0 004 0C14 12.5 12 10 12 10z" fill="white" opacity="0.85" />
-        </svg>
-      </div>
-    </div>
-  );
-}
 
 function NavLink({
   href, label, icon: Icon, exact, onClick,
@@ -101,12 +87,9 @@ function SidebarContent({
     <div className="flex flex-col h-full">
       {/* Brand */}
       <div className="px-5 py-[18px] flex items-center justify-between shrink-0 border-b border-slate-100">
-        <Link href="/admin" onClick={onClose} className="flex items-center gap-3 group">
-          <BrandMark />
-          <div className="leading-none">
-            <p className="text-[15px] font-black text-[#0a1628] tracking-tight">Fenice <span className="text-[#d98a0e]">SPA</span></p>
-            <p className="text-[10px] text-slate-400 mt-1 font-bold tracking-[0.18em] uppercase">Panel Admin</p>
-          </div>
+        <Link href="/admin" onClick={onClose} className="flex flex-col items-start gap-1.5 group">
+          <BrandLogo className="h-10 w-[150px]" imageClassName="scale-[1.58]" />
+          <p className="text-[10px] text-slate-400 font-bold tracking-[0.18em] uppercase">Panel Admin</p>
         </Link>
         {onClose && (
           <button onClick={onClose} className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-[#0a1628] hover:bg-slate-100 transition-all">
