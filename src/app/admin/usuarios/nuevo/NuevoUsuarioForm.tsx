@@ -58,7 +58,7 @@ export default function NuevoUsuarioForm() {
             <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 z-10" />
             <select name="rol" defaultValue="admin" className="admin-input !pl-9">
               <option value="admin">Admin — acceso completo al panel</option>
-              <option value="editor">Editor — solo blog y productos</option>
+              <option value="editor">Editor — solo contenido</option>
               <option value="superadmin">Superadmin — incluye gestión de usuarios</option>
             </select>
           </div>

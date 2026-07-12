@@ -65,7 +65,7 @@ export default async function AdminPreciosCombustiblePage() {
       <div className="mt-8 bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-sm text-slate-500">
         <p className="font-semibold text-slate-700 mb-1">¿Cómo funciona?</p>
         <ul className="list-disc list-inside space-y-1">
-          <li>El interruptor superior <strong>muestra u oculta toda la sección de precios</strong> de la web pública (el catálogo de productos no se ve afectado).</li>
+          <li>El interruptor superior <strong>muestra u oculta toda la sección de precios</strong> de la web pública.</li>
           <li>La <strong>fecha de caducidad</strong> es interna: al vencer, ese precio desaparece automáticamente del sitio hasta que se actualice.</li>
           <li><strong>Alertas por correo:</strong> a las 10:00 del día anterior al vencimiento se envía un aviso a los correos internos (ventas, Rubén, Cecilia y Erika).</li>
           <li>La <strong>publicación programada</strong> reemplaza el precio actual por el nuevo en la fecha/hora indicada, de forma automática (~1 min de precisión).</li>

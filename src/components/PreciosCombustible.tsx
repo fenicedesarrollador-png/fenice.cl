@@ -1,10 +1,8 @@
-import Link from "next/link";
-import Image from "next/image";
 import { createClient } from "@/lib/supabase/public";
 import { hasUsableSupabasePublicConfig } from "@/lib/supabase/config";
 import { SITE_CONFIG } from "@/lib/config";
 import { getSiteConfig, fetchWithTimeout } from "@/lib/getSiteConfig";
-import { Fuel, Flame, Home, ArrowRight, Clock, CheckCircle2, AlertCircle } from "lucide-react";
+import { Fuel, Flame, Home, ArrowRight, Clock, CheckCircle2, AlertCircle, Tag } from "lucide-react";
 
 type FuelPrice = {
   id: string;
@@ -21,19 +19,27 @@ type FuelPrice = {
   vence_at: string | null;
 };
 
+type FuelPromo = {
+  fuel_code: string;
+  titulo: string;
+  descuento_tipo: "porcentaje" | "monto" | null;
+  descuento_valor: number | null;
+  descuento_texto: string | null;
+};
+
 /* Columnas públicas explícitas: el rol anon tiene grants por columna y NO
    puede leer precio_programado/programado_at (datos comerciales internos). */
 const PUBLIC_COLUMNS =
   "id, code, name, price, unit, accent_color, is_available, is_visible, display_order, note, updated_at, vence_at";
 
-const CODE_META: Record<string, { label: string; icon: React.ElementType; bg: string; border: string }> = {
-  diesel:          { label: "D",  icon: Fuel,  bg: "bg-[#f5a623]/10", border: "border-[#f5a623]/20" },
-  kerosene:        { label: "K",  icon: Flame, bg: "bg-[#ea8c00]/10", border: "border-[#ea8c00]/20" },
-  gas_residencial: { label: "GE", icon: Home,  bg: "bg-[#1a6b3c]/10", border: "border-[#1a6b3c]/20" },
+const CODE_META: Record<string, { label: string; icon: React.ElementType }> = {
+  diesel:          { label: "D",  icon: Fuel },
+  kerosene:        { label: "K",  icon: Flame },
+  gas_residencial: { label: "GE", icon: Home },
 };
 
 function formatPrice(price: number): string {
-  return "$" + price.toLocaleString("es-CL");
+  return "$" + Math.round(price).toLocaleString("es-CL");
 }
 
 function formatUpdatedAt(iso: string): string {
@@ -47,16 +53,24 @@ function formatUpdatedAt(iso: string): string {
   return isToday ? `Actualizado hoy, ${time}` : `Actualizado ${d.toLocaleDateString("es-CL", { day: "numeric", month: "short" })}, ${time}`;
 }
 
-type Producto = {
-  id: string;
-  slug: string;
-  nombre: string;
-  descripcion_corta: string | null;
-  imagen_url: string | null;
-  categoria: string | null;
-  precio_referencial: number | null;
-  destacado: boolean;
-};
+/** Precio con descuento aplicado, o null si el descuento no reduce el precio. */
+function discountedPrice(price: number, promo: FuelPromo): number | null {
+  if (!promo.descuento_tipo || promo.descuento_valor == null || promo.descuento_valor <= 0) return null;
+  const d =
+    promo.descuento_tipo === "porcentaje"
+      ? price * (1 - promo.descuento_valor / 100)
+      : price - promo.descuento_valor;
+  const rounded = Math.max(0, Math.round(d));
+  return rounded < price ? rounded : null;
+}
+
+/** Etiqueta corta del descuento para el badge de la tarjeta. */
+function promoBadge(promo: FuelPromo): string {
+  if (promo.descuento_texto?.trim()) return promo.descuento_texto.trim();
+  if (promo.descuento_tipo === "porcentaje" && promo.descuento_valor) return `-${promo.descuento_valor}%`;
+  if (promo.descuento_tipo === "monto" && promo.descuento_valor) return `-${formatPrice(promo.descuento_valor)}`;
+  return "Oferta";
+}
 
 async function getFuelPrices(): Promise<FuelPrice[] | null> {
   if (!hasUsableSupabasePublicConfig()) return null;
@@ -96,20 +110,25 @@ async function getFuelPrices(): Promise<FuelPrice[] | null> {
   }
 }
 
-async function getProductos(): Promise<Producto[]> {
-  if (!hasUsableSupabasePublicConfig()) return [];
+/** Promociones vigentes ligadas a un combustible (RLS filtra activo + vigencia). */
+async function getFuelPromos(): Promise<Record<string, FuelPromo>> {
+  if (!hasUsableSupabasePublicConfig()) return {};
   try {
     const supabase = await createClient();
     const { data, error } = await supabase
-      .from("productos")
-      .select("id, slug, nombre, descripcion_corta, imagen_url, categoria, precio_referencial, destacado")
-      .eq("activo", true)
-      .order("destacado", { ascending: false })
-      .order("nombre", { ascending: true });
-    if (error) return [];
-    return (data as Producto[]) ?? [];
+      .from("promociones")
+      .select("fuel_code, titulo, descuento_tipo, descuento_valor, descuento_texto")
+      .not("fuel_code", "is", null)
+      .order("created_at", { ascending: false });
+    if (error || !data) return {};
+    const map: Record<string, FuelPromo> = {};
+    for (const p of data as FuelPromo[]) {
+      // Primera (más reciente) promo por combustible.
+      if (p.fuel_code && !map[p.fuel_code]) map[p.fuel_code] = p;
+    }
+    return map;
   } catch {
-    return [];
+    return {};
   }
 }
 
@@ -118,183 +137,93 @@ export default async function PreciosCombustible() {
   const config = await getSiteConfig();
   const preciosVisibles = (config.precios_visibles ?? "true") !== "false";
 
-  const [prices, productos] = await Promise.all([
-    preciosVisibles ? getFuelPrices() : Promise.resolve<FuelPrice[] | null>([]),
-    getProductos(),
-  ]);
+  if (!preciosVisibles) return null;
 
-  // Bloque de precios: solo si el toggle está activo Y hay precios vigentes.
-  // (prices === null ⇒ Supabase sin configurar: se muestran skeletons en dev)
-  const showSkeletons = preciosVisibles && prices === null;
-  const showPrecios = preciosVisibles && prices !== null && prices.length > 0;
-  const showPreciosBlock = showPrecios || showSkeletons;
+  const [prices, promos] = await Promise.all([getFuelPrices(), getFuelPromos()]);
 
-  // Sin precios ni catálogo → la sección completa desaparece.
-  if (!showPreciosBlock && productos.length === 0) return null;
+  const showSkeletons = prices === null; // Supabase sin configurar (solo dev)
+  const showPrecios = prices !== null && prices.length > 0;
+
+  // Nada que mostrar → la sección completa desaparece.
+  if (!showSkeletons && !showPrecios) return null;
 
   const WA_URL = `https://wa.me/${SITE_CONFIG.whatsapp_numero}?text=${encodeURIComponent("Hola, quiero solicitar un despacho de combustible.")}`;
 
   return (
-    <section className="bg-white border-b border-slate-100" aria-label="Productos y precios de combustible">
+    <section className="bg-white border-b border-slate-100" aria-label="Precios de combustible">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-
-        {showPreciosBlock && (
-          <>
-            {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-7">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <div className="h-px w-6 bg-[#f5a623]" />
-                  <p className="text-[11px] font-bold text-[#f5a623] uppercase tracking-widest">Precios vigentes</p>
-                </div>
-                <h2 className="text-xl font-extrabold text-[#0a1628] leading-tight">
-                  Precios de combustible
-                </h2>
-              </div>
-              <a
-                href={WA_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#f5a623] hover:bg-[#d4891a] text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all shadow-md shadow-[#f5a623]/20 shrink-0 w-fit"
-                aria-label="Solicitar despacho de combustible por WhatsApp"
-              >
-                Solicitar despacho
-                <ArrowRight className="w-4 h-4" aria-hidden="true" />
-              </a>
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-7">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <div className="h-px w-6 bg-[#f5a623]" />
+              <p className="text-[11px] font-bold text-[#f5a623] uppercase tracking-widest">Precios vigentes</p>
             </div>
+            <h2 className="text-xl font-extrabold text-[#0a1628] leading-tight">
+              Precios de combustible
+            </h2>
+          </div>
+          <a
+            href={WA_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-[#f5a623] hover:bg-[#d4891a] text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all shadow-md shadow-[#f5a623]/20 shrink-0 w-fit"
+            aria-label="Solicitar despacho de combustible por WhatsApp"
+          >
+            Solicitar despacho
+            <ArrowRight className="w-4 h-4" aria-hidden="true" />
+          </a>
+        </div>
 
-            {/* Supabase no configurado (entorno local): skeletons */}
-            {showSkeletons && (
-              <div className="grid sm:grid-cols-3 gap-4">
-                {["Diésel", "Kerosene", "Gas Envasado"].map((name) => (
-                  <PriceCardSkeleton key={name} name={name} />
-                ))}
-              </div>
-            )}
-
-            {showPrecios && (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto sm:overflow-visible">
-                <div className="contents">
-                  {prices.map((fp, i) => (
-                    <PriceCard key={fp.id} fp={fp} index={i} waUrl={WA_URL} />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Disclaimer */}
-            <p className="text-[11px] text-slate-400 text-center mt-6 max-w-2xl mx-auto leading-relaxed">
-              Valores referenciales. Confirma cobertura, condiciones y disponibilidad antes de solicitar despacho.
-            </p>
-          </>
-        )}
-
-        {/* ── CATÁLOGO DE PRODUCTOS ─────────────────────────────────── */}
-        {productos.length > 0 && (
-          <div className={showPreciosBlock ? "mt-12 pt-10 border-t border-slate-100" : ""}>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-7">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <div className="h-px w-6 bg-[#1a6b3c]" />
-                  <p className="text-[11px] font-bold text-[#1a6b3c] uppercase tracking-widest">Catálogo</p>
-                </div>
-                <h2 className="text-xl font-extrabold text-[#0a1628] leading-tight">
-                  Nuestros productos
-                </h2>
-              </div>
-              <Link
-                href="/productos"
-                className="inline-flex items-center gap-1.5 text-sm font-bold text-[#1a6b3c] hover:text-[#0d4a28] transition-colors shrink-0 w-fit"
-              >
-                Ver catálogo completo
-                <ArrowRight className="w-4 h-4" aria-hidden="true" />
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {productos.map((p, i) => (
-                <ProductoCard key={p.id} producto={p} index={i} />
-              ))}
-            </div>
+        {/* Supabase no configurado (entorno local): skeletons */}
+        {showSkeletons && (
+          <div className="grid sm:grid-cols-3 gap-4">
+            {["Diésel", "Kerosene", "Gas Envasado"].map((name) => (
+              <PriceCardSkeleton key={name} name={name} />
+            ))}
           </div>
         )}
+
+        {showPrecios && (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {prices.map((fp, i) => (
+              <PriceCard key={fp.id} fp={fp} index={i} waUrl={WA_URL} promo={promos[fp.code]} />
+            ))}
+          </div>
+        )}
+
+        {/* Disclaimer */}
+        <p className="text-[11px] text-slate-400 text-center mt-6 max-w-2xl mx-auto leading-relaxed">
+          Valores referenciales. Confirma cobertura, condiciones y disponibilidad antes de solicitar despacho.
+        </p>
       </div>
     </section>
   );
 }
 
-function ProductoCard({ producto, index }: { producto: Producto; index: number }) {
-  return (
-    <Link
-      href={`/productos/${producto.slug}`}
-      className="group bg-white border border-slate-200 hover:border-[#1a6b3c]/40 rounded-2xl overflow-hidden transition-all hover:shadow-md flex flex-col animate-fade-in"
-      style={{ animationDelay: `${index * 80}ms` }}
-      aria-label={`Producto: ${producto.nombre}`}
-    >
-      {/* Imagen o placeholder */}
-      <div className="aspect-[4/3] bg-slate-50 overflow-hidden relative">
-        {producto.imagen_url ? (
-          <Image
-            src={producto.imagen_url}
-            alt={`${producto.nombre} — Fenice SPA`}
-            fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Fuel className="w-9 h-9 text-slate-300" strokeWidth={1.5} aria-hidden="true" />
-          </div>
-        )}
-        {producto.destacado && (
-          <span className="absolute top-2 left-2 bg-[#f5a623] text-white text-[9px] font-black uppercase tracking-wide px-2 py-0.5 rounded-full">
-            Destacado
-          </span>
-        )}
-      </div>
-
-      {/* Contenido */}
-      <div className="p-4 flex flex-col flex-1">
-        {producto.categoria && (
-          <span className="text-[10px] font-bold text-[#1a6b3c] uppercase tracking-wider mb-1">
-            {producto.categoria}
-          </span>
-        )}
-        <h3 className="font-extrabold text-[#0a1628] text-sm leading-tight mb-1 group-hover:text-[#1a6b3c] transition-colors">
-          {producto.nombre}
-        </h3>
-        {producto.descripcion_corta && (
-          <p className="text-[11px] text-slate-400 leading-relaxed line-clamp-2 mb-2">
-            {producto.descripcion_corta}
-          </p>
-        )}
-        <div className="mt-auto pt-2 flex items-center justify-between gap-2">
-          {producto.precio_referencial !== null ? (
-            <span className="text-sm font-black text-[#0a1628]">{formatPrice(producto.precio_referencial)}</span>
-          ) : (
-            <span className="text-[11px] font-semibold text-slate-400 italic">Consultar precio</span>
-          )}
-          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#1a6b3c] group-hover:gap-1.5 transition-all">
-            Ver más
-            <ArrowRight className="w-3 h-3" aria-hidden="true" />
-          </span>
-        </div>
-      </div>
-    </Link>
-  );
-}
-
-function PriceCard({ fp, index, waUrl }: { fp: FuelPrice; index: number; waUrl: string }) {
-  const meta = CODE_META[fp.code] ?? { label: fp.code.toUpperCase(), icon: Fuel, bg: "bg-slate-100", border: "border-slate-200" };
+function PriceCard({ fp, index, waUrl, promo }: { fp: FuelPrice; index: number; waUrl: string; promo?: FuelPromo }) {
+  const meta = CODE_META[fp.code] ?? { label: fp.code.toUpperCase(), icon: Fuel };
   const Icon = meta.icon;
   const accent = fp.accent_color;
 
+  const hasPrice = fp.is_available && fp.price !== null;
+  const nuevoPrecio = hasPrice && promo ? discountedPrice(fp.price!, promo) : null;
+  const enOferta = hasPrice && promo && nuevoPrecio !== null;
+
   return (
     <article
-      className="group bg-white border border-slate-200 hover:border-slate-300 rounded-2xl p-5 transition-all hover:shadow-md flex flex-col gap-4 animate-fade-in"
+      className={`group relative bg-white border rounded-2xl p-5 transition-all hover:shadow-md flex flex-col gap-4 animate-fade-in ${enOferta ? "border-[#f5a623]/50 shadow-sm" : "border-slate-200 hover:border-slate-300"}`}
       style={{ animationDelay: `${index * 80}ms` }}
       aria-label={`Precio de ${fp.name}`}
     >
+      {/* Cinta de oferta */}
+      {enOferta && (
+        <div className="absolute -top-2.5 right-4 inline-flex items-center gap-1 bg-[#f5a623] text-white text-[11px] font-black px-2.5 py-1 rounded-full shadow-sm shadow-[#f5a623]/30" role="status">
+          <Tag className="w-3 h-3" aria-hidden="true" />
+          {promoBadge(promo!)}
+        </div>
+      )}
+
       {/* Top row: código + icono */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -306,11 +235,7 @@ function PriceCard({ fp, index, waUrl }: { fp: FuelPrice; index: number; waUrl: 
             <Icon className="w-5 h-5" style={{ color: accent }} strokeWidth={1.8} />
           </div>
           <div>
-            <span
-              className="text-2xl font-black leading-none tracking-tight"
-              style={{ color: accent }}
-              aria-hidden="true"
-            >
+            <span className="text-2xl font-black leading-none tracking-tight" style={{ color: accent }} aria-hidden="true">
               {meta.label}
             </span>
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none mt-0.5">
@@ -336,21 +261,30 @@ function PriceCard({ fp, index, waUrl }: { fp: FuelPrice; index: number; waUrl: 
       {/* Nombre */}
       <div>
         <h3 className="font-extrabold text-[#0a1628] text-base leading-tight">{fp.name}</h3>
+        {enOferta && <p className="text-[11px] font-bold text-[#b87608] mt-0.5 line-clamp-1">{promo!.titulo}</p>}
       </div>
 
       {/* Precio */}
-      <div className="flex items-baseline gap-1.5">
-        {fp.is_available && fp.price !== null ? (
-          <>
-            <span
-              className="text-3xl font-black tracking-tight"
-              style={{ color: accent }}
-              aria-label={`Precio: ${formatPrice(fp.price)} por ${fp.unit.replace("$/", "")}`}
-            >
-              {formatPrice(fp.price)}
-            </span>
-            <span className="text-sm font-bold text-slate-400">{fp.unit.replace("$", "")}</span>
-          </>
+      <div>
+        {hasPrice ? (
+          enOferta ? (
+            <div className="flex items-baseline gap-2 flex-wrap">
+              <span className="text-3xl font-black tracking-tight" style={{ color: accent }} aria-label={`Precio con descuento: ${formatPrice(nuevoPrecio!)}`}>
+                {formatPrice(nuevoPrecio!)}
+              </span>
+              <span className="text-sm font-bold text-slate-400">{fp.unit.replace("$", "")}</span>
+              <span className="text-sm font-semibold text-slate-400 line-through" aria-label={`Precio normal: ${formatPrice(fp.price!)}`}>
+                {formatPrice(fp.price!)}
+              </span>
+            </div>
+          ) : (
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-3xl font-black tracking-tight" style={{ color: accent }} aria-label={`Precio: ${formatPrice(fp.price!)}`}>
+                {formatPrice(fp.price!)}
+              </span>
+              <span className="text-sm font-bold text-slate-400">{fp.unit.replace("$", "")}</span>
+            </div>
+          )
         ) : (
           <span className="text-sm font-semibold text-slate-400 italic">
             {fp.is_available ? "Precio temporalmente no disponible" : "Consultar disponibilidad"}
@@ -359,9 +293,7 @@ function PriceCard({ fp, index, waUrl }: { fp: FuelPrice; index: number; waUrl: 
       </div>
 
       {/* Nota */}
-      {fp.note && (
-        <p className="text-[11px] text-slate-400 leading-relaxed -mt-2">{fp.note}</p>
-      )}
+      {fp.note && <p className="text-[11px] text-slate-400 leading-relaxed -mt-2">{fp.note}</p>}
 
       {/* Footer: updated_at + botón */}
       <div className="flex items-center justify-between mt-auto pt-3 border-t border-slate-100">

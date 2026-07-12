@@ -140,7 +140,7 @@ export function VisibilidadGlobal({ visible }: { visible: boolean }) {
         <p className="text-[12px] text-slate-500 mt-0.5 leading-relaxed">
           {value
             ? "Los visitantes ven los precios vigentes en la página de inicio. Los precios vencidos se ocultan automáticamente."
-            : "Toda la sección informativa de precios está oculta del sitio. El catálogo de productos sigue visible."}
+            : "Toda la sección informativa de precios está oculta del sitio."}
         </p>
         {error && <p className="text-[12px] text-red-600 font-semibold mt-1">{error}</p>}
       </div>

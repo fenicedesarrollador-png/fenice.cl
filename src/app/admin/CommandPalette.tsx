@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  LayoutDashboard, Inbox, Package, Building2, FileText, CalendarDays,
+  LayoutDashboard, Inbox, Building2, FileText, CalendarDays,
   Tag, Settings, Fuel, Users, ChartColumn, Plus, Search, CornerDownLeft, Globe,
   DollarSign, BarChart3,
 } from "lucide-react";
@@ -22,7 +22,6 @@ const COMMANDS: Cmd[] = [
   { label: "Cotizaciones", hint: "Gestión + PDF + Excel", icon: DollarSign, action: (r) => r.push("/admin/cotizaciones"), keywords: "pdf excel pipeline presupuestos" },
   { label: "Reportes", hint: "Análisis y descargas", icon: BarChart3, action: (r) => r.push("/admin/reportes"), keywords: "graficos excel xlsx descargas analisis" },
   { label: "Precios de combustible", icon: Fuel, action: (r) => r.push("/admin/precios-combustible"), keywords: "diesel kerosene gas" },
-  { label: "Productos", icon: Package, action: (r) => r.push("/admin/productos") },
   { label: "Clientes", icon: Building2, action: (r) => r.push("/admin/clientes"), keywords: "logos empresas" },
   { label: "Equipo", icon: Users, action: (r) => r.push("/admin/equipo"), keywords: "miembros fotos nosotros" },
   { label: "Blog", icon: FileText, action: (r) => r.push("/admin/blog"), keywords: "posts articulos" },
@@ -31,7 +30,6 @@ const COMMANDS: Cmd[] = [
   { label: "Métricas", icon: ChartColumn, action: (r) => r.push("/admin/metricas"), keywords: "analytics estadisticas" },
   { label: "Usuarios", icon: Users, action: (r) => r.push("/admin/usuarios") },
   { label: "Configuración", icon: Settings, action: (r) => r.push("/admin/configuracion") },
-  { label: "Nuevo producto", hint: "Crear", icon: Plus, action: (r) => r.push("/admin/productos/nuevo") },
   { label: "Nuevo post de blog", hint: "Crear", icon: Plus, action: (r) => r.push("/admin/blog/nuevo") },
   { label: "Nuevo cliente", hint: "Crear", icon: Plus, action: (r) => r.push("/admin/clientes/nuevo") },
   { label: "Nuevo evento", hint: "Crear", icon: Plus, action: (r) => r.push("/admin/eventos/nuevo") },

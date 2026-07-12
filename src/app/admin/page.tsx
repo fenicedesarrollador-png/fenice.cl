@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import {
-  Inbox, Package, FileText, CalendarDays, Tag, ArrowRight,
+  Inbox, FileText, CalendarDays, Tag, ArrowRight,
   Plus, DollarSign, Users, Activity, Zap, Fuel, Settings,
   TrendingUp, Sparkles, Clock,
 } from "lucide-react";
@@ -15,7 +15,7 @@ export default async function AdminDashboard() {
   let stats = {
     leads: 0, leadsNuevos: 0, leadsContactados: 0, leadsCerrados: 0,
     cotizaciones: 0, cotizacionesNuevas: 0,
-    productos: 0, posts: 0, eventosActivos: 0, promoActivas: 0, clientes: 0,
+    posts: 0, eventosActivos: 0, promoActivas: 0, clientes: 0,
   };
   let recentLeads: { id: string; nombre: string; estado: string; created_at: string; comuna?: string }[] = [];
   let recentCotizaciones: { id: string; nombre: string; empresa: string; estado: string; created_at: string }[] = [];
@@ -29,7 +29,7 @@ export default async function AdminDashboard() {
     const [
       leadsRes, leadsNuevosRes, leadsContactadosRes, leadsCerradosRes,
       cotRes, cotNuevasRes,
-      prodRes, blogRes, eventosRes, promosRes, clientesRes,
+      blogRes, eventosRes, promosRes, clientesRes,
       recentLeadsRes, recentCotRes,
       cotRowsRes, leadRowsRes,
     ] = await Promise.all([
@@ -39,7 +39,6 @@ export default async function AdminDashboard() {
       supabase.from("leads").select("id", { count: "exact", head: true }).eq("estado", "cerrado"),
       supabase.from("cotizaciones").select("id", { count: "exact", head: true }),
       supabase.from("cotizaciones").select("id", { count: "exact", head: true }).eq("estado", "nuevo"),
-      supabase.from("productos").select("id", { count: "exact", head: true }).eq("activo", true),
       supabase.from("blog_posts").select("id", { count: "exact", head: true }).eq("publicado", true),
       supabase.from("eventos").select("id", { count: "exact", head: true }).eq("activo", true),
       supabase.from("promociones").select("id", { count: "exact", head: true }).eq("activo", true),
@@ -56,7 +55,6 @@ export default async function AdminDashboard() {
       leadsCerrados: leadsCerradosRes.count ?? 0,
       cotizaciones: cotRes.count ?? 0,
       cotizacionesNuevas: cotNuevasRes.count ?? 0,
-      productos: prodRes.count ?? 0,
       posts: blogRes.count ?? 0,
       eventosActivos: eventosRes.count ?? 0,
       promoActivas: promosRes.count ?? 0,
@@ -99,7 +97,7 @@ export default async function AdminDashboard() {
   const kpis = [
     { label: "Contactos", value: stats.leads, sub: `${stats.leadsNuevos} nuevos`, href: "/admin/leads?origen=contacto", icon: Inbox, color: "green", alert: stats.leadsNuevos > 0 },
     { label: "Cotizaciones", value: stats.cotizaciones, sub: `${stats.cotizacionesNuevas} sin procesar`, href: "/admin/leads?origen=cotizacion", icon: DollarSign, color: "amber", alert: stats.cotizacionesNuevas > 0 },
-    { label: "Productos activos", value: stats.productos, sub: "en catálogo", href: "/admin/productos", icon: Package, color: "navy", alert: false },
+    { label: "Clientes activos", value: stats.clientes, sub: "en el sitio", href: "/admin/clientes", icon: Users, color: "navy", alert: false },
     { label: "Tasa de cierre", value: `${tasaCierre}%`, sub: `${stats.leadsCerrados} cerrados`, href: "/admin/leads", icon: TrendingUp, color: "green", alert: false },
   ];
 
@@ -113,12 +111,12 @@ export default async function AdminDashboard() {
     { label: "Posts blog", value: stats.posts, href: "/admin/blog", icon: FileText },
     { label: "Clientes activos", value: stats.clientes, href: "/admin/clientes", icon: Users },
     { label: "Eventos activos", value: stats.eventosActivos, href: "/admin/eventos", icon: CalendarDays },
-    { label: "Promociones", value: stats.promoActivas, href: "/admin/promociones", icon: Tag },
+    { label: "Promociones activas", value: stats.promoActivas, href: "/admin/promociones", icon: Tag },
   ];
 
   const quickActions = [
     { href: "/admin/precios-combustible", label: "Actualizar precios", icon: Fuel },
-    { href: "/admin/productos/nuevo", label: "Nuevo producto", icon: Plus },
+    { href: "/admin/promociones/nuevo", label: "Nueva promoción", icon: Plus },
     { href: "/admin/blog/nuevo", label: "Nuevo post", icon: Plus },
     { href: "/admin/configuracion", label: "Configuración", icon: Settings },
   ];

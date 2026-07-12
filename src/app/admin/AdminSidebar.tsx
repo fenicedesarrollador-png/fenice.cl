@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
 import BrandLogo from "@/components/BrandLogo";
 import {
-  LayoutDashboard, Inbox, Package, Building2, FileText,
+  LayoutDashboard, Inbox, Building2, FileText,
   CalendarDays, Tag, Settings, Globe, LogOut, Fuel,
   Users, ChartColumn, X, ArrowUpRight, ChevronRight,
   DollarSign, BarChart3,
@@ -18,7 +18,6 @@ const links = [
   { href: "/admin/leads", label: "Solicitudes", icon: Inbox },
   { href: "/admin/cotizaciones", label: "Cotizaciones", icon: DollarSign },
   { href: "/admin/reportes", label: "Reportes", icon: BarChart3 },
-  { href: "/admin/productos", label: "Productos", icon: Package },
   { href: "/admin/clientes", label: "Clientes", icon: Building2 },
   { href: "/admin/equipo", label: "Equipo", icon: Users },
   { href: "/admin/blog", label: "Blog", icon: FileText },

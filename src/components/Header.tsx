@@ -127,6 +127,9 @@ export default function Header({ config }: { config: SiteConfig }) {
               <Link href="/empresas-faenas-flotas" data-analytics-id="header_nav_empresas" data-analytics-label="Empresas / Faenas / Flotas" data-analytics-cta="primary_navigation" className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-[#0a1628] rounded-lg hover:bg-slate-50 transition-all whitespace-nowrap">
                 Empresas / Faenas / Flotas
               </Link>
+              <Link href="/blog" data-analytics-id="header_nav_blog" data-analytics-label="Blog" data-analytics-cta="primary_navigation" className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-[#0a1628] rounded-lg hover:bg-slate-50 transition-all whitespace-nowrap">
+                Blog
+              </Link>
               <Link href="/preguntas-frecuentes" data-analytics-id="header_nav_faq" data-analytics-label="Preguntas frecuentes" data-analytics-cta="primary_navigation" className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-[#0a1628] rounded-lg hover:bg-slate-50 transition-all whitespace-nowrap">
                 FAQ
               </Link>
@@ -199,6 +202,7 @@ export default function Header({ config }: { config: SiteConfig }) {
                 { href: "/clientes", label: "Clientes y proyectos" },
                 { href: "/cobertura", label: "Cobertura" },
                 { href: "/empresas-faenas-flotas", label: "Empresas / Faenas / Flotas" },
+                { href: "/blog", label: "Blog" },
                 { href: "/preguntas-frecuentes", label: "Preguntas frecuentes" },
                 { href: "/contacto", label: "Contacto" },
               ].map((l) => (

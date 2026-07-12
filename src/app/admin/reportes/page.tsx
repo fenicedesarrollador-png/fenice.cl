@@ -6,7 +6,7 @@ import ExportButton from "../_components/ExportButton";
 import { ChartCard, TrendChart, DonutChart, RankBars } from "../_components/charts";
 import { dailySeries, countBy, inLastDays, monthDelta, isoDaysAgo, type FechaRow } from "@/lib/admin/stats";
 import {
-  BarChart3, DollarSign, Inbox, Building2, Package, Users,
+  BarChart3, DollarSign, Inbox, Building2, Users,
   TrendingUp, TrendingDown, Minus, FileSpreadsheet, ChartColumn, ArrowRight,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -33,24 +33,22 @@ function DeltaBadge({ deltaPct }: { deltaPct: number | null }) {
 export default async function ReportesPage() {
   let cotRows: FechaRow[] = [];
   let leadRows: FechaRow[] = [];
-  let counts = { clientes: 0, productos: 0, equipo: 0 };
+  let counts = { clientes: 0, equipo: 0 };
 
   const desde365 = isoDaysAgo(365);
 
   try {
     const supabase = await createClient();
-    const [cotRes, leadRes, cliRes, prodRes, eqRes] = await Promise.all([
+    const [cotRes, leadRes, cliRes, eqRes] = await Promise.all([
       supabase.from("cotizaciones").select("created_at, servicio_solicitado, comuna, estado, volumen_estimado, frecuencia").gte("created_at", desde365).limit(5000),
       supabase.from("leads").select("created_at, tipo_operacion, comuna, estado").gte("created_at", desde365).limit(5000),
       supabase.from("clientes").select("id", { count: "exact", head: true }),
-      supabase.from("productos").select("id", { count: "exact", head: true }),
       supabase.from("equipo").select("id", { count: "exact", head: true }),
     ]);
     if (cotRes.data) cotRows = cotRes.data as FechaRow[];
     if (leadRes.data) leadRows = leadRes.data as FechaRow[];
     counts = {
       clientes: cliRes.count ?? 0,
-      productos: prodRes.count ?? 0,
       equipo: eqRes.count ?? 0,
     };
   } catch {}
@@ -88,7 +86,6 @@ export default async function ReportesPage() {
     { tipo: "cotizaciones", titulo: "Cotizaciones", desc: "Todas las solicitudes de cotización con su detalle", icon: DollarSign },
     { tipo: "leads", titulo: "Contactos (leads)", desc: "Mensajes de contacto con notas internas", icon: Inbox },
     { tipo: "clientes", titulo: "Clientes", desc: `${counts.clientes} empresas con sector y trabajos realizados`, icon: Building2 },
-    { tipo: "productos", titulo: "Productos", desc: `${counts.productos} productos del catálogo`, icon: Package },
     { tipo: "equipo", titulo: "Equipo", desc: `${counts.equipo} miembros del equipo público`, icon: Users },
   ];
 

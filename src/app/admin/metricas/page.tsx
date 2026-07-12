@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BarChart3, Download, FilterX } from "lucide-react";
+import { BarChart3, Download, FilterX, AlertTriangle } from "lucide-react";
 import MetricasDashboard from "./MetricasDashboard";
 import {
   buildAnalyticsQueryString,
@@ -12,6 +12,11 @@ import { createClient } from "@/lib/supabase/server";
 export const metadata: Metadata = {
   title: "Métricas | Admin Fenice",
 };
+
+/** Detecta si el error es por RPCs/tablas de analytics inexistentes (migración pendiente). */
+function isSetupError(msg: string): boolean {
+  return /does not exist|could not find the function|schema cache|relation .* does not exist|function .* does not exist/i.test(msg);
+}
 
 export default async function MetricasPage({
   searchParams,
@@ -31,6 +36,7 @@ export default async function MetricasPage({
     errorMessage = error instanceof Error ? error.message : "No se pudieron cargar las métricas.";
   }
 
+  const setupPendiente = errorMessage !== "" && isSetupError(errorMessage);
   const exportQuery = buildAnalyticsQueryString(filters);
 
   return (
@@ -192,7 +198,23 @@ export default async function MetricasPage({
         </div>
       </form>
 
-      {errorMessage ? (
+      {setupPendiente ? (
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-5 text-sm text-amber-800">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 shrink-0 text-amber-500 mt-0.5" />
+            <div>
+              <p className="font-bold text-amber-900 mb-1">Las métricas aún no están activadas</p>
+              <p className="leading-relaxed">
+                Faltan las funciones de analítica en la base de datos. Ejecuta{" "}
+                <code className="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-[13px]">supabase/migration_analytics.sql</code>{" "}
+                en el SQL Editor de Supabase. Una vez ejecutado, el tracking del sitio empezará a
+                registrar visitas y este panel mostrará los datos.
+              </p>
+              <p className="mt-2 text-[12px] text-amber-700/80">Detalle técnico: {errorMessage}</p>
+            </div>
+          </div>
+        </div>
+      ) : errorMessage ? (
         <div className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-600">
           {errorMessage}
         </div>

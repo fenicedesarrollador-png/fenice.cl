@@ -118,8 +118,8 @@ const products: ProductCard[] = [
     icon: Flame,
     title: "Kerosene",
     text: "Kerosene para calefacción y necesidades estacionales de clientes residenciales, comerciales u operativos.",
-    href: "/productos",
-    cta: "Ver productos",
+    href: "/cotizacion",
+    cta: "Cotizar kerosene",
     image: corporateImage.src,
     imageAlt: "Kerosene para calefacción — Fenice SPA",
   },
@@ -127,8 +127,8 @@ const products: ProductCard[] = [
     icon: Home,
     title: "Gas envasado residencial",
     text: "Gas envasado para hogares y necesidades cotidianas de cocción, calefacción y uso residencial.",
-    href: "/productos",
-    cta: "Ver productos",
+    href: "/cotizacion",
+    cta: "Cotizar gas",
     image: corporateImage.src,
     imageAlt: "Gas envasado residencial — Fenice SPA",
   },
@@ -394,10 +394,10 @@ export default async function NosotrosPage() {
                 Solicitar cotización <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                href="/productos"
+                href="/servicios/instalacion-de-estanques"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/15"
               >
-                Conocer nuestros productos
+                Conocer nuestros servicios
               </Link>
             </div>
           </div>

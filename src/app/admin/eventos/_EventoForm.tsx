@@ -17,15 +17,18 @@ export default function EventoForm({ evento }: { evento?: Evento }) {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault(); setLoading(true); setError("");
     const fd = new FormData(e.currentTarget);
-    const titulo = fd.get("titulo") as string;
+    const titulo = (fd.get("titulo") as string).trim();
+    const slug = evento?.slug || slugify(titulo);
+    if (!titulo || !slug) { setError("El título es obligatorio."); setLoading(false); return; }
+    if (!(fd.get("fecha_inicio") as string)) { setError("La fecha de inicio es obligatoria."); setLoading(false); return; }
     const payload = {
       titulo,
-      slug: evento?.slug || slugify(titulo),
-      descripcion: fd.get("descripcion") as string,
-      ubicacion: fd.get("ubicacion") as string,
+      slug,
+      descripcion: (fd.get("descripcion") as string).trim() || null,
+      ubicacion: (fd.get("ubicacion") as string).trim() || null,
       fecha_inicio: fd.get("fecha_inicio") as string,
-      fecha_fin: fd.get("fecha_fin") as string || null,
-      imagen_url: fd.get("imagen_url") as string,
+      fecha_fin: (fd.get("fecha_fin") as string) || null,
+      imagen_url: (fd.get("imagen_url") as string).trim() || null,
       activo: fd.get("activo") === "on",
     };
     const supabase = createClient();

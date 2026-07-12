@@ -22,6 +22,9 @@ const nextConfig: NextConfig = {
       { source: "/contact.html", destination: "/contacto", permanent: true },
       { source: "/about.html", destination: "/nosotros", permanent: true },
       { source: "/about", destination: "/nosotros", permanent: true },
+      // Sección de productos retirada → redirigir a inicio (evita 404 e indexación muerta).
+      { source: "/productos", destination: "/", permanent: true },
+      { source: "/productos/:slug", destination: "/", permanent: true },
     ];
   },
   async headers() {

@@ -16,7 +16,6 @@ const staticRoutes: MetadataRoute.Sitemap = [
   { url: `${BASE_URL}/cobertura`, lastModified: NOW, changeFrequency: "monthly", priority: 0.85 },
   { url: `${BASE_URL}/preguntas-frecuentes`, lastModified: NOW, changeFrequency: "monthly", priority: 0.8 },
   { url: `${BASE_URL}/blog`, lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
-  { url: `${BASE_URL}/productos`, lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
   { url: `${BASE_URL}/nosotros`, lastModified: NOW, changeFrequency: "monthly", priority: 0.7 },
   { url: `${BASE_URL}/clientes`, lastModified: NOW, changeFrequency: "weekly", priority: 0.75 },
   { url: `${BASE_URL}/testimonios`, lastModified: NOW, changeFrequency: "monthly", priority: 0.6 },
@@ -52,15 +51,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   let blogDynamic: MetadataRoute.Sitemap = [];
-  let productosDynamic: MetadataRoute.Sitemap = [];
   let eventosDynamic: MetadataRoute.Sitemap = [];
 
   try {
     const supabase = await createClient();
     // Timeout corto: si Supabase tarda, el sitemap igual responde con lo estático.
-    const [blogRes, productosRes, eventosRes] = await Promise.all([
+    const [blogRes, eventosRes] = await Promise.all([
       fetchWithTimeout(supabase.from("blog_posts").select("slug, updated_at").eq("publicado", true), 3000),
-      fetchWithTimeout(supabase.from("productos").select("slug, updated_at").eq("activo", true), 3000),
       fetchWithTimeout(supabase.from("eventos").select("slug, updated_at").eq("activo", true), 3000),
     ]);
 
@@ -73,13 +70,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.7,
       }));
 
-    productosDynamic = (productosRes?.data || []).map((product) => ({
-      url: `${BASE_URL}/productos/${product.slug}`,
-      lastModified: product.updated_at ? new Date(product.updated_at) : undefined,
-      changeFrequency: "weekly" as const,
-      priority: 0.75,
-    }));
-
     eventosDynamic = (eventosRes?.data || []).map((event) => ({
       url: `${BASE_URL}/eventos/${event.slug}`,
       lastModified: event.updated_at ? new Date(event.updated_at) : undefined,
@@ -88,5 +78,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
   } catch {}
 
-  return [...staticRoutes, ...blogStatic, ...blogDynamic, ...productosDynamic, ...eventosDynamic];
+  return [...staticRoutes, ...blogStatic, ...blogDynamic, ...eventosDynamic];
 }
