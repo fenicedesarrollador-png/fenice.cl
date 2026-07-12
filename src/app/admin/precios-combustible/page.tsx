@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { hasUsableSupabasePublicConfig } from "@/lib/supabase/config";
-import PreciosEditor from "./PreciosEditor";
+import PreciosEditor, { VisibilidadGlobal } from "./PreciosEditor";
 import { Fuel, AlertTriangle } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -20,10 +20,11 @@ export default async function AdminPreciosCombustiblePage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: prices, error } = await supabase
-    .from("fuel_prices")
-    .select("*")
-    .order("display_order", { ascending: true });
+  const [{ data: prices, error }, { data: visRow }] = await Promise.all([
+    supabase.from("fuel_prices").select("*").order("display_order", { ascending: true }),
+    supabase.from("configuracion_sitio").select("valor").eq("clave", "precios_visibles").maybeSingle(),
+  ]);
+  const preciosVisibles = (visRow?.valor ?? "true") !== "false";
 
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-7 admin-rise">
@@ -53,17 +54,23 @@ export default async function AdminPreciosCombustiblePage() {
       )}
 
       {prices && prices.length > 0 && (
-        <PreciosEditor initialPrices={prices} />
+        <div className="space-y-6">
+          {/* Toggle global de visibilidad de la sección en la web */}
+          <VisibilidadGlobal visible={preciosVisibles} />
+          <PreciosEditor initialPrices={prices} />
+        </div>
       )}
 
       {/* How-to note */}
       <div className="mt-8 bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-sm text-slate-500">
         <p className="font-semibold text-slate-700 mb-1">¿Cómo funciona?</p>
-        <ul className="list-disc list-inside space-y-0.5">
-          <li>Deja el campo <strong>Precio vacío</strong> para mostrar &quot;Consultar disponibilidad&quot;.</li>
-          <li>Desactiva <strong>Visible en el sitio</strong> para ocultar un producto sin eliminarlo.</li>
-          <li>Desactiva <strong>Disponible</strong> para mostrar la tarjeta pero marcarla sin stock.</li>
-          <li>Al guardar se publica inmediatamente en el sitio web.</li>
+        <ul className="list-disc list-inside space-y-1">
+          <li>El interruptor superior <strong>muestra u oculta toda la sección de precios</strong> de la web pública (el catálogo de productos no se ve afectado).</li>
+          <li>La <strong>fecha de caducidad</strong> es interna: al vencer, ese precio desaparece automáticamente del sitio hasta que se actualice.</li>
+          <li><strong>Alertas por correo:</strong> a las 10:00 del día anterior al vencimiento se envía un aviso a los correos internos (ventas, Rubén, Cecilia y Erika).</li>
+          <li>La <strong>publicación programada</strong> reemplaza el precio actual por el nuevo en la fecha/hora indicada, de forma automática (~1 min de precisión).</li>
+          <li>Deja el campo <strong>Precio vacío</strong> para mostrar &quot;Consultar disponibilidad&quot;; desactiva <strong>Visible</strong> para ocultar solo ese combustible.</li>
+          <li>Al guardar, los cambios se publican inmediatamente en el sitio web.</li>
         </ul>
       </div>
     </div>

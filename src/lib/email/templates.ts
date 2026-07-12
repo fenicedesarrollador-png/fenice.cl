@@ -193,6 +193,81 @@ export function cotizacionClienteEmail(data: CotizacionEmailData): string {
   });
 }
 
+export type PrecioPorVencer = {
+  name: string;
+  price: number | null;
+  unit: string;
+  vence_at: string;
+};
+
+/** Alerta interna: precios de combustible por vencer (se envía a las 10:00 del día anterior). */
+export function preciosAlertaEmail(precios: PrecioPorVencer[]): string {
+  const fmtFecha = new Intl.DateTimeFormat("es-CL", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "America/Santiago",
+  });
+
+  const filas = precios
+    .map((p) => {
+      const precio = p.price !== null ? `$${p.price.toLocaleString("es-CL")} ${esc(p.unit.replace("$", ""))}` : "Sin precio";
+      return `
+      <tr>
+        <td style="padding:12px 16px;border-bottom:1px solid #eef2f7;font-size:14px;font-weight:800;color:#0a1628;">${esc(p.name)}</td>
+        <td style="padding:12px 16px;border-bottom:1px solid #eef2f7;font-size:14px;color:#1a6b3c;font-weight:700;white-space:nowrap;">${precio}</td>
+        <td style="padding:12px 16px;border-bottom:1px solid #eef2f7;font-size:13px;color:#b45309;font-weight:700;">${esc(fmtFecha.format(new Date(p.vence_at)))}</td>
+      </tr>`;
+    })
+    .join("");
+
+  const content = `
+    <tr>
+      <td style="padding:20px 32px 8px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #fde68a;background:#fffbeb;border-radius:12px;">
+          <tr>
+            <td style="padding:14px 16px;font-size:13px;color:#92400e;line-height:1.6;">
+              <strong>⚠ Importante:</strong> si los precios no se actualizan antes de su fecha de
+              caducidad, se <strong>ocultarán automáticamente</strong> de la web pública y los
+              clientes verán "consultar disponibilidad".
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:16px 32px 8px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #eef2f7;border-radius:12px;overflow:hidden;">
+          <tr>
+            <td style="background:#f0faf4;padding:10px 16px;font-size:11px;font-weight:800;color:#1a6b3c;text-transform:uppercase;letter-spacing:0.08em;">Combustible</td>
+            <td style="background:#f0faf4;padding:10px 16px;font-size:11px;font-weight:800;color:#1a6b3c;text-transform:uppercase;letter-spacing:0.08em;">Precio actual</td>
+            <td style="background:#f0faf4;padding:10px 16px;font-size:11px;font-weight:800;color:#1a6b3c;text-transform:uppercase;letter-spacing:0.08em;">Vence</td>
+          </tr>
+          ${filas}
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:22px 32px 30px;" align="center">
+        <a href="${BASE}/admin/precios-combustible" style="display:inline-block;background:#1a6b3c;color:#ffffff;font-size:14px;font-weight:800;text-decoration:none;padding:14px 32px;border-radius:10px;">Actualizar precios ahora</a>
+        <p style="margin:14px 0 0;font-size:12px;color:#94a3b8;line-height:1.6;">
+          Puedes actualizar el precio, extender la fecha de caducidad o dejar
+          programado el nuevo precio para que se publique automáticamente.
+        </p>
+      </td>
+    </tr>`;
+
+  return shell({
+    badge: "Alerta de precios",
+    title: `${precios.length === 1 ? "Un precio de combustible vence pronto" : `${precios.length} precios de combustible vencen pronto`}`,
+    subtitle:
+      "Verifica los cambios de precios de combustible y actualiza los valores publicados en fenice.cl antes de que caduquen.",
+    content,
+  });
+}
+
 export type ContactoEmailData = {
   nombre: string;
   telefono: string | null;

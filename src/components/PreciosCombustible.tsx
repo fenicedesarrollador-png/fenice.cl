@@ -3,6 +3,7 @@ import Image from "next/image";
 import { createClient } from "@/lib/supabase/public";
 import { hasUsableSupabasePublicConfig } from "@/lib/supabase/config";
 import { SITE_CONFIG } from "@/lib/config";
+import { getSiteConfig, fetchWithTimeout } from "@/lib/getSiteConfig";
 import { Fuel, Flame, Home, ArrowRight, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 
 type FuelPrice = {
@@ -17,7 +18,13 @@ type FuelPrice = {
   display_order: number;
   note: string | null;
   updated_at: string;
+  vence_at: string | null;
 };
+
+/* Columnas públicas explícitas: el rol anon tiene grants por columna y NO
+   puede leer precio_programado/programado_at (datos comerciales internos). */
+const PUBLIC_COLUMNS =
+  "id, code, name, price, unit, accent_color, is_available, is_visible, display_order, note, updated_at, vence_at";
 
 const CODE_META: Record<string, { label: string; icon: React.ElementType; bg: string; border: string }> = {
   diesel:          { label: "D",  icon: Fuel,  bg: "bg-[#f5a623]/10", border: "border-[#f5a623]/20" },
@@ -55,13 +62,35 @@ async function getFuelPrices(): Promise<FuelPrice[] | null> {
   if (!hasUsableSupabasePublicConfig()) return null;
   try {
     const supabase = await createClient();
-    const { data, error } = await supabase
+
+    // Publica los precios programados cuya hora llegó (función SQL idempotente).
+    // Con ISR de 60 s, la publicación automática tiene precisión de ~1 minuto.
+    await fetchWithTimeout(supabase.rpc("aplicar_precios_programados"), 2000);
+
+    let { data, error } = await supabase
       .from("fuel_prices")
-      .select("*")
+      .select(PUBLIC_COLUMNS)
       .eq("is_visible", true)
       .order("display_order", { ascending: true });
-    if (error) return null;
-    return data as FuelPrice[];
+
+    // Compatibilidad: si la migración de caducidad aún no se ejecutó
+    // (columna vence_at inexistente), usar el esquema anterior.
+    if (error) {
+      const legacy = await supabase
+        .from("fuel_prices")
+        .select("id, code, name, price, unit, accent_color, is_available, is_visible, display_order, note, updated_at")
+        .eq("is_visible", true)
+        .order("display_order", { ascending: true });
+      data = legacy.data as typeof data;
+      error = legacy.error;
+    }
+    if (error || !data) return null;
+
+    // Caducidad: un precio vencido no se muestra (se oculta automáticamente).
+    const now = Date.now();
+    return (data as FuelPrice[]).filter(
+      (fp) => !fp.vence_at || new Date(fp.vence_at).getTime() > now,
+    );
   } catch {
     return null;
   }
@@ -85,7 +114,23 @@ async function getProductos(): Promise<Producto[]> {
 }
 
 export default async function PreciosCombustible() {
-  const [prices, productos] = await Promise.all([getFuelPrices(), getProductos()]);
+  // Toggle global desde /admin/precios-combustible (clave precios_visibles).
+  const config = await getSiteConfig();
+  const preciosVisibles = (config.precios_visibles ?? "true") !== "false";
+
+  const [prices, productos] = await Promise.all([
+    preciosVisibles ? getFuelPrices() : Promise.resolve<FuelPrice[] | null>([]),
+    getProductos(),
+  ]);
+
+  // Bloque de precios: solo si el toggle está activo Y hay precios vigentes.
+  // (prices === null ⇒ Supabase sin configurar: se muestran skeletons en dev)
+  const showSkeletons = preciosVisibles && prices === null;
+  const showPrecios = preciosVisibles && prices !== null && prices.length > 0;
+  const showPreciosBlock = showPrecios || showSkeletons;
+
+  // Sin precios ni catálogo → la sección completa desaparece.
+  if (!showPreciosBlock && productos.length === 0) return null;
 
   const WA_URL = `https://wa.me/${SITE_CONFIG.whatsapp_numero}?text=${encodeURIComponent("Hola, quiero solicitar un despacho de combustible.")}`;
 
@@ -93,61 +138,60 @@ export default async function PreciosCombustible() {
     <section className="bg-white border-b border-slate-100" aria-label="Productos y precios de combustible">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-7">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <div className="h-px w-6 bg-[#f5a623]" />
-              <p className="text-[11px] font-bold text-[#f5a623] uppercase tracking-widest">Precios vigentes</p>
+        {showPreciosBlock && (
+          <>
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-7">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="h-px w-6 bg-[#f5a623]" />
+                  <p className="text-[11px] font-bold text-[#f5a623] uppercase tracking-widest">Precios vigentes</p>
+                </div>
+                <h2 className="text-xl font-extrabold text-[#0a1628] leading-tight">
+                  Precios de combustible
+                </h2>
+              </div>
+              <a
+                href={WA_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-[#f5a623] hover:bg-[#d4891a] text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all shadow-md shadow-[#f5a623]/20 shrink-0 w-fit"
+                aria-label="Solicitar despacho de combustible por WhatsApp"
+              >
+                Solicitar despacho
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </a>
             </div>
-            <h2 className="text-xl font-extrabold text-[#0a1628] leading-tight">
-              Precios de combustible
-            </h2>
-          </div>
-          <a
-            href={WA_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[#f5a623] hover:bg-[#d4891a] text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all shadow-md shadow-[#f5a623]/20 shrink-0 w-fit"
-            aria-label="Solicitar despacho de combustible por WhatsApp"
-          >
-            Solicitar despacho
-            <ArrowRight className="w-4 h-4" aria-hidden="true" />
-          </a>
-        </div>
 
-        {/* Error: Supabase no configurado o fallo */}
-        {prices === null && (
-          <div className="grid sm:grid-cols-3 gap-4">
-            {["Diésel", "Kerosene", "Gas Envasado"].map((name) => (
-              <PriceCardSkeleton key={name} name={name} />
-            ))}
-          </div>
+            {/* Supabase no configurado (entorno local): skeletons */}
+            {showSkeletons && (
+              <div className="grid sm:grid-cols-3 gap-4">
+                {["Diésel", "Kerosene", "Gas Envasado"].map((name) => (
+                  <PriceCardSkeleton key={name} name={name} />
+                ))}
+              </div>
+            )}
+
+            {showPrecios && (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto sm:overflow-visible">
+                <div className="contents">
+                  {prices.map((fp, i) => (
+                    <PriceCard key={fp.id} fp={fp} index={i} waUrl={WA_URL} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Disclaimer */}
+            <p className="text-[11px] text-slate-400 text-center mt-6 max-w-2xl mx-auto leading-relaxed">
+              Valores referenciales. Confirma cobertura, condiciones y disponibilidad antes de solicitar despacho.
+            </p>
+          </>
         )}
-
-        {/* Cards de precios */}
-        {prices !== null && prices.length === 0 && (
-          <p className="text-sm text-slate-400 text-center py-8">No hay precios publicados actualmente.</p>
-        )}
-
-        {prices !== null && prices.length > 0 && (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto sm:overflow-visible">
-            <div className="contents">
-              {prices.map((fp, i) => (
-                <PriceCard key={fp.id} fp={fp} index={i} waUrl={WA_URL} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Disclaimer */}
-        <p className="text-[11px] text-slate-400 text-center mt-6 max-w-2xl mx-auto leading-relaxed">
-          Valores referenciales. Confirma cobertura, condiciones y disponibilidad antes de solicitar despacho.
-        </p>
 
         {/* ── CATÁLOGO DE PRODUCTOS ─────────────────────────────────── */}
         {productos.length > 0 && (
-          <div className="mt-12 pt-10 border-t border-slate-100">
+          <div className={showPreciosBlock ? "mt-12 pt-10 border-t border-slate-100" : ""}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-7">
               <div>
                 <div className="flex items-center gap-2 mb-1">
