@@ -100,7 +100,7 @@ export default function LoginForm() {
             type="email"
             required
             autoComplete="email"
-            className="w-full border border-slate-200 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-slate-50"
+            className="w-full border border-slate-200 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a6b3c] focus:border-transparent bg-slate-50"
             placeholder="admin@fenice.cl"
           />
         </div>
@@ -118,7 +118,7 @@ export default function LoginForm() {
             type={showPwd ? "text" : "password"}
             required
             autoComplete="current-password"
-            className="w-full border border-slate-200 rounded-xl pl-9 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-slate-50"
+            className="w-full border border-slate-200 rounded-xl pl-9 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a6b3c] focus:border-transparent bg-slate-50"
           />
           <button
             type="button"
@@ -140,7 +140,7 @@ export default function LoginForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition-colors shadow-sm mt-2"
+        className="w-full bg-[#1a6b3c] hover:bg-[#145530] disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition-colors shadow-sm mt-2"
       >
         {loading ? "Verificando..." : "Ingresar"}
       </button>

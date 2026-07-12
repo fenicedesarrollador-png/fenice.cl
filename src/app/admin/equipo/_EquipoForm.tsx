@@ -80,15 +80,15 @@ export default function EquipoForm({ miembro }: { miembro?: Miembro }) {
           />
         </Field>
         <div className="flex items-center gap-4">
-          <div className="w-28 h-36 rounded-xl overflow-hidden border border-white/12 bg-white/[0.03] flex items-center justify-center shrink-0">
+          <div className="w-28 h-36 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 flex items-center justify-center shrink-0">
             {fotoUrl ? (
               // eslint-disable-next-line @next/next/no-img-element -- vista previa en panel privado
               <img src={fotoUrl} alt="Vista previa" className="w-full h-full object-cover object-top" />
             ) : (
-              <UserRound className="w-8 h-8 text-[#5f739a]" />
+              <UserRound className="w-8 h-8 text-slate-400" />
             )}
           </div>
-          <p className="text-[12px] text-[#94a7c2] leading-relaxed">
+          <p className="text-[12px] text-slate-500 leading-relaxed">
             Vista previa de cómo se recorta la foto en la tarjeta del equipo.
             Si no se carga, revisa que la URL sea pública y termine en .jpg, .png o .webp.
           </p>

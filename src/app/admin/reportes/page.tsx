@@ -16,14 +16,14 @@ export const metadata: Metadata = { title: "Reportes" };
 function DeltaBadge({ deltaPct }: { deltaPct: number | null }) {
   if (deltaPct === null) {
     return (
-      <span className="inline-flex items-center gap-1 text-[10.5px] font-bold text-[#5f739a]">
+      <span className="inline-flex items-center gap-1 text-[10.5px] font-bold text-slate-400">
         <Minus className="w-3 h-3" /> sin base previa
       </span>
     );
   }
   const up = deltaPct >= 0;
   return (
-    <span className={`inline-flex items-center gap-1 text-[10.5px] font-black ${up ? "text-[#2bbe6a]" : "text-red-400"}`}>
+    <span className={`inline-flex items-center gap-1 text-[10.5px] font-black ${up ? "text-[#1a6b3c]" : "text-red-500"}`}>
       {up ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
       {up ? "+" : ""}{deltaPct}% vs mes anterior
     </span>
@@ -113,14 +113,14 @@ export default async function ReportesPage() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
         {kpis.map((k) => (
           <div key={k.label} className="admin-card p-5">
-            <div className="w-10 h-10 rounded-xl bg-[#5f8ceb]/12 text-[#7aa2ff] flex items-center justify-center mb-3.5">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-3.5">
               <k.icon className="w-5 h-5" strokeWidth={2.2} />
             </div>
-            <p className="text-[28px] leading-none font-black tabular-nums text-[#e8eef7]">{k.value}</p>
-            <p className="text-[12px] font-bold text-[#94a7c2] mt-2">{k.label}</p>
+            <p className="text-[28px] leading-none font-black tabular-nums text-[#0a1628]">{k.value}</p>
+            <p className="text-[12px] font-bold text-slate-500 mt-2">{k.label}</p>
             <div className="mt-1.5">
               {k.noDelta ? (
-                <span className="text-[10.5px] text-[#5f739a] font-semibold">{k.hint ?? " "}</span>
+                <span className="text-[10.5px] text-slate-400 font-semibold">{k.hint ?? " "}</span>
               ) : (
                 <DeltaBadge deltaPct={k.delta} />
               )}
@@ -159,25 +159,25 @@ export default async function ReportesPage() {
 
       {/* Centro de descargas */}
       <div className="admin-card overflow-hidden">
-        <div className="px-5 py-4 border-b border-white/[0.06] flex items-center gap-2.5">
-          <FileSpreadsheet className="w-4 h-4 text-[#2bbe6a]" />
+        <div className="px-5 py-4 border-b border-slate-100 flex items-center gap-2.5">
+          <FileSpreadsheet className="w-4 h-4 text-[#1a6b3c]" />
           <div>
-            <h2 className="text-sm font-black text-[#e8eef7]">Centro de descargas</h2>
-            <p className="text-[11.5px] text-[#94a7c2] mt-0.5">
+            <h2 className="text-sm font-black text-[#0a1628]">Centro de descargas</h2>
+            <p className="text-[11.5px] text-slate-500 mt-0.5">
               Archivos Excel (.xlsx) con formato corporativo, listos para compartir o analizar.
             </p>
           </div>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 divide-y sm:divide-y-0 divide-white/[0.05]">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 divide-y sm:divide-y-0 divide-slate-100">
           {descargas.map((d) => (
-            <div key={d.tipo} className="p-5 border-white/[0.05] sm:border-b lg:[&:nth-child(n+4)]:border-b-0 sm:[&:nth-child(n+5)]:border-b-0 sm:odd:border-r lg:odd:border-r-0 lg:[&:not(:nth-child(3n))]:border-r">
+            <div key={d.tipo} className="p-5 border-slate-100 sm:border-b lg:[&:nth-child(n+4)]:border-b-0 sm:[&:nth-child(n+5)]:border-b-0 sm:odd:border-r lg:odd:border-r-0 lg:[&:not(:nth-child(3n))]:border-r">
               <div className="flex items-center gap-2.5 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
-                  <d.icon className="w-4 h-4 text-[#94a7c2]" />
+                <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                  <d.icon className="w-4 h-4 text-slate-500" />
                 </div>
-                <h3 className="text-[13px] font-black text-[#e8eef7]">{d.titulo}</h3>
+                <h3 className="text-[13px] font-black text-[#0a1628]">{d.titulo}</h3>
               </div>
-              <p className="text-[11.5px] text-[#94a7c2] leading-relaxed mb-3.5">{d.desc}</p>
+              <p className="text-[11.5px] text-slate-500 leading-relaxed mb-3.5">{d.desc}</p>
               <div className="flex flex-wrap gap-2">
                 <ExportButton tipo={d.tipo} label="Todo" className="!text-[11.5px] !py-1.5 !px-2.5" />
                 {(d.tipo === "cotizaciones" || d.tipo === "leads" || d.tipo === "solicitudes") && (
@@ -187,9 +187,9 @@ export default async function ReportesPage() {
             </div>
           ))}
         </div>
-        <div className="px-5 py-3.5 border-t border-white/[0.06] flex items-center justify-between">
-          <p className="text-[11.5px] text-[#5f739a]">¿Necesitas datos de navegación del sitio? El módulo de métricas exporta sesiones en CSV.</p>
-          <Link href="/admin/metricas" className="text-[12px] font-bold text-[#2bbe6a] hover:text-[#5fe39a] flex items-center gap-1 whitespace-nowrap transition-colors">
+        <div className="px-5 py-3.5 border-t border-slate-100 flex items-center justify-between">
+          <p className="text-[11.5px] text-slate-400">¿Necesitas datos de navegación del sitio? El módulo de métricas exporta sesiones en CSV.</p>
+          <Link href="/admin/metricas" className="text-[12px] font-bold text-[#1a6b3c] hover:text-[#0d4a28] flex items-center gap-1 whitespace-nowrap transition-colors">
             Ir a métricas <ArrowRight className="w-3 h-3" />
           </Link>
         </div>

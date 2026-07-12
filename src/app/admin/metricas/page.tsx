@@ -38,11 +38,11 @@ export default async function MetricasPage({
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 bg-[#f5a623]/12 border border-[#f5a623]/20 rounded-2xl flex items-center justify-center shrink-0">
-            <BarChart3 className="w-5 h-5 text-[#f5a623]" />
+            <BarChart3 className="w-5 h-5 text-[#b87608]" />
           </div>
           <div>
-            <h1 className="text-xl font-black text-[#e8eef7]">Métricas</h1>
-            <p className="text-[#94a7c2] text-xs mt-0.5 font-medium">
+            <h1 className="text-xl font-black text-[#0a1628]">Métricas</h1>
+            <p className="text-slate-500 text-xs mt-0.5 font-medium">
               Actividad real de fenice.cl · Tracking propio
             </p>
           </div>
@@ -51,14 +51,14 @@ export default async function MetricasPage({
         <div className="flex flex-wrap items-center gap-3">
           <Link
             href={`/api/admin/metricas/export?${exportQuery}`}
-            className="inline-flex items-center gap-2 rounded-xl border border-white/12 bg-white/[0.04] px-4 py-2.5 text-sm font-bold text-[#cdd9ea] transition-all hover:border-white/25 hover:bg-white/[0.05] shadow-sm"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-bold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 shadow-sm"
           >
             <Download className="h-4 w-4" />
             Exportar CSV
           </Link>
           <Link
             href="/admin/metricas"
-            className="inline-flex items-center gap-2 rounded-xl border border-white/12 bg-white/[0.04] px-4 py-2.5 text-sm font-bold text-[#cdd9ea] transition-all hover:border-white/25 hover:bg-white/[0.05] shadow-sm"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-bold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-100 shadow-sm"
           >
             <FilterX className="h-4 w-4" />
             Limpiar filtros
@@ -66,10 +66,10 @@ export default async function MetricasPage({
         </div>
       </div>
 
-      <form method="get" className="rounded-2xl border border-white/[0.06] bg-white/[0.04] p-5 shadow-sm">
+      <form method="get" className="rounded-2xl border border-slate-100 bg-slate-50 p-5 shadow-sm">
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <label className="space-y-2 text-sm">
-            <span className="font-semibold text-[#cdd9ea]">Período</span>
+            <span className="font-semibold text-slate-700">Período</span>
             <select
               name="period"
               defaultValue={filters.period}
@@ -85,7 +85,7 @@ export default async function MetricasPage({
           </label>
 
           <label className="space-y-2 text-sm">
-            <span className="font-semibold text-[#cdd9ea]">Desde</span>
+            <span className="font-semibold text-slate-700">Desde</span>
             <input
               type="date"
               name="date_from"
@@ -95,7 +95,7 @@ export default async function MetricasPage({
           </label>
 
           <label className="space-y-2 text-sm">
-            <span className="font-semibold text-[#cdd9ea]">Hasta</span>
+            <span className="font-semibold text-slate-700">Hasta</span>
             <input
               type="date"
               name="date_to"
@@ -105,7 +105,7 @@ export default async function MetricasPage({
           </label>
 
           <label className="space-y-2 text-sm">
-            <span className="font-semibold text-[#cdd9ea]">Fuente</span>
+            <span className="font-semibold text-slate-700">Fuente</span>
             <select
               name="source"
               defaultValue={filters.source}
@@ -121,7 +121,7 @@ export default async function MetricasPage({
           </label>
 
           <label className="space-y-2 text-sm">
-            <span className="font-semibold text-[#cdd9ea]">Dispositivo</span>
+            <span className="font-semibold text-slate-700">Dispositivo</span>
             <select
               name="device_type"
               defaultValue={filters.deviceType}
@@ -137,7 +137,7 @@ export default async function MetricasPage({
           </label>
 
           <label className="space-y-2 text-sm">
-            <span className="font-semibold text-[#cdd9ea]">Página</span>
+            <span className="font-semibold text-slate-700">Página</span>
             <select
               name="path"
               defaultValue={filters.path}
@@ -153,7 +153,7 @@ export default async function MetricasPage({
           </label>
 
           <label className="space-y-2 text-sm">
-            <span className="font-semibold text-[#cdd9ea]">Campaña</span>
+            <span className="font-semibold text-slate-700">Campaña</span>
             <select
               name="campaign"
               defaultValue={filters.campaign}
@@ -169,7 +169,7 @@ export default async function MetricasPage({
           </label>
 
           <label className="space-y-2 text-sm">
-            <span className="font-semibold text-[#cdd9ea]">Estado</span>
+            <span className="font-semibold text-slate-700">Estado</span>
             <select
               name="identity_state"
               defaultValue={filters.identityState}
@@ -193,7 +193,7 @@ export default async function MetricasPage({
       </form>
 
       {errorMessage ? (
-        <div className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-300">
+        <div className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-600">
           {errorMessage}
         </div>
       ) : null}

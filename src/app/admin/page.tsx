@@ -89,11 +89,11 @@ export default async function AdminDashboard() {
   const leadDelta = monthDelta(leadRows);
 
   const ESTADO_TONE: Record<string, string> = {
-    nuevo: "bg-red-500/15 text-red-300",
-    contactado: "bg-[#f5a623]/15 text-[#f8c46a]",
-    cerrado: "bg-[#2bbe6a]/15 text-[#5fe39a]",
-    en_proceso: "bg-blue-400/15 text-blue-200",
-    cotizado: "bg-purple-400/15 text-purple-200",
+    nuevo: "bg-red-100 text-red-600",
+    contactado: "bg-[#f5a623]/15 text-[#b87608]",
+    cerrado: "bg-[#1a6b3c]/15 text-[#0d4a28]",
+    en_proceso: "bg-blue-100 text-blue-700",
+    cotizado: "bg-purple-100 text-purple-700",
   };
 
   const kpis = [
@@ -104,9 +104,9 @@ export default async function AdminDashboard() {
   ];
 
   const colorMap: Record<string, { ring: string; iconBg: string; val: string; glow: string }> = {
-    green: { ring: "ring-[#2bbe6a]/20", iconBg: "bg-[#2bbe6a]/15 text-[#2bbe6a]", val: "text-[#e8eef7]", glow: "from-[#2bbe6a]/20" },
-    amber: { ring: "ring-[#f5a623]/20", iconBg: "bg-[#f5a623]/15 text-[#f5a623]", val: "text-[#e8eef7]", glow: "from-[#f5a623]/20" },
-    navy: { ring: "ring-white/10", iconBg: "bg-white/8 text-slate-300", val: "text-[#e8eef7]", glow: "from-white/10" },
+    green: { ring: "ring-[#1a6b3c]/20", iconBg: "bg-[#1a6b3c]/15 text-[#1a6b3c]", val: "text-[#0a1628]", glow: "from-[#1a6b3c]/20" },
+    amber: { ring: "ring-[#f5a623]/20", iconBg: "bg-[#f5a623]/15 text-[#b87608]", val: "text-[#0a1628]", glow: "from-[#f5a623]/20" },
+    navy: { ring: "ring-slate-200", iconBg: "bg-slate-100 text-slate-500", val: "text-[#0a1628]", glow: "from-slate-100" },
   };
 
   const modules = [
@@ -129,14 +129,14 @@ export default async function AdminDashboard() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3.5">
           <div className="relative shrink-0">
-            <div className="absolute inset-0 rounded-2xl bg-[#2bbe6a]/30 blur-lg" />
-            <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-[#2bbe6a] to-[#149c52] flex items-center justify-center shadow-lg shadow-[#2bbe6a]/30">
+            <div className="absolute inset-0 rounded-2xl bg-[#1a6b3c]/30 blur-lg" />
+            <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-[#1a6b3c] to-[#0d4a28] flex items-center justify-center shadow-lg shadow-[#1a6b3c]/30">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
           </div>
           <div>
-            <h1 className="text-xl sm:text-2xl font-black text-[#e8eef7] tracking-tight">Buen día 👋</h1>
-            <p className="text-[#94a7c2] text-[13px] font-medium capitalize">
+            <h1 className="text-xl sm:text-2xl font-black text-[#0a1628] tracking-tight">Buen día 👋</h1>
+            <p className="text-slate-500 text-[13px] font-medium capitalize">
               {new Date().toLocaleDateString("es-CL", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
             </p>
           </div>
@@ -151,8 +151,8 @@ export default async function AdminDashboard() {
             <Zap className="w-5 h-5 text-[#2a1a00]" fill="currentColor" />
           </div>
           <div className="flex-1 relative">
-            <p className="font-black text-[#e8eef7] text-sm">{totalAlertas} solicitud{totalAlertas > 1 ? "es" : ""} requieren tu atención</p>
-            <p className="text-[#94a7c2] text-xs mt-0.5">
+            <p className="font-black text-[#0a1628] text-sm">{totalAlertas} solicitud{totalAlertas > 1 ? "es" : ""} requieren tu atención</p>
+            <p className="text-slate-500 text-xs mt-0.5">
               {stats.leadsNuevos > 0 && `${stats.leadsNuevos} lead${stats.leadsNuevos > 1 ? "s" : ""} nuevo${stats.leadsNuevos > 1 ? "s" : ""}`}
               {stats.leadsNuevos > 0 && stats.cotizacionesNuevas > 0 && " · "}
               {stats.cotizacionesNuevas > 0 && `${stats.cotizacionesNuevas} cotización${stats.cotizacionesNuevas > 1 ? "es" : ""} pendiente${stats.cotizacionesNuevas > 1 ? "s" : ""}`}
@@ -191,15 +191,15 @@ export default async function AdminDashboard() {
                 </div>
                 {kpi.alert && (
                   <span className="flex h-2 w-2 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
                   </span>
                 )}
               </div>
               <p className={`text-[28px] leading-none font-black tabular-nums relative ${c.val}`}>{kpi.value}</p>
-              <p className="text-[12.5px] font-bold text-[#94a7c2] mt-2 relative">{kpi.label}</p>
-              <p className="text-[11px] text-[#5f739a] mt-0.5 relative">{kpi.sub}</p>
-              <ArrowRight className="w-4 h-4 text-[#5f739a] group-hover:text-[#2bbe6a] absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all -translate-x-1 group-hover:translate-x-0" />
+              <p className="text-[12.5px] font-bold text-slate-500 mt-2 relative">{kpi.label}</p>
+              <p className="text-[11px] text-slate-400 mt-0.5 relative">{kpi.sub}</p>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#1a6b3c] absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all -translate-x-1 group-hover:translate-x-0" />
             </Link>
           );
         })}
@@ -212,7 +212,7 @@ export default async function AdminDashboard() {
             title="Solicitudes por día"
             subtitle={`Últimos 30 días · Este mes: ${cotDelta.actual} cotizaciones${cotDelta.deltaPct !== null ? ` (${cotDelta.deltaPct >= 0 ? "+" : ""}${cotDelta.deltaPct}% vs mes anterior)` : ""} y ${leadDelta.actual} contactos`}
             actions={
-              <Link href="/admin/reportes" className="text-[12px] font-bold text-[#2bbe6a] hover:text-[#5fe39a] flex items-center gap-1 transition-colors whitespace-nowrap">
+              <Link href="/admin/reportes" className="text-[12px] font-bold text-[#1a6b3c] hover:text-[#0d4a28] flex items-center gap-1 transition-colors whitespace-nowrap">
                 Ver reportes <ArrowRight className="w-3 h-3" />
               </Link>
             }
@@ -236,50 +236,50 @@ export default async function AdminDashboard() {
       <div className="grid lg:grid-cols-3 gap-4">
         {/* Actividad reciente */}
         <div className="lg:col-span-2 admin-card overflow-hidden">
-          <div className="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
+          <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <Activity className="w-4 h-4 text-[#2bbe6a]" />
-              <h2 className="text-sm font-black text-[#e8eef7]">Actividad reciente</h2>
+              <Activity className="w-4 h-4 text-[#1a6b3c]" />
+              <h2 className="text-sm font-black text-[#0a1628]">Actividad reciente</h2>
             </div>
-            <Link href="/admin/leads" className="text-[12px] font-bold text-[#2bbe6a] hover:text-[#5fe39a] flex items-center gap-1 transition-colors">
+            <Link href="/admin/leads" className="text-[12px] font-bold text-[#1a6b3c] hover:text-[#0d4a28] flex items-center gap-1 transition-colors">
               Ver todo <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
           {recentLeads.length === 0 && recentCotizaciones.length === 0 ? (
             <div className="py-14 text-center">
-              <Clock className="w-7 h-7 text-[#33415c] mx-auto mb-2" />
-              <p className="text-[#94a7c2] text-sm font-medium">Sin actividad reciente todavía.</p>
+              <Clock className="w-7 h-7 text-slate-500 mx-auto mb-2" />
+              <p className="text-slate-500 text-sm font-medium">Sin actividad reciente todavía.</p>
             </div>
           ) : (
-            <div className="divide-y divide-white/[0.05]">
+            <div className="divide-y divide-slate-100">
               {recentLeads.map((lead) => (
-                <Link key={`l-${lead.id}`} href="/admin/leads" className="flex items-center gap-3 px-5 py-3 hover:bg-white/[0.03] transition-colors">
-                  <div className="w-9 h-9 rounded-xl bg-[#2bbe6a]/12 flex items-center justify-center text-[11px] font-black text-[#2bbe6a] shrink-0">
+                <Link key={`l-${lead.id}`} href="/admin/leads" className="flex items-center gap-3 px-5 py-3 hover:bg-slate-50 transition-colors">
+                  <div className="w-9 h-9 rounded-xl bg-[#1a6b3c]/12 flex items-center justify-center text-[11px] font-black text-[#1a6b3c] shrink-0">
                     {lead.nombre.slice(0, 2).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-bold text-[#e8eef7] truncate">{lead.nombre}</p>
-                    <p className="text-[11px] text-[#5f739a] truncate">
+                    <p className="text-[13px] font-bold text-[#0a1628] truncate">{lead.nombre}</p>
+                    <p className="text-[11px] text-slate-400 truncate">
                       Lead{lead.comuna ? ` · ${lead.comuna}` : ""} · {new Date(lead.created_at).toLocaleDateString("es-CL", { day: "2-digit", month: "short" })}
                     </p>
                   </div>
-                  <span className={`text-[10px] font-black px-2 py-0.5 rounded-full shrink-0 capitalize ${ESTADO_TONE[lead.estado] ?? "bg-white/8 text-slate-400"}`}>
+                  <span className={`text-[10px] font-black px-2 py-0.5 rounded-full shrink-0 capitalize ${ESTADO_TONE[lead.estado] ?? "bg-slate-100 text-slate-400"}`}>
                     {lead.estado}
                   </span>
                 </Link>
               ))}
               {recentCotizaciones.map((cot) => (
-                <Link key={`c-${cot.id}`} href="/admin/leads?origen=cotizacion" className="flex items-center gap-3 px-5 py-3 hover:bg-white/[0.03] transition-colors">
+                <Link key={`c-${cot.id}`} href="/admin/leads?origen=cotizacion" className="flex items-center gap-3 px-5 py-3 hover:bg-slate-50 transition-colors">
                   <div className="w-9 h-9 rounded-xl bg-[#f5a623]/12 flex items-center justify-center shrink-0">
-                    <DollarSign className="w-4 h-4 text-[#f5a623]" />
+                    <DollarSign className="w-4 h-4 text-[#b87608]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-bold text-[#e8eef7] truncate">{cot.empresa}</p>
-                    <p className="text-[11px] text-[#5f739a] truncate">
+                    <p className="text-[13px] font-bold text-[#0a1628] truncate">{cot.empresa}</p>
+                    <p className="text-[11px] text-slate-400 truncate">
                       Cotización · {cot.nombre} · {new Date(cot.created_at).toLocaleDateString("es-CL", { day: "2-digit", month: "short" })}
                     </p>
                   </div>
-                  <span className={`text-[10px] font-black px-2 py-0.5 rounded-full shrink-0 capitalize ${ESTADO_TONE[cot.estado] ?? "bg-white/8 text-slate-400"}`}>
+                  <span className={`text-[10px] font-black px-2 py-0.5 rounded-full shrink-0 capitalize ${ESTADO_TONE[cot.estado] ?? "bg-slate-100 text-slate-400"}`}>
                     {cot.estado.replace("_", " ")}
                   </span>
                 </Link>
@@ -292,24 +292,24 @@ export default async function AdminDashboard() {
         <div className="space-y-4">
           {/* Pipeline mini */}
           <div className="admin-card overflow-hidden p-5 relative">
-            <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-[#2bbe6a]/8 rounded-full blur-2xl" />
+            <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-[#1a6b3c]/8 rounded-full blur-2xl" />
             <div className="flex items-center gap-2 mb-4 relative">
               <div className="w-1.5 h-1.5 rounded-full bg-[#f5a623] admin-glow-dot" />
-              <h2 className="text-xs font-black text-[#e8eef7] uppercase tracking-wider">Pipeline comercial</h2>
+              <h2 className="text-xs font-black text-[#0a1628] uppercase tracking-wider">Pipeline comercial</h2>
             </div>
             <div className="grid grid-cols-3 gap-2.5 relative">
               {[
-                { label: "Nuevos", value: stats.leadsNuevos, color: "text-red-400" },
-                { label: "Contacto", value: stats.leadsContactados, color: "text-[#f5a623]" },
-                { label: "Cerrados", value: stats.leadsCerrados, color: "text-[#2bbe6a]" },
+                { label: "Nuevos", value: stats.leadsNuevos, color: "text-red-500" },
+                { label: "Contacto", value: stats.leadsContactados, color: "text-[#b87608]" },
+                { label: "Cerrados", value: stats.leadsCerrados, color: "text-[#1a6b3c]" },
               ].map((s) => (
-                <div key={s.label} className="bg-white/[0.04] border border-white/[0.06] rounded-xl p-2.5 text-center">
+                <div key={s.label} className="bg-slate-50 border border-slate-100 rounded-xl p-2.5 text-center">
                   <p className={`text-xl font-black tabular-nums ${s.color}`}>{s.value}</p>
-                  <p className="text-[9px] text-[#5f739a] font-bold mt-1 uppercase tracking-wide">{s.label}</p>
+                  <p className="text-[9px] text-slate-400 font-bold mt-1 uppercase tracking-wide">{s.label}</p>
                 </div>
               ))}
             </div>
-            <Link href="/admin/leads" className="mt-4 flex items-center justify-center gap-1.5 text-[12px] font-bold text-[#f5a623] hover:text-[#f8c46a] transition-colors relative">
+            <Link href="/admin/leads" className="mt-4 flex items-center justify-center gap-1.5 text-[12px] font-bold text-[#b87608] hover:text-[#b87608] transition-colors relative">
               Gestionar pipeline <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -321,18 +321,18 @@ export default async function AdminDashboard() {
 
           {/* Quick actions */}
           <div className="admin-card overflow-hidden">
-            <div className="px-5 py-3.5 border-b border-white/[0.06] flex items-center gap-2.5">
-              <Zap className="w-4 h-4 text-[#f5a623]" />
-              <h2 className="text-sm font-black text-[#e8eef7]">Acciones rápidas</h2>
+            <div className="px-5 py-3.5 border-b border-slate-100 flex items-center gap-2.5">
+              <Zap className="w-4 h-4 text-[#b87608]" />
+              <h2 className="text-sm font-black text-[#0a1628]">Acciones rápidas</h2>
             </div>
-            <div className="divide-y divide-white/[0.05]">
+            <div className="divide-y divide-slate-100">
               {quickActions.map((a) => (
-                <Link key={a.href} href={a.href} className="flex items-center gap-3 px-5 py-2.5 hover:bg-white/[0.03] transition-colors group">
-                  <div className="w-7 h-7 rounded-lg bg-white/5 group-hover:bg-[#2bbe6a]/12 flex items-center justify-center transition-colors shrink-0">
-                    <a.icon className="w-3.5 h-3.5 text-[#94a7c2] group-hover:text-[#2bbe6a] transition-colors" />
+                <Link key={a.href} href={a.href} className="flex items-center gap-3 px-5 py-2.5 hover:bg-slate-50 transition-colors group">
+                  <div className="w-7 h-7 rounded-lg bg-slate-100 group-hover:bg-[#1a6b3c]/12 flex items-center justify-center transition-colors shrink-0">
+                    <a.icon className="w-3.5 h-3.5 text-slate-500 group-hover:text-[#1a6b3c] transition-colors" />
                   </div>
-                  <span className="flex-1 text-[13px] font-semibold text-[#94a7c2] group-hover:text-[#e8eef7]">{a.label}</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-[#5f739a] group-hover:text-[#2bbe6a] transition-colors" />
+                  <span className="flex-1 text-[13px] font-semibold text-slate-500 group-hover:text-[#0a1628]">{a.label}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#1a6b3c] transition-colors" />
                 </Link>
               ))}
             </div>
@@ -344,12 +344,12 @@ export default async function AdminDashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
         {modules.map((m) => (
           <Link key={m.label} href={m.href} className="admin-card admin-card-hover px-4 py-4 flex items-center gap-3.5 group">
-            <div className="w-10 h-10 rounded-xl bg-white/5 group-hover:bg-[#2bbe6a]/12 flex items-center justify-center shrink-0 transition-colors">
-              <m.icon className="w-5 h-5 text-[#94a7c2] group-hover:text-[#2bbe6a] transition-colors" />
+            <div className="w-10 h-10 rounded-xl bg-slate-100 group-hover:bg-[#1a6b3c]/12 flex items-center justify-center shrink-0 transition-colors">
+              <m.icon className="w-5 h-5 text-slate-500 group-hover:text-[#1a6b3c] transition-colors" />
             </div>
             <div>
-              <p className="text-xl font-black text-[#e8eef7] tabular-nums leading-none">{m.value}</p>
-              <p className="text-[11px] text-[#94a7c2] font-semibold mt-1">{m.label}</p>
+              <p className="text-xl font-black text-[#0a1628] tabular-nums leading-none">{m.value}</p>
+              <p className="text-[11px] text-slate-500 font-semibold mt-1">{m.label}</p>
             </div>
           </Link>
         ))}

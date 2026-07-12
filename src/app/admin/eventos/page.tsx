@@ -29,13 +29,13 @@ export default async function AdminEventosPage() {
 
       <div className="grid grid-cols-3 gap-3 mb-4">
         {[
-          { label: "Total", value: eventos.length, color: "text-[#e8eef7]" },
-          { label: "Activos", value: activos, color: "text-[#2bbe6a]" },
+          { label: "Total", value: eventos.length, color: "text-[#0a1628]" },
+          { label: "Activos", value: activos, color: "text-[#1a6b3c]" },
           { label: "Próximos", value: futuros, color: "text-teal-600" },
         ].map((s) => (
           <div key={s.label} className="admin-card px-4 py-3 text-center">
             <p className={`text-[26px] leading-none font-black tabular-nums ${s.color}`}>{s.value}</p>
-            <p className="text-[11px] text-[#94a7c2] font-bold mt-1.5">{s.label}</p>
+            <p className="text-[11px] text-slate-500 font-bold mt-1.5">{s.label}</p>
           </div>
         ))}
       </div>
@@ -53,15 +53,15 @@ export default async function AdminEventosPage() {
                   <span className="text-[9px] font-bold uppercase">{new Date(ev.fecha_inicio).toLocaleDateString("es-CL", { month: "short" })}</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-black text-[#e8eef7] text-sm line-clamp-1">{ev.titulo}</p>
+                  <p className="font-black text-[#0a1628] text-sm line-clamp-1">{ev.titulo}</p>
                   <div className="flex items-center gap-3 mt-0.5 flex-wrap">
-                    {ev.ubicacion && <span className="text-[11px] text-[#94a7c2] flex items-center gap-1"><MapPin className="w-3 h-3 text-[#94a7c2]" />{ev.ubicacion}</span>}
+                    {ev.ubicacion && <span className="text-[11px] text-slate-500 flex items-center gap-1"><MapPin className="w-3 h-3 text-slate-500" />{ev.ubicacion}</span>}
                     {futuro && <span className="text-[10px] text-teal-600 font-black">● Próximo</span>}
                   </div>
                 </div>
                 <div className="hidden sm:block shrink-0"><Badge tone={ev.activo ? "green" : "neutral"} dot>{ev.activo ? "Activo" : "Inactivo"}</Badge></div>
                 <div className="flex items-center gap-1 shrink-0">
-                  <Link href={`/admin/eventos/${ev.id}/editar`} className="p-2 rounded-lg text-[#94a7c2] hover:text-[#2bbe6a] hover:bg-[#2bbe6a]/12 transition-all" title="Editar"><Edit2 className="w-4 h-4" /></Link>
+                  <Link href={`/admin/eventos/${ev.id}/editar`} className="p-2 rounded-lg text-slate-500 hover:text-[#1a6b3c] hover:bg-[#1a6b3c]/12 transition-all" title="Editar"><Edit2 className="w-4 h-4" /></Link>
                   {ev.slug && <SiteLink href={`/eventos/${ev.slug}`} />}
                   <DeleteButton table="eventos" id={ev.id} />
                 </div>

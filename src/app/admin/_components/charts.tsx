@@ -6,21 +6,21 @@ import {
 } from "recharts";
 
 /* ============================================================
-   Gráficos del panel admin — tema dark Fenice.
-   Paleta categórica validada (CVD-safe sobre #0d1626), orden fijo:
+   Gráficos del panel admin — tema claro Fenice.
+   Paleta categórica validada (CVD-safe sobre blanco), orden fijo:
    verde → ámbar → azul → rosa. Más de 4 categorías se agrupan en "Otros".
    ============================================================ */
 
 export const CHART_PALETTE = ["#27a95d", "#c4820c", "#5f8ceb", "#d8639c"] as const;
-const SURFACE = "#0d1626";
-const GRID = "rgba(255,255,255,0.07)";
-const AXIS = "#5f739a";
+const SURFACE = "#ffffff";
+const GRID = "rgba(10,22,40,0.08)";
+const AXIS = "#64748b";
 
 const TOOLTIP_STYLE = {
-  background: "#111d31",
-  border: "1px solid rgba(255,255,255,0.14)",
+  background: "#ffffff",
+  border: "1px solid #e2e8f0",
   borderRadius: "0.75rem",
-  color: "#e8eef7",
+  color: "#0a1628",
   fontSize: "12px",
   padding: "8px 12px",
 } as const;
@@ -41,8 +41,8 @@ export function ChartCard({
     <div className="admin-card p-5 overflow-hidden">
       <div className="flex items-start justify-between gap-3 mb-4">
         <div>
-          <h2 className="text-sm font-black text-[#e8eef7]">{title}</h2>
-          {subtitle && <p className="text-[11.5px] text-[#94a7c2] mt-0.5">{subtitle}</p>}
+          <h2 className="text-sm font-black text-[#0a1628]">{title}</h2>
+          {subtitle && <p className="text-[11.5px] text-slate-500 mt-0.5">{subtitle}</p>}
         </div>
         {actions}
       </div>
@@ -53,7 +53,7 @@ export function ChartCard({
 
 export function ChartEmpty({ label = "Aún no hay datos para este período." }: { label?: string }) {
   return (
-    <div className="rounded-xl border border-dashed border-white/12 bg-white/[0.02] px-5 py-10 text-center text-[12.5px] text-[#94a7c2]">
+    <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/60 px-5 py-10 text-center text-[12.5px] text-slate-500">
       {label}
     </div>
   );
@@ -90,7 +90,7 @@ export function TrendChart({
             <CartesianGrid strokeDasharray="3 3" stroke={GRID} vertical={false} />
             <XAxis dataKey="fecha" stroke={AXIS} tick={{ fontSize: 10.5 }} tickLine={false} axisLine={{ stroke: GRID }} minTickGap={24} />
             <YAxis stroke={AXIS} tick={{ fontSize: 10.5 }} tickLine={false} axisLine={false} allowDecimals={false} width={42} />
-            <Tooltip contentStyle={TOOLTIP_STYLE} labelStyle={{ color: "#94a7c2", fontWeight: 700 }} cursor={{ stroke: "rgba(255,255,255,0.18)", strokeWidth: 1 }} />
+            <Tooltip contentStyle={TOOLTIP_STYLE} labelStyle={{ color: "#64748b", fontWeight: 700 }} cursor={{ stroke: "rgba(10,22,40,0.25)", strokeWidth: 1 }} />
             {series.map((s, i) => (
               <Area
                 key={s.key}
@@ -110,7 +110,7 @@ export function TrendChart({
       {series.length > 1 && (
         <div className="flex flex-wrap gap-x-5 gap-y-1.5 mt-3 px-1">
           {series.map((s, i) => (
-            <span key={s.key} className="inline-flex items-center gap-2 text-[11.5px] font-semibold text-[#94a7c2]">
+            <span key={s.key} className="inline-flex items-center gap-2 text-[11.5px] font-semibold text-slate-500">
               <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: CHART_PALETTE[i] }} />
               {s.label}
             </span>
@@ -167,17 +167,17 @@ export function DonutChart({ data, height = 210 }: { data: DonutDatum[]; height?
           </PieChart>
         </ResponsiveContainer>
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <p className="text-[22px] leading-none font-black text-[#e8eef7] tabular-nums">{total}</p>
-          <p className="text-[9.5px] text-[#5f739a] font-bold uppercase tracking-wide mt-1">Total</p>
+          <p className="text-[22px] leading-none font-black text-[#0a1628] tabular-nums">{total}</p>
+          <p className="text-[9.5px] text-slate-400 font-bold uppercase tracking-wide mt-1">Total</p>
         </div>
       </div>
       <ul className="flex-1 w-full space-y-2 min-w-0">
         {folded.map((d, i) => (
           <li key={d.label} className="flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: CHART_PALETTE[i] ?? CHART_PALETTE[3] }} />
-            <span className="flex-1 text-[12px] font-semibold text-[#cdd9ea] truncate" title={d.label}>{d.label}</span>
-            <span className="text-[12px] font-black text-[#e8eef7] tabular-nums">{d.value}</span>
-            <span className="text-[10.5px] text-[#5f739a] tabular-nums w-9 text-right">{Math.round((d.value / total) * 100)}%</span>
+            <span className="flex-1 text-[12px] font-semibold text-slate-700 truncate" title={d.label}>{d.label}</span>
+            <span className="text-[12px] font-black text-[#0a1628] tabular-nums">{d.value}</span>
+            <span className="text-[10.5px] text-slate-400 tabular-nums w-9 text-right">{Math.round((d.value / total) * 100)}%</span>
           </li>
         ))}
       </ul>
@@ -204,13 +204,13 @@ export function RankBars({ data, height, color = CHART_PALETTE[0] }: { data: Ran
             dataKey="label"
             width={132}
             stroke={AXIS}
-            tick={{ fontSize: 11, fill: "#cdd9ea" }}
+            tick={{ fontSize: 11, fill: "#334155" }}
             tickLine={false}
             axisLine={false}
             tickFormatter={(v: string) => (v.length > 18 ? `${v.slice(0, 17)}…` : v)}
           />
-          <Tooltip contentStyle={TOOLTIP_STYLE} cursor={{ fill: "rgba(255,255,255,0.04)" }} />
-          <Bar dataKey="value" name="Solicitudes" fill={color} radius={[0, 4, 4, 0]} maxBarSize={14} label={{ position: "right", fill: "#94a7c2", fontSize: 11, fontWeight: 700 }} />
+          <Tooltip contentStyle={TOOLTIP_STYLE} cursor={{ fill: "rgba(10,22,40,0.04)" }} />
+          <Bar dataKey="value" name="Solicitudes" fill={color} radius={[0, 4, 4, 0]} maxBarSize={14} label={{ position: "right", fill: "#475569", fontSize: 11, fontWeight: 700 }} />
         </BarChart>
       </ResponsiveContainer>
     </div>

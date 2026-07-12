@@ -16,7 +16,7 @@ import { formatDuration, type AnalyticsDashboardData } from "@/lib/analytics/adm
 
 function EmptyState({ label }: { label: string }) {
   return (
-    <div className="rounded-2xl border border-dashed border-white/12 bg-white/[0.03] px-5 py-8 text-center text-sm text-[#94a7c2]">
+    <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-5 py-8 text-center text-sm text-slate-500">
       {label}
     </div>
   );
@@ -32,10 +32,10 @@ function Card({
   hint?: string;
 }) {
   return (
-    <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
-      <p className="text-xs font-semibold uppercase tracking-widest text-[#94a7c2]">{label}</p>
-      <p className="mt-3 text-2xl font-extrabold text-[#e8eef7]">{value}</p>
-      {hint ? <p className="mt-1 text-xs text-[#94a7c2]">{hint}</p> : null}
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+      <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">{label}</p>
+      <p className="mt-3 text-2xl font-extrabold text-[#0a1628]">{value}</p>
+      {hint ? <p className="mt-1 text-xs text-slate-500">{hint}</p> : null}
     </div>
   );
 }
@@ -75,22 +75,22 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
       </div>
 
       <div className="grid gap-6 xl:grid-cols-2">
-        <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
           <div className="mb-5">
-            <h2 className="text-lg font-bold text-[#e8eef7]">Tendencia de tráfico</h2>
-            <p className="text-sm text-[#94a7c2]">Visitantes, sesiones y páginas vistas por día.</p>
+            <h2 className="text-lg font-bold text-[#0a1628]">Tendencia de tráfico</h2>
+            <p className="text-sm text-slate-500">Visitantes, sesiones y páginas vistas por día.</p>
           </div>
           {hasSessions ? (
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={data.traffic}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />
-                  <XAxis dataKey="bucket_date" stroke="#5f739a" />
-                  <YAxis stroke="#5f739a" />
-                  <Tooltip contentStyle={{ background: "#0d1626", border: "1px solid rgba(255,255,255,0.12)", borderRadius: "0.75rem", color: "#e8eef7" }} labelStyle={{ color: "#94a7c2" }} itemStyle={{ color: "#e8eef7" }} />
-                  <Line type="monotone" dataKey="visitors" stroke="#2bbe6a" strokeWidth={2} />
-                  <Line type="monotone" dataKey="sessions" stroke="#f5a623" strokeWidth={2} />
-                  <Line type="monotone" dataKey="page_views" stroke="#7aa2ff" strokeWidth={2} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(10,22,40,0.08)" />
+                  <XAxis dataKey="bucket_date" stroke="#64748b" />
+                  <YAxis stroke="#64748b" />
+                  <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "0.75rem", color: "#0a1628" }} labelStyle={{ color: "#64748b" }} itemStyle={{ color: "#0a1628" }} />
+                  <Line type="monotone" dataKey="visitors" stroke="#27a95d" strokeWidth={2} />
+                  <Line type="monotone" dataKey="sessions" stroke="#c4820c" strokeWidth={2} />
+                  <Line type="monotone" dataKey="page_views" stroke="#5f8ceb" strokeWidth={2} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -99,20 +99,20 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
           )}
         </div>
 
-        <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
           <div className="mb-5">
-            <h2 className="text-lg font-bold text-[#e8eef7]">Fuentes de tráfico</h2>
-            <p className="text-sm text-[#94a7c2]">Sesiones, visitantes y conversión por fuente.</p>
+            <h2 className="text-lg font-bold text-[#0a1628]">Fuentes de tráfico</h2>
+            <p className="text-sm text-slate-500">Sesiones, visitantes y conversión por fuente.</p>
           </div>
           {data.sources.length ? (
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data.sources.slice(0, 8)}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />
-                  <XAxis dataKey="source" stroke="#5f739a" />
-                  <YAxis stroke="#5f739a" />
-                  <Tooltip contentStyle={{ background: "#0d1626", border: "1px solid rgba(255,255,255,0.12)", borderRadius: "0.75rem", color: "#e8eef7" }} labelStyle={{ color: "#94a7c2" }} itemStyle={{ color: "#e8eef7" }} />
-                  <Bar dataKey="sessions" fill="#2bbe6a" radius={[8, 8, 0, 0]} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(10,22,40,0.08)" />
+                  <XAxis dataKey="source" stroke="#64748b" />
+                  <YAxis stroke="#64748b" />
+                  <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "0.75rem", color: "#0a1628" }} labelStyle={{ color: "#64748b" }} itemStyle={{ color: "#0a1628" }} />
+                  <Bar dataKey="sessions" fill="#1a6b3c" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -122,17 +122,17 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
         </div>
       </div>
 
-      <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
+      <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
         <div className="mb-5">
-          <h2 className="text-lg font-bold text-[#e8eef7]">Embudo de conversión</h2>
-          <p className="text-sm text-[#94a7c2]">Etapas reales medidas sobre sesiones filtradas.</p>
+          <h2 className="text-lg font-bold text-[#0a1628]">Embudo de conversión</h2>
+          <p className="text-sm text-slate-500">Etapas reales medidas sobre sesiones filtradas.</p>
         </div>
         {data.funnel.stages.length ? (
           <div className="grid gap-4 md:grid-cols-5">
             {data.funnel.stages.map((stage) => (
-              <div key={stage.key} className="rounded-2xl bg-white/[0.03] p-4">
-                <p className="text-xs font-semibold uppercase tracking-widest text-[#94a7c2]">{stage.label}</p>
-                <p className="mt-2 text-2xl font-extrabold text-[#e8eef7]">{stage.count}</p>
+              <div key={stage.key} className="rounded-2xl bg-slate-50 p-4">
+                <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">{stage.label}</p>
+                <p className="mt-2 text-2xl font-extrabold text-[#0a1628]">{stage.count}</p>
               </div>
             ))}
           </div>
@@ -142,12 +142,12 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
       </div>
 
       <div className="grid gap-6 xl:grid-cols-2">
-        <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
-          <h2 className="text-lg font-bold text-[#e8eef7]">Páginas más vistas</h2>
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <h2 className="text-lg font-bold text-[#0a1628]">Páginas más vistas</h2>
           <div className="mt-4 overflow-x-auto">
             <table className="min-w-full text-sm">
               <thead>
-                <tr className="border-b border-white/[0.06] text-left text-[#94a7c2]">
+                <tr className="border-b border-slate-100 text-left text-slate-500">
                   <th className="pb-3 pr-4 font-semibold">Ruta</th>
                   <th className="pb-3 pr-4 font-semibold">Vistas</th>
                   <th className="pb-3 pr-4 font-semibold">Visitantes</th>
@@ -158,15 +158,15 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
               <tbody>
                 {data.pages.length ? (
                   data.pages.slice(0, 8).map((page) => (
-                    <tr key={page.path} className="border-b border-white/[0.06]">
+                    <tr key={page.path} className="border-b border-slate-100">
                       <td className="py-3 pr-4">
-                        <div className="font-medium text-[#e8eef7]">{page.path}</div>
-                        <div className="text-xs text-[#94a7c2]">{page.page_title}</div>
+                        <div className="font-medium text-[#0a1628]">{page.path}</div>
+                        <div className="text-xs text-slate-500">{page.page_title}</div>
                       </td>
-                      <td className="py-3 pr-4 text-[#cdd9ea]">{page.views}</td>
-                      <td className="py-3 pr-4 text-[#cdd9ea]">{page.visitors}</td>
-                      <td className="py-3 pr-4 text-[#cdd9ea]">{formatDuration(page.avg_time_seconds)}</td>
-                      <td className="py-3 text-[#cdd9ea]">{page.conversion_rate}%</td>
+                      <td className="py-3 pr-4 text-slate-700">{page.views}</td>
+                      <td className="py-3 pr-4 text-slate-700">{page.visitors}</td>
+                      <td className="py-3 pr-4 text-slate-700">{formatDuration(page.avg_time_seconds)}</td>
+                      <td className="py-3 text-slate-700">{page.conversion_rate}%</td>
                     </tr>
                   ))
                 ) : (
@@ -181,12 +181,12 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
           </div>
         </div>
 
-        <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
-          <h2 className="text-lg font-bold text-[#e8eef7]">Botones y CTA</h2>
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <h2 className="text-lg font-bold text-[#0a1628]">Botones y CTA</h2>
           <div className="mt-4 overflow-x-auto">
             <table className="min-w-full text-sm">
               <thead>
-                <tr className="border-b border-white/[0.06] text-left text-[#94a7c2]">
+                <tr className="border-b border-slate-100 text-left text-slate-500">
                   <th className="pb-3 pr-4 font-semibold">Elemento</th>
                   <th className="pb-3 pr-4 font-semibold">Página</th>
                   <th className="pb-3 pr-4 font-semibold">Clics</th>
@@ -197,15 +197,15 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
               <tbody>
                 {data.ctas.length ? (
                   data.ctas.slice(0, 8).map((cta) => (
-                    <tr key={`${cta.element_id}-${cta.path}`} className="border-b border-white/[0.06]">
+                    <tr key={`${cta.element_id}-${cta.path}`} className="border-b border-slate-100">
                       <td className="py-3 pr-4">
-                        <div className="font-medium text-[#e8eef7]">{cta.element_label}</div>
-                        <div className="text-xs text-[#94a7c2]">{cta.element_id}</div>
+                        <div className="font-medium text-[#0a1628]">{cta.element_label}</div>
+                        <div className="text-xs text-slate-500">{cta.element_id}</div>
                       </td>
-                      <td className="py-3 pr-4 text-[#cdd9ea]">{cta.path}</td>
-                      <td className="py-3 pr-4 text-[#cdd9ea]">{cta.clicks}</td>
-                      <td className="py-3 pr-4 text-[#cdd9ea]">{cta.click_percentage}%</td>
-                      <td className="py-3 text-[#cdd9ea]">{cta.conversion_rate}%</td>
+                      <td className="py-3 pr-4 text-slate-700">{cta.path}</td>
+                      <td className="py-3 pr-4 text-slate-700">{cta.clicks}</td>
+                      <td className="py-3 pr-4 text-slate-700">{cta.click_percentage}%</td>
+                      <td className="py-3 text-slate-700">{cta.conversion_rate}%</td>
                     </tr>
                   ))
                 ) : (
@@ -222,12 +222,12 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
       </div>
 
       <div className="grid gap-6 xl:grid-cols-2">
-        <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
-          <h2 className="text-lg font-bold text-[#e8eef7]">Secciones más vistas</h2>
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <h2 className="text-lg font-bold text-[#0a1628]">Secciones más vistas</h2>
           <div className="mt-4 overflow-x-auto">
             <table className="min-w-full text-sm">
               <thead>
-                <tr className="border-b border-white/[0.06] text-left text-[#94a7c2]">
+                <tr className="border-b border-slate-100 text-left text-slate-500">
                   <th className="pb-3 pr-4 font-semibold">Página</th>
                   <th className="pb-3 pr-4 font-semibold">Sección</th>
                   <th className="pb-3 pr-4 font-semibold">Vistas</th>
@@ -237,11 +237,11 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
               <tbody>
                 {data.sections.length ? (
                   data.sections.slice(0, 10).map((section) => (
-                    <tr key={`${section.path}-${section.section_id}`} className="border-b border-white/[0.06]">
-                      <td className="py-3 pr-4 text-[#cdd9ea]">{section.path}</td>
-                      <td className="py-3 pr-4 font-medium text-[#e8eef7]">{section.section_id}</td>
-                      <td className="py-3 pr-4 text-[#cdd9ea]">{section.views}</td>
-                      <td className="py-3 text-[#cdd9ea]">{section.page_percentage}%</td>
+                    <tr key={`${section.path}-${section.section_id}`} className="border-b border-slate-100">
+                      <td className="py-3 pr-4 text-slate-700">{section.path}</td>
+                      <td className="py-3 pr-4 font-medium text-[#0a1628]">{section.section_id}</td>
+                      <td className="py-3 pr-4 text-slate-700">{section.views}</td>
+                      <td className="py-3 text-slate-700">{section.page_percentage}%</td>
                     </tr>
                   ))
                 ) : (
@@ -256,12 +256,12 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
           </div>
         </div>
 
-        <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
-          <h2 className="text-lg font-bold text-[#e8eef7]">Profundidad de scroll</h2>
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <h2 className="text-lg font-bold text-[#0a1628]">Profundidad de scroll</h2>
           <div className="mt-4 overflow-x-auto">
             <table className="min-w-full text-sm">
               <thead>
-                <tr className="border-b border-white/[0.06] text-left text-[#94a7c2]">
+                <tr className="border-b border-slate-100 text-left text-slate-500">
                   <th className="pb-3 pr-4 font-semibold">Página</th>
                   <th className="pb-3 pr-4 font-semibold">25%</th>
                   <th className="pb-3 pr-4 font-semibold">50%</th>
@@ -272,12 +272,12 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
               <tbody>
                 {data.scrollDepth.length ? (
                   data.scrollDepth.map((row) => (
-                    <tr key={row.path} className="border-b border-white/[0.06]">
-                      <td className="py-3 pr-4 text-[#cdd9ea]">{row.path}</td>
-                      <td className="py-3 pr-4 text-[#cdd9ea]">{row.depth_25}</td>
-                      <td className="py-3 pr-4 text-[#cdd9ea]">{row.depth_50}</td>
-                      <td className="py-3 pr-4 text-[#cdd9ea]">{row.depth_75}</td>
-                      <td className="py-3 text-[#cdd9ea]">{row.depth_100}</td>
+                    <tr key={row.path} className="border-b border-slate-100">
+                      <td className="py-3 pr-4 text-slate-700">{row.path}</td>
+                      <td className="py-3 pr-4 text-slate-700">{row.depth_25}</td>
+                      <td className="py-3 pr-4 text-slate-700">{row.depth_50}</td>
+                      <td className="py-3 pr-4 text-slate-700">{row.depth_75}</td>
+                      <td className="py-3 text-slate-700">{row.depth_100}</td>
                     </tr>
                   ))
                 ) : (
@@ -294,17 +294,17 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
       </div>
 
       <div className="grid gap-6 xl:grid-cols-2">
-        <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
-          <h2 className="text-lg font-bold text-[#e8eef7]">Dispositivos</h2>
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <h2 className="text-lg font-bold text-[#0a1628]">Dispositivos</h2>
           <div className="mt-4 space-y-6">
             <div>
-              <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-[#94a7c2]">Tipos</p>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-slate-500">Tipos</p>
               {data.devices.devices.length ? (
                 <div className="space-y-2">
                   {data.devices.devices.map((device) => (
-                    <div key={device.device_type} className="flex items-center justify-between rounded-xl bg-white/[0.03] px-4 py-3">
-                      <span className="font-medium text-[#e8eef7]">{device.device_type}</span>
-                      <span className="text-sm text-[#cdd9ea]">{device.sessions} sesiones</span>
+                    <div key={device.device_type} className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3">
+                      <span className="font-medium text-[#0a1628]">{device.device_type}</span>
+                      <span className="text-sm text-slate-700">{device.sessions} sesiones</span>
                     </div>
                   ))}
                 </div>
@@ -314,13 +314,13 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-[#94a7c2]">Navegadores</p>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-slate-500">Navegadores</p>
               {data.devices.browsers.length ? (
                 <div className="space-y-2">
                   {data.devices.browsers.slice(0, 5).map((browser) => (
-                    <div key={browser.browser_name} className="flex items-center justify-between rounded-xl bg-white/[0.03] px-4 py-3">
-                      <span className="font-medium text-[#e8eef7]">{browser.browser_name}</span>
-                      <span className="text-sm text-[#cdd9ea]">{browser.sessions}</span>
+                    <div key={browser.browser_name} className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3">
+                      <span className="font-medium text-[#0a1628]">{browser.browser_name}</span>
+                      <span className="text-sm text-slate-700">{browser.sessions}</span>
                     </div>
                   ))}
                 </div>
@@ -331,12 +331,12 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
           </div>
         </div>
 
-        <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
-          <h2 className="text-lg font-bold text-[#e8eef7]">Campañas UTM</h2>
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <h2 className="text-lg font-bold text-[#0a1628]">Campañas UTM</h2>
           <div className="mt-4 overflow-x-auto">
             <table className="min-w-full text-sm">
               <thead>
-                <tr className="border-b border-white/[0.06] text-left text-[#94a7c2]">
+                <tr className="border-b border-slate-100 text-left text-slate-500">
                   <th className="pb-3 pr-4 font-semibold">Campaign</th>
                   <th className="pb-3 pr-4 font-semibold">Source</th>
                   <th className="pb-3 pr-4 font-semibold">Medium</th>
@@ -347,12 +347,12 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
               <tbody>
                 {data.campaigns.length ? (
                   data.campaigns.map((campaign) => (
-                    <tr key={`${campaign.campaign}-${campaign.source}-${campaign.medium}`} className="border-b border-white/[0.06]">
-                      <td className="py-3 pr-4 text-[#e8eef7]">{campaign.campaign}</td>
-                      <td className="py-3 pr-4 text-[#cdd9ea]">{campaign.source}</td>
-                      <td className="py-3 pr-4 text-[#cdd9ea]">{campaign.medium}</td>
-                      <td className="py-3 pr-4 text-[#cdd9ea]">{campaign.sessions}</td>
-                      <td className="py-3 text-[#cdd9ea]">{campaign.conversions}</td>
+                    <tr key={`${campaign.campaign}-${campaign.source}-${campaign.medium}`} className="border-b border-slate-100">
+                      <td className="py-3 pr-4 text-[#0a1628]">{campaign.campaign}</td>
+                      <td className="py-3 pr-4 text-slate-700">{campaign.source}</td>
+                      <td className="py-3 pr-4 text-slate-700">{campaign.medium}</td>
+                      <td className="py-3 pr-4 text-slate-700">{campaign.sessions}</td>
+                      <td className="py-3 text-slate-700">{campaign.conversions}</td>
                     </tr>
                   ))
                 ) : (
@@ -368,20 +368,20 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
         </div>
       </div>
 
-      <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
+      <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h2 className="text-lg font-bold text-[#e8eef7]">Sesiones recientes</h2>
-            <p className="text-sm text-[#94a7c2]">Detalle paginado de navegación y conversión.</p>
+            <h2 className="text-lg font-bold text-[#0a1628]">Sesiones recientes</h2>
+            <p className="text-sm text-slate-500">Detalle paginado de navegación y conversión.</p>
           </div>
-          <p className="text-xs text-[#94a7c2]">
+          <p className="text-xs text-slate-500">
             Página {data.filters.page} de {totalPages}
           </p>
         </div>
         <div className="mt-4 overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead>
-              <tr className="border-b border-white/[0.06] text-left text-[#94a7c2]">
+              <tr className="border-b border-slate-100 text-left text-slate-500">
                 <th className="pb-3 pr-4 font-semibold">Inicio</th>
                 <th className="pb-3 pr-4 font-semibold">Visitante</th>
                 <th className="pb-3 pr-4 font-semibold">Estado</th>
@@ -395,16 +395,16 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
             <tbody>
               {data.recentSessions.length ? (
                 data.recentSessions.map((session) => (
-                  <tr key={session.session_id} className="border-b border-white/[0.06]">
-                    <td className="py-3 pr-4 text-[#cdd9ea]">{new Date(session.started_at).toLocaleString("es-CL")}</td>
-                    <td className="py-3 pr-4 font-medium text-[#e8eef7]">{session.visitor_label}</td>
-                    <td className="py-3 pr-4 text-[#cdd9ea]">{session.identity_state}</td>
-                    <td className="py-3 pr-4 text-[#cdd9ea]">{session.source}</td>
-                    <td className="py-3 pr-4 text-[#cdd9ea]">{session.landing_path}</td>
-                    <td className="py-3 pr-4 text-[#cdd9ea]">{session.last_path}</td>
-                    <td className="py-3 pr-4 text-[#cdd9ea]">{formatDuration(session.duration_seconds)}</td>
+                  <tr key={session.session_id} className="border-b border-slate-100">
+                    <td className="py-3 pr-4 text-slate-700">{new Date(session.started_at).toLocaleString("es-CL")}</td>
+                    <td className="py-3 pr-4 font-medium text-[#0a1628]">{session.visitor_label}</td>
+                    <td className="py-3 pr-4 text-slate-700">{session.identity_state}</td>
+                    <td className="py-3 pr-4 text-slate-700">{session.source}</td>
+                    <td className="py-3 pr-4 text-slate-700">{session.landing_path}</td>
+                    <td className="py-3 pr-4 text-slate-700">{session.last_path}</td>
+                    <td className="py-3 pr-4 text-slate-700">{formatDuration(session.duration_seconds)}</td>
                     <td className="py-3">
-                      <Link href={`/admin/metricas/${session.session_id}`} className="font-semibold text-[#2bbe6a] hover:text-[#5fe39a]">
+                      <Link href={`/admin/metricas/${session.session_id}`} className="font-semibold text-[#1a6b3c] hover:text-[#0d4a28]">
                         Ver sesión
                       </Link>
                     </td>

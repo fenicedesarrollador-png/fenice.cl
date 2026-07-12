@@ -37,19 +37,19 @@ export default function EditarUsuarioForm({ profile }: { profile: Profile }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <FormSection title="Datos del usuario">
-        <div className="flex items-center gap-2 bg-white/[0.03] rounded-xl px-4 py-2.5 border border-white/[0.06]">
-          <Mail className="w-4 h-4 text-[#94a7c2]" />
-          <span className="text-[13px] text-[#cdd9ea]"><span className="font-bold">Email:</span> {profile.email}</span>
+        <div className="flex items-center gap-2 bg-slate-50 rounded-xl px-4 py-2.5 border border-slate-100">
+          <Mail className="w-4 h-4 text-slate-500" />
+          <span className="text-[13px] text-slate-700"><span className="font-bold">Email:</span> {profile.email}</span>
         </div>
         <Field label="Nombre" required>
           <div className="relative">
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94a7c2]" />
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
             <input name="nombre" type="text" required defaultValue={profile.nombre} className="admin-input !pl-9" />
           </div>
         </Field>
         <Field label="Rol" required>
           <div className="relative">
-            <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94a7c2] z-10" />
+            <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 z-10" />
             <select name="rol" defaultValue={profile.rol} className="admin-input !pl-9">
               <option value="admin">Admin</option>
               <option value="editor">Editor</option>
@@ -62,16 +62,16 @@ export default function EditarUsuarioForm({ profile }: { profile: Profile }) {
       <FormSection title="Seguridad">
         <Field label="Nueva contraseña" hint="Dejar vacío para no cambiarla.">
           <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94a7c2]" />
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
             <input type={showPwd ? "text" : "password"} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Mínimo 8 caracteres" className="admin-input !pl-9 !pr-10" />
-            <button type="button" tabIndex={-1} onClick={() => setShowPwd(!showPwd)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94a7c2] hover:text-[#cdd9ea]">
+            <button type="button" tabIndex={-1} onClick={() => setShowPwd(!showPwd)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700">
               {showPwd ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
         </Field>
       </FormSection>
 
-      {success && <div className="bg-[#2bbe6a]/12 border border-[#1a6b3c]/20 rounded-xl px-4 py-3 text-[#2bbe6a] text-sm font-medium">{success}</div>}
+      {success && <div className="bg-[#1a6b3c]/12 border border-[#1a6b3c]/20 rounded-xl px-4 py-3 text-[#1a6b3c] text-sm font-medium">{success}</div>}
       <FormActions submitLabel="Guardar cambios" loading={loading} onCancel={() => router.back()} error={error} />
     </form>
   );

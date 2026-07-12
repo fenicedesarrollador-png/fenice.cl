@@ -125,42 +125,39 @@ details summary::-webkit-details-marker { display: none; }
 
 
 /* ============================================
-   ADMIN PANEL — Dark Cockpit Premium (marca Fenice)
-   navy base · verde #1a6b3c · ámbar #f5a623
+   ADMIN PANEL — Tema claro corporativo (marca Fenice)
+   fondo slate claro · navy #0a1628 · verde #1a6b3c · ámbar #f5a623
    ============================================ */
 .admin-scope {
-  --a-bg: #070d18;          /* fondo más profundo que el navy */
-  --a-surface: #0d1626;     /* superficie de tarjetas */
-  --a-surface-2: #111d31;   /* superficie elevada / hover */
-  --a-border: rgba(255,255,255,0.08);
-  --a-border-strong: rgba(255,255,255,0.14);
-  --a-text: #e8eef7;
-  --a-text-dim: #94a7c2;
-  --a-text-faint: #5f739a;
-  --a-green: #2bbe6a;       /* verde marca aclarado para contraste en dark */
-  --a-green-deep: #1a6b3c;
+  --a-bg: #f3f5f9;          /* fondo general claro */
+  --a-surface: #ffffff;     /* superficie de tarjetas */
+  --a-surface-2: #f8fafc;   /* superficie elevada / hover */
+  --a-border: #e2e8f0;
+  --a-border-strong: #cbd5e1;
+  --a-text: #0a1628;
+  --a-text-dim: #64748b;
+  --a-text-faint: #94a3b8;
+  --a-green: #1a6b3c;
+  --a-green-deep: #0d4a28;
   --a-amber: #f5a623;
   --a-amber-deep: #d98a0e;
 
-  background:
-    radial-gradient(1200px 600px at 12% -10%, rgba(43,190,106,0.10), transparent 60%),
-    radial-gradient(900px 500px at 100% 0%, rgba(245,166,35,0.08), transparent 55%),
-    var(--a-bg);
+  background: var(--a-bg);
   color: var(--a-text);
   -webkit-font-smoothing: antialiased;
 }
 
-/* Scrollbars finas dark */
+/* Scrollbars finas claras */
 .admin-scope ::-webkit-scrollbar { width: 8px; height: 8px; }
 .admin-scope ::-webkit-scrollbar-track { background: transparent; }
-.admin-scope ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.10); border-radius: 4px; }
-.admin-scope ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
+.admin-scope ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+.admin-scope ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 .admin-nav-scroll::-webkit-scrollbar { width: 4px; }
-.admin-nav-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.10); border-radius: 2px; }
+.admin-nav-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
 .scrollbar-none::-webkit-scrollbar { display: none; }
 .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Inputs dark */
+/* Inputs claros */
 .admin-input {
   width: 100%;
   border: 1px solid var(--a-border-strong);
@@ -168,24 +165,24 @@ details summary::-webkit-details-marker { display: none; }
   padding: 0.625rem 0.875rem;
   font-size: 0.875rem;
   color: var(--a-text);
-  background: rgba(255,255,255,0.04);
+  background: #ffffff;
   transition: border-color .15s, box-shadow .15s, background .15s;
 }
-.admin-input::placeholder { color: #6b7f9c; }
+.admin-input::placeholder { color: #94a3b8; }
 .admin-input:focus {
   outline: none;
   border-color: var(--a-green);
-  background: rgba(255,255,255,0.06);
-  box-shadow: 0 0 0 3px rgba(43,190,106,0.18);
+  box-shadow: 0 0 0 3px rgba(26,107,60,0.14);
 }
-.admin-input:hover:not(:focus) { border-color: rgba(255,255,255,0.22); }
+.admin-input:hover:not(:focus) { border-color: #94a3b8; }
+.admin-input:disabled { background: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
 textarea.admin-input { resize: vertical; line-height: 1.6; }
 select.admin-input {
   cursor: pointer; appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a7c2' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 0.75rem center; padding-right: 2.25rem;
 }
-.admin-input option { background: #0d1626; color: var(--a-text); }
+.admin-input option { background: #ffffff; color: var(--a-text); }
 
 /* Label */
 .admin-label {
@@ -198,33 +195,32 @@ select.admin-input {
   margin-bottom: 0.45rem;
 }
 
-/* Card glass premium */
+/* Card clara formal */
 .admin-card {
   position: relative;
-  background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
+  background: var(--a-surface);
   border: 1px solid var(--a-border);
   border-radius: 1rem;
-  box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 12px 30px -18px rgba(0,0,0,0.8);
-  backdrop-filter: blur(8px);
+  box-shadow: 0 1px 2px rgba(10,22,40,0.04), 0 8px 24px -16px rgba(10,22,40,0.10);
 }
 .admin-card-hover { transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
 .admin-card-hover:hover {
   transform: translateY(-2px);
-  border-color: rgba(43,190,106,0.35);
-  box-shadow: 0 0 0 1px rgba(43,190,106,0.15), 0 24px 48px -24px rgba(0,0,0,0.9);
+  border-color: rgba(26,107,60,0.35);
+  box-shadow: 0 0 0 1px rgba(26,107,60,0.12), 0 16px 32px -20px rgba(10,22,40,0.25);
 }
 
-/* Botón primario (verde marca con glow) */
+/* Botón primario (verde marca) */
 .admin-btn-primary {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-  background: linear-gradient(180deg, #2bbe6a, #1a9c54);
-  color: #042312;
+  background: linear-gradient(180deg, #1f7d47, #1a6b3c);
+  color: #ffffff;
   font-weight: 800; font-size: 0.875rem;
   padding: 0.625rem 1.1rem; border-radius: 0.75rem;
-  box-shadow: 0 8px 24px -8px rgba(43,190,106,0.6);
+  box-shadow: 0 6px 16px -6px rgba(26,107,60,0.45);
   transition: filter .15s, transform .1s, box-shadow .15s;
 }
-.admin-btn-primary:hover { filter: brightness(1.08); box-shadow: 0 10px 30px -8px rgba(43,190,106,0.75); }
+.admin-btn-primary:hover { filter: brightness(1.06); box-shadow: 0 8px 20px -6px rgba(26,107,60,0.55); }
 .admin-btn-primary:active { transform: translateY(1px); }
 .admin-btn-primary:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
 
@@ -232,25 +228,25 @@ select.admin-input {
 .admin-btn-amber {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
   background: linear-gradient(180deg, #f5a623, #e08a0a);
-  color: #2a1a00;
+  color: #ffffff;
   font-weight: 800; font-size: 0.875rem;
   padding: 0.625rem 1.1rem; border-radius: 0.75rem;
-  box-shadow: 0 8px 24px -8px rgba(245,166,35,0.6);
+  box-shadow: 0 6px 16px -6px rgba(245,166,35,0.45);
   transition: filter .15s, transform .1s;
 }
-.admin-btn-amber:hover { filter: brightness(1.08); }
+.admin-btn-amber:hover { filter: brightness(1.05); }
 .admin-btn-amber:active { transform: translateY(1px); }
 
-/* Botón secundario (ghost dark) */
+/* Botón secundario (ghost claro) */
 .admin-btn-ghost {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem;
-  background: rgba(255,255,255,0.04); color: var(--a-text-dim);
+  background: #ffffff; color: var(--a-text-dim);
   font-weight: 600; font-size: 0.8125rem;
   padding: 0.55rem 0.9rem; border-radius: 0.75rem;
   border: 1px solid var(--a-border-strong);
   transition: all .15s;
 }
-.admin-btn-ghost:hover { border-color: rgba(255,255,255,0.28); background: rgba(255,255,255,0.07); color: var(--a-text); }
+.admin-btn-ghost:hover { border-color: #94a3b8; background: #f8fafc; color: var(--a-text); }
 
 /* Animaciones de entrada (stagger via inline delay) */
 @keyframes adminRise {
@@ -265,17 +261,17 @@ select.admin-input {
 }
 .admin-glow-dot { animation: adminGlowPulse 2s ease-in-out infinite; }
 
-/* Texto que respeta el tema dark dentro del scope */
+/* Texto que respeta el tema dentro del scope */
 .admin-scope .admin-h { color: var(--a-text); }
 .admin-scope .admin-dim { color: var(--a-text-dim); }
 
-/* Skeleton shimmer */
+/* Skeleton shimmer claro */
 @keyframes adminShimmer {
   0% { background-position: -400px 0; }
   100% { background-position: 400px 0; }
 }
 .admin-skeleton {
-  background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.09) 37%, rgba(255,255,255,0.04) 63%);
+  background: linear-gradient(90deg, #eef2f7 25%, #e2e8f0 37%, #eef2f7 63%);
   background-size: 800px 100%;
   animation: adminShimmer 1.4s ease-in-out infinite;
   border-radius: 0.5rem;

@@ -49,28 +49,28 @@ export default function AdminTopBar({ onMenuClick }: { onMenuClick: () => void }
 
   return (
     <>
-      <header className="h-14 bg-[#070d18]/80 backdrop-blur-xl border-b border-white/[0.06] flex items-center px-4 gap-3 shrink-0 sticky top-0 z-30">
+      <header className="h-14 bg-slate-1005 backdrop-blur-xl border-b border-slate-100 flex items-center px-4 gap-3 shrink-0 sticky top-0 z-30">
         <button
           onClick={onMenuClick}
-          className="lg:hidden p-2 -ml-1 rounded-lg text-[#94a7c2] hover:text-white hover:bg-white/5 transition-all"
+          className="lg:hidden p-2 -ml-1 rounded-lg text-slate-500 hover:text-[#0a1628] hover:bg-slate-100 transition-all"
           aria-label="Abrir menú"
         >
           <Menu className="w-5 h-5" />
         </button>
 
         <nav className="flex items-center gap-1.5 min-w-0 flex-1" aria-label="Breadcrumb">
-          <Link href="/admin" className="text-[#5f739a] hover:text-[#2bbe6a] transition-colors shrink-0">
+          <Link href="/admin" className="text-slate-400 hover:text-[#1a6b3c] transition-colors shrink-0">
             <Home className="w-4 h-4" />
           </Link>
           {crumbs.slice(1).map((crumb, i) => {
             const isLast = i === crumbs.length - 2;
             return (
               <span key={crumb.href} className="flex items-center gap-1.5 min-w-0">
-                <ChevronRight className="w-3.5 h-3.5 text-[#33415c] shrink-0" />
+                <ChevronRight className="w-3.5 h-3.5 text-slate-500 shrink-0" />
                 {isLast ? (
-                  <span className="text-[13px] font-bold text-[#e8eef7] truncate">{crumb.label}</span>
+                  <span className="text-[13px] font-bold text-[#0a1628] truncate">{crumb.label}</span>
                 ) : (
-                  <Link href={crumb.href} className="text-[13px] text-[#94a7c2] hover:text-[#2bbe6a] transition-colors truncate">
+                  <Link href={crumb.href} className="text-[13px] text-slate-500 hover:text-[#1a6b3c] transition-colors truncate">
                     {crumb.label}
                   </Link>
                 )}
@@ -82,16 +82,16 @@ export default function AdminTopBar({ onMenuClick }: { onMenuClick: () => void }
         {/* Buscador / Command palette trigger */}
         <button
           onClick={() => setPaletteOpen(true)}
-          className="hidden sm:inline-flex items-center gap-2 text-[12px] font-medium text-[#94a7c2] hover:text-white border border-white/10 hover:border-white/20 px-3 py-1.5 rounded-lg transition-all bg-white/[0.03] hover:bg-white/[0.06] shrink-0"
+          className="hidden sm:inline-flex items-center gap-2 text-[12px] font-medium text-slate-500 hover:text-[#0a1628] border border-slate-200 hover:border-slate-300 px-3 py-1.5 rounded-lg transition-all bg-slate-50 hover:bg-slate-100 shrink-0"
         >
           <Search className="w-3.5 h-3.5" />
           <span className="hidden md:inline">Buscar…</span>
-          <kbd className="hidden md:inline-flex items-center gap-0.5 text-[10px] font-bold text-[#5f739a] bg-white/5 border border-white/10 rounded px-1.5 py-0.5 ml-1">⌘K</kbd>
+          <kbd className="hidden md:inline-flex items-center gap-0.5 text-[10px] font-bold text-slate-400 bg-slate-100 border border-slate-200 rounded px-1.5 py-0.5 ml-1">⌘K</kbd>
         </button>
 
         <button
           onClick={() => setPaletteOpen(true)}
-          className="sm:hidden p-2 rounded-lg text-[#94a7c2] hover:text-white hover:bg-white/5 transition-all"
+          className="sm:hidden p-2 rounded-lg text-slate-500 hover:text-[#0a1628] hover:bg-slate-100 transition-all"
           aria-label="Buscar"
         >
           <Search className="w-4 h-4" />
@@ -101,9 +101,9 @@ export default function AdminTopBar({ onMenuClick }: { onMenuClick: () => void }
           href="/"
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden sm:inline-flex items-center gap-1.5 text-[12px] font-bold text-[#94a7c2] hover:text-[#2bbe6a] border border-white/10 hover:border-[#2bbe6a]/30 px-3 py-1.5 rounded-lg transition-all bg-white/[0.03] hover:bg-[#2bbe6a]/10 shrink-0"
+          className="hidden sm:inline-flex items-center gap-1.5 text-[12px] font-bold text-slate-500 hover:text-[#1a6b3c] border border-slate-200 hover:border-[#1a6b3c]/30 px-3 py-1.5 rounded-lg transition-all bg-slate-50 hover:bg-[#1a6b3c]/10 shrink-0"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#2bbe6a] admin-glow-dot" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#1a6b3c] admin-glow-dot" />
           fenice.cl
         </a>
       </header>

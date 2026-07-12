@@ -42,7 +42,7 @@ export default function DeleteAdminUserButton({
         </button>
         <button
           onClick={() => setConfirm(false)}
-          className="text-[10px] font-semibold text-[#94a7c2] hover:text-[#cdd9ea] px-2 py-1 rounded-lg border border-white/12"
+          className="text-[10px] font-semibold text-slate-500 hover:text-slate-700 px-2 py-1 rounded-lg border border-slate-200"
         >
           No
         </button>
@@ -54,7 +54,7 @@ export default function DeleteAdminUserButton({
     <button
       onClick={() => setConfirm(true)}
       title="Eliminar usuario"
-      className="p-1.5 rounded-lg border border-white/[0.06] text-[#94a7c2] hover:text-red-500 hover:border-red-100 hover:bg-red-50 transition-all"
+      className="p-1.5 rounded-lg border border-slate-100 text-slate-500 hover:text-red-500 hover:border-red-100 hover:bg-red-50 transition-all"
     >
       <Trash2 className="w-3.5 h-3.5" />
     </button>

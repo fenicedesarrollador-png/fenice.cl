@@ -139,7 +139,7 @@ export default function PreciosEditor({ initialPrices }: { initialPrices: FuelPr
             className="admin-card rounded-2xl overflow-hidden shadow-sm"
           >
             {/* Card header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] bg-white/[0.03]">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50">
               <div className="flex items-center gap-3">
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg"
@@ -148,8 +148,8 @@ export default function PreciosEditor({ initialPrices }: { initialPrices: FuelPr
                   {codeLabel(fp.code)}
                 </div>
                 <div>
-                  <p className="font-bold text-[#e8eef7] text-sm leading-tight">{fp.code}</p>
-                  <p className="text-xs text-[#94a7c2]">Código interno</p>
+                  <p className="font-bold text-[#0a1628] text-sm leading-tight">{fp.code}</p>
+                  <p className="text-xs text-slate-500">Código interno</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -157,7 +157,7 @@ export default function PreciosEditor({ initialPrices }: { initialPrices: FuelPr
                   className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full border ${
                     st.is_visible
                       ? "bg-green-50 border-green-200 text-green-700"
-                      : "bg-white/8 border-white/12 text-[#94a7c2]"
+                      : "bg-slate-100 border-slate-200 text-slate-500"
                   }`}
                 >
                   {st.is_visible ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
@@ -170,29 +170,29 @@ export default function PreciosEditor({ initialPrices }: { initialPrices: FuelPr
             <div className="px-6 py-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {/* Nombre */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#cdd9ea] uppercase tracking-wider">Nombre</label>
+                <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider">Nombre</label>
                 <input
                   type="text"
                   value={st.name}
                   onChange={(e) => update(fp.id, "name", e.target.value)}
-                  className="border border-white/12 rounded-xl px-3 py-2.5 text-sm text-[#e8eef7] focus:outline-none focus:ring-2 focus:ring-[#f5a623]/40 focus:border-[#f5a623]"
+                  className="border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-[#0a1628] focus:outline-none focus:ring-2 focus:ring-[#f5a623]/40 focus:border-[#f5a623]"
                   placeholder="Nombre del combustible"
                 />
               </div>
 
               {/* Precio */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#cdd9ea] uppercase tracking-wider">
+                <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
                   Precio (dejar vacío = no disponible)
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-[#94a7c2]">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-500">$</span>
                   <input
                     type="text"
                     inputMode="numeric"
                     value={st.price}
                     onChange={(e) => update(fp.id, "price", e.target.value)}
-                    className="w-full border border-white/12 rounded-xl pl-7 pr-3 py-2.5 text-sm text-[#e8eef7] focus:outline-none focus:ring-2 focus:ring-[#f5a623]/40 focus:border-[#f5a623]"
+                    className="w-full border border-slate-200 rounded-xl pl-7 pr-3 py-2.5 text-sm text-[#0a1628] focus:outline-none focus:ring-2 focus:ring-[#f5a623]/40 focus:border-[#f5a623]"
                     placeholder="0"
                   />
                 </div>
@@ -205,11 +205,11 @@ export default function PreciosEditor({ initialPrices }: { initialPrices: FuelPr
 
               {/* Unidad */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#cdd9ea] uppercase tracking-wider">Unidad</label>
+                <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider">Unidad</label>
                 <select
                   value={st.unit}
                   onChange={(e) => update(fp.id, "unit", e.target.value)}
-                  className="border border-white/12 rounded-xl px-3 py-2.5 text-sm text-[#e8eef7] focus:outline-none focus:ring-2 focus:ring-[#f5a623]/40 focus:border-[#f5a623] bg-white/[0.04]"
+                  className="border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-[#0a1628] focus:outline-none focus:ring-2 focus:ring-[#f5a623]/40 focus:border-[#f5a623] bg-slate-50"
                 >
                   <option value="$/L">$/L (litro)</option>
                   <option value="$/kg">$/kg (kilogramo)</option>
@@ -219,12 +219,12 @@ export default function PreciosEditor({ initialPrices }: { initialPrices: FuelPr
 
               {/* Nota */}
               <div className="flex flex-col gap-1.5 sm:col-span-2">
-                <label className="text-xs font-semibold text-[#cdd9ea] uppercase tracking-wider">Nota (opcional)</label>
+                <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider">Nota (opcional)</label>
                 <input
                   type="text"
                   value={st.note}
                   onChange={(e) => update(fp.id, "note", e.target.value)}
-                  className="border border-white/12 rounded-xl px-3 py-2.5 text-sm text-[#e8eef7] focus:outline-none focus:ring-2 focus:ring-[#f5a623]/40 focus:border-[#f5a623]"
+                  className="border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-[#0a1628] focus:outline-none focus:ring-2 focus:ring-[#f5a623]/40 focus:border-[#f5a623]"
                   placeholder="Ej: Precio sujeto a zona de despacho"
                   maxLength={120}
                 />
@@ -232,39 +232,39 @@ export default function PreciosEditor({ initialPrices }: { initialPrices: FuelPr
 
               {/* Actualizado por */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#cdd9ea] uppercase tracking-wider">Actualizado por</label>
+                <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider">Actualizado por</label>
                 <input
                   type="text"
                   value={st.updated_by}
                   onChange={(e) => update(fp.id, "updated_by", e.target.value)}
-                  className="border border-white/12 rounded-xl px-3 py-2.5 text-sm text-[#e8eef7] focus:outline-none focus:ring-2 focus:ring-[#f5a623]/40 focus:border-[#f5a623]"
+                  className="border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-[#0a1628] focus:outline-none focus:ring-2 focus:ring-[#f5a623]/40 focus:border-[#f5a623]"
                   placeholder="Nombre del responsable"
                 />
               </div>
 
               {/* Color acento */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#cdd9ea] uppercase tracking-wider">Color acento</label>
+                <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider">Color acento</label>
                 <div className="flex items-center gap-2">
                   <input
                     type="color"
                     value={st.accent_color}
                     onChange={(e) => update(fp.id, "accent_color", e.target.value)}
-                    className="w-10 h-10 rounded-xl border border-white/12 p-0.5 cursor-pointer"
+                    className="w-10 h-10 rounded-xl border border-slate-200 p-0.5 cursor-pointer"
                   />
-                  <span className="text-sm font-mono text-[#94a7c2]">{st.accent_color}</span>
+                  <span className="text-sm font-mono text-slate-500">{st.accent_color}</span>
                 </div>
               </div>
 
               {/* Orden */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#cdd9ea] uppercase tracking-wider">Orden de display</label>
+                <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider">Orden de display</label>
                 <input
                   type="number"
                   min={0}
                   value={st.display_order}
                   onChange={(e) => update(fp.id, "display_order", e.target.value)}
-                  className="border border-white/12 rounded-xl px-3 py-2.5 text-sm text-[#e8eef7] focus:outline-none focus:ring-2 focus:ring-[#f5a623]/40 focus:border-[#f5a623]"
+                  className="border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-[#0a1628] focus:outline-none focus:ring-2 focus:ring-[#f5a623]/40 focus:border-[#f5a623]"
                 />
               </div>
 
@@ -280,10 +280,10 @@ export default function PreciosEditor({ initialPrices }: { initialPrices: FuelPr
                       className={`relative w-10 h-5 rounded-full transition-colors ${st.is_available ? "bg-green-500" : "bg-slate-300"}`}
                     >
                       <span
-                        className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white/[0.04] rounded-full shadow transition-transform ${st.is_available ? "translate-x-5" : "translate-x-0"}`}
+                        className={`absolute top-0.5 left-0.5 w-4 h-4 bg-slate-50 rounded-full shadow transition-transform ${st.is_available ? "translate-x-5" : "translate-x-0"}`}
                       />
                     </button>
-                    <span className="text-sm font-medium text-[#cdd9ea]">
+                    <span className="text-sm font-medium text-slate-700">
                       {st.is_available ? "Disponible para despacho" : "Sin disponibilidad"}
                     </span>
                   </label>
@@ -297,10 +297,10 @@ export default function PreciosEditor({ initialPrices }: { initialPrices: FuelPr
                       className={`relative w-10 h-5 rounded-full transition-colors ${st.is_visible ? "bg-[#f5a623]" : "bg-slate-300"}`}
                     >
                       <span
-                        className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white/[0.04] rounded-full shadow transition-transform ${st.is_visible ? "translate-x-5" : "translate-x-0"}`}
+                        className={`absolute top-0.5 left-0.5 w-4 h-4 bg-slate-50 rounded-full shadow transition-transform ${st.is_visible ? "translate-x-5" : "translate-x-0"}`}
                       />
                     </button>
-                    <span className="text-sm font-medium text-[#cdd9ea]">
+                    <span className="text-sm font-medium text-slate-700">
                       {st.is_visible ? "Visible en el sitio" : "Oculto del sitio"}
                     </span>
                   </label>
@@ -309,7 +309,7 @@ export default function PreciosEditor({ initialPrices }: { initialPrices: FuelPr
             </div>
 
             {/* Save row */}
-            <div className="px-6 py-4 border-t border-white/[0.06] flex items-center justify-between gap-4 bg-white/[0.02]">
+            <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-between gap-4 bg-slate-50/60">
               {res && (
                 <span
                   className={`flex items-center gap-1.5 text-sm font-medium ${res.ok ? "text-green-600" : "text-red-600"}`}

@@ -51,9 +51,9 @@ export default function ExportButton({
       onClick={handleDownload}
       disabled={loading}
       title="Descargar Excel (.xlsx)"
-      className={`admin-btn-ghost shrink-0 ${error ? "!border-red-500/40 !text-red-300" : ""} ${className}`}
+      className={`admin-btn-ghost shrink-0 ${error ? "!border-red-300 !text-red-600" : ""} ${className}`}
     >
-      {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileSpreadsheet className="w-4 h-4 text-[#2bbe6a]" />}
+      {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileSpreadsheet className="w-4 h-4 text-[#1a6b3c]" />}
       <span className="hidden sm:inline">{error ? "Error al exportar" : loading ? "Generando…" : label}</span>
     </button>
   );

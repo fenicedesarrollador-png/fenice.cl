@@ -30,13 +30,13 @@ export default async function AdminPromocionesPage() {
 
       <div className="grid grid-cols-3 gap-3 mb-4">
         {[
-          { label: "Total", value: promos.length, color: "text-[#e8eef7]" },
-          { label: "Activas", value: activas, color: "text-[#2bbe6a]" },
-          { label: "Destacadas", value: destacadas, color: "text-[#f5a623]" },
+          { label: "Total", value: promos.length, color: "text-[#0a1628]" },
+          { label: "Activas", value: activas, color: "text-[#1a6b3c]" },
+          { label: "Destacadas", value: destacadas, color: "text-[#b87608]" },
         ].map((s) => (
           <div key={s.label} className="admin-card px-4 py-3 text-center">
             <p className={`text-[26px] leading-none font-black tabular-nums ${s.color}`}>{s.value}</p>
-            <p className="text-[11px] text-[#94a7c2] font-bold mt-1.5">{s.label}</p>
+            <p className="text-[11px] text-slate-500 font-bold mt-1.5">{s.label}</p>
           </div>
         ))}
       </div>
@@ -52,14 +52,14 @@ export default async function AdminPromocionesPage() {
                 <div className="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center shrink-0 text-pink-500"><Tag className="w-4.5 h-4.5" /></div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
-                    {p.destacado && <Star className="w-3.5 h-3.5 text-[#f5a623] fill-[#f5a623] shrink-0" />}
-                    <p className="font-black text-[#e8eef7] text-sm line-clamp-1">{p.titulo}</p>
+                    {p.destacado && <Star className="w-3.5 h-3.5 text-[#b87608] fill-[#f5a623] shrink-0" />}
+                    <p className="font-black text-[#0a1628] text-sm line-clamp-1">{p.titulo}</p>
                   </div>
                   <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                    {p.descuento_texto && <span className="text-[10px] bg-[#f5a623]/12 text-[#f8c46a] font-black px-1.5 py-0.5 rounded-md border border-[#f5a623]/20">{p.descuento_texto}</span>}
-                    {p.codigo && <span className="text-[10px] font-mono bg-white/8 text-[#cdd9ea] font-bold px-1.5 py-0.5 rounded-md tracking-wider">{p.codigo}</span>}
-                    <span className="text-[11px] text-[#94a7c2] flex items-center gap-1"><Calendar className="w-3 h-3" />{new Date(p.fecha_inicio).toLocaleDateString("es-CL", { dateStyle: "short" })} → {new Date(p.fecha_fin).toLocaleDateString("es-CL", { dateStyle: "short" })}</span>
-                    {vigente && p.activo && <span className="text-[10px] text-[#2bbe6a] font-black">● En curso</span>}
+                    {p.descuento_texto && <span className="text-[10px] bg-[#f5a623]/12 text-[#b87608] font-black px-1.5 py-0.5 rounded-md border border-[#f5a623]/20">{p.descuento_texto}</span>}
+                    {p.codigo && <span className="text-[10px] font-mono bg-slate-100 text-slate-700 font-bold px-1.5 py-0.5 rounded-md tracking-wider">{p.codigo}</span>}
+                    <span className="text-[11px] text-slate-500 flex items-center gap-1"><Calendar className="w-3 h-3" />{new Date(p.fecha_inicio).toLocaleDateString("es-CL", { dateStyle: "short" })} → {new Date(p.fecha_fin).toLocaleDateString("es-CL", { dateStyle: "short" })}</span>
+                    {vigente && p.activo && <span className="text-[10px] text-[#1a6b3c] font-black">● En curso</span>}
                   </div>
                 </div>
                 <div className="hidden sm:block shrink-0"><Badge tone={p.activo ? "green" : "neutral"} dot>{p.activo ? "Activa" : "Inactiva"}</Badge></div>
