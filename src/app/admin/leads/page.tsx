@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import SolicitudesTable, { type Solicitud } from "./SolicitudesTable";
 import { PageHeader } from "../_components/ui";
+import { ChartCard, TrendChart, DonutChart } from "../_components/charts";
+import { dailySeries, countBy, type FechaRow } from "@/lib/admin/stats";
 import { Inbox } from "lucide-react";
 
 export const metadata: Metadata = { title: "Solicitudes" };
@@ -65,14 +67,52 @@ export default async function SolicitudesPage({
     })),
   ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
+  const ESTADO_LABEL: Record<string, string> = {
+    nuevo: "Nuevas",
+    contactado: "Contactadas",
+    en_proceso: "En proceso",
+    cotizado: "Cotizadas",
+    cerrado: "Cerradas",
+  };
+  const trend = dailySeries(
+    [
+      { key: "cotizaciones", rows: cotizaciones as FechaRow[] },
+      { key: "contactos", rows: leads as FechaRow[] },
+    ],
+    30,
+  );
+  const porEstado = countBy(solicitudes as unknown as Record<string, unknown>[], "estado").map((d) => ({
+    ...d,
+    label: ESTADO_LABEL[d.label] ?? d.label,
+  }));
+
   return (
-    <div className="p-4 sm:p-6 lg:p-7 max-w-[1200px] mx-auto admin-rise">
+    <div className="p-4 sm:p-6 lg:p-7 max-w-[1200px] mx-auto admin-rise space-y-5">
       <PageHeader
         icon={Inbox}
         accent="green"
         title="Solicitudes"
         subtitle="Cotizaciones y mensajes de contacto, todo en una bandeja"
       />
+
+      <div className="grid lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2">
+          <ChartCard title="Volumen de solicitudes" subtitle="Últimos 30 días">
+            <TrendChart
+              data={trend}
+              series={[
+                { key: "cotizaciones", label: "Cotizaciones" },
+                { key: "contactos", label: "Contactos" },
+              ]}
+              height={205}
+            />
+          </ChartCard>
+        </div>
+        <ChartCard title="Estados de la bandeja" subtitle="Historial completo">
+          <DonutChart data={porEstado} height={160} />
+        </ChartCard>
+      </div>
+
       <SolicitudesTable solicitudes={solicitudes} origenInicial={origenInicial} />
     </div>
   );

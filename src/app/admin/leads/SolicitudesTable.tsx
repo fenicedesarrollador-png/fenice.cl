@@ -4,9 +4,10 @@ import { useState, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import {
-  Mail, Phone, MapPin, Package, MessageSquare, Building2, Search, Download,
-  X, StickyNote, Inbox, Clock, ChevronDown, Filter, DollarSign,
+  Mail, Phone, MapPin, Package, MessageSquare, Building2, Search,
+  X, StickyNote, Inbox, Clock, ChevronDown, Filter, DollarSign, FileDown, Loader2,
 } from "lucide-react";
+import ExportButton from "../_components/ExportButton";
 
 export type Solicitud = {
   id: string;
@@ -57,21 +58,6 @@ function tableFor(origen: Solicitud["origen"]) {
   return origen === "cotizacion" ? "cotizaciones" : "leads";
 }
 
-function exportCSV(items: Solicitud[]) {
-  const headers = ["Origen", "Nombre", "Empresa", "RUT", "Email", "Teléfono", "Comuna", "Servicio", "Volumen", "Frecuencia", "Estado", "Fecha"];
-  const rows = items.map((s) => [
-    ORIGEN_CFG[s.origen].label, s.nombre, s.empresa ?? "", s.rut_empresa ?? "", s.email ?? "",
-    s.telefono ?? "", s.comuna ?? "", s.servicio ?? "", s.volumen ?? "", s.frecuencia ?? "",
-    s.estado, new Date(s.created_at).toLocaleDateString("es-CL"),
-  ]);
-  const csv = [headers, ...rows].map((r) => r.map((c) => `"${c}"`).join(",")).join("\n");
-  const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = `solicitudes_fenice_${new Date().toISOString().slice(0, 10)}.csv`; a.click();
-  URL.revokeObjectURL(url);
-}
-
 function WaIcon() {
   return (
     <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current">
@@ -97,6 +83,26 @@ export default function SolicitudesTable({
   const [openNote, setOpenNote] = useState<string | null>(null);
   const [noteText, setNoteText] = useState<Record<string, string>>({});
   const [savingNote, setSavingNote] = useState<string | null>(null);
+  const [pdfLoading, setPdfLoading] = useState<string | null>(null);
+
+  async function downloadPdf(s: Solicitud) {
+    setPdfLoading(s.id);
+    try {
+      const res = await fetch(`/api/admin/cotizaciones/${s.id}/pdf`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `cotizacion_${(s.empresa ?? s.nombre).toLowerCase().replace(/[^a-z0-9]+/g, "-")}_${s.id.slice(0, 8)}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      alert("No se pudo generar el PDF. Intenta de nuevo.");
+    } finally {
+      setPdfLoading(null);
+    }
+  }
 
   const filtered = useMemo(() => {
     let r = solicitudes;
@@ -162,7 +168,13 @@ export default function SolicitudesTable({
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar nombre, empresa, email, teléfono…" className="admin-input !pl-10 !pr-9" />
             {search && <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94a7c2] hover:text-[#cdd9ea]"><X className="w-4 h-4" /></button>}
           </div>
-          <button onClick={() => exportCSV(filtered)} className="admin-btn-ghost shrink-0"><Download className="w-4 h-4" /><span className="hidden sm:inline">Exportar</span></button>
+          <ExportButton
+            tipo="solicitudes"
+            params={{
+              ...(origenFilter !== "todos" ? { origen: origenFilter } : {}),
+              ...(estadoFilter !== "todos" ? { estado: estadoFilter } : {}),
+            }}
+          />
         </div>
 
         {/* Filtros de origen */}
@@ -285,6 +297,16 @@ export default function SolicitudesTable({
 
                     {/* Acciones */}
                     <div className="flex flex-wrap items-center gap-2">
+                      {s.origen === "cotizacion" && (
+                        <button
+                          onClick={() => downloadPdf(s)}
+                          disabled={pdfLoading === s.id}
+                          className="inline-flex items-center gap-1.5 bg-[#f5a623] hover:bg-[#e08a0a] disabled:opacity-60 text-[#2a1a00] text-[12px] font-black px-3 py-2 rounded-xl transition-colors shadow-sm shadow-[#f5a623]/25"
+                        >
+                          {pdfLoading === s.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileDown className="w-3.5 h-3.5" />}
+                          <span className="hidden sm:inline">PDF</span>
+                        </button>
+                      )}
                       {s.telefono && (
                         <a href={`https://wa.me/${s.telefono.replace(/\D/g, "")}?text=${encodeURIComponent(`Hola ${s.nombre}, recibimos tu ${origen.label.toLowerCase()} en Fenice SPA. ¿Podemos coordinar?`)}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#1fb959] text-white text-[12px] font-bold px-3 py-2 rounded-xl transition-colors shadow-sm shadow-[#25D366]/25"><WaIcon /> WhatsApp</a>
                       )}

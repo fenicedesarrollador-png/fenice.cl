@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import DeleteButton from "../_components/DeleteButton";
+import ExportButton from "../_components/ExportButton";
 import { PageHeader, PrimaryLink, EmptyState } from "../_components/ui";
 import { Building2, Plus, Edit2, Star } from "lucide-react";
 
@@ -23,6 +24,7 @@ export default async function AdminClientesPage() {
   return (
     <div className="p-4 sm:p-6 lg:p-7 max-w-[1200px] mx-auto admin-rise">
       <PageHeader icon={Building2} accent="green" title="Clientes" subtitle={`${clientes.length} empresa${clientes.length !== 1 ? "s" : ""} · ${activos} activa${activos !== 1 ? "s" : ""} en el sitio`}>
+        <ExportButton tipo="clientes" label="Excel" />
         <PrimaryLink href="/admin/clientes/nuevo" icon={Plus}>Agregar cliente</PrimaryLink>
       </PageHeader>
 

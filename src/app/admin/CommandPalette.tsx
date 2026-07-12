@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   LayoutDashboard, Inbox, Package, Building2, FileText, CalendarDays,
   Tag, Settings, Fuel, Users, ChartColumn, Plus, Search, CornerDownLeft, Globe,
+  DollarSign, BarChart3,
 } from "lucide-react";
 
 type Cmd = {
@@ -18,9 +19,12 @@ type Cmd = {
 const COMMANDS: Cmd[] = [
   { label: "Dashboard", icon: LayoutDashboard, action: (r) => r.push("/admin"), keywords: "inicio resumen" },
   { label: "Solicitudes", hint: "Leads y cotizaciones", icon: Inbox, action: (r) => r.push("/admin/leads"), keywords: "leads cotizaciones contactos" },
+  { label: "Cotizaciones", hint: "Gestión + PDF + Excel", icon: DollarSign, action: (r) => r.push("/admin/cotizaciones"), keywords: "pdf excel pipeline presupuestos" },
+  { label: "Reportes", hint: "Análisis y descargas", icon: BarChart3, action: (r) => r.push("/admin/reportes"), keywords: "graficos excel xlsx descargas analisis" },
   { label: "Precios de combustible", icon: Fuel, action: (r) => r.push("/admin/precios-combustible"), keywords: "diesel kerosene gas" },
   { label: "Productos", icon: Package, action: (r) => r.push("/admin/productos") },
   { label: "Clientes", icon: Building2, action: (r) => r.push("/admin/clientes"), keywords: "logos empresas" },
+  { label: "Equipo", icon: Users, action: (r) => r.push("/admin/equipo"), keywords: "miembros fotos nosotros" },
   { label: "Blog", icon: FileText, action: (r) => r.push("/admin/blog"), keywords: "posts articulos" },
   { label: "Eventos", icon: CalendarDays, action: (r) => r.push("/admin/eventos") },
   { label: "Promociones", icon: Tag, action: (r) => r.push("/admin/promociones") },

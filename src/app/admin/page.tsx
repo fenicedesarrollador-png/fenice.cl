@@ -6,6 +6,8 @@ import {
   Plus, DollarSign, Users, Activity, Zap, Fuel, Settings,
   TrendingUp, Sparkles, Clock,
 } from "lucide-react";
+import { ChartCard, TrendChart, DonutChart, RankBars } from "./_components/charts";
+import { dailySeries, countBy, inLastDays, monthDelta, isoDaysAgo, type FechaRow } from "@/lib/admin/stats";
 
 export const metadata: Metadata = { title: "Dashboard | Admin Fenice" };
 
@@ -17,6 +19,10 @@ export default async function AdminDashboard() {
   };
   let recentLeads: { id: string; nombre: string; estado: string; created_at: string; comuna?: string }[] = [];
   let recentCotizaciones: { id: string; nombre: string; empresa: string; estado: string; created_at: string }[] = [];
+  let cotRows: FechaRow[] = [];
+  let leadRows: FechaRow[] = [];
+
+  const desde90 = isoDaysAgo(90);
 
   try {
     const supabase = await createClient();
@@ -25,6 +31,7 @@ export default async function AdminDashboard() {
       cotRes, cotNuevasRes,
       prodRes, blogRes, eventosRes, promosRes, clientesRes,
       recentLeadsRes, recentCotRes,
+      cotRowsRes, leadRowsRes,
     ] = await Promise.all([
       supabase.from("leads").select("id", { count: "exact", head: true }),
       supabase.from("leads").select("id", { count: "exact", head: true }).eq("estado", "nuevo"),
@@ -39,6 +46,8 @@ export default async function AdminDashboard() {
       supabase.from("clientes").select("id", { count: "exact", head: true }).eq("activo", true),
       supabase.from("leads").select("id, nombre, estado, created_at, comuna").order("created_at", { ascending: false }).limit(4),
       supabase.from("cotizaciones").select("id, nombre, empresa, estado, created_at").order("created_at", { ascending: false }).limit(3),
+      supabase.from("cotizaciones").select("created_at, servicio_solicitado, comuna, estado").gte("created_at", desde90).limit(3000),
+      supabase.from("leads").select("created_at, tipo_operacion, comuna, estado").gte("created_at", desde90).limit(3000),
     ]);
     stats = {
       leads: leadsRes.count ?? 0,
@@ -55,10 +64,29 @@ export default async function AdminDashboard() {
     };
     if (recentLeadsRes.data) recentLeads = recentLeadsRes.data;
     if (recentCotRes.data) recentCotizaciones = recentCotRes.data;
+    if (cotRowsRes.data) cotRows = cotRowsRes.data as FechaRow[];
+    if (leadRowsRes.data) leadRows = leadRowsRes.data as FechaRow[];
   } catch {}
 
   const totalAlertas = stats.leadsNuevos + stats.cotizacionesNuevas;
   const tasaCierre = stats.leads > 0 ? Math.round((stats.leadsCerrados / stats.leads) * 100) : 0;
+
+  // ── Datos para gráficos (últimos 30/90 días) ─────────────────────────
+  const trend30 = dailySeries(
+    [
+      { key: "cotizaciones", rows: cotRows },
+      { key: "contactos", rows: leadRows },
+    ],
+    30,
+  );
+  const serviciosDonut = countBy(inLastDays(cotRows, 90), "servicio_solicitado");
+  const comunasRank = countBy(
+    [...inLastDays(cotRows, 90), ...inLastDays(leadRows, 90)],
+    "comuna",
+    "Sin comuna",
+  ).filter((c) => c.label !== "Sin comuna");
+  const cotDelta = monthDelta(cotRows);
+  const leadDelta = monthDelta(leadRows);
 
   const ESTADO_TONE: Record<string, string> = {
     nuevo: "bg-red-500/15 text-red-300",
@@ -177,6 +205,33 @@ export default async function AdminDashboard() {
         })}
       </div>
 
+      {/* ── Análisis comercial (últimos 30/90 días) ────────────────────── */}
+      <div className="grid lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2">
+          <ChartCard
+            title="Solicitudes por día"
+            subtitle={`Últimos 30 días · Este mes: ${cotDelta.actual} cotizaciones${cotDelta.deltaPct !== null ? ` (${cotDelta.deltaPct >= 0 ? "+" : ""}${cotDelta.deltaPct}% vs mes anterior)` : ""} y ${leadDelta.actual} contactos`}
+            actions={
+              <Link href="/admin/reportes" className="text-[12px] font-bold text-[#2bbe6a] hover:text-[#5fe39a] flex items-center gap-1 transition-colors whitespace-nowrap">
+                Ver reportes <ArrowRight className="w-3 h-3" />
+              </Link>
+            }
+          >
+            <TrendChart
+              data={trend30}
+              series={[
+                { key: "cotizaciones", label: "Cotizaciones" },
+                { key: "contactos", label: "Contactos" },
+              ]}
+              height={248}
+            />
+          </ChartCard>
+        </div>
+        <ChartCard title="Servicios más cotizados" subtitle="Últimos 90 días">
+          <DonutChart data={serviciosDonut} height={185} />
+        </ChartCard>
+      </div>
+
       {/* Main grid */}
       <div className="grid lg:grid-cols-3 gap-4">
         {/* Actividad reciente */}
@@ -258,6 +313,11 @@ export default async function AdminDashboard() {
               Gestionar pipeline <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
+
+          {/* Zonas con más demanda */}
+          <ChartCard title="Zonas con más demanda" subtitle="Comunas · últimos 90 días">
+            <RankBars data={comunasRank} />
+          </ChartCard>
 
           {/* Quick actions */}
           <div className="admin-card overflow-hidden">

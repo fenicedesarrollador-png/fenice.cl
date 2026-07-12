@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import DeleteButton from "../_components/DeleteButton";
+import ExportButton from "../_components/ExportButton";
 import { PageHeader, PrimaryLink, EmptyState } from "../_components/ui";
 import { Users, Plus, Edit2, Mail, UserRound } from "lucide-react";
 
@@ -31,6 +32,7 @@ export default async function AdminEquipoPage() {
         title="Equipo"
         subtitle={`${miembros.length} miembro${miembros.length !== 1 ? "s" : ""} · ${activos} visible${activos !== 1 ? "s" : ""} en /nosotros`}
       >
+        <ExportButton tipo="equipo" label="Excel" />
         <PrimaryLink href="/admin/equipo/nuevo" icon={Plus}>Agregar miembro</PrimaryLink>
       </PageHeader>
 
