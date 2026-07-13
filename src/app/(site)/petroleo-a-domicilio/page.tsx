@@ -4,7 +4,7 @@ import {
   MapPin, FileText, ChevronRight
 } from "lucide-react";
 import CTASection from "@/components/CTASection";
-import { COMUNAS, SITE_CONFIG } from "@/lib/config";
+import { COMUNAS_DESTACADAS, SITE_CONFIG } from "@/lib/config";
 import { buildMetadata } from "@/lib/seo";
 
 // Intención diferenciada de la home: despacho URGENTE/PROGRAMADO (no compite con la genérica).
@@ -161,7 +161,7 @@ export default function PetroleoADomicilioPage() {
             </Link>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-            {COMUNAS.map((c) => (
+            {COMUNAS_DESTACADAS.map((c) => (
               <Link
                 key={c.slug}
                 href={`/cobertura/petroleo-a-domicilio-${c.slug}`}

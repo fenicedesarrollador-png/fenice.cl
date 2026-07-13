@@ -23,20 +23,9 @@ export const SITE_CONFIG = {
   review_count: 0,
 } as const;
 
-export const COMUNAS = [
-  { nombre: "Maipú", slug: "maipu" },
-  { nombre: "Pudahuel", slug: "pudahuel" },
-  { nombre: "Quilicura", slug: "quilicura" },
-  { nombre: "Puente Alto", slug: "puente-alto" },
-  { nombre: "San Bernardo", slug: "san-bernardo" },
-  { nombre: "Colina", slug: "colina" },
-  { nombre: "Lampa", slug: "lampa" },
-  { nombre: "Buin", slug: "buin" },
-  { nombre: "Las Condes", slug: "las-condes" },
-  { nombre: "Providencia", slug: "providencia" },
-  { nombre: "Valparaíso", slug: "valparaiso" },
-  { nombre: "Rancagua", slug: "rancagua" },
-] as const;
+// Cobertura de comunas: la fuente de verdad vive en "./comunas". Se re-exporta
+// aquí para mantener retrocompatibilidad con todos los imports existentes.
+export { COMUNAS, COMUNAS_DESTACADAS } from "./comunas";
 
 export const SERVICIOS = [
   {

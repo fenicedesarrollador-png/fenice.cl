@@ -1,36 +1,49 @@
 import Link from "next/link";
 import CTASection from "@/components/CTASection";
-import { COMUNAS } from "@/lib/config";
+import { COMUNAS_COBERTURA, PROVINCIAS_RM } from "@/lib/comunas";
 import { buildMetadata } from "@/lib/seo";
 import { MapPin, ChevronRight } from "lucide-react";
 
 export const metadata = buildMetadata({
-  title: "Cobertura de Despacho de Petróleo | Comunas de Santiago y RM",
+  title: "Cobertura de Petróleo a Domicilio | Todas las Comunas de la RM",
   description:
-    "Fenice SPA despacha petróleo diesel a domicilio en las principales comunas de la Región Metropolitana de Santiago, además de Valparaíso y Rancagua. Consulta si llegamos a tu zona y cotiza por WhatsApp.",
+    "Fenice SPA despacha petróleo diesel a domicilio en las 52 comunas de la Región Metropolitana de Santiago, además de Valparaíso y Rancagua. Encuentra tu comuna y cotiza por WhatsApp.",
   path: "/cobertura",
   keywords: [
     "cobertura petróleo a domicilio santiago",
     "comunas despacho de combustible RM",
     "petróleo a domicilio región metropolitana",
     "distribuidor de combustible santiago",
+    "petróleo a domicilio todas las comunas",
   ],
 });
 
-const comunaDescriptions: Record<string, string> = {
-  "maipu": "Zona industrial y residencial de alto consumo en el poniente de Santiago.",
-  "pudahuel": "Sector logístico e industrial, cercano al Aeropuerto de Santiago.",
-  "quilicura": "Parques industriales y bodegas en el norte de Santiago.",
-  "puente-alto": "La comuna más poblada de Chile, con fuerte presencia industrial.",
-  "san-bernardo": "Sector industrial y de construcción al sur de Santiago.",
-  "colina": "Zona periurbana con faenas agrícolas, mineras y generadores.",
-  "lampa": "Sector rural-industrial con alta demanda de combustible para maquinaria.",
-  "buin": "Zona agrícola y vitivinícola al sur de la RM.",
-  "las-condes": "Sector corporativo con edificios y generadores de respaldo.",
-  "providencia": "Zona comercial y corporativa del sector oriente de Santiago.",
-  "valparaiso": "Principal puerto de Chile, con industria naviera y manufacturera.",
-  "rancagua": "Capital de la Región de O'Higgins, con fuerte actividad minera.",
-};
+const rmComunas = COMUNAS_COBERTURA.filter((c) => c.region === "Región Metropolitana");
+const otrasComunas = COMUNAS_COBERTURA.filter((c) => c.region !== "Región Metropolitana");
+const totalRM = rmComunas.length;
+
+function ComunaCard({ nombre, slug, perfil }: { nombre: string; slug: string; perfil: string }) {
+  return (
+    <Link
+      href={`/cobertura/petroleo-a-domicilio-${slug}`}
+      data-analytics-id={`cobertura_${slug}`}
+      data-analytics-label={nombre}
+      data-analytics-cta="coverage_navigation"
+      className="group flex items-start gap-4 bg-slate-50 hover:bg-white border border-slate-100 hover:border-orange-200 hover:shadow-md rounded-xl p-5 transition-all"
+    >
+      <div className="w-9 h-9 rounded-lg bg-white group-hover:bg-orange-50 border border-slate-200 group-hover:border-orange-200 flex items-center justify-center shrink-0 transition-all">
+        <MapPin className="w-4 h-4 text-slate-400 group-hover:text-orange-500 transition-colors" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="font-semibold text-slate-900 group-hover:text-orange-700 transition-colors leading-tight mb-1">
+          Petróleo en {nombre}
+        </p>
+        <p className="text-slate-500 text-xs leading-relaxed capitalize">Perfil {perfil}.</p>
+      </div>
+      <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-orange-500 shrink-0 mt-0.5 transition-colors" />
+    </Link>
+  );
+}
 
 export default function CoberturaPage() {
   return (
@@ -45,18 +58,18 @@ export default function CoberturaPage() {
             <span className="text-orange-400 text-xs font-semibold uppercase tracking-widest">Zonas de despacho</span>
           </div>
           <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-            Cobertura de petróleo a domicilio
+            Cobertura de petróleo a domicilio en toda la Región Metropolitana
           </h1>
           <p className="text-lg text-slate-300 max-w-2xl">
-            Fenice SPA despacha petróleo e instala estanques en las principales comunas de Santiago
-            y en zonas de Valparaíso y Rancagua.
+            Fenice SPA despacha petróleo diesel e instala estanques en las {totalRM} comunas de la
+            Región Metropolitana de Santiago, además de zonas de Valparaíso y Rancagua.
           </p>
 
           {/* Stats */}
           <div className="flex flex-wrap gap-6 mt-8">
             {[
-              { val: "12+", label: "Comunas cubiertas" },
-              { val: "3", label: "Regiones" },
+              { val: `${totalRM}`, label: "Comunas de la RM" },
+              { val: "6", label: "Provincias cubiertas" },
               { val: "24h", label: "Despacho urgente" },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-3">
@@ -68,36 +81,50 @@ export default function CoberturaPage() {
         </div>
       </section>
 
-      {/* Grid comunas */}
+      {/* Grid comunas agrupado por provincia */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-slate-600 max-w-2xl mb-10 leading-relaxed">
-            Desde nuestra base operativa en La Granja, cubrimos la Región Metropolitana con despacho
-            de petróleo a domicilio para empresas e industria. Selecciona tu comuna para ver
+          <p className="text-slate-600 max-w-3xl mb-12 leading-relaxed">
+            Desde nuestra base operativa en La Granja, cubrimos toda la Región Metropolitana con
+            despacho de petróleo a domicilio para empresas e industria. Selecciona tu comuna para ver
             información específica de cobertura, tiempos de despacho y cómo cotizar.
           </p>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {COMUNAS.map((c) => (
-              <Link
-                key={c.slug}
-                href={`/cobertura/petroleo-a-domicilio-${c.slug}`}
-                className="group flex items-start gap-4 bg-slate-50 hover:bg-white border border-slate-100 hover:border-orange-200 hover:shadow-md rounded-xl p-5 transition-all"
-              >
-                <div className="w-9 h-9 rounded-lg bg-white group-hover:bg-orange-50 border border-slate-200 group-hover:border-orange-200 flex items-center justify-center shrink-0 transition-all">
-                  <MapPin className="w-4 h-4 text-slate-400 group-hover:text-orange-500 transition-colors" />
+          <div className="space-y-14">
+            {PROVINCIAS_RM.map((provincia) => {
+              const comunas = rmComunas.filter((c) => c.provincia === provincia);
+              if (comunas.length === 0) return null;
+              return (
+                <div key={provincia}>
+                  <div className="flex items-center gap-3 mb-6">
+                    <h2 className="text-lg font-bold text-slate-900">{provincia}</h2>
+                    <span className="text-xs font-semibold text-slate-400 bg-slate-100 rounded-full px-2.5 py-1">
+                      {comunas.length} comunas
+                    </span>
+                    <span className="flex-1 h-px bg-slate-100" />
+                  </div>
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {comunas.map((c) => (
+                      <ComunaCard key={c.slug} nombre={c.nombre} slug={c.slug} perfil={c.perfil} />
+                    ))}
+                  </div>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <p className="font-semibold text-slate-900 group-hover:text-orange-700 transition-colors leading-tight mb-1">
-                    Petróleo en {c.nombre}
-                  </p>
-                  <p className="text-slate-500 text-xs leading-relaxed line-clamp-2">
-                    {comunaDescriptions[c.slug] ?? "Cobertura de despacho de petróleo a domicilio."}
-                  </p>
+              );
+            })}
+
+            {otrasComunas.length > 0 && (
+              <div>
+                <div className="flex items-center gap-3 mb-6">
+                  <h2 className="text-lg font-bold text-slate-900">Cobertura extendida (otras regiones)</h2>
+                  <span className="flex-1 h-px bg-slate-100" />
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-orange-500 shrink-0 mt-0.5 transition-colors" />
-              </Link>
-            ))}
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {otrasComunas.map((c) => (
+                    <ComunaCard key={c.slug} nombre={c.nombre} slug={c.slug} perfil={c.perfil} />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -116,8 +143,8 @@ export default function CoberturaPage() {
                 desc: "También llegamos a Valparaíso y Rancagua para clientes con operaciones en múltiples regiones.",
               },
               {
-                title: "¿No ves tu comuna?",
-                desc: "Contáctanos y evaluamos la cobertura. Ampliamos nuestras rutas según la demanda de clientes industriales.",
+                title: "¿Operación en varias comunas?",
+                desc: "Coordinamos despachos programados y rutas fijas para empresas con faenas o sucursales en distintas comunas de la RM.",
               },
             ].map((item) => (
               <div key={item.title} className="bg-white rounded-xl p-6 border border-slate-100">

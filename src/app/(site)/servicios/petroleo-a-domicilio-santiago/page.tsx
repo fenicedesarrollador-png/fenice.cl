@@ -2,7 +2,7 @@ import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Link from "next/link";
-import { COMUNAS } from "@/lib/config";
+import { COMUNAS_DESTACADAS } from "@/lib/config";
 import { buildMetadata, serviceSchema as buildServiceSchema } from "@/lib/seo";
 import { CheckCircle2, MapPin, Clock, FileText, Truck, Building2 } from "lucide-react";
 
@@ -150,7 +150,7 @@ export default function PetroleoSantiagoPage() {
                   Despachamos petróleo a domicilio en comunas de Santiago como:
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {COMUNAS.map((c) => (
+                  {COMUNAS_DESTACADAS.map((c) => (
                     <Link
                       key={c.slug}
                       href={`/cobertura/petroleo-a-domicilio-${c.slug}`}

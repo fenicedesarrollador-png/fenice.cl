@@ -13,12 +13,16 @@ interface ComunaConfig {
   perfil: string; // tipo de clientes dominante
   contexto: string; // párrafo de contexto único
   beneficios: string[]; // 3-4 bullets únicos
+  region?: string; // Región administrativa (default: Región Metropolitana)
 }
 
+const REGION_DEFAULT = "Región Metropolitana";
+
 export function buildComunaMetadata(c: ComunaConfig): Metadata {
+  const region = c.region ?? REGION_DEFAULT;
   return buildMetadata({
     title: `Petróleo a Domicilio en ${c.nombre} | Despacho de Diesel para Empresas`,
-    description: `Distribuidor de petróleo diesel a domicilio en ${c.nombre}, Región Metropolitana. Despacho rápido para empresas e industria, coordinación por WhatsApp y factura electrónica. Cotiza ahora.`,
+    description: `Distribuidor de petróleo diesel a domicilio en ${c.nombre}, ${region}. Despacho rápido para empresas e industria, coordinación por WhatsApp y factura electrónica. Cotiza ahora.`,
     path: `/cobertura/petroleo-a-domicilio-${c.slug}`,
     keywords: comunaKeywords(c.nombre),
   });
@@ -26,6 +30,7 @@ export function buildComunaMetadata(c: ComunaConfig): Metadata {
 
 export function buildComunaSchema(c: ComunaConfig) {
   const base = SITE_CONFIG.site_url;
+  const region = c.region ?? REGION_DEFAULT;
   return {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -33,8 +38,8 @@ export function buildComunaSchema(c: ComunaConfig) {
     serviceType: `Despacho de petróleo a domicilio en ${c.nombre}`,
     url: `${base}/cobertura/petroleo-a-domicilio-${c.slug}`,
     provider: { "@id": `${base}/#localbusiness` },
-    areaServed: { "@type": "City", name: c.nombre, containedInPlace: { "@type": "AdministrativeArea", name: "Región Metropolitana de Santiago" } },
-    description: `Despacho de petróleo diesel para empresas e industria en ${c.nombre}, Región Metropolitana.`,
+    areaServed: { "@type": "City", name: c.nombre, containedInPlace: { "@type": "AdministrativeArea", name: region } },
+    description: `Despacho de petróleo diesel para empresas e industria en ${c.nombre}, ${region}.`,
     availableChannel: {
       "@type": "ServiceChannel",
       serviceUrl: `${base}/cotizacion`,

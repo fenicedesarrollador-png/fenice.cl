@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Menu, X, ChevronDown, Phone, Fuel, Truck, Container, MapPin, ArrowRight, Waves } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import { SERVICIOS } from "@/lib/config";
@@ -13,12 +14,28 @@ export default function Header({ config }: { config: SiteConfig }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Acceso oculto al panel: 5 clics seguidos sobre el logo abren el login de admin.
+  // Un clic normal (o con pausas) sigue navegando al inicio con normalidad.
+  const tapCountRef = useRef(0);
+  const lastTapRef = useRef(0);
+  const handleLogoClick = (e: React.MouseEvent) => {
+    const now = Date.now();
+    tapCountRef.current = now - lastTapRef.current > 1500 ? 1 : tapCountRef.current + 1;
+    lastTapRef.current = now;
+    if (tapCountRef.current >= 5) {
+      e.preventDefault();
+      tapCountRef.current = 0;
+      router.push("/login");
+    }
+  };
 
   return (
     <>
@@ -56,7 +73,7 @@ export default function Header({ config }: { config: SiteConfig }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-[70px]">
             {/* Logo */}
-            <Link href="/" className="flex items-center shrink-0" aria-label="Fenice SPA — Inicio">
+            <Link href="/" className="flex items-center shrink-0" aria-label="Fenice SPA — Inicio" onClick={handleLogoClick}>
               <BrandLogo className="h-12 w-[164px] lg:h-[58px] lg:w-[198px]" priority />
             </Link>
 

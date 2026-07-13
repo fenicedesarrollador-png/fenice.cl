@@ -2,7 +2,7 @@ import Link from "next/link";
 import { MapPin, Phone, Mail, Clock, ArrowUpRight } from "lucide-react";
 import ConsentPreferencesButton from "@/components/analytics/ConsentPreferencesButton";
 import BrandLogo from "@/components/BrandLogo";
-import { COMUNAS, SERVICIOS } from "@/lib/config";
+import { COMUNAS_DESTACADAS, SERVICIOS } from "@/lib/config";
 import type { SiteConfig } from "@/lib/getSiteConfig";
 
 export default function Footer({ config }: { config: SiteConfig }) {
@@ -99,7 +99,7 @@ export default function Footer({ config }: { config: SiteConfig }) {
           <div>
             <h3 className="text-white text-xs font-bold uppercase tracking-widest mb-5">Cobertura RM</h3>
             <ul className="grid grid-cols-2 gap-x-3 gap-y-2">
-              {COMUNAS.map((c) => (
+              {COMUNAS_DESTACADAS.map((c) => (
                 <li key={c.slug}>
                   <Link
                     href={`/cobertura/petroleo-a-domicilio-${c.slug}`}
@@ -112,6 +112,17 @@ export default function Footer({ config }: { config: SiteConfig }) {
                   </Link>
                 </li>
               ))}
+              <li className="col-span-2 mt-1">
+                <Link
+                  href="/cobertura"
+                  data-analytics-id="footer_cobertura_todas"
+                  data-analytics-label="Ver todas las comunas"
+                  data-analytics-cta="footer_navigation"
+                  className="text-xs font-semibold text-[#f5a623] hover:text-[#d4891a] transition-colors"
+                >
+                  Ver las 52 comunas de la RM →
+                </Link>
+              </li>
             </ul>
           </div>
 

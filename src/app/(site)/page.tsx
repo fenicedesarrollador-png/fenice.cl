@@ -11,7 +11,7 @@ import {
   ChevronRight, Users, Award, Clipboard,
   Route, Shield, BarChart3, HeadphonesIcon, Container
 } from "lucide-react";
-import { COMUNAS, SITE_CONFIG } from "@/lib/config";
+import { COMUNAS_DESTACADAS, SITE_CONFIG } from "@/lib/config";
 import { buildMetadata, faqSchema, jsonLd, CORE_KEYWORDS } from "@/lib/seo";
 
 export const revalidate = 60;
@@ -435,7 +435,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" data-reveal>
-            {COMUNAS.map((c) => (
+            {COMUNAS_DESTACADAS.map((c) => (
               <Link
                 key={c.slug}
                 href={`/cobertura/petroleo-a-domicilio-${c.slug}`}
