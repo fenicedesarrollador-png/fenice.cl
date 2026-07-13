@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
-import FirstVisitLoader from "@/components/FirstVisitLoader";
+import FeniceLoader from "@/components/FeniceLoader";
 import ScrollReveal from "@/components/ScrollReveal";
 import { getSiteConfig } from "@/lib/getSiteConfig";
 import { organizationSchema, websiteSchema, localBusinessSchema, jsonLd } from "@/lib/seo";
@@ -27,7 +27,9 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
 
   return (
     <>
-      <FirstVisitLoader />
+      {/* Precarga la imagen del camion para que el loader aparezca completo desde el primer frame. */}
+      <link rel="preload" as="image" href="/loader/truck.webp" />
+      <FeniceLoader />
       <ScrollReveal />
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(seoGraph)} />
       <AnalyticsProvider>
