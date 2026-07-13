@@ -318,7 +318,7 @@ export function aboutPageSchema() {
     url: `${BASE}/nosotros`,
     name: "Sobre Fenice SPA — Distribuidor de combustible en la Región Metropolitana",
     description:
-      "Conoce a Fenice SPA: empresa dedicada a la distribución de diésel, kerosene y gas envasado residencial para empresas, operaciones y hogares en Santiago y la Región Metropolitana.",
+      "Conoce a Fenice SPA: empresa dedicada a la distribución de diésel y kerosene para empresas, operaciones y hogares en Santiago y la Región Metropolitana.",
     inLanguage: "es-CL",
     about: { "@id": `${BASE}/#organization` },
     isPartOf: { "@id": `${BASE}/#website` },

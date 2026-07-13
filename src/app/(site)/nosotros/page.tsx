@@ -69,7 +69,7 @@ const sectionNav = [
 
 /* Banda de confianza / impacto (E-E-A-T, contenido indexable) */
 const stats = [
-  { value: "3", label: "Líneas de producto", hint: "Diésel · Kerosene · Gas" },
+  { value: "2", label: "Líneas de producto", hint: "Diésel · Kerosene" },
   { value: "RM", label: "Cobertura operativa", hint: "Región Metropolitana" },
   { value: "B2B + B2C", label: "Empresas y hogares", hint: "Atención dual" },
   { value: "100%", label: "Procesos documentados", hint: "Factura electrónica" },
@@ -85,11 +85,6 @@ const productHighlights: IconCard[] = [
     icon: Flame,
     title: "Kerosene para calefacción",
     text: "Alternativas para calefacción y requerimientos estacionales.",
-  },
-  {
-    icon: House,
-    title: "Gas envasado residencial",
-    text: "Energía para hogares y necesidades cotidianas de uso residencial.",
   },
 ];
 
@@ -113,13 +108,6 @@ const products: ProductCard[] = [
     href: "/cotizacion",
     cta: "Cotizar kerosene",
   },
-  {
-    icon: Home,
-    title: "Gas envasado residencial",
-    text: "Gas envasado para hogares y necesidades cotidianas de cocción, calefacción y uso residencial.",
-    href: "/cotizacion",
-    cta: "Cotizar gas",
-  },
 ];
 
 const audiences = [
@@ -137,7 +125,7 @@ const audiences = [
   {
     icon: House,
     title: "Clientes residenciales",
-    text: "Entregamos alternativas de kerosene y gas envasado residencial para hogares que requieren energía y calefacción en su día a día.",
+    text: "Entregamos alternativas de kerosene para hogares que requieren calefacción y atención comercial en su día a día.",
     items: [
       { icon: Home, label: "Hogares" },
       { icon: Flame, label: "Calefacción" },
@@ -165,7 +153,7 @@ const valueCards: IconCard[] = [
   {
     icon: Fuel,
     title: "Soluciones energéticas",
-    text: "Diésel, kerosene y gas envasado residencial en un mismo lugar.",
+    text: "Diésel y kerosene para empresas, operaciones y hogares.",
   },
 ];
 
@@ -364,8 +352,8 @@ export default async function NosotrosPage() {
             <p className="hero-rise-1 mt-6 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
               En Fenice SPA distribuimos petróleo diesel a domicilio para empresas, faenas
               y flotas, e instalamos estanques certificados SEC con carga periódica según
-              la necesidad de cada operación. Complementamos con kerosene y gas envasado
-              residencial en Santiago y toda la Región Metropolitana.
+              la necesidad de cada operación. Complementamos con kerosene en Santiago y
+              toda la Región Metropolitana.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -428,9 +416,8 @@ export default async function NosotrosPage() {
             </h2>
             <div className="mt-6 space-y-5 text-base leading-relaxed text-slate-600">
               <p>
-                Fenice SPA es una empresa dedicada a la distribución de diésel, kerosene y
-                gas envasado residencial. Trabajamos para entregar alternativas de suministro
-                y atención comercial a empresas, operaciones y clientes residenciales, según
+                Fenice SPA es una empresa dedicada a la distribución de diésel y kerosene,
+                con atención comercial a empresas, operaciones y clientes residenciales, según
                 las necesidades de cada requerimiento.
               </p>
               <p>
@@ -440,7 +427,7 @@ export default async function NosotrosPage() {
                 en cada solicitud, con cobertura en Santiago y la Región Metropolitana.
               </p>
             </div>
-            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
               {productHighlights.map((item) => (
                 <div key={item.title} className="rounded-xl border border-slate-100 bg-slate-50 p-4">
                   <item.icon className="mb-3 h-6 w-6 text-[#1a6b3c]" />
@@ -475,7 +462,7 @@ export default async function NosotrosPage() {
               Soluciones de combustible para distintas necesidades
             </h2>
           </div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2">
             {products.map((product) => (
               <article
                 key={product.title}
@@ -550,7 +537,7 @@ export default async function NosotrosPage() {
             <p className="mt-5 text-base leading-relaxed text-slate-300">
               En Fenice SPA buscamos entregar una atención clara, cercana y responsable para
               cada requerimiento. Nuestro enfoque está en orientar a clientes residenciales
-              y empresas, facilitando el acceso a diésel, kerosene y gas envasado según el
+              y empresas, facilitando el acceso a diésel y kerosene según el
               tipo de necesidad.
             </p>
           </div>
@@ -584,7 +571,7 @@ export default async function NosotrosPage() {
               </div>
               <h3 className="mb-4 text-xl font-extrabold text-[#0a1628]">Misión</h3>
               <p className="leading-relaxed text-slate-600">
-                Entregar soluciones confiables de diésel, kerosene y gas envasado residencial,
+                Entregar soluciones confiables de diésel y kerosene,
                 atendiendo las necesidades de empresas, operaciones y hogares mediante una
                 atención cercana, procesos transparentes y una coordinación eficiente.
               </p>
@@ -683,7 +670,7 @@ export default async function NosotrosPage() {
             </h2>
             <p className="mt-5 text-base leading-relaxed text-slate-600">
               Fenice SPA busca mantener una gestión comercial clara y responsable, orientando cada
-              solicitud de diésel, kerosene y gas envasado residencial de acuerdo con las
+              solicitud de diésel y kerosene de acuerdo con las
               condiciones aplicables, disponibilidad y necesidades del cliente.
             </p>
           </div>
@@ -707,7 +694,7 @@ export default async function NosotrosPage() {
         <div className="mx-auto grid max-w-7xl gap-8 px-5 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-center lg:px-8">
           <div>
             <h2 className="text-3xl font-extrabold sm:text-4xl">
-              ¿Necesitas cotizar diésel, kerosene o gas envasado residencial?
+              ¿Necesitas cotizar diésel o kerosene?
             </h2>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-300">
               Nuestro equipo está disponible para orientar tu requerimiento según producto,
@@ -729,7 +716,7 @@ export default async function NosotrosPage() {
               Solicitar cotización
             </Link>
             <a
-              href={whatsappUrl("Hola, necesito cotizar diésel, kerosene o gas envasado residencial.")}
+              href={whatsappUrl("Hola, necesito cotizar diésel o kerosene.")}
               target="_blank"
               rel="noopener noreferrer"
               data-analytics-id="nosotros_cta_whatsapp"
