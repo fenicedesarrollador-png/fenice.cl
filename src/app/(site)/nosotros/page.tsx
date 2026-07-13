@@ -28,6 +28,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { SITE_CONFIG, whatsappUrl } from "@/lib/config";
 import { buildMetadata, aboutPageSchema, teamSchema, jsonLd } from "@/lib/seo";
+import { BLUR } from "@/lib/imageBlur";
 import { getEquipo, type MiembroEquipo } from "@/lib/getContent";
 import Breadcrumb from "@/components/Breadcrumb";
 import Certificaciones from "@/components/Certificaciones";
@@ -456,6 +457,8 @@ export default async function NosotrosPage() {
               alt="Camión cisterna de Fenice SPA distribuyendo combustible en Santiago, con la cordillera al atardecer"
               fill
               sizes="(min-width: 1024px) 50vw, 100vw"
+              placeholder="blur"
+              blurDataURL={BLUR["nosotros-fenice"]}
               className="object-cover object-center"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/30 to-transparent" />

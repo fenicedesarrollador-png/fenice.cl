@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { COMUNAS_DESTACADAS, SITE_CONFIG } from "@/lib/config";
 import { buildMetadata, faqSchema, jsonLd, CORE_KEYWORDS } from "@/lib/seo";
+import { BLUR } from "@/lib/imageBlur";
 
 export const revalidate = 60;
 
@@ -147,6 +148,8 @@ export default function HomePage() {
           priority
           fetchPriority="high"
           sizes="100vw"
+          placeholder="blur"
+          blurDataURL={BLUR["portada-fenice"]}
           className="object-cover sm:object-[55%_center] object-[35%_center]"
         />
 
@@ -423,6 +426,8 @@ export default function HomePage() {
                     alt={im.alt}
                     fill
                     sizes="(min-width: 640px) 33vw, 100vw"
+                    placeholder="blur"
+                    blurDataURL={BLUR[im.src.replace("/images/", "").replace(".webp", "")]}
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/80 via-[#0a1628]/10 to-transparent" />
@@ -443,6 +448,8 @@ export default function HomePage() {
                 alt="Camión estanque de Fenice SPA cargando combustible en planta, con la cordillera de Santiago al fondo"
                 fill
                 sizes="100vw"
+                placeholder="blur"
+                blurDataURL={BLUR["operacion-central"]}
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/85 via-[#0a1628]/35 to-transparent" />

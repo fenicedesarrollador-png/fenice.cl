@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
+    // Cachea las variantes optimizadas 1 año en el CDN (las fotos no cambian):
+    // evita re-optimizar en cada visita, que era la causa de la carga lenta.
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       { protocol: "https", hostname: "*.supabase.co", pathname: "/storage/v1/object/public/**" },
       { protocol: "https", hostname: "*.supabase.in", pathname: "/storage/v1/object/public/**" },
@@ -45,6 +48,13 @@ const nextConfig: NextConfig = {
         source: "/loader/:path*",
         headers: [
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
+        ],
+      },
+      {
+        // Imágenes/íconos estáticos: caché inmutable de 1 año (aceleran la carga).
+        source: "/:dir(images|icons|brand)/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
       },
       {
