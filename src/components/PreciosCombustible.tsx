@@ -177,15 +177,17 @@ export default async function PreciosCombustible() {
 
         {/* Supabase no configurado (entorno local): skeletons */}
         {showSkeletons && (
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="flex flex-wrap justify-center gap-4">
             {["Diésel", "Kerosene", "Gas Envasado"].map((name) => (
               <PriceCardSkeleton key={name} name={name} />
             ))}
           </div>
         )}
 
+        {/* Flex + justify-center: con 3 tarjetas llenan la fila; si ocultas alguna,
+            las restantes quedan CENTRADAS en vez de alinearse a la izquierda. */}
         {showPrecios && (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="flex flex-wrap justify-center gap-4">
             {prices.map((fp, i) => (
               <PriceCard key={fp.id} fp={fp} index={i} waUrl={WA_URL} promo={promos[fp.code]} />
             ))}
@@ -212,7 +214,7 @@ function PriceCard({ fp, index, waUrl, promo }: { fp: FuelPrice; index: number; 
 
   return (
     <article
-      className={`group relative bg-white border rounded-2xl p-5 transition-all hover:shadow-md flex flex-col gap-4 animate-fade-in ${enOferta ? "border-[#f5a623]/50 shadow-sm" : "border-slate-200 hover:border-slate-300"}`}
+      className={`group relative w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.667rem)] max-w-md bg-white border rounded-2xl p-5 transition-all hover:shadow-md flex flex-col gap-4 animate-fade-in ${enOferta ? "border-[#f5a623]/50 shadow-sm" : "border-slate-200 hover:border-slate-300"}`}
       style={{ animationDelay: `${index * 80}ms` }}
       aria-label={`Precio de ${fp.name}`}
     >
@@ -319,7 +321,7 @@ function PriceCard({ fp, index, waUrl, promo }: { fp: FuelPrice; index: number; 
 
 function PriceCardSkeleton({ name }: { name: string }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col gap-4" aria-busy="true" aria-label={`Cargando precio de ${name}`}>
+    <div className="w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.667rem)] max-w-md bg-white border border-slate-200 rounded-2xl p-5 flex flex-col gap-4" aria-busy="true" aria-label={`Cargando precio de ${name}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-xl bg-slate-100 animate-pulse" />

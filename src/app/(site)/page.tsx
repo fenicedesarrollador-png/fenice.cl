@@ -150,12 +150,12 @@ export default function HomePage() {
           className="object-cover sm:object-[55%_center] object-[35%_center]"
         />
 
-        {/* Overlay desktop: oscuro solo en la franja izquierda donde va el texto */}
-        <div className="absolute inset-0 hidden sm:block bg-gradient-to-r from-[#0a1628]/92 via-[#0a1628]/55 to-[#0a1628]/10" />
+        {/* Overlay desktop: oscuro solo en la franja izquierda donde va el texto; el resto se ve claro */}
+        <div className="absolute inset-0 hidden sm:block bg-gradient-to-r from-[#0a1628]/80 via-[#0a1628]/30 to-transparent" />
 
-        {/* Overlay móvil: oscurece la mitad superior (texto) y deja ver el camión abajo */}
+        {/* Overlay móvil: apenas oscurece la parte superior (texto) y deja ver la foto clara abajo */}
         <div className="absolute inset-0 sm:hidden"
-          style={{ background: "linear-gradient(to bottom, rgba(10,22,40,0.88) 0%, rgba(10,22,40,0.88) 55%, rgba(10,22,40,0.15) 100%)" }}
+          style={{ background: "linear-gradient(to bottom, rgba(10,22,40,0.82) 0%, rgba(10,22,40,0.5) 48%, rgba(10,22,40,0.05) 100%)" }}
         />
 
         {/* Línea inferior */}
@@ -377,6 +377,84 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── OPERACIÓN EN TERRENO (galería) ───────────────────────────────────── */}
+      <section className="py-20 bg-slate-50 border-y border-slate-100" data-analytics-section="operacion">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mb-10" data-reveal>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="h-px w-6 bg-[#f5a623]" />
+              <span className="text-xs font-bold text-[#f5a623] uppercase tracking-widest">En terreno</span>
+            </div>
+            <h2 className="text-3xl font-extrabold text-[#0a1628] leading-tight">
+              Abastecemos tu operación donde la necesites
+            </h2>
+            <p className="mt-3 text-slate-600 leading-relaxed">
+              Desde maquinaria en faena hasta flotas y estanques en planta: despachamos petróleo
+              con equipo propio y protocolos de seguridad en cada carga.
+            </p>
+          </div>
+
+          {/* 3 imágenes verticales */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5" data-reveal>
+            {[
+              {
+                src: "/images/operacion-carga-maquinaria.webp",
+                alt: "Operario de Fenice SPA cargando petróleo diesel directamente al estanque de una maquinaria",
+                cap: "Carga directa a maquinaria",
+              },
+              {
+                src: "/images/operacion-faena-excavadora.webp",
+                alt: "Trabajador de Fenice SPA abasteciendo de combustible una excavadora en faena",
+                cap: "Abastecimiento en faena",
+              },
+              {
+                src: "/images/operacion-despacho-flota.webp",
+                alt: "Operario de Fenice SPA despachando combustible desde un camión estanque a un estanque de empresa",
+                cap: "Despacho a flotas y estanques",
+              },
+            ].map((im) => (
+              <figure key={im.src} className="group relative overflow-hidden rounded-2xl shadow-sm ring-1 ring-slate-900/5">
+                <div className="relative aspect-[4/5]">
+                  <Image
+                    src={im.src}
+                    alt={im.alt}
+                    fill
+                    sizes="(min-width: 640px) 33vw, 100vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/80 via-[#0a1628]/10 to-transparent" />
+                </div>
+                <figcaption className="absolute inset-x-0 bottom-0 flex items-center gap-2 p-4 text-white">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#f5a623] shrink-0" />
+                  <span className="text-sm font-semibold leading-tight">{im.cap}</span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+
+          {/* Imagen horizontal (flota / planta) */}
+          <figure className="group relative mt-4 sm:mt-5 overflow-hidden rounded-2xl shadow-sm ring-1 ring-slate-900/5" data-reveal>
+            <div className="relative aspect-[16/10] sm:aspect-[21/9]">
+              <Image
+                src="/images/operacion-central.webp"
+                alt="Camión estanque de Fenice SPA cargando combustible en planta, con la cordillera de Santiago al fondo"
+                fill
+                sizes="100vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/85 via-[#0a1628]/35 to-transparent" />
+            </div>
+            <figcaption className="absolute inset-y-0 left-0 flex max-w-md flex-col justify-center gap-2 p-6 sm:p-10 text-white">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#f5a623]">Flota propia</span>
+              <p className="text-xl sm:text-2xl font-extrabold leading-tight">
+                Camiones estanque con certificación TC10A
+              </p>
+              <p className="text-sm text-slate-200">Carga controlada y trazabilidad en cada despacho.</p>
+            </figcaption>
+          </figure>
         </div>
       </section>
 
