@@ -101,8 +101,21 @@ export function cotizacionInternaEmail(data: CotizacionEmailData): string {
     timeStyle: "short",
     timeZone: "America/Santiago",
   }).format(new Date());
+  const folio = data.id.slice(0, 8).toUpperCase();
 
   const content = `
+    <tr>
+      <td style="padding:16px 32px 0;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0faf4;border:1px solid #d6efe0;border-radius:12px;">
+          <tr>
+            <td style="padding:12px 16px;font-size:13px;color:#166534;line-height:1.6;">
+              <strong style="color:#14532d;">📎 PDF adjunto:</strong> esta solicitud incluye el documento de cotización con el detalle completo &middot;
+              <span style="font-weight:800;color:#1a6b3c;">Folio N° ${folio}</span>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
     <tr>
       <td style="padding:20px 32px 8px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #eef2f7;border-radius:12px;overflow:hidden;">

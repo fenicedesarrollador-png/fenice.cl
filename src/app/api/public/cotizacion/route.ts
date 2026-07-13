@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { linkAnalyticsIdentity } from "@/lib/analytics/server";
-import { sendEmail } from "@/lib/email/resend";
+import { sendEmail, type EmailAttachment } from "@/lib/email/resend";
 import { cotizacionInternaEmail, cotizacionClienteEmail } from "@/lib/email/templates";
+import { buildCotizacionPdf } from "@/lib/admin/cotizacionPdf";
 import { NOTIFY_EMAILS } from "@/lib/config";
 
 function normalizeOptionalText(value: unknown) {
@@ -68,7 +69,7 @@ export async function POST(request: Request) {
     const { data, error } = await serviceClient
       .from("cotizaciones")
       .insert(payload)
-      .select("id")
+      .select("id, created_at")
       .single();
 
     if (error || !data?.id) {
@@ -80,6 +81,27 @@ export async function POST(request: Request) {
 
     await linkAnalyticsIdentity(serviceClient, request, { cotizacionId: data.id });
 
+    // PDF corporativo de la solicitud, adjunto en la notificación interna.
+    // Si el PDF falla por cualquier motivo, el correo se envía igual (sin adjunto).
+    const folio = data.id.slice(0, 8).toUpperCase();
+    let adjuntos: EmailAttachment[] | undefined;
+    try {
+      const pdfBytes = await buildCotizacionPdf({
+        ...payload,
+        id: data.id,
+        created_at: data.created_at ?? new Date().toISOString(),
+      });
+      adjuntos = [
+        {
+          filename: `Cotizacion-${folio}-${payload.empresa.replace(/[^\p{L}\p{N}]+/gu, "-").slice(0, 40)}.pdf`,
+          content: Buffer.from(pdfBytes).toString("base64"),
+          contentType: "application/pdf",
+        },
+      ];
+    } catch (pdfError) {
+      console.error("[cotizacion] No se pudo generar el PDF adjunto:", pdfError);
+    }
+
     // Notificaciones por correo (Resend). Nunca bloquean la respuesta:
     // la cotización ya quedó registrada en el panel administrativo.
     const emailData = { ...payload, id: data.id };
@@ -89,6 +111,7 @@ export async function POST(request: Request) {
         subject: `Nueva cotización — ${payload.empresa} (${payload.servicio_solicitado})`,
         html: cotizacionInternaEmail(emailData),
         replyTo: payload.email,
+        attachments: adjuntos,
       }),
       sendEmail({
         to: [payload.email],

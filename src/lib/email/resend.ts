@@ -10,14 +10,22 @@
 
 const RESEND_ENDPOINT = "https://api.resend.com/emails";
 
+export type EmailAttachment = {
+  filename: string;
+  /** Contenido del archivo codificado en base64. */
+  content: string;
+  contentType?: string;
+};
+
 export type EmailPayload = {
   to: string[];
   subject: string;
   html: string;
   replyTo?: string;
+  attachments?: EmailAttachment[];
 };
 
-export async function sendEmail({ to, subject, html, replyTo }: EmailPayload): Promise<boolean> {
+export async function sendEmail({ to, subject, html, replyTo, attachments }: EmailPayload): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     console.warn("[email] RESEND_API_KEY no configurada — correo omitido:", subject);
@@ -39,6 +47,15 @@ export async function sendEmail({ to, subject, html, replyTo }: EmailPayload): P
         subject,
         html,
         ...(replyTo ? { reply_to: replyTo } : {}),
+        ...(attachments && attachments.length
+          ? {
+              attachments: attachments.map((a) => ({
+                filename: a.filename,
+                content: a.content, // base64
+                ...(a.contentType ? { content_type: a.contentType } : {}),
+              })),
+            }
+          : {}),
       }),
     });
 
