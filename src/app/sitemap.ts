@@ -10,6 +10,7 @@ const staticRoutes: MetadataRoute.Sitemap = [
   { url: BASE_URL, lastModified: NOW, changeFrequency: "weekly", priority: 1.0 },
   { url: `${BASE_URL}/petroleo-a-domicilio`, lastModified: NOW, changeFrequency: "weekly", priority: 0.95 },
   { url: `${BASE_URL}/venta-petroleo-diesel`, lastModified: NOW, changeFrequency: "weekly", priority: 0.95 },
+  { url: `${BASE_URL}/venta-kerosene`, lastModified: NOW, changeFrequency: "weekly", priority: 0.95 },
   { url: `${BASE_URL}/empresas-faenas-flotas`, lastModified: NOW, changeFrequency: "weekly", priority: 0.9 },
   { url: `${BASE_URL}/cotizacion`, lastModified: NOW, changeFrequency: "weekly", priority: 0.95 },
   { url: `${BASE_URL}/contacto`, lastModified: NOW, changeFrequency: "monthly", priority: 0.9 },
