@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -448,32 +449,16 @@ export default async function NosotrosPage() {
               ))}
             </div>
           </div>
-          {/* Panel de marca sin imagen (rápido). Slot libre para una imagen futura del cliente. */}
-          <div data-reveal="right" className="relative flex min-h-[320px] items-center justify-center overflow-hidden rounded-2xl bg-[#0a1628] shadow-sm lg:min-h-[440px]">
-            <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
-            <div className="absolute -right-16 -top-16 h-72 w-72 rounded-full bg-[#f5a623]/10 blur-3xl" />
-            <div className="absolute -bottom-16 -left-16 h-72 w-72 rounded-full bg-[#1a6b3c]/15 blur-3xl" />
-            <div className="relative flex flex-col items-center gap-6 px-8 text-center">
-              <svg viewBox="0 0 32 32" className="h-16 w-16 drop-shadow" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="nos-drop" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#1f9c5a" />
-                    <stop offset="100%" stopColor="#e8702a" />
-                  </linearGradient>
-                </defs>
-                <path d="M16 2 C16 2 6 14 6 21 a10 10 0 0 0 20 0 C26 14 16 2 16 2 Z" fill="url(#nos-drop)" />
-              </svg>
-              <p className="max-w-xs text-lg font-semibold leading-snug text-white">
-                Energía y combustible con respaldo para tu operación
-              </p>
-              <div className="flex items-center gap-3">
-                {[Fuel, Flame, House].map((Icon, i) => (
-                  <span key={i} className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/15 bg-white/10 text-[#f5a623]">
-                    <Icon className="h-5 w-5" />
-                  </span>
-                ))}
-              </div>
-            </div>
+          {/* Imagen de presentación de Nosotros */}
+          <div data-reveal="right" className="relative min-h-[320px] overflow-hidden rounded-2xl bg-slate-100 shadow-sm lg:min-h-[440px]">
+            <Image
+              src="/images/nosotros-fenice.webp"
+              alt="Camión cisterna de Fenice SPA distribuyendo combustible en Santiago, con la cordillera al atardecer"
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/30 to-transparent" />
           </div>
         </div>
       </section>
