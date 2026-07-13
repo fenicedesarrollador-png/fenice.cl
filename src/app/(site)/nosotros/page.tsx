@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -49,11 +48,6 @@ export const metadata = buildMetadata({
   ],
 });
 
-const corporateImage = {
-  src: "/images/imagen_camion_de_combustible.webp",
-  alt: "Camión de distribución de combustible de Fenice SPA en operación en la Región Metropolitana",
-};
-
 type IconCard = {
   icon: LucideIcon;
   title: string;
@@ -100,8 +94,6 @@ const productHighlights: IconCard[] = [
 type ProductCard = IconCard & {
   href: string;
   cta: string;
-  image: string;
-  imageAlt: string;
 };
 
 const products: ProductCard[] = [
@@ -111,8 +103,6 @@ const products: ProductCard[] = [
     text: "Soluciones de diésel para empresas, flotas, maquinaria, equipos y operaciones que requieren continuidad.",
     href: "/venta-petroleo-diesel",
     cta: "Ver diésel",
-    image: corporateImage.src,
-    imageAlt: "Soluciones de diésel para empresas — Fenice SPA",
   },
   {
     icon: Flame,
@@ -120,8 +110,6 @@ const products: ProductCard[] = [
     text: "Kerosene para calefacción y necesidades estacionales de clientes residenciales, comerciales u operativos.",
     href: "/cotizacion",
     cta: "Cotizar kerosene",
-    image: corporateImage.src,
-    imageAlt: "Kerosene para calefacción — Fenice SPA",
   },
   {
     icon: Home,
@@ -129,8 +117,6 @@ const products: ProductCard[] = [
     text: "Gas envasado para hogares y necesidades cotidianas de cocción, calefacción y uso residencial.",
     href: "/cotizacion",
     cta: "Cotizar gas",
-    image: corporateImage.src,
-    imageAlt: "Gas envasado residencial — Fenice SPA",
   },
 ];
 
@@ -355,15 +341,10 @@ export default async function NosotrosPage() {
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#0a1628] text-white" data-analytics-section="nosotros_hero">
-        <Image
-          src={corporateImage.src}
-          alt={corporateImage.alt}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-[45%_center] opacity-40"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628] via-[#0a1628]/88 to-[#0a1628]/30" />
+        {/* Fondo de marca sin imagen (rápido). Slot libre para una imagen futura del cliente. */}
+        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
+        <div className="absolute -right-24 top-0 h-96 w-96 rounded-full bg-[#f5a623]/10 blur-3xl" />
+        <div className="absolute -left-16 bottom-0 h-80 w-80 rounded-full bg-[#1a6b3c]/15 blur-3xl" />
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1a6b3c] via-[#f5a623] to-[#1a6b3c]" />
         <div className="relative mx-auto max-w-7xl px-5 pt-6 sm:px-6 lg:px-8">
           <Breadcrumb crumbs={[{ name: "Inicio", href: "/" }, { name: "Nosotros" }]} />
@@ -467,15 +448,32 @@ export default async function NosotrosPage() {
               ))}
             </div>
           </div>
-          <div data-reveal="right" className="relative min-h-[320px] overflow-hidden rounded-2xl bg-slate-100 shadow-sm lg:min-h-[440px]">
-            <Image
-              src={corporateImage.src}
-              alt="Operación de distribución de combustible de Fenice SPA en la Región Metropolitana"
-              fill
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              className="object-cover object-center"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/30 to-transparent" />
+          {/* Panel de marca sin imagen (rápido). Slot libre para una imagen futura del cliente. */}
+          <div data-reveal="right" className="relative flex min-h-[320px] items-center justify-center overflow-hidden rounded-2xl bg-[#0a1628] shadow-sm lg:min-h-[440px]">
+            <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+            <div className="absolute -right-16 -top-16 h-72 w-72 rounded-full bg-[#f5a623]/10 blur-3xl" />
+            <div className="absolute -bottom-16 -left-16 h-72 w-72 rounded-full bg-[#1a6b3c]/15 blur-3xl" />
+            <div className="relative flex flex-col items-center gap-6 px-8 text-center">
+              <svg viewBox="0 0 32 32" className="h-16 w-16 drop-shadow" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="nos-drop" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#1f9c5a" />
+                    <stop offset="100%" stopColor="#e8702a" />
+                  </linearGradient>
+                </defs>
+                <path d="M16 2 C16 2 6 14 6 21 a10 10 0 0 0 20 0 C26 14 16 2 16 2 Z" fill="url(#nos-drop)" />
+              </svg>
+              <p className="max-w-xs text-lg font-semibold leading-snug text-white">
+                Energía y combustible con respaldo para tu operación
+              </p>
+              <div className="flex items-center gap-3">
+                {[Fuel, Flame, House].map((Icon, i) => (
+                  <span key={i} className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/15 bg-white/10 text-[#f5a623]">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -495,18 +493,13 @@ export default async function NosotrosPage() {
                 key={product.title}
                 className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#1a6b3c]/40 hover:shadow-md"
               >
-                <div className="relative h-52 bg-slate-100">
-                  <Image
-                    src={product.image}
-                    alt={product.imageAlt}
-                    fill
-                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                    className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/50 to-transparent" />
-                  <div className="absolute bottom-4 left-4 flex h-12 w-12 items-center justify-center rounded-xl bg-white text-[#1a6b3c] shadow-sm">
-                    <product.icon className="h-6 w-6" />
-                  </div>
+                {/* Header con icono profesional (sin imagen, carga instantánea) */}
+                <div className="relative flex h-40 items-center justify-center overflow-hidden bg-gradient-to-br from-[#0a1628] to-[#123056]">
+                  <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 1px)", backgroundSize: "18px 18px" }} />
+                  <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-[#1a6b3c] via-[#f5a623] to-[#1a6b3c]" />
+                  <span className="relative flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/15 backdrop-blur-sm transition-transform duration-300 group-hover:scale-105">
+                    <product.icon className="h-9 w-9 text-[#f5a623]" strokeWidth={1.75} />
+                  </span>
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-extrabold text-[#0a1628]">{product.title}</h3>

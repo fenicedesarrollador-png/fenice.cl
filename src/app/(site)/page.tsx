@@ -37,7 +37,7 @@ const faqItems = [
 const homeFaqSchema = faqSchema(faqItems);
 
 const STATS = [
-  { value: "12+", label: "Comunas RM", icon: MapPin },
+  { value: "52", label: "Comunas RM", icon: MapPin },
   { value: "24h", label: "Tiempo respuesta", icon: Clock },
   { value: "B2B", label: "Especialistas", icon: Building2 },
   { value: "SEC", label: "Certificado", icon: Award },
@@ -141,13 +141,13 @@ export default function HomePage() {
 
         {/* Imagen de fondo — desktop centrada al camión, móvil apuntada a izquierda */}
         <Image
-          src="/images/imagen_camion_de_combustible.webp"
-          alt="Camión de despacho de petróleo a domicilio de Fenice SPA en Santiago"
+          src="/images/portada-fenice.webp"
+          alt="Camión de despacho de petróleo a domicilio de Fenice SPA en Santiago, con la cordillera de fondo"
           fill
           priority
           fetchPriority="high"
           sizes="100vw"
-          className="object-cover sm:object-[55%_center] object-[20%_center]"
+          className="object-cover sm:object-[55%_center] object-[35%_center]"
         />
 
         {/* Overlay desktop: oscuro solo en la franja izquierda donde va el texto */}
