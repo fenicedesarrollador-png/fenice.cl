@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
 import FeniceLoader from "@/components/FeniceLoader";
+import WhatsAppFab from "@/components/WhatsAppFab";
 import ScrollReveal from "@/components/ScrollReveal";
 import { getSiteConfig } from "@/lib/getSiteConfig";
 import { organizationSchema, websiteSchema, localBusinessSchema, jsonLd } from "@/lib/seo";
@@ -46,6 +47,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
           <main className="flex-1">{children}</main>
           <Footer config={config} />
         </div>
+        <WhatsAppFab />
       </AnalyticsProvider>
     </>
   );

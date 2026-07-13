@@ -87,7 +87,7 @@ function SidebarContent({
       {/* Brand */}
       <div className="px-5 py-[18px] flex items-center justify-between shrink-0 border-b border-slate-100">
         <Link href="/admin" onClick={onClose} className="flex flex-col items-start gap-1.5 group">
-          <BrandLogo className="h-10 w-[150px]" imageClassName="scale-[1.58]" />
+          <BrandLogo className="h-10 w-[137px]" />
           <p className="text-[10px] text-slate-400 font-bold tracking-[0.18em] uppercase">Panel Admin</p>
         </Link>
         {onClose && (

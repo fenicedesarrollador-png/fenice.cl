@@ -28,7 +28,7 @@ export default async function LoginPage({
         {/* Brand */}
         <div className="text-center mb-8">
           <div className="flex justify-center">
-            <BrandLogo className="h-16 w-[220px]" imageClassName="scale-[1.6]" priority />
+            <BrandLogo className="h-16 w-[219px]" priority />
           </div>
           <p className="text-slate-500 text-sm mt-3">Panel de administración</p>
         </div>

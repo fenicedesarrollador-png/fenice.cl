@@ -17,7 +17,7 @@ export default function Footer({ config }: { config: SiteConfig }) {
           {/* Brand — spans 2 cols on large */}
           <div className="lg:col-span-2">
             <Link href="/" data-analytics-id="footer_logo" data-analytics-label="Fenice" data-analytics-cta="footer_navigation" className="inline-flex items-center mb-6">
-              <BrandLogo className="h-14 w-[190px]" imageClassName="scale-[1.58]" onDark />
+              <BrandLogo className="h-14 w-[186px]" onDark />
             </Link>
             <p className="text-sm leading-relaxed mb-6 max-w-xs">
               Distribución de petróleo diesel e instalación de estanques certificados para empresas

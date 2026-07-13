@@ -56,8 +56,8 @@ export default function Header({ config }: { config: SiteConfig }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-[70px]">
             {/* Logo */}
-            <Link href="/" className="flex items-center shrink-0">
-              <BrandLogo className="h-11 w-[150px] sm:h-12 sm:w-[172px]" imageClassName="scale-[1.56]" priority />
+            <Link href="/" className="flex items-center shrink-0" aria-label="Fenice SPA — Inicio">
+              <BrandLogo className="h-12 w-[164px] lg:h-[58px] lg:w-[198px]" priority />
             </Link>
 
             {/* Desktop nav */}
