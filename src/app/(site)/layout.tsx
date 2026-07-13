@@ -29,6 +29,14 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     <>
       {/* Precarga la imagen del camion para que el loader aparezca completo desde el primer frame. */}
       <link rel="preload" as="image" href="/loader/truck.webp" />
+      {/* Gate anti-parpadeo: antes del primer pintado, si ya se mostro en esta sesion,
+          oculta el overlay por CSS. La animacion la maneja React en FeniceLoader. */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html:
+            "(function(){try{if(sessionStorage.getItem('fenice-loader-shown')==='1'){document.documentElement.classList.add('fenice-loader-seen');}}catch(e){}})();",
+        }}
+      />
       <FeniceLoader />
       <ScrollReveal />
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(seoGraph)} />

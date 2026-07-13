@@ -1,23 +1,22 @@
+"use client";
+
 // Pantalla de carga de primera visita.
 //
-// A diferencia de un componente cliente clásico, este se renderiza INLINE en el
-// HTML del servidor: la superposición forma parte del primer pintado, por lo que
-// cubre la página desde el primer pixel (sin flash de "web -> loader -> web") y sin
-// esperar a que React hidrate ni a que cargue un iframe aparte.
+// El overlay se renderiza en el SSR (forma parte del HTML inicial), por lo que
+// cubre la pagina desde el primer pixel: no hay flash de "web -> loader -> web"
+// ni espera a un iframe. La ANIMACION la controla React con useEffect + refs, de
+// modo que nunca pelea con la hidratacion (el intento anterior manipulaba el DOM
+// desde un <script> inline y la hidratacion dejaba la barra congelada).
 //
-// - Un script "gate" síncrono decide, ANTES de pintar, si ya se mostró en esta
-//   sesión (sessionStorage). Si ya se mostró, agrega la clase `fenice-loader-seen`
-//   y el CSS oculta la superposición sin parpadeo.
-// - La barra avanza de 0 a 100% en ~3.6s con easing suave y luego se desvanece:
-//   duración total ~4s, determinista (no depende de la red).
-// - `<noscript>` la oculta para usuarios/crawlers sin JS (SEO seguro).
+// El "gate" por sesion (mostrar solo una vez) vive como script de servidor en el
+// layout: agrega `html.fenice-loader-seen` antes del primer pintado para ocultar
+// el overlay sin parpadeo en visitas repetidas. Aqui solo LEEMOS ese estado.
+
+import { useEffect, useRef, useState } from "react";
+
+const DURATION = 3600; // ms que tarda la barra en ir de 0 a 100
 
 const LOADER_CSS = `
-html.fenice-loader-lock,
-html.fenice-loader-lock body {
-  overflow: hidden !important;
-}
-
 html.fenice-loader-seen #fenice-loader {
   display: none !important;
 }
@@ -438,122 +437,153 @@ html.fenice-loader-seen #fenice-loader {
 }
 `;
 
-// Corre durante el parseo del HTML, ANTES del primer pintado: decide si mostrar.
-const GATE_SCRIPT = `
-(function(){
-  try{
-    if(sessionStorage.getItem('fenice-loader-shown')==='1'){
-      document.documentElement.classList.add('fenice-loader-seen');
-      return;
-    }
-    sessionStorage.setItem('fenice-loader-shown','1');
-  }catch(e){}
-  document.documentElement.classList.add('fenice-loader-lock');
-})();
-`;
-
-// Anima la barra 0 -> 100 en ~3.6s con easing suave y luego oculta la superposicion.
-const RUN_SCRIPT = `
-(function(){
-  var root = document.documentElement;
-  var el = document.getElementById('fenice-loader');
-  if(!el) return;
-
-  function unlock(){ root.classList.remove('fenice-loader-lock'); }
-
-  // Si ya se mostro en esta sesion, retirar sin animar.
-  if(root.classList.contains('fenice-loader-seen')){
-    if(el.parentNode) el.parentNode.removeChild(el);
-    unlock();
-    return;
-  }
-
-  // Lineas de viento
-  var windLayer = el.querySelector('#fl-windLayer');
-  if(windLayer){
-    for(var i=0;i<8;i++){
-      var line = document.createElement('div');
-      line.className = 'wind-line';
-      line.style.top = (Math.random()*100) + '%';
-      line.style.width = (50 + Math.random()*70) + 'px';
-      line.style.animationDuration = (0.8 + Math.random()*0.9) + 's';
-      line.style.animationDelay = '-' + (Math.random()*1.6) + 's';
-      windLayer.appendChild(line);
-    }
-  }
-
-  // Frases rotativas
-  var phrases = [
-    'Estamos preparando tu camion...',
-    'Verificando niveles de combustible...',
-    'Cargando ruta y permisos...',
-    'Revisando presion de neumaticos...',
-    'Sincronizando datos de despacho...',
-    'Ya casi esta listo...'
-  ];
-  var pIdx = 0, phraseBusy = false;
-  var phraseEl = el.querySelector('#fl-phrase');
-  var phraseTimer = setInterval(function(){
-    if(phraseBusy || !phraseEl) return;
-    phraseBusy = true;
-    phraseEl.classList.add('is-hidden');
-    setTimeout(function(){
-      pIdx = (pIdx+1) % phrases.length;
-      phraseEl.textContent = phrases[pIdx];
-      requestAnimationFrame(function(){ requestAnimationFrame(function(){
-        phraseEl.classList.remove('is-hidden');
-        setTimeout(function(){ phraseBusy = false; }, 180);
-      }); });
-    }, 180);
-  }, 650);
-
-  // Barra 0 -> 100 durante DURATION, easing sinusoidal (suave al iniciar y al terminar).
-  var DURATION = 3600;
-  var bar = el.querySelector('#fl-bar');
-  var pct = el.querySelector('#fl-pct');
-  var start = null, done = false;
-
-  function finish(){
-    if(done) return;
-    done = true;
-    clearInterval(phraseTimer);
-    if(bar) bar.style.width = '100%';
-    if(pct) pct.textContent = '100%';
-    setTimeout(function(){
-      el.classList.add('is-hidden');
-      unlock();
-      setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 480);
-    }, 260);
-  }
-
-  function frame(ts){
-    if(start === null) start = ts;
-    var t = Math.min((ts - start) / DURATION, 1);
-    var eased = 0.5 - 0.5 * Math.cos(Math.PI * t); // easeInOutSine
-    var value = Math.round(eased * 100);
-    if(bar) bar.style.width = value + '%';
-    if(pct) pct.textContent = value + '%';
-    if(t < 1){ requestAnimationFrame(frame); } else { finish(); }
-  }
-  requestAnimationFrame(frame);
-
-  // Red de seguridad: nunca quedarse mas de ~6s.
-  setTimeout(finish, DURATION + 2400);
-})();
-`;
+const PHRASES = [
+  "Estamos preparando tu camion...",
+  "Verificando niveles de combustible...",
+  "Cargando ruta y permisos...",
+  "Revisando presion de neumaticos...",
+  "Sincronizando datos de despacho...",
+  "Ya casi esta listo...",
+];
 
 export default function FeniceLoader() {
+  const [active, setActive] = useState(true);
+  const [leaving, setLeaving] = useState(false);
+
+  const barRef = useRef<HTMLDivElement>(null);
+  const pctRef = useRef<HTMLSpanElement>(null);
+  const phraseRef = useRef<HTMLDivElement>(null);
+  const windRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Gate: solo una vez por sesion. El script del layout ya oculto el overlay
+    // (via CSS) en visitas repetidas; aqui simplemente lo desmontamos.
+    let seen = false;
+    try {
+      seen = sessionStorage.getItem("fenice-loader-shown") === "1";
+    } catch {}
+    if (seen) {
+      setActive(false);
+      return;
+    }
+    try {
+      sessionStorage.setItem("fenice-loader-shown", "1");
+    } catch {}
+
+    const html = document.documentElement;
+    const body = document.body;
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+
+    const restoreScroll = () => {
+      html.style.overflow = "";
+      body.style.overflow = "";
+    };
+
+    // Lineas de viento
+    const wl = windRef.current;
+    if (wl) {
+      for (let i = 0; i < 8; i++) {
+        const line = document.createElement("div");
+        line.className = "wind-line";
+        line.style.top = Math.random() * 100 + "%";
+        line.style.width = 50 + Math.random() * 70 + "px";
+        line.style.animationDuration = 0.8 + Math.random() * 0.9 + "s";
+        line.style.animationDelay = "-" + Math.random() * 1.6 + "s";
+        wl.appendChild(line);
+      }
+    }
+
+    // Frases rotativas
+    let pIdx = 0;
+    let phraseBusy = false;
+    const phraseTimer = window.setInterval(() => {
+      const el = phraseRef.current;
+      if (!el || phraseBusy) return;
+      phraseBusy = true;
+      el.classList.add("is-hidden");
+      window.setTimeout(() => {
+        pIdx = (pIdx + 1) % PHRASES.length;
+        el.textContent = PHRASES[pIdx];
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => {
+            el.classList.remove("is-hidden");
+            window.setTimeout(() => {
+              phraseBusy = false;
+            }, 180);
+          }),
+        );
+      }, 180);
+    }, 650);
+
+    // Barra 0 -> 100 con easing sinusoidal (suave al iniciar y al terminar)
+    let start: number | null = null;
+    let raf = 0;
+    let done = false;
+    let holdTimer = 0;
+    let fadeTimer = 0;
+
+    const finish = () => {
+      if (done) return;
+      done = true;
+      window.clearInterval(phraseTimer);
+      cancelAnimationFrame(raf);
+      if (barRef.current) barRef.current.style.width = "100%";
+      if (pctRef.current) pctRef.current.textContent = "100%";
+      holdTimer = window.setTimeout(() => {
+        setLeaving(true);
+        fadeTimer = window.setTimeout(() => {
+          restoreScroll();
+          setActive(false);
+        }, 480);
+      }, 260);
+    };
+
+    const frame = (ts: number) => {
+      if (start === null) start = ts;
+      const t = Math.min((ts - start) / DURATION, 1);
+      const eased = 0.5 - 0.5 * Math.cos(Math.PI * t); // easeInOutSine
+      const value = Math.round(eased * 100);
+      if (barRef.current) barRef.current.style.width = value + "%";
+      if (pctRef.current) pctRef.current.textContent = value + "%";
+      if (t < 1) {
+        raf = requestAnimationFrame(frame);
+      } else {
+        finish();
+      }
+    };
+    raf = requestAnimationFrame(frame);
+
+    // Red de seguridad: nunca quedarse mas de ~6s
+    const safetyTimer = window.setTimeout(finish, DURATION + 2400);
+
+    return () => {
+      window.clearInterval(phraseTimer);
+      cancelAnimationFrame(raf);
+      window.clearTimeout(holdTimer);
+      window.clearTimeout(fadeTimer);
+      window.clearTimeout(safetyTimer);
+      restoreScroll();
+    };
+  }, []);
+
+  if (!active) return null;
+
   return (
     <>
-      {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-      <script dangerouslySetInnerHTML={{ __html: GATE_SCRIPT }} />
       <style dangerouslySetInnerHTML={{ __html: LOADER_CSS }} />
       <noscript>
         {/* Sin JS (crawlers/no-script): no ocultar el contenido tras la superposicion. */}
         <style dangerouslySetInnerHTML={{ __html: "#fenice-loader{display:none !important;}" }} />
       </noscript>
 
-      <div id="fenice-loader" role="status" aria-live="polite" aria-label="Cargando Fenice SPA">
+      <div
+        id="fenice-loader"
+        role="status"
+        aria-live="polite"
+        aria-label="Cargando Fenice SPA"
+        className={leaving ? "is-hidden" : undefined}
+      >
         <div className="stage">
           <div className="backdrop">
             <div className="sun-glow" />
@@ -580,7 +610,7 @@ export default function FeniceLoader() {
               <rect x="1450" y="130" width="100" height="70" fill="#9fb3c8" />
             </svg>
 
-            <div className="wind-layer" id="fl-windLayer" />
+            <div className="wind-layer" ref={windRef} />
 
             <div className="truck-stage">
               <div className="truck-shadow" />
@@ -616,19 +646,17 @@ export default function FeniceLoader() {
               </svg>
               <span>Sociedad Fenice SPA</span>
             </div>
-            <div className="phrase" id="fl-phrase">Estamos preparando tu camion...</div>
+            <div className="phrase" ref={phraseRef}>Estamos preparando tu camion...</div>
             <div className="bar-outer">
-              <div className="bar-inner" id="fl-bar" />
+              <div className="bar-inner" ref={barRef} />
             </div>
             <div className="bar-meta">
               <span>Cargando datos del viaje</span>
-              <span className="pct" id="fl-pct">0%</span>
+              <span className="pct" ref={pctRef}>0%</span>
             </div>
           </div>
         </div>
       </div>
-
-      <script dangerouslySetInnerHTML={{ __html: RUN_SCRIPT }} />
     </>
   );
 }
