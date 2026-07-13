@@ -7,7 +7,7 @@ interface Crumb {
   href?: string;
 }
 
-export default function Breadcrumb({ crumbs }: { crumbs: Crumb[] }) {
+export default function Breadcrumb({ crumbs, dark = false }: { crumbs: Crumb[]; dark?: boolean }) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -18,6 +18,14 @@ export default function Breadcrumb({ crumbs }: { crumbs: Crumb[] }) {
       ...(c.href ? { item: `${SITE_CONFIG.site_url}${c.href}` } : {}),
     })),
   };
+
+  const linkClass = dark
+    ? "inline-flex items-center gap-1 text-slate-300 hover:text-white transition-colors"
+    : "inline-flex items-center gap-1 text-slate-500 hover:text-[#1a6b3c] transition-colors";
+  const lastClass = dark
+    ? "inline-flex items-center gap-1 text-white font-semibold"
+    : "inline-flex items-center gap-1 text-[#0a1628] font-semibold";
+  const chevronClass = dark ? "w-3.5 h-3.5 text-slate-500 shrink-0" : "w-3.5 h-3.5 text-slate-300 shrink-0";
 
   return (
     <>
@@ -31,17 +39,14 @@ export default function Breadcrumb({ crumbs }: { crumbs: Crumb[] }) {
             const isLast = i === crumbs.length - 1;
             return (
               <li key={i} className="flex items-center gap-1.5">
-                {i > 0 && <ChevronRight className="w-3.5 h-3.5 text-slate-300 shrink-0" />}
+                {i > 0 && <ChevronRight className={chevronClass} />}
                 {crumb.href && !isLast ? (
-                  <Link
-                    href={crumb.href}
-                    className="inline-flex items-center gap-1 text-slate-500 hover:text-[#1a6b3c] transition-colors"
-                  >
+                  <Link href={crumb.href} className={linkClass}>
                     {i === 0 && <Home className="w-3.5 h-3.5" />}
                     {crumb.name}
                   </Link>
                 ) : (
-                  <span className="inline-flex items-center gap-1 text-[#0a1628] font-semibold">
+                  <span className={lastClass}>
                     {i === 0 && <Home className="w-3.5 h-3.5" />}
                     {crumb.name}
                   </span>

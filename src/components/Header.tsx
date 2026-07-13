@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Menu, X, ChevronDown, Phone, Fuel, Truck, Container, MapPin, ArrowRight, Waves } from "lucide-react";
+import { Menu, X, ChevronDown, Phone, Fuel, Truck, Container, MapPin, ArrowRight, Waves, Flame } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import { SERVICIOS } from "@/lib/config";
 import type { SiteConfig } from "@/lib/getSiteConfig";
@@ -124,6 +124,9 @@ export default function Header({ config }: { config: SiteConfig }) {
                       <Link href="/venta-petroleo-diesel" data-analytics-id="header_nav_venta_diesel" data-analytics-label="Venta de Petróleo Diésel" data-analytics-cta="service_navigation" className="flex items-center gap-2 text-xs font-semibold text-[#f5a623] hover:text-[#d4891a] transition-colors py-1">
                         <Fuel className="w-3.5 h-3.5" /> Venta de Petróleo Diésel
                       </Link>
+                      <Link href="/venta-kerosene" data-analytics-id="header_nav_venta_kerosene" data-analytics-label="Venta de Kerosene" data-analytics-cta="service_navigation" className="flex items-center gap-2 text-xs font-semibold text-[#f5a623] hover:text-[#d4891a] transition-colors py-1 mt-0.5">
+                        <Flame className="w-3.5 h-3.5" /> Venta de Kerosene
+                      </Link>
                       <Link href="/petroleo-a-domicilio" data-analytics-id="header_nav_petroleo_domicilio" data-analytics-label="Petróleo a Domicilio" data-analytics-cta="service_navigation" className="flex items-center gap-2 text-xs font-semibold text-[#f5a623] hover:text-[#d4891a] transition-colors py-1 mt-0.5">
                         <Waves className="w-3.5 h-3.5" /> Petróleo a Domicilio
                       </Link>
@@ -207,6 +210,10 @@ export default function Header({ config }: { config: SiteConfig }) {
               <Link href="/venta-petroleo-diesel" data-analytics-id="mobile_nav_venta_diesel" data-analytics-label="Venta de Petróleo Diésel" data-analytics-cta="mobile_service_navigation" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[#f0faf4]" onClick={() => setOpen(false)}>
                 <Fuel className="w-4 h-4 text-[#1a6b3c] shrink-0" />
                 <span className="text-sm font-medium text-slate-700">Venta de Petróleo Diésel</span>
+              </Link>
+              <Link href="/venta-kerosene" data-analytics-id="mobile_nav_venta_kerosene" data-analytics-label="Venta de Kerosene" data-analytics-cta="mobile_service_navigation" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[#f0faf4]" onClick={() => setOpen(false)}>
+                <Flame className="w-4 h-4 text-[#1a6b3c] shrink-0" />
+                <span className="text-sm font-medium text-slate-700">Venta de Kerosene</span>
               </Link>
               <Link href="/petroleo-a-domicilio" data-analytics-id="mobile_nav_petroleo_domicilio" data-analytics-label="Petróleo a Domicilio" data-analytics-cta="mobile_service_navigation" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[#f0faf4]" onClick={() => setOpen(false)}>
                 <Waves className="w-4 h-4 text-[#1a6b3c] shrink-0" />

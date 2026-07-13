@@ -105,8 +105,8 @@ const products: ProductCard[] = [
     icon: Flame,
     title: "Kerosene",
     text: "Kerosene para calefacción y necesidades estacionales de clientes residenciales, comerciales u operativos.",
-    href: "/cotizacion",
-    cta: "Cotizar kerosene",
+    href: "/venta-kerosene",
+    cta: "Ver kerosene",
   },
 ];
 
