@@ -437,14 +437,13 @@ html.fenice-loader-seen #fenice-loader {
 }
 `;
 
+// Frases cortas y claras. Rotan lento (ver PHRASE_INTERVAL) para poder leerse.
 const PHRASES = [
-  "Estamos preparando tu camion...",
-  "Verificando niveles de combustible...",
-  "Cargando ruta y permisos...",
-  "Revisando presion de neumaticos...",
-  "Sincronizando datos de despacho...",
-  "Ya casi esta listo...",
+  "Preparando tu despacho",
+  "Cargando combustible",
+  "Ya casi listo",
 ];
+const PHRASE_INTERVAL = 1600; // ms que cada frase permanece visible
 
 export default function FeniceLoader() {
   const [active, setActive] = useState(true);
@@ -514,7 +513,7 @@ export default function FeniceLoader() {
           }),
         );
       }, 180);
-    }, 650);
+    }, PHRASE_INTERVAL);
 
     // Barra 0 -> 100 con easing sinusoidal (suave al iniciar y al terminar)
     let start: number | null = null;
@@ -646,12 +645,12 @@ export default function FeniceLoader() {
               </svg>
               <span>Sociedad Fenice SPA</span>
             </div>
-            <div className="phrase" ref={phraseRef}>Estamos preparando tu camion...</div>
+            <div className="phrase" ref={phraseRef}>Preparando tu despacho</div>
             <div className="bar-outer">
               <div className="bar-inner" ref={barRef} />
             </div>
             <div className="bar-meta">
-              <span>Cargando datos del viaje</span>
+              <span>Cargando</span>
               <span className="pct" ref={pctRef}>0%</span>
             </div>
           </div>
