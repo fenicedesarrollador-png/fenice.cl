@@ -177,7 +177,7 @@ export default function HomePage() {
               <h1 className="hero-rise-1 text-3xl sm:text-5xl lg:text-[3.2rem] font-extrabold text-white leading-[1.15] sm:leading-[1.1] tracking-tight mb-5">
                 Petróleo a Domicilio<br />
                 en <span className="text-[#f5a623]">Santiago</span> para<br />
-                <span className="text-[#f5a623]">Empresas e Industria</span>
+                <span className="text-[#f5a623]">Empresas e Industrias</span>
               </h1>
               <p className="hero-rise-2 text-sm sm:text-base text-slate-300 leading-relaxed mb-7 max-w-xl">
                 Fenice SPA distribuye petróleo diesel a domicilio en toda la Región Metropolitana
@@ -208,11 +208,11 @@ export default function HomePage() {
 
             {/* Stats card — solo desktop */}
             <div className="hidden lg:block py-28">
-              <div className="hero-rise-3 bg-[#0d2040]/30 border border-white/15 rounded-2xl p-8 backdrop-blur-md">
+              <div className="hero-rise-3 bg-[#0d2040]/18 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6">Cobertura operativa</p>
                 <div className="grid grid-cols-2 gap-4 mb-8">
                   {STATS.map(({ value, label, icon: Icon }) => (
-                    <div key={label} className="bg-white/10 rounded-xl p-4 border border-white/15 backdrop-blur-sm">
+                    <div key={label} className="bg-white/7 rounded-xl p-4 border border-white/12 backdrop-blur-[2px]">
                       <Icon className="w-4 h-4 text-[#f5a623] mb-2" />
                       <p className="text-2xl font-extrabold text-white">{value}</p>
                       <p className="text-xs text-slate-400 mt-0.5">{label}</p>
@@ -223,7 +223,7 @@ export default function HomePage() {
                   <p className="text-xs text-slate-400 mb-3 font-medium">Sectores que atendemos</p>
                   <div className="flex flex-wrap gap-2">
                     {SECTORES.map((s) => (
-                      <span key={s} className="text-xs bg-white/10 text-slate-200 border border-white/20 px-2.5 py-1 rounded-full">{s}</span>
+                      <span key={s} className="text-xs bg-white/8 text-slate-200 border border-white/15 px-2.5 py-1 rounded-full">{s}</span>
                     ))}
                   </div>
                 </div>
