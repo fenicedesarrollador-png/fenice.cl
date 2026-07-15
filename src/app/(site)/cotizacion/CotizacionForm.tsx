@@ -5,6 +5,13 @@ import Link from "next/link";
 import { CheckCircle2, AlertCircle, ArrowRight, Loader2, Mail, Home } from "lucide-react";
 import { useAnalytics } from "@/components/analytics/AnalyticsProvider";
 import { COMUNAS, whatsappUrl } from "@/lib/config";
+import {
+  formatPhoneInput,
+  formatRutInput,
+  hasCompletePhone,
+  normalizePhoneForStorage,
+  normalizeRutForStorage,
+} from "@/lib/contactFormat";
 
 const SERVICIOS_OPS = [
   "Petróleo a domicilio (empresa)",
@@ -37,6 +44,8 @@ export default function CotizacionForm() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [rutEmpresa, setRutEmpresa] = useState("");
+  const [telefono, setTelefono] = useState("");
   const startedRef = useRef(false);
   const { sessionId, trackEvent, trackFormStart, visitorId } = useAnalytics();
 
@@ -60,17 +69,24 @@ export default function CotizacionForm() {
     // Leer el formulario de forma SÍNCRONA antes de cualquier await:
     // React recicla el evento tras el primer await y e.currentTarget pasa a null.
     const fd = new FormData(e.currentTarget);
+    const rawTelefono = (fd.get("telefono") as string).trim();
 
     ensureFormStartTracked();
     setLoading(true);
     setError("");
 
+    if (!hasCompletePhone(rawTelefono)) {
+      setError("Ingresa un teléfono válido de 8 dígitos después del +56 9.");
+      setLoading(false);
+      return;
+    }
+
     const payload = {
       nombre: (fd.get("nombre") as string).trim(),
       empresa: (fd.get("empresa") as string).trim(),
-      rut_empresa: (fd.get("rut_empresa") as string).trim() || null,
+      rut_empresa: normalizeRutForStorage((fd.get("rut_empresa") as string).trim()),
       email: (fd.get("email") as string).trim(),
-      telefono: (fd.get("telefono") as string).trim(),
+      telefono: normalizePhoneForStorage(rawTelefono),
       comuna: (fd.get("comuna") as string).trim() || null,
       servicio_solicitado: (fd.get("servicio_solicitado") as string),
       volumen_estimado: (fd.get("volumen_estimado") as string) || null,
@@ -209,7 +225,11 @@ export default function CotizacionForm() {
             <input
               name="rut_empresa"
               type="text"
+              value={rutEmpresa}
+              onChange={(e) => setRutEmpresa(formatRutInput(e.target.value))}
               placeholder="76.XXX.XXX-X"
+              autoComplete="off"
+              maxLength={12}
               className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors"
             />
           </div>
@@ -219,7 +239,14 @@ export default function CotizacionForm() {
               name="telefono"
               type="tel"
               required
+              value={telefono}
+              onFocus={() => setTelefono((current) => formatPhoneInput(current, { forcePrefix: true }))}
+              onBlur={() => setTelefono((current) => formatPhoneInput(current))}
+              onChange={(e) => setTelefono(formatPhoneInput(e.target.value, { forcePrefix: e.target.value.trim().length > 0 }))}
               placeholder="+56 9 XXXX XXXX"
+              autoComplete="tel"
+              inputMode="numeric"
+              maxLength={15}
               className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors"
             />
           </div>
