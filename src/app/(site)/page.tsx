@@ -208,22 +208,22 @@ export default function HomePage() {
 
             {/* Stats card — solo desktop */}
             <div className="hidden lg:block py-28">
-              <div className="hero-rise-3 bg-[#0d2040]/18 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6">Cobertura operativa</p>
+              <div className="hero-rise-3 rounded-2xl border border-white/12 bg-gradient-to-b from-[#173258]/18 via-[#102540]/24 to-[#09172a]/40 p-8 backdrop-blur-sm shadow-[0_20px_60px_rgba(10,22,40,0.22)]">
+                <p className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-6">Cobertura operativa</p>
                 <div className="grid grid-cols-2 gap-4 mb-8">
                   {STATS.map(({ value, label, icon: Icon }) => (
-                    <div key={label} className="bg-white/7 rounded-xl p-4 border border-white/12 backdrop-blur-[2px]">
+                    <div key={label} className="rounded-xl border border-white/14 bg-white/9 p-4 backdrop-blur-[3px] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
                       <Icon className="w-4 h-4 text-[#f5a623] mb-2" />
                       <p className="text-2xl font-extrabold text-white">{value}</p>
-                      <p className="text-xs text-slate-400 mt-0.5">{label}</p>
+                      <p className="mt-0.5 text-xs text-slate-200/90">{label}</p>
                     </div>
                   ))}
                 </div>
-                <div className="border-t border-white/10 pt-6">
-                  <p className="text-xs text-slate-400 mb-3 font-medium">Sectores que atendemos</p>
+                <div className="border-t border-white/12 pt-6">
+                  <p className="mb-3 text-xs font-medium text-slate-200/90">Sectores que atendemos</p>
                   <div className="flex flex-wrap gap-2">
                     {SECTORES.map((s) => (
-                      <span key={s} className="text-xs bg-white/8 text-slate-200 border border-white/15 px-2.5 py-1 rounded-full">{s}</span>
+                      <span key={s} className="rounded-full border border-white/16 bg-black/18 px-2.5 py-1 text-xs text-white/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">{s}</span>
                     ))}
                   </div>
                 </div>
