@@ -4,6 +4,7 @@ import { linkAnalyticsIdentity } from "@/lib/analytics/server";
 import { sendEmail, type EmailAttachment } from "@/lib/email/resend";
 import { cotizacionInternaEmail, cotizacionClienteEmail } from "@/lib/email/templates";
 import { buildCotizacionPdf } from "@/lib/admin/cotizacionPdf";
+import { hasCompletePhone, normalizePhoneForStorage, normalizeRutForStorage } from "@/lib/contactFormat";
 import { NOTIFY_EMAILS } from "@/lib/config";
 
 function normalizeOptionalText(value: unknown) {
@@ -30,13 +31,14 @@ function isValidEmail(value: string) {
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as Record<string, unknown>;
+    const rawTelefono = normalizeRequiredText(body.telefono);
 
     const payload = {
       nombre: normalizeRequiredText(body.nombre),
       empresa: normalizeRequiredText(body.empresa),
-      rut_empresa: normalizeOptionalText(body.rut_empresa),
+      rut_empresa: typeof body.rut_empresa === "string" ? normalizeRutForStorage(body.rut_empresa.trim()) : null,
       email: normalizeRequiredText(body.email),
-      telefono: normalizeRequiredText(body.telefono),
+      telefono: normalizePhoneForStorage(rawTelefono),
       comuna: normalizeOptionalText(body.comuna),
       servicio_solicitado: normalizeRequiredText(body.servicio_solicitado),
       volumen_estimado: normalizeOptionalText(body.volumen_estimado),
@@ -61,6 +63,13 @@ export async function POST(request: Request) {
     if (!isValidEmail(payload.email)) {
       return NextResponse.json(
         { error: "El correo electrónico no es válido." },
+        { status: 400 },
+      );
+    }
+
+    if (!hasCompletePhone(rawTelefono)) {
+      return NextResponse.json(
+        { error: "El teléfono debe incluir 8 dígitos después del +56 9." },
         { status: 400 },
       );
     }
@@ -129,4 +138,3 @@ export async function POST(request: Request) {
     );
   }
 }
-
