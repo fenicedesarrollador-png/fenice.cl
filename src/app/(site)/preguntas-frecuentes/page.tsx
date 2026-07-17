@@ -11,64 +11,69 @@ export const metadata: Metadata = {
 
 const faqs = [
   {
-    q: "¿Hacen despacho de petróleo a domicilio en Santiago?",
-    a: "Sí. Realizamos despacho de petróleo a domicilio en toda la Región Metropolitana para clientes empresariales e industriales, con requerimientos programados o puntuales.",
+    q: "¿Cuál es la cantidad mínima de combustible que puedo comprar?",
+    a: "La compra mínima es de 50 litros, tanto para petróleo diésel como para kerosene. Desde ese volumen coordinamos el despacho en la fecha y horario acordados.",
+    cat: "Pedidos",
+  },
+  {
+    q: "¿Realizan despachos de emergencia?",
+    a: "Sí, atendemos requerimientos urgentes sujetos a disponibilidad operacional y previa coordinación telefónica o por WhatsApp. Contáctanos y evaluamos la entrega más rápida posible para tu comuna y volumen.",
     cat: "Despacho",
   },
   {
-    q: "¿En qué comunas de Santiago trabajan?",
-    a: "Atendemos comunas del Gran Santiago como La Granja, Providencia, Las Condes, Maipú, Pudahuel, Quilicura, Puente Alto y San Bernardo, además de Lampa, Buin y Colina. También cubrimos Valparaíso y Rancagua.",
+    q: "¿Puedo programar entregas semanales o mensuales?",
+    a: "Sí. Puedes programar abastecimientos semanales o mensuales según el consumo de tu operación, generador, caldera o maquinaria. La programación periódica reduce el riesgo de quedarte sin combustible y simplifica tu gestión logística.",
+    cat: "Despacho",
+  },
+  {
+    q: "¿Qué información necesito para cotizar?",
+    a: "Para cotizar necesitamos: nombre y RUT de la empresa, persona de contacto, teléfono, correo, dirección exacta y comuna del despacho, tipo de combustible (diésel o kerosene), cantidad requerida en litros, fecha estimada de entrega y el tipo de instalación o maquinaria que será abastecida.",
+    cat: "Cotización",
+  },
+  {
+    q: "¿Qué formas de pago aceptan?",
+    a: "Aceptamos transferencia bancaria, tarjetas de débito, tarjetas de crédito y cheque, este último previa evaluación o consulta. Emitimos factura electrónica por cada despacho.",
+    cat: "Pagos",
+  },
+  {
+    q: "¿En qué comunas realizan despachos?",
+    a: "Cubrimos las 52 comunas de la Región Metropolitana —con foco en Santiago, Lampa, Colina, Buin, María Pinto, Melipilla, Curacaví, Talagante, Isla de Maipo y San Ramón— además de la Región de Valparaíso, Los Andes, Rancagua y Santa Cruz. Las entregas se programan según disponibilidad operacional, comuna y volumen.",
     cat: "Cobertura",
   },
   {
-    q: "¿Atienden a empresas o también a particulares?",
-    a: "Nuestro servicio está orientado principalmente a empresas, industria, construcción y operaciones que requieren volúmenes significativos. Consulta por tus requerimientos específicos.",
-    cat: "Clientes",
+    q: "¿Despachan combustible para generadores eléctricos?",
+    a: "Sí, es uno de nuestros servicios principales. Abastecemos generadores de edificios, condominios, clínicas, centros de salud, hoteles, establecimientos educacionales e industrias, con despachos programados o urgentes previa coordinación.",
+    cat: "Servicios",
   },
   {
-    q: "¿Cómo puedo cotizar el precio del petróleo?",
-    a: "Puedes cotizar directamente por WhatsApp al +56 9 3957 9658 o mediante nuestro formulario de contacto. Respondemos en minutos en horario Lun-Vie 09:00–19:00.",
+    q: "¿Atienden maquinaria pesada en terreno?",
+    a: "Sí. Cargamos directamente en faena excavadoras, retroexcavadoras, cargadores frontales, grúas, maquinaria agrícola y equipos de movimiento de tierra, sin que necesites trasladar los equipos.",
+    cat: "Servicios",
+  },
+  {
+    q: "¿El precio del diésel cambia semanalmente?",
+    a: "Los precios de los combustibles varían según las condiciones del mercado, por lo que se confirman antes de cada despacho. En los abastecimientos programados te informamos el precio vigente al coordinar cada entrega.",
     cat: "Precios",
   },
   {
-    q: "¿Cuánto tiempo demora el despacho?",
-    a: "Los tiempos dependen del volumen, la disponibilidad y tu ubicación. En la mayoría de los casos coordinamos el despacho en el mismo día o al siguiente hábil. Los despachos programados se agendan con anticipación según tu ciclo de consumo.",
+    q: "¿Cómo puedo consultar el estado de un despacho?",
+    a: "Puedes consultar el estado de tu despacho directamente por WhatsApp al +56 9 3957 9658 o al correo notifica@fenice.cl. Mantenemos comunicación directa desde la coordinación hasta la entrega.",
     cat: "Despacho",
   },
   {
     q: "¿Emiten factura electrónica?",
-    a: "Sí, emitimos factura electrónica para todos nuestros clientes empresariales. Puedes solicitarla al momento de coordinar el despacho.",
-    cat: "Facturación",
-  },
-  {
-    q: "¿Cuál es el volumen mínimo de pedido?",
-    a: "Consulta el volumen mínimo directamente por WhatsApp ya que puede variar según zona y disponibilidad de la flota. Atendemos desde despachos puntuales hasta contratos de suministro recurrente.",
-    cat: "Pedidos",
+    a: "Sí. Una vez aceptada la cotización se genera la orden de compra, se realiza el despacho y se emite la factura electrónica correspondiente. Para temas de facturación y pagos puedes escribir a finanzas@fenice.cl.",
+    cat: "Pagos",
   },
   {
     q: "¿Qué diferencia tiene el petróleo del diésel?",
-    a: "En Chile, el término 'petróleo' se usa informalmente para referirse al petróleo diésel, que es el mismo producto. El petróleo diésel (D2) es el combustible estándar para maquinaria, camiones, generadores y equipamiento industrial.",
+    a: "En Chile, el término 'petróleo' se usa informalmente para referirse al petróleo diésel, que es el mismo producto. Es el combustible estándar para maquinaria pesada, camiones, generadores eléctricos y calderas.",
     cat: "Producto",
   },
   {
-    q: "¿Instalan estanques de almacenamiento?",
-    a: "Sí. Ofrecemos el servicio de instalación de estanques de petróleo certificados por la SEC. El proceso incluye asesoría, instalación, tramitación ante la SEC y puesta en marcha.",
+    q: "¿Instalan y mantienen estanques de almacenamiento?",
+    a: "Sí. Realizamos instalación de estanques para almacenamiento de combustible, mantención preventiva y correctiva, evaluación de requerimientos de almacenamiento y apoyo en la planificación del abastecimiento.",
     cat: "Estanques",
-  },
-  {
-    q: "¿Qué normativa regula los estanques de combustible en Chile?",
-    a: "La instalación de estanques está regulada por el Decreto N° 160 del Ministerio de Economía y la NCh 2597. La SEC fiscaliza el cumplimiento de estas normas. Nuestro equipo realiza las instalaciones cumpliendo con toda la normativa vigente.",
-    cat: "Estanques",
-  },
-  {
-    q: "¿Tienen servicio de despacho de urgencia?",
-    a: "Disponemos de despachos urgentes sujetos a disponibilidad de flota. Contáctanos por WhatsApp para evaluar la disponibilidad en tu fecha y zona.",
-    cat: "Despacho",
-  },
-  {
-    q: "¿Cómo calcular cuánto petróleo necesita mi operación?",
-    a: "El consumo depende del tipo de maquinaria, horas de operación y carga de trabajo. Puedes revisar nuestro artículo en el blog sobre cómo calcular el consumo de petróleo industrial, o contactarnos para asesorarte.",
-    cat: "Producto",
   },
 ];
 

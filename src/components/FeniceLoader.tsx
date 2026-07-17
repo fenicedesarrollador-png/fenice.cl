@@ -462,8 +462,12 @@ export default function FeniceLoader() {
       seen = sessionStorage.getItem("fenice-loader-shown") === "1";
     } catch {}
     if (seen) {
-      setActive(false);
-      return;
+      const hideTimer = window.setTimeout(() => {
+        setActive(false);
+      }, 0);
+      return () => {
+        window.clearTimeout(hideTimer);
+      };
     }
     try {
       sessionStorage.setItem("fenice-loader-shown", "1");
@@ -615,7 +619,7 @@ export default function FeniceLoader() {
               <div className="truck-shadow" />
               <div className="truck-wrap">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="truck-img" src="/loader/truck.webp" alt="Camion cisterna Sociedad Fenice SPA" />
+                <img className="truck-img" src="/loader/truck.webp" alt="Camion cisterna FENICE SpA" />
                 <div className="wheel front"><div className="wheel-spin" /></div>
                 <div className="wheel rear-one"><div className="wheel-spin" /></div>
                 <div className="wheel rear-two"><div className="wheel-spin" /></div>
@@ -643,7 +647,7 @@ export default function FeniceLoader() {
                 </defs>
                 <path d="M16 2 C16 2 6 14 6 21 a10 10 0 0 0 20 0 C26 14 16 2 16 2 Z" fill="url(#fl-dropG)" />
               </svg>
-              <span>Sociedad Fenice SPA</span>
+              <span>FENICE SpA</span>
             </div>
             <div className="phrase" ref={phraseRef}>Preparando tu despacho</div>
             <div className="bar-outer">

@@ -66,8 +66,8 @@ function shell({ badge, title, subtitle, content }: { badge: string; title: stri
         <tr>
           <td style="background:#f8fafc;border-top:1px solid #eef2f7;padding:20px 32px;">
             <p style="margin:0;font-size:12px;color:#94a3b8;line-height:1.7;">
-              Fenice SPA · La Granja, Santiago, Región Metropolitana<br>
-              <a href="mailto:ventas@fenice.cl" style="color:#1a6b3c;text-decoration:none;font-weight:600;">ventas@fenice.cl</a> ·
+              FENICE SpA · Calle La Granja 8396, San Ramón, Región Metropolitana<br>
+              <a href="mailto:notifica@fenice.cl" style="color:#1a6b3c;text-decoration:none;font-weight:600;">notifica@fenice.cl</a> ·
               <a href="tel:${SITE_CONFIG.telefono}" style="color:#1a6b3c;text-decoration:none;font-weight:600;">${SITE_CONFIG.telefono}</a> ·
               <a href="${BASE}" style="color:#1a6b3c;text-decoration:none;font-weight:600;">fenice.cl</a>
             </p>
@@ -92,6 +92,11 @@ export type CotizacionEmailData = {
   volumen_estimado: string | null;
   frecuencia: string | null;
   mensaje: string | null;
+  // Campos del formulario potenciado (opcionales)
+  tipo_combustible?: string | null;
+  direccion_entrega?: string | null;
+  fecha_estimada?: string | null;
+  tipo_instalacion?: string | null;
 };
 
 /** Notificación interna: nueva solicitud de cotización (para el equipo Fenice). */
@@ -123,9 +128,13 @@ export function cotizacionInternaEmail(data: CotizacionEmailData): string {
             <td colspan="2" style="background:#f0faf4;padding:10px 16px;font-size:11px;font-weight:800;color:#1a6b3c;text-transform:uppercase;letter-spacing:0.08em;">Servicio solicitado</td>
           </tr>
           ${row("Servicio", data.servicio_solicitado, true)}
+          ${data.tipo_combustible ? row("Tipo de combustible", data.tipo_combustible) : ""}
           ${row("Volumen estimado", data.volumen_estimado)}
           ${row("Frecuencia", data.frecuencia)}
           ${row("Comuna / zona", data.comuna)}
+          ${data.direccion_entrega ? row("Dirección de entrega", data.direccion_entrega) : ""}
+          ${data.fecha_estimada ? row("Fecha estimada de entrega", data.fecha_estimada) : ""}
+          ${data.tipo_instalacion ? row("Instalación / equipo", data.tipo_instalacion) : ""}
           <tr>
             <td colspan="2" style="background:#f0faf4;padding:10px 16px;font-size:11px;font-weight:800;color:#1a6b3c;text-transform:uppercase;letter-spacing:0.08em;">Datos del solicitante</td>
           </tr>
@@ -173,9 +182,13 @@ export function cotizacionClienteEmail(data: CotizacionEmailData): string {
             <td colspan="2" style="background:#f0faf4;padding:10px 16px;font-size:11px;font-weight:800;color:#1a6b3c;text-transform:uppercase;letter-spacing:0.08em;">Resumen de tu solicitud</td>
           </tr>
           ${row("Servicio", data.servicio_solicitado, true)}
+          ${data.tipo_combustible ? row("Tipo de combustible", data.tipo_combustible) : ""}
           ${row("Volumen estimado", data.volumen_estimado)}
           ${row("Frecuencia", data.frecuencia)}
           ${row("Comuna / zona", data.comuna)}
+          ${data.direccion_entrega ? row("Dirección de entrega", data.direccion_entrega) : ""}
+          ${data.fecha_estimada ? row("Fecha estimada de entrega", data.fecha_estimada) : ""}
+          ${data.tipo_instalacion ? row("Instalación / equipo", data.tipo_instalacion) : ""}
           ${row("Empresa", data.empresa)}
         </table>
       </td>

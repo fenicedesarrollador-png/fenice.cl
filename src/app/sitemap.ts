@@ -36,21 +36,8 @@ const staticRoutes: MetadataRoute.Sitemap = [
   })),
 ];
 
-const staticBlogSlugs = [
-  "diferencia-entre-petroleo-y-diesel",
-  "como-calcular-consumo-petroleo-industrial",
-  "mantenimiento-de-estanques-de-petroleo",
-  "normativa-sec-almacenamiento-combustible",
-  "petroleo-para-generadores-guia-completa",
-];
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const blogStatic = staticBlogSlugs.map((slug) => ({
-    url: `${BASE_URL}/blog/${slug}`,
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  }));
-
+  // El blog vive solo en Supabase (administrado desde /admin/blog).
   let blogDynamic: MetadataRoute.Sitemap = [];
   let eventosDynamic: MetadataRoute.Sitemap = [];
 
@@ -63,7 +50,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ]);
 
     blogDynamic = (blogRes?.data || [])
-      .filter((post) => !staticBlogSlugs.includes(post.slug))
       .map((post) => ({
         url: `${BASE_URL}/blog/${post.slug}`,
         lastModified: post.updated_at ? new Date(post.updated_at) : undefined,
@@ -79,5 +65,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
   } catch {}
 
-  return [...staticRoutes, ...blogStatic, ...blogDynamic, ...eventosDynamic];
+  return [...staticRoutes, ...blogDynamic, ...eventosDynamic];
 }

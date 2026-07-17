@@ -59,6 +59,7 @@ type IconCard = {
 /* Navegación interna por anclas — mejora UX y profundidad de scroll (señal SEO) */
 const sectionNav = [
   { href: "#quienes-somos", label: "Quiénes somos" },
+  { href: "#historia", label: "Historia" },
   { href: "#productos", label: "Productos" },
   { href: "#clientes", label: "A quién atendemos" },
   { href: "#valores", label: "Valores" },
@@ -69,9 +70,9 @@ const sectionNav = [
 
 /* Banda de confianza / impacto (E-E-A-T, contenido indexable) */
 const stats = [
+  { value: "16", label: "Años de experiencia", hint: "De sus fundadores en el rubro" },
   { value: "2", label: "Líneas de producto", hint: "Diésel · Kerosene" },
-  { value: "RM", label: "Cobertura operativa", hint: "Región Metropolitana" },
-  { value: "B2B + B2C", label: "Empresas y hogares", hint: "Atención dual" },
+  { value: "3", label: "Regiones con cobertura", hint: "RM · Valparaíso · O'Higgins" },
   { value: "100%", label: "Procesos documentados", hint: "Factura electrónica" },
 ];
 
@@ -159,34 +160,34 @@ const valueCards: IconCard[] = [
 
 const principles: IconCard[] = [
   {
-    icon: ShieldCheck,
-    title: "Confiabilidad",
-    text: "Cumplimos los compromisos y condiciones informadas.",
+    icon: Handshake,
+    title: "Confianza",
+    text: "Construimos relaciones de largo plazo cumpliendo lo acordado en cada despacho.",
   },
   {
     icon: FileText,
     title: "Transparencia",
-    text: "Entregamos información clara sobre productos, cotizaciones y procesos.",
+    text: "Comunicación clara y precios actualizados según las condiciones del mercado.",
   },
   {
-    icon: ClipboardCheck,
-    title: "Responsabilidad",
-    text: "Promovemos una gestión comercial ordenada y consciente.",
+    icon: ShieldCheck,
+    title: "Seguridad",
+    text: "Protocolos y flota especializada para un despacho seguro en cada instalación.",
   },
   {
-    icon: Handshake,
-    title: "Cercanía",
-    text: "Escuchamos y orientamos a cada cliente según su necesidad.",
-  },
-  {
-    icon: Fuel,
-    title: "Continuidad",
-    text: "Comprendemos la importancia de contar con energía para hogares y operaciones.",
+    icon: CalendarCheck,
+    title: "Puntualidad",
+    text: "Cumplimos los tiempos comprometidos: fecha, horario y cantidad coordinados.",
   },
   {
     icon: Sparkles,
-    title: "Mejora continua",
-    text: "Buscamos optimizar nuestra atención y experiencia de servicio.",
+    title: "Atención personalizada",
+    text: "Nos adaptamos a las necesidades de cada cliente, sin intermediarios innecesarios.",
+  },
+  {
+    icon: Fuel,
+    title: "Continuidad operacional",
+    text: "Nuestro compromiso es que su operación nunca se detenga por falta de combustible.",
   },
 ];
 
@@ -416,15 +417,16 @@ export default async function NosotrosPage() {
             </h2>
             <div className="mt-6 space-y-5 text-base leading-relaxed text-slate-600">
               <p>
-                Fenice SPA es una empresa dedicada a la distribución de diésel y kerosene,
-                con atención comercial a empresas, operaciones y clientes residenciales, según
-                las necesidades de cada requerimiento.
+                FENICE SpA es una empresa especializada en la distribución y despacho de
+                petróleo diésel y kerosene para empresas e instituciones, respaldada por
+                fundadores con cerca de 16 años de experiencia en el rubro energético.
               </p>
               <p>
-                Entendemos que el acceso oportuno a combustible y energía es importante para
-                mantener en funcionamiento hogares, negocios y operaciones. Por eso buscamos
-                entregar procesos claros, orientación cercana y una coordinación responsable
-                en cada solicitud, con cobertura en Santiago y la Región Metropolitana.
+                Entendemos que el acceso oportuno al combustible es lo que mantiene en
+                funcionamiento generadores, calderas, maquinaria y operaciones completas.
+                Por eso trabajamos con despachos coordinados, comunicación directa y precios
+                actualizados, con cobertura en la Región Metropolitana, la Región de
+                Valparaíso, Los Andes y la Región de O&apos;Higgins.
               </p>
             </div>
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -449,6 +451,55 @@ export default async function NosotrosPage() {
               className="object-cover object-center"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/30 to-transparent" />
+          </div>
+        </div>
+      </section>
+
+      {/* ── NUESTRA HISTORIA ──────────────────────────────────────────────── */}
+      <section id="historia" className="scroll-mt-32 border-y border-slate-100 bg-white py-16 sm:py-20" data-analytics-section="historia">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <div className="mb-12 max-w-3xl">
+            <SectionEyebrow>Nuestra historia</SectionEyebrow>
+            <h2 className="text-3xl font-extrabold text-[#0a1628] sm:text-4xl">
+              16 años de experiencia en el rubro energético
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-slate-600">
+              FENICE es la etapa más reciente de un camino que sus fundadores comenzaron
+              hace aproximadamente 16 años, distribuyendo combustible con un solo camión
+              y atendiendo a clientes cercanos.
+            </p>
+          </div>
+          <div className="grid gap-6 lg:grid-cols-3">
+            {[
+              {
+                year: "2010",
+                title: "Los inicios",
+                text: "Los fundadores comienzan en el rubro energético distribuyendo diésel con un solo camión, atendiendo a clientes cercanos y construyendo relaciones de confianza que perduran hasta hoy.",
+              },
+              {
+                year: "Etapa EMDECO",
+                title: "Crecimiento y aprendizaje",
+                text: "La operación se desarrolla bajo el nombre de EMDECO SpA, distribuyendo gas y petróleo. Con el tiempo, la empresa decide especializarse exclusivamente en la distribución de petróleo diésel y kerosene.",
+              },
+              {
+                year: "Hoy: FENICE",
+                title: "Especialización y consolidación",
+                text: "Hace aproximadamente tres años nace la marca FENICE SpA: un servicio enfocado en la rapidez, la atención personalizada, la seguridad y la continuidad operacional de cada cliente.",
+              },
+            ].map((item, i) => (
+              <article
+                key={item.year}
+                data-reveal
+                data-reveal-delay={String(i * 110)}
+                className="relative rounded-2xl border border-slate-200 bg-slate-50 p-7 transition-all hover:-translate-y-0.5 hover:border-[#1a6b3c]/30 hover:shadow-md"
+              >
+                <span className="inline-flex rounded-full bg-[#1a6b3c]/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#1a6b3c]">
+                  {item.year}
+                </span>
+                <h3 className="mt-4 text-lg font-extrabold text-[#0a1628]">{item.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-slate-600">{item.text}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -571,9 +622,9 @@ export default async function NosotrosPage() {
               </div>
               <h3 className="mb-4 text-xl font-extrabold text-[#0a1628]">Misión</h3>
               <p className="leading-relaxed text-slate-600">
-                Entregar soluciones confiables de diésel y kerosene,
-                atendiendo las necesidades de empresas, operaciones y hogares mediante una
-                atención cercana, procesos transparentes y una coordinación eficiente.
+                En FENICE trabajamos para garantizar un abastecimiento de combustible seguro,
+                puntual y transparente, construyendo relaciones de confianza a largo plazo
+                con nuestros clientes, proveedores y aliados estratégicos.
               </p>
             </article>
             <article className="rounded-2xl border border-[#f5a623]/20 bg-[#fff7ec] p-7">
@@ -582,9 +633,10 @@ export default async function NosotrosPage() {
               </div>
               <h3 className="mb-4 text-xl font-extrabold text-[#0a1628]">Visión</h3>
               <p className="leading-relaxed text-slate-600">
-                Ser una empresa reconocida por la confianza, cercanía y capacidad de respuesta
-                en la distribución de combustibles y energía para clientes residenciales y
-                empresariales de la Región Metropolitana.
+                Ser un socio estratégico y confiable en la distribución de combustibles,
+                reconocido por nuestra rapidez, seguridad, atención personalizada y capacidad
+                de respuesta. Buscamos crecer mediante procesos eficientes y herramientas
+                tecnológicas, sin perder la cercanía con nuestros clientes.
               </p>
             </article>
           </div>

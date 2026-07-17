@@ -1,10 +1,10 @@
 // Placeholders blur (base64) para carga percibida instantánea.
 // Generados con sharp (16px). NO editar a mano; regenerar si cambian las fotos.
 export const BLUR: Record<string, string> = {
-  "portada-fenice": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAAAQAgCdASoQAAkAA8BgJQBOgCICdh6nOfcAAMpAEKBf0blDM6527zLGcN8oEfx8TBjCwo4vl0exOeGTafCGqzHuFCHAAA==",
-  "nosotros-fenice": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADQAQCdASoQAAkAA8BgJYgCdAEWbK6gAAD+1zxYot2sNN3JtXzzLb6+baShio5+Eph+RKdZ8dcqBlem7c0Ibbh2qaasLIgEmGRAAAAA",
-  "operacion-carga-maquinaria": "data:image/webp;base64,UklGRp4AAABXRUJQVlA4IJIAAADwAwCdASoQABQAPwFqrE6rJiQiMAgBYCAJaACdLwABgxXUhb5hpvLgAP63IJhCUspvmMZK9FjT2LMcd2qjigpEo2y/d3xYQJO5IGZGsRhZuzfbdLdrg/xm3J4hDQyOHgDDKBogfgbMzxmlDQ74yDE8FJxFu2G00YwBq6URkbvuUeTOX8/xz8zv8pLQ84OtIKAAAA==",
-  "operacion-faena-excavadora": "data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAAAwBACdASoQABQAPwFqrE8rJiQiMAgBYCAJaACnM8AB9Zm2JlZum35OueAA/nhvy51RO9h16ZG/xdMynkS7ll8+oBrGh5dU/ZsqpP0+yzWVNK1t+ImEavZXgrwgF9K0g8ZO9iVibuYG9NMxiKdeoR5cDSLdBDvuEy76T9yBFf7agrwcAXxAAA==",
-  "operacion-despacho-flota": "data:image/webp;base64,UklGRowAAABXRUJQVlA4IIAAAADwAwCdASoQABQAPwForE8rJaQiMAgBYCAJZwAATvc4WnTMr9TUooKwAP7ZTEPdQ6+j2/LZ7Sl9qSqppnCUv4lEwo0oN7HElj6DFqsdP1XYAzVcpyvhPXyXic3SFThsB6ibgxtNy6DivL2cSQiwQ5nolz0xt9mRin9B8TV3wgcgAA==",
-  "operacion-central": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAAAQAgCdASoQAAkAA8BgJYwCdAD8vs+JsogAAP3jaIOdDwqyDJwgCIiqZPH/HHSYj7IJJ8w1bzLurZXd0wkyTfK81/BDR6jWHXCp/RAA"
+  "portada-fenice": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADwAQCdASoQAAkAA4BaJQBOgCIExX/YpAAAykAQoF/R0p9gkMSKNox1Ip1PmTW0aGWIB4+XjOlQUu4tgGjASCNIrWUTFRBuwAA=",
+  "nosotros-fenice": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAAAQAgCdASoQAAkAA4BaJYgCdAECwit9AuCAAP7hqtxI9w6AIVqwOHsM+ceEnOqbdgb+9qBQyhWECpdWLup8yIDKg3gloYgWhYZEAAAA",
+  "operacion-carga-maquinaria": "data:image/webp;base64,UklGRqoAAABXRUJQVlA4IJ4AAAAQBACdASoQABQAPu1iqU2ppaOiMAgBMB2JaACdH8ACgsNmKKGowX4oAAD+ycfwAQBLKsmVBRyPkCIcoRTN4kcZySVtlIH+e0U+DpACpRp86NTxMFWZUJeZii5o1S/IzQADc8VLD506YlfQeOjEST0Jnty2rtup1XPFahS2ZI566o+i4jbwMcCyQqhC0iccwOKO32QUvF93XlimLUAAAA==",
+  "operacion-faena-excavadora": "data:image/webp;base64,UklGRqIAAABXRUJQVlA4IJYAAAAwBACdASoQABQAPu1iqU2ppaOiMAgBMB2JaACsMoACIYxYNUJd3YoNBAAA/nhxDgCyhkLr8GxWA/P1gP4R1U2npQIVX2pzv+Kx1ZiuqeV4O3pk+iBrBlnnmLvxzuHSz/1wjRZ8x5hgyosf1fxFR+9jzb1ye94TmyTnJ0MtRDS71wML6Q8qAgLRl+nmOkeDtD1qXNCgAAA=",
+  "operacion-despacho-flota": "data:image/webp;base64,UklGRpoAAABXRUJQVlA4II4AAADQAwCdASoQABQAPu1iqU2ppaOiMAgBMB2JZwAATuO20OLjKWVbywAA/uNQ176ZvdcQ+GvGZet9vybCshB92BgpGV/BrWyv6ixEMfu9hvF1JzOjvE0tiNQf2wF4N7MKTAJlM/kKuZIG3iUqvz35j7YFtdMqTzASc1xPPiBXUGiL7aZiiGOv297YZCT7OAAA",
+  "operacion-central": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAADwAQCdASoQAAkAA4BaJQBOgCKt9Ny3AkgA/eNog4CWcjVDgxTBwVgig/exYYDW1q9twKIXw1ueCNUiS8AIuDP4SYvQltFlxNU11NoYAAA=",
 };

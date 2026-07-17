@@ -670,15 +670,27 @@ export const COMUNAS_COBERTURA: Comuna[] = [
     ],
   },
   {
-    nombre: "Rancagua", slug: "rancagua", region: "Región de O'Higgins", provincia: "Región de O'Higgins",
-    sector: "región de O'Higgins", perfil: "minero e industrial",
+    nombre: "Los Andes", slug: "los-andes", region: "Región de Valparaíso", provincia: "Región de Valparaíso",
+    sector: "cordillera de Valparaíso", perfil: "minero, logístico y agroindustrial",
     contexto:
-      "Rancagua es la capital de la Región de O'Higgins y uno de los centros industriales y mineros más importantes de Chile, sede de empresas que abastecen a la gran minería del cobre y al sector agroindustrial de la región. La demanda de combustible es alta y constante para las faenas mineras, la maquinaria agrícola y las plantas de procesamiento.",
+      "Los Andes es un punto estratégico del corredor bioceánico hacia Argentina y puerta de entrada a la minería de la zona: la división Andina de Codelco y sus empresas contratistas operan en el sector. La actividad logística del paso Los Libertadores, la agroindustria del valle del Aconcagua y las faenas de montaña generan demanda constante de diésel para maquinaria, generadores y flotas.",
     beneficios: [
-      "Proveedores de la gran minería del cobre en la región",
-      "Empresas agroindustriales con flota de maquinaria propia",
-      "Constructoras con faenas activas en la zona central",
-      "Plantas de generación y empresas energéticas regionales",
+      "Empresas contratistas y proveedores de la minería andina",
+      "Operadores logísticos y flotas del corredor internacional",
+      "Agroindustria y packing del valle del Aconcagua",
+      "Faenas de montaña con generadores y equipos en terreno",
+    ],
+  },
+  {
+    nombre: "Santa Cruz", slug: "santa-cruz", region: "Región de O'Higgins", provincia: "Región de O'Higgins",
+    sector: "valle de Colchagua", perfil: "agroindustrial y vitivinícola",
+    contexto:
+      "Santa Cruz es el corazón del valle de Colchagua, una de las zonas vitivinícolas y agroindustriales más activas de Chile. Viñas, packing, plantas de proceso y campos con maquinaria agrícola propia requieren abastecimiento confiable de diésel para tractores, cosechadoras, generadores y calderas, especialmente en temporada de vendimia y cosecha.",
+    beneficios: [
+      "Viñas y bodegas con calderas, generadores y maquinaria propia",
+      "Empresas agrícolas y packing con alta demanda estacional",
+      "Maquinaria agrícola en campo: tractores y cosechadoras",
+      "Hoteles y turismo del valle con equipos de respaldo",
     ],
   },
 ];

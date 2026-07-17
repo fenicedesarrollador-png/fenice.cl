@@ -188,7 +188,7 @@ export default function Footer({ config }: { config: SiteConfig }) {
       {/* Bottom bar */}
       <div className="border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
-          <p>© {new Date().getFullYear()} Fenice SPA · La Granja, Santiago, Chile · Todos los derechos reservados</p>
+          <p>© {new Date().getFullYear()} FENICE SpA · Sociedad de Transportes y Diesel SpA · San Ramón, Santiago, Chile · Todos los derechos reservados</p>
           <div className="flex items-center gap-4">
             <Link href="/politica-de-privacidad" data-analytics-id="footer_privacidad" data-analytics-label="Privacidad" data-analytics-cta="footer_navigation" className="hover:text-slate-400 transition-colors">Privacidad</Link>
             <Link href="/aviso-legal" data-analytics-id="footer_legal" data-analytics-label="Legal" data-analytics-cta="footer_navigation" className="hover:text-slate-400 transition-colors">Legal</Link>
