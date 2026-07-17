@@ -43,7 +43,7 @@ const caracteristicas = [
   {
     icon: MapPin,
     title: "Cobertura RM completa",
-    desc: "Operamos en toda la Región Metropolitana desde nuestra base en La Granja, Santiago.",
+    desc: "Operamos en toda la Región Metropolitana desde nuestra base en San Ramón, Santiago.",
   },
   {
     icon: Calendar,

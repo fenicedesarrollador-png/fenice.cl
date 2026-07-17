@@ -86,7 +86,7 @@ export default function ComunaPage({ config }: { config: ComunaConfig }) {
           </h2>
           <p className="text-gray-600 leading-relaxed mb-4">{config.contexto}</p>
           <p className="text-gray-600 leading-relaxed mb-6">
-            Desde nuestra base en La Granja, Santiago, llegamos a {config.nombre} con tiempos de
+            Desde nuestra base en San Ramón, Santiago, llegamos a {config.nombre} con tiempos de
             despacho competitivos. Coordinamos por WhatsApp para ajustarnos a tu horario de operación
             y emitimos factura electrónica para tu departamento de compras.
           </p>

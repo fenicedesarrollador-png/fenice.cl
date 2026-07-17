@@ -21,6 +21,11 @@ export type CotizacionPdfData = {
   mensaje: string | null;
   estado: string;
   created_at: string;
+  // Campos del formulario potenciado (migration_potenciacion_comercial.sql)
+  tipo_combustible?: string | null;
+  direccion_entrega?: string | null;
+  fecha_estimada?: string | null;
+  tipo_instalacion?: string | null;
 };
 
 const NAVY = rgb(0.039, 0.086, 0.157); // #0a1628
@@ -96,7 +101,7 @@ export async function buildCotizacionPdf(data: CotizacionPdfData): Promise<Uint8
     p.drawText("Distribución de combustible · Región Metropolitana", {
       x: MARGIN, y: PAGE_H - 70, size: 9, font: helv, color: rgb(0.58, 0.65, 0.76),
     });
-    p.drawText("ventas@fenice.cl · +56 9 3957 9658 · fenice.cl", {
+    p.drawText("notifica@fenice.cl · +56 9 3957 9658 · fenice.cl", {
       x: MARGIN, y: PAGE_H - 84, size: 9, font: helv, color: rgb(0.58, 0.65, 0.76),
     });
 
@@ -114,7 +119,7 @@ export async function buildCotizacionPdf(data: CotizacionPdfData): Promise<Uint8
   /* ── Pie de página ──────────────────────────────────────────── */
   function drawFooter(p: PDFPage, pageNum: number, totalHint: number) {
     p.drawLine({ start: { x: MARGIN, y: 64 }, end: { x: PAGE_W - MARGIN, y: 64 }, thickness: 0.75, color: LINE });
-    p.drawText("Fenice SPA · La Granja, Santiago, Región Metropolitana · Estanques certificados SEC · TC4 · TC10A · DS 160", {
+    p.drawText("FENICE SpA · Calle La Granja 8396, San Ramón, Región Metropolitana · Estanques certificados SEC · TC4 · TC10A · DS 160", {
       x: MARGIN, y: 50, size: 7.5, font: helv, color: MUTED,
     });
     p.drawText("Documento generado desde el panel administrativo de fenice.cl — uso interno y comercial.", {
@@ -190,13 +195,17 @@ export async function buildCotizacionPdf(data: CotizacionPdfData): Promise<Uint8
     { label: "Correo electrónico", value: data.email },
     { label: "Teléfono", value: data.telefono },
     { label: "Comuna / zona de entrega", value: data.comuna },
+    ...(data.direccion_entrega ? [{ label: "Dirección de entrega", value: data.direccion_entrega }] : []),
   ]);
 
   sectionTitle("Detalle del requerimiento");
   fieldGrid([
     { label: "Servicio solicitado", value: data.servicio_solicitado },
+    ...(data.tipo_combustible ? [{ label: "Tipo de combustible", value: data.tipo_combustible }] : []),
     { label: "Volumen estimado por despacho", value: data.volumen_estimado },
     { label: "Frecuencia de despacho", value: data.frecuencia },
+    ...(data.fecha_estimada ? [{ label: "Fecha estimada de entrega", value: data.fecha_estimada }] : []),
+    ...(data.tipo_instalacion ? [{ label: "Instalación / equipo a abastecer", value: data.tipo_instalacion }] : []),
     { label: "Fecha de recepción", value: fecha },
   ]);
 

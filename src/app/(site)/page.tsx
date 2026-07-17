@@ -9,7 +9,8 @@ import {
   Truck, ArrowRight, Phone, CheckCircle2,
   MapPin, Clock, Building2, ShieldCheck, FileText,
   ChevronRight, Users, Award, Clipboard,
-  Route, Shield, BarChart3, HeadphonesIcon, Container
+  Route, Shield, BarChart3, HeadphonesIcon, Container,
+  Construction, Zap, Flame
 } from "lucide-react";
 import { COMUNAS_DESTACADAS, SITE_CONFIG } from "@/lib/config";
 import { buildMetadata, faqSchema, jsonLd, CORE_KEYWORDS } from "@/lib/seo";
@@ -27,12 +28,12 @@ export const metadata = buildMetadata({
 });
 
 const faqItems = [
-  { q: "¿Hacen despacho de petróleo a domicilio en Santiago?", a: "Sí. Realizamos despacho de petróleo a domicilio en toda la Región Metropolitana para empresas e industria, con despachos programados o urgentes según sus necesidades." },
-  { q: "¿En qué comunas de Santiago trabajan?", a: "Atendemos La Granja, Providencia, Las Condes, Maipú, Pudahuel, Quilicura, Puente Alto, San Bernardo, Lampa, Buin, Colina, además de Valparaíso y Rancagua." },
-  { q: "¿Instalan estanques de combustible?", a: "Sí. Instalamos estanques certificados SEC con autorización TC4 y coordinamos la carga periódica según la necesidad de tu operación: semanal, quincenal, mensual o a demanda." },
-  { q: "¿Qué tipo de empresas pueden cotizar petróleo?", a: "Industria manufacturera, construcción, minería, faenas, generadores eléctricos, flotas de maquinaria y cualquier organización con requerimiento de combustible." },
-  { q: "¿Cumplen la normativa de transporte de combustible?", a: "Sí. Nuestra flota de camiones estanque opera con certificación TC10A y cumplimos el DS 160 y la normativa de transporte de carga peligrosa en cada despacho." },
-  { q: "¿Cómo cotizo el precio del petróleo?", a: "Por WhatsApp al +56 9 3957 9658, mediante el formulario de cotización o al correo ventas@fenice.cl. Respondemos en minutos Lun-Vie 09:00–19:00." },
+  { q: "¿Hacen despacho de petróleo a domicilio en Santiago?", a: "Sí. Realizamos despacho de petróleo diésel y kerosene a domicilio en toda la Región Metropolitana para empresas e instituciones, con despachos programados o urgentes previa coordinación." },
+  { q: "¿Cuál es la cantidad mínima de combustible?", a: "La compra mínima es de 50 litros. Puedes programar abastecimientos semanales o mensuales, o solicitar despachos puntuales según tu operación." },
+  { q: "¿En qué comunas trabajan?", a: "Cubrimos las 52 comunas de la Región Metropolitana —incluyendo Santiago, Lampa, Colina, Buin, Melipilla, Curacaví y Talagante— además de Valparaíso, Los Andes, Rancagua y Santa Cruz." },
+  { q: "¿Despachan combustible para generadores y calderas?", a: "Sí, son servicios prioritarios: abastecemos generadores eléctricos y calderas de edificios, condominios, clínicas, hoteles e industrias, con despachos programados o urgentes previa coordinación." },
+  { q: "¿Qué formas de pago aceptan?", a: "Transferencia bancaria, tarjetas de débito, tarjetas de crédito y cheque previa evaluación. Emitimos factura electrónica por cada despacho. Los precios se confirman antes de cada entrega según el mercado." },
+  { q: "¿Cómo cotizo el precio del petróleo?", a: "Por WhatsApp al +56 9 3957 9658, mediante el formulario de cotización o al correo notifica@fenice.cl. Respondemos en minutos Lun-Vie 09:00–19:00." },
 ];
 
 const homeFaqSchema = faqSchema(faqItems);
@@ -55,26 +56,38 @@ const SERVICIOS_HOME = [
   {
     icon: Truck,
     title: "Petróleo diesel a domicilio",
-    desc: "Despacho de diesel para empresas, faenas y cualquier necesidad operativa en la RM.",
+    desc: "Despacho de diesel y kerosene para empresas e instituciones en toda la RM.",
     href: "/servicios/petroleo-a-domicilio-santiago",
+  },
+  {
+    icon: Construction,
+    title: "Combustible para maquinaria pesada",
+    desc: "Carga directa en faena a excavadoras, cargadores y equipos de movimiento de tierra.",
+    href: "/servicios/combustible-para-maquinaria-pesada",
+  },
+  {
+    icon: Zap,
+    title: "Combustible para generadores",
+    desc: "Abastecimiento programado o urgente para generadores de edificios, clínicas e industrias.",
+    href: "/servicios/combustible-para-generadores-electricos",
+  },
+  {
+    icon: Flame,
+    title: "Combustible para calderas",
+    desc: "Suministro para calderas de edificios, condominios, hoteles y procesos térmicos.",
+    href: "/servicios/combustible-para-calderas",
   },
   {
     icon: Container,
     title: "Instalación de estanques SEC",
-    desc: "Estanques certificados con carga periódica según la necesidad de tu operación.",
+    desc: "Instalación y mantención de estanques con carga periódica según tu operación.",
     href: "/servicios/instalacion-de-estanques",
   },
   {
     icon: Building2,
     title: "Abastecimiento a empresas",
-    desc: "Soluciones adaptadas a la operación de industrias, flotas y clientes corporativos.",
+    desc: "Despachos programados semanales o mensuales para industrias, flotas y faenas.",
     href: "/empresas-faenas-flotas",
-  },
-  {
-    icon: HeadphonesIcon,
-    title: "Atención personalizada",
-    desc: "Acompañamiento comercial y operativo según cada necesidad.",
-    href: "/contacto",
   },
 ];
 
@@ -116,12 +129,12 @@ const SECURITY_ITEMS = [
 ];
 
 const SECTORES = [
-  "Construcción e inmobiliaria",
-  "Manufactura y planta industrial",
-  "Minería y extracción",
+  "Movimiento de tierra y construcción",
   "Generadores eléctricos",
-  "Flota de maquinaria pesada",
-  "Agroindustria y agricultura",
+  "Calderas y calefacción central",
+  "Edificios y condominios",
+  "Clínicas y centros de salud",
+  "Agroindustria y faenas mineras",
 ];
 
 const WA_URL = `https://wa.me/${SITE_CONFIG.whatsapp_numero}?text=${encodeURIComponent("Hola, quiero cotizar petróleo a domicilio para mi empresa.")}`;
@@ -180,9 +193,10 @@ export default function HomePage() {
                 <span className="text-[#f5a623]">Empresas e Industrias</span>
               </h1>
               <p className="hero-rise-2 text-sm sm:text-base text-slate-300 leading-relaxed mb-7 max-w-xl">
-                Fenice SPA distribuye petróleo diesel a domicilio en toda la Región Metropolitana
-                e instala estanques certificados SEC con carga periódica según tu operación.
-                Flota especializada, despacho rápido y respaldo en cada entrega.
+                Combustible confiable para mantener su operación en movimiento: despachamos
+                petróleo diesel y kerosene directamente en empresas, faenas, edificios y
+                centros de operación de la Región Metropolitana, Valparaíso y O&apos;Higgins.
+                Despachos programados, precios actualizados y comunicación directa.
               </p>
               <div className="hero-rise-3 flex flex-col sm:flex-row gap-3 mb-7">
                 <Link href="/cotizacion" data-analytics-id="hero_cotizar" data-analytics-label="Solicitar cotización" data-analytics-cta="quote" className="inline-flex items-center justify-center gap-2 bg-[#f5a623] hover:bg-[#d4891a] text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-lg shadow-[#f5a623]/25 text-sm">
@@ -299,7 +313,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {SERVICIOS_HOME.map(({ icon: Icon, title, desc, href }, i) => (
               <Link
                 key={title}

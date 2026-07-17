@@ -41,6 +41,10 @@ export async function POST(request: Request) {
       telefono: normalizePhoneForStorage(rawTelefono),
       comuna: normalizeOptionalText(body.comuna),
       servicio_solicitado: normalizeRequiredText(body.servicio_solicitado),
+      tipo_combustible: normalizeOptionalText(body.tipo_combustible),
+      direccion_entrega: normalizeOptionalText(body.direccion_entrega),
+      fecha_estimada: normalizeOptionalText(body.fecha_estimada),
+      tipo_instalacion: normalizeOptionalText(body.tipo_instalacion),
       volumen_estimado: normalizeOptionalText(body.volumen_estimado),
       frecuencia: normalizeOptionalText(body.frecuencia),
       mensaje: normalizeOptionalText(body.mensaje),
@@ -75,11 +79,31 @@ export async function POST(request: Request) {
     }
 
     const serviceClient = await createServiceClient();
-    const { data, error } = await serviceClient
+    let { data, error } = await serviceClient
       .from("cotizaciones")
       .insert(payload)
       .select("id, created_at")
       .single();
+
+    // Compatibilidad: si aún no se ejecutó migration_potenciacion_comercial.sql
+    // (columnas nuevas inexistentes), reintenta sin esos campos y conserva el
+    // detalle dentro del mensaje para no perder información del cliente.
+    if (error && /column|schema cache/i.test(error.message ?? "")) {
+      const { tipo_combustible, direccion_entrega, fecha_estimada, tipo_instalacion, ...base } = payload;
+      const extras = [
+        tipo_combustible && `Combustible: ${tipo_combustible}`,
+        direccion_entrega && `Dirección de entrega: ${direccion_entrega}`,
+        fecha_estimada && `Fecha estimada: ${fecha_estimada}`,
+        tipo_instalacion && `Instalación/equipo: ${tipo_instalacion}`,
+      ].filter(Boolean).join(" · ");
+      const retry = await serviceClient
+        .from("cotizaciones")
+        .insert({ ...base, mensaje: [base.mensaje, extras].filter(Boolean).join("\n") || null })
+        .select("id, created_at")
+        .single();
+      data = retry.data;
+      error = retry.error;
+    }
 
     if (error || !data?.id) {
       return NextResponse.json(

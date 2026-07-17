@@ -136,7 +136,7 @@ export default function CoberturaPage() {
             {[
               {
                 title: "Base operativa",
-                desc: "La Granja, Santiago — centro estratégico para cubrir toda la Región Metropolitana en tiempos óptimos.",
+                desc: "San Ramón, Santiago — centro estratégico para cubrir toda la Región Metropolitana en tiempos óptimos.",
               },
               {
                 title: "Cobertura extendida",

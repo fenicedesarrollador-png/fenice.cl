@@ -14,17 +14,21 @@ import {
 } from "@/lib/contactFormat";
 
 const SERVICIOS_OPS = [
-  "Petróleo a domicilio (empresa)",
-  "Transporte de combustible RM",
-  "Abastecimiento para faena",
+  "Petróleo diésel a domicilio (empresa)",
+  "Kerosene a domicilio",
+  "Combustible para maquinaria pesada / faena",
+  "Combustible para generador eléctrico",
+  "Combustible para caldera",
   "Abastecimiento para flota",
-  "Instalación de estanque",
+  "Instalación o mantención de estanque",
   "Contrato de suministro periódico",
   "Otro",
 ];
 
+const COMBUSTIBLES = ["Petróleo diésel", "Kerosene", "No estoy seguro"];
+
 const VOLUMENES = [
-  "Menos de 500 litros",
+  "50 – 500 litros (compra mínima: 50 L)",
   "500 – 2.000 litros",
   "2.000 – 5.000 litros",
   "5.000 – 15.000 litros",
@@ -89,6 +93,10 @@ export default function CotizacionForm() {
       telefono: normalizePhoneForStorage(rawTelefono),
       comuna: (fd.get("comuna") as string).trim() || null,
       servicio_solicitado: (fd.get("servicio_solicitado") as string),
+      tipo_combustible: (fd.get("tipo_combustible") as string) || null,
+      direccion_entrega: (fd.get("direccion_entrega") as string).trim() || null,
+      fecha_estimada: (fd.get("fecha_estimada") as string) || null,
+      tipo_instalacion: (fd.get("tipo_instalacion") as string).trim() || null,
       volumen_estimado: (fd.get("volumen_estimado") as string) || null,
       frecuencia: (fd.get("frecuencia") as string) || null,
       mensaje: (fd.get("mensaje") as string).trim() || null,
@@ -273,6 +281,15 @@ export default function CotizacionForm() {
               {COMUNAS.map((c) => <option key={c.slug} value={c.nombre} />)}
             </datalist>
           </div>
+          <div className="sm:col-span-2">
+            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Dirección exacta del despacho</label>
+            <input
+              name="direccion_entrega"
+              type="text"
+              placeholder="Calle, número, referencia de acceso…"
+              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors"
+            />
+          </div>
         </div>
       </div>
 
@@ -292,13 +309,23 @@ export default function CotizacionForm() {
         </div>
       </div>
 
-      {/* Volumen y frecuencia */}
+      {/* Detalle del despacho */}
       <div>
         <h3 className="text-sm font-bold text-[#0a1628] uppercase tracking-wider mb-4 flex items-center gap-2">
           <span className="w-5 h-5 rounded-full bg-[#f5a623] text-white text-xs font-extrabold flex items-center justify-center shrink-0">3</span>
-          Volumen y frecuencia estimados
+          Detalle del despacho
         </h3>
         <div className="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Tipo de combustible</label>
+            <select
+              name="tipo_combustible"
+              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors bg-white"
+            >
+              <option value="">Seleccionar…</option>
+              {COMBUSTIBLES.map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
           <div>
             <label className="block text-xs font-semibold text-slate-600 mb-1.5">Volumen estimado por despacho</label>
             <select
@@ -318,6 +345,23 @@ export default function CotizacionForm() {
               <option value="">Seleccionar…</option>
               {FRECUENCIAS.map((f) => <option key={f} value={f}>{f}</option>)}
             </select>
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Fecha estimada de entrega</label>
+            <input
+              name="fecha_estimada"
+              type="date"
+              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors bg-white"
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Instalación, equipo o maquinaria a abastecer</label>
+            <input
+              name="tipo_instalacion"
+              type="text"
+              placeholder="Generador eléctrico, caldera, excavadora, estanque, flota…"
+              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors"
+            />
           </div>
         </div>
       </div>

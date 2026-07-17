@@ -1,12 +1,16 @@
 // Fallback config — overridden at runtime by configuracion_sitio table values
 export const SITE_CONFIG = {
   nombre: "Fenice SPA",
-  razon_social: "Sociedad Fenice SPA",
+  razon_social: "Sociedad de Transportes y Diesel SpA",
+  rut: "76.710.961-K",
+  fundacion: "2010",
   whatsapp_numero: "56939579658",
   telefono: "+56939579658",
-  email: "ventas@fenice.cl",
+  email: "notifica@fenice.cl",
+  email_finanzas: "finanzas@fenice.cl",
   horario: "Lun-Vie 09:00–19:00",
-  direccion: "La Granja, Santiago, Región Metropolitana",
+  direccion: "Calle La Granja 8396, San Ramón, Región Metropolitana",
+  comuna: "San Ramón",
   region: "Región Metropolitana",
   ciudad: "Santiago",
   pais: "Chile",
@@ -34,19 +38,35 @@ export const SERVICIOS = [
     descripcion: "Despacho rápido de petróleo para empresas e industria en la RM.",
   },
   {
-    nombre: "Transporte de Combustible RM",
-    slug: "transporte-de-combustible-rm",
-    descripcion: "Transporte seguro y certificado de combustible en la Región Metropolitana.",
+    nombre: "Combustible para Maquinaria Pesada",
+    slug: "combustible-para-maquinaria-pesada",
+    descripcion: "Diésel en terreno para excavadoras, retroexcavadoras, cargadores y faenas de movimiento de tierra.",
+  },
+  {
+    nombre: "Combustible para Generadores Eléctricos",
+    slug: "combustible-para-generadores-electricos",
+    descripcion: "Abastecimiento programado o urgente de diésel para generadores de edificios, clínicas, industrias y hoteles.",
+  },
+  {
+    nombre: "Combustible para Calderas",
+    slug: "combustible-para-calderas",
+    descripcion: "Suministro de combustible para calderas de edificios, condominios, centros de salud e industrias.",
   },
   {
     nombre: "Instalación de Estanques",
     slug: "instalacion-de-estanques",
-    descripcion: "Instalación de estanques de petróleo certificados por la SEC.",
+    descripcion: "Instalación y mantención de estanques de combustible certificados por la SEC.",
+  },
+  {
+    nombre: "Transporte de Combustible RM",
+    slug: "transporte-de-combustible-rm",
+    descripcion: "Transporte seguro y certificado de combustible en la Región Metropolitana.",
   },
 ] as const;
 
 // Destinatarios de las notificaciones de cotización/contacto (Resend)
 export const NOTIFY_EMAILS = [
+  "notifica@fenice.cl",
   "ventas@fenice.cl",
   "ruben.pierattini@fenice.cl",
   "cecilia.moya@fenice.cl",
