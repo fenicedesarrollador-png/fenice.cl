@@ -5,6 +5,7 @@ import TrustSignals from "@/components/TrustSignals";
 import FuelGauge from "@/components/FuelGauge";
 import Certificaciones from "@/components/Certificaciones";
 import ClientesShowcase from "@/components/ClientesShowcase";
+import FlotaDocumentacion from "@/components/flota/FlotaDocumentacion";
 import {
   Truck, ArrowRight, Phone, CheckCircle2,
   MapPin, Clock, Building2, ShieldCheck, FileText,
@@ -478,6 +479,9 @@ export default function HomePage() {
           </figure>
         </div>
       </section>
+
+      {/* ── FLOTA CERTIFICADA Y DOCUMENTACIÓN VERIFICABLE ────────────────────── */}
+      <FlotaDocumentacion />
 
       {/* ── COMPROMISO CON LA SEGURIDAD ──────────────────────────────────────── */}
       <section className="py-16 bg-white" data-analytics-section="seguridad">
