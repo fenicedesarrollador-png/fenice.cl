@@ -54,28 +54,60 @@ function SecurePdfViewer({ url, plate }: { url: string; plate: string }) {
   const [numPages, setNumPages] = useState(0);
   const [page, setPage] = useState(1);
   const [zoom, setZoom] = useState(1);
+  const [retryToken, setRetryToken] = useState(0);
 
-  // Carga el documento al montar. El padre remonta este componente con
-  // `key={documento.id}` al cambiar de documento, así que el estado inicial
-  // (loading=true, page=1, zoom=1) ya cumple el rol de "reset".
+  // Carga el documento al montar (o al reintentar). El padre remonta este
+  // componente con `key={documento.id}` al cambiar de documento, así que el
+  // estado inicial (loading=true, page=1, zoom=1) ya cumple el rol de "reset".
   useEffect(() => {
     let cancelled = false;
 
     (async () => {
+      // Reset dentro de la función async (no al tope del efecto): en un
+      // reintento el estado anterior tiene loading=false/error=mensaje y hay
+      // que limpiarlo antes de la nueva carga.
+      setLoading(true);
+      setError("");
       try {
+        // 1) Traemos los bytes con fetch() directo (no con la lógica interna
+        //    de pdf.js): evita que pdf.js intente peticiones por rangos
+        //    (Range) que pueden fallar por CORS aunque una descarga normal
+        //    funcione. Si esto falla, el mensaje de error es específico
+        //    (código HTTP / red), no genérico.
+        const response = await fetch(url, { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error(
+            response.status === 404
+              ? "El archivo no existe en el bucket (404). Verifica que el PDF público se haya subido correctamente en /admin/flota."
+              : `El servidor respondió con un error (HTTP ${response.status}).`,
+          );
+        }
+        const arrayBuffer = await response.arrayBuffer();
+        if (arrayBuffer.byteLength === 0) throw new Error("El archivo PDF está vacío.");
+
+        // 2) Recién ahora entra pdf.js, a partir de los bytes ya descargados.
         const pdfjsLib = await import("pdfjs-dist");
         // Ruta estática fija (copiada a /public en postinstall) en vez de
         // `new URL(..., import.meta.url)`: esa resolución depende del
         // bundler y puede fallar en producción, dejando el visor en blanco.
         pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-        const doc = await pdfjsLib.getDocument({ url }).promise;
+        const doc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
         if (cancelled) { doc.destroy(); return; }
         pdfRef.current = doc;
         setNumPages(doc.numPages);
         setLoading(false);
       } catch (e) {
-        console.error("[FlotaDocumentViewerModal] error al cargar el PDF:", e);
-        if (!cancelled) { setError("No se pudo cargar el documento. Intenta nuevamente."); setLoading(false); }
+        console.error("[FlotaDocumentViewerModal] error al cargar el PDF:", url, e);
+        if (!cancelled) {
+          const msg = e instanceof Error ? e.message : "";
+          const isNetwork = e instanceof TypeError; // fetch rechaza con TypeError en fallos de red/CORS
+          setError(
+            isNetwork
+              ? "No se pudo conectar con el archivo (red o CORS). Revisa tu conexión e intenta de nuevo."
+              : msg || "No se pudo cargar el documento. Intenta nuevamente.",
+          );
+          setLoading(false);
+        }
       }
     })();
 
@@ -85,7 +117,7 @@ function SecurePdfViewer({ url, plate }: { url: string; plate: string }) {
       pdfRef.current?.destroy();
       pdfRef.current = null;
     };
-  }, [url]);
+  }, [url, retryToken]);
 
   // Renderiza la página activa.
   useEffect(() => {
@@ -174,9 +206,16 @@ function SecurePdfViewer({ url, plate }: { url: string; plate: string }) {
           </div>
         )}
         {!loading && error && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-center px-6">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center px-6">
             <AlertTriangle className="w-6 h-6 text-red-400" />
-            <p className="text-sm text-slate-500 font-medium">{error}</p>
+            <p className="text-sm text-slate-500 font-medium max-w-sm">{error}</p>
+            <button
+              type="button"
+              onClick={() => setRetryToken((t) => t + 1)}
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-[#0a1628] hover:bg-[#0d2040] px-3.5 py-2 rounded-lg transition-colors"
+            >
+              Reintentar
+            </button>
           </div>
         )}
         {!error && (
