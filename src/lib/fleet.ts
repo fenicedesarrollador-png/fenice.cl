@@ -133,6 +133,16 @@ export const DOCUMENT_STATUS_META: Record<DocumentStatusKey, { label: string; to
 };
 
 /**
+ * Estado para MOSTRAR en el sitio público: colapsa "vigente_advertencia" en
+ * "vigente" (decisión del cliente: no mostrar la nuance de advertencia a
+ * visitantes, solo internamente en /admin/flota). El cálculo real
+ * (`computeDocumentStatus`) no cambia — solo cómo se presenta al público.
+ */
+export function publicStatusMeta(key: DocumentStatusKey): { label: string; tone: BadgeTone } {
+  return DOCUMENT_STATUS_META[key === "vigente_advertencia" ? "vigente" : key];
+}
+
+/**
  * Calcula el estado de un documento siguiendo, en orden de prioridad:
  * histórico > revisión/rechazo > fecha de vencimiento.
  * `referenceDate` es inyectable para tests; por defecto usa la fecha actual.

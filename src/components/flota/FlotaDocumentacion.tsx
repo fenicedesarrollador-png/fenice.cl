@@ -4,8 +4,8 @@ import { hasUsableSupabasePublicConfig } from "@/lib/supabase/config";
 import { fetchWithTimeout } from "@/lib/getSiteConfig";
 import { SITE_CONFIG } from "@/lib/config";
 import {
-  computeDocumentStatus, computeVehicleStatus,
-  DOCUMENT_STATUS_META, PUBLIC_VEHICLE_COLUMNS, PUBLIC_DOCUMENT_COLUMNS,
+  computeDocumentStatus, computeVehicleStatus, publicStatusMeta,
+  PUBLIC_VEHICLE_COLUMNS, PUBLIC_DOCUMENT_COLUMNS,
   FLEET_PUBLIC_DOCUMENTS_BUCKET, FLEET_VEHICLE_PHOTOS_BUCKET,
   type FleetVehicleRow, type FleetDocumentRow,
 } from "@/lib/fleet";
@@ -63,7 +63,7 @@ export default async function FlotaDocumentacion() {
     const documents: PublicFleetDocument[] = docsForVehicle.map((doc) => {
       // RLS ya garantiza que cualquier fila pública está review_status='approved'.
       const status = computeDocumentStatus({ expires_at: doc.expires_at, is_historical: doc.is_historical, review_status: "approved" });
-      const meta = DOCUMENT_STATUS_META[status.key];
+      const meta = publicStatusMeta(status.key);
       const path = doc.public_file_path as string;
       const fileUrl = supabase!.storage.from(FLEET_PUBLIC_DOCUMENTS_BUCKET).getPublicUrl(path).data.publicUrl;
 
@@ -91,7 +91,7 @@ export default async function FlotaDocumentacion() {
     const vehicleStatus = computeVehicleStatus(
       docsForVehicle.map((doc) => ({ expires_at: doc.expires_at, is_historical: doc.is_historical, review_status: "approved" as const })),
     );
-    const vehicleMeta = DOCUMENT_STATUS_META[vehicleStatus.key];
+    const vehicleMeta = publicStatusMeta(vehicleStatus.key);
     const imageUrl = v.image_path
       ? (v.image_path.startsWith("http")
           ? v.image_path
