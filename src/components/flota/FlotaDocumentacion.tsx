@@ -4,7 +4,7 @@ import { hasUsableSupabasePublicConfig } from "@/lib/supabase/config";
 import { fetchWithTimeout } from "@/lib/getSiteConfig";
 import { SITE_CONFIG } from "@/lib/config";
 import {
-  computeDocumentStatus, computeVehicleStatus, sanitizeFilename,
+  computeDocumentStatus, computeVehicleStatus,
   DOCUMENT_STATUS_META, PUBLIC_VEHICLE_COLUMNS, PUBLIC_DOCUMENT_COLUMNS,
   FLEET_PUBLIC_DOCUMENTS_BUCKET, FLEET_VEHICLE_PHOTOS_BUCKET,
   type FleetVehicleRow, type FleetDocumentRow,
@@ -66,10 +66,6 @@ export default async function FlotaDocumentacion() {
       const meta = DOCUMENT_STATUS_META[status.key];
       const path = doc.public_file_path as string;
       const fileUrl = supabase!.storage.from(FLEET_PUBLIC_DOCUMENTS_BUCKET).getPublicUrl(path).data.publicUrl;
-      const downloadName = `${sanitizeFilename(doc.title)}.pdf`;
-      const downloadUrl = supabase!.storage
-        .from(FLEET_PUBLIC_DOCUMENTS_BUCKET)
-        .getPublicUrl(path, { download: downloadName }).data.publicUrl;
 
       return {
         id: doc.id,
@@ -85,7 +81,6 @@ export default async function FlotaDocumentacion() {
         expires_at: doc.expires_at,
         next_inspection_at: doc.next_inspection_at,
         fileUrl,
-        downloadUrl,
         is_historical: doc.is_historical,
         statusKey: status.key,
         statusLabel: meta.label,
@@ -147,9 +142,9 @@ export default async function FlotaDocumentacion() {
         </div>
 
         {showSkeleton ? (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" aria-busy="true" aria-label="Cargando flota certificada">
+          <div className="flex flex-wrap justify-center gap-5" aria-busy="true" aria-label="Cargando flota certificada">
             {[0, 1, 2].map((i) => (
-              <div key={i} className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+              <div key={i} className="w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.834rem)] max-w-sm bg-white border border-slate-200 rounded-2xl overflow-hidden">
                 <div className="aspect-[16/10] bg-slate-100 admin-skeleton" />
                 <div className="p-5 space-y-3">
                   <div className="h-4 w-2/3 bg-slate-100 admin-skeleton rounded" />
@@ -160,7 +155,7 @@ export default async function FlotaDocumentacion() {
             ))}
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" data-reveal>
+          <div className="flex flex-wrap justify-center gap-5" data-reveal>
             {vehicles.map((vehicle) => (
               <FlotaVehiculoCard key={vehicle.id} vehicle={vehicle} waUrl={waUrl} />
             ))}
