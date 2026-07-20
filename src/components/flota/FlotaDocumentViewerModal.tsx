@@ -64,16 +64,17 @@ function SecurePdfViewer({ url, plate }: { url: string; plate: string }) {
     (async () => {
       try {
         const pdfjsLib = await import("pdfjs-dist");
-        pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-          "pdfjs-dist/build/pdf.worker.min.mjs",
-          import.meta.url,
-        ).toString();
-        const doc = await pdfjsLib.getDocument({ url, disableAutoFetch: true }).promise;
+        // Ruta estática fija (copiada a /public en postinstall) en vez de
+        // `new URL(..., import.meta.url)`: esa resolución depende del
+        // bundler y puede fallar en producción, dejando el visor en blanco.
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+        const doc = await pdfjsLib.getDocument({ url }).promise;
         if (cancelled) { doc.destroy(); return; }
         pdfRef.current = doc;
         setNumPages(doc.numPages);
         setLoading(false);
-      } catch {
+      } catch (e) {
+        console.error("[FlotaDocumentViewerModal] error al cargar el PDF:", e);
         if (!cancelled) { setError("No se pudo cargar el documento. Intenta nuevamente."); setLoading(false); }
       }
     })();

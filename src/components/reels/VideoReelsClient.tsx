@@ -17,36 +17,38 @@ export type ReelVideo = {
 const SOUND_KEY = "fenice-reels-sound";
 
 export default function VideoReelsClient({ videos }: { videos: ReelVideo[] }) {
-  const [activeId, setActiveId] = useState<string | null>(null);
+  // Única fuente de verdad de "qué video suena/reproduce ahora". Un clic
+  // manual SIEMPRE la controla directamente, sin importar cuál tarjeta esté
+  // más visible — así se puede reproducir/pausar cualquier tarjeta, no solo
+  // la que el observer eligió (bug reportado: en desktop, con varias
+  // tarjetas visibles a la vez, tocar play en una que no era "la activa" no
+  // hacía nada).
+  const [playingId, setPlayingId] = useState<string | null>(null);
   const [loadedIds, setLoadedIds] = useState<Set<string>>(new Set());
-  // Override manual: el usuario tocó play/pausa en una tarjeta puntual. Solo
-  // aplica mientras esa tarjeta siga siendo la "activa"; al cambiar de
-  // tarjeta enfocada, el override queda obsoleto automáticamente (no hace
-  // falta un efecto para "resetearlo": el cálculo de abajo ya lo ignora).
-  const [override, setOverride] = useState<{ id: string; playing: boolean } | null>(null);
-  // Preferencia de sonido: lectura perezosa de sessionStorage durante el
-  // primer render (no en un efecto) para no disparar un setState extra.
-  const [soundOn, setSoundOn] = useState(() => typeof window !== "undefined" && sessionStorage.getItem(SOUND_KEY) === "on");
+  // El estado inicial DEBE coincidir con el servidor (false) para no romper
+  // la hidratación (una lectura perezosa de sessionStorage en el propio
+  // useState ya causó un error de hidratación en producción). Se corrige
+  // después de montar, en un efecto: es una excepción justificada a la regla
+  // de lint, ya que sincronizar con una preferencia solo disponible en el
+  // cliente es exactamente el caso de uso que un efecto cubre.
+  const [soundOn, setSoundOn] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- lectura de preferencia solo-cliente al montar, ver comentario arriba
+    if (sessionStorage.getItem(SOUND_KEY) === "on") setSoundOn(true);
+  }, []);
 
   const trackRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const videoRefs = useRef<Map<string, HTMLVideoElement>>(new Map());
   const ratiosRef = useRef<Map<string, number>>(new Map());
-
-  // Video que debería reproducirse por defecto: la tarjeta enfocada, solo si
-  // esa tarjeta tiene autoplay activado. Calculado en cada render (sin
-  // efecto) a partir de activeId + videos.
-  const defaultPlayingId = (() => {
-    if (!activeId) return null;
-    const video = videos.find((v) => v.id === activeId);
-    return video?.autoplay ? activeId : null;
-  })();
-  const effectivePlayingId = override && override.id === activeId ? (override.playing ? override.id : null) : defaultPlayingId;
+  const lastFocusedRef = useRef<string | null>(null);
 
   // Observadores: uno decide cuándo "acercar" (cargar) el <video>, otro cuál
-  // tarjeta está más visible para decidir cuál reproducir automáticamente.
-  // Los setState ocurren dentro de los callbacks de los observers (eventos
-  // externos asíncronos), no de forma síncrona en el cuerpo del efecto.
+  // tarjeta está más visible para aplicarle su comportamiento por defecto
+  // (autoplay o no) SOLO cuando el foco cambia de una tarjeta a otra —no en
+  // cada notificación del observer, para no pisar un play/pausa manual del
+  // usuario mientras la tarjeta enfocada sigue siendo la misma.
   useEffect(() => {
     const loadObserver = new IntersectionObserver(
       (entries) => {
@@ -68,12 +70,20 @@ export default function VideoReelsClient({ videos }: { videos: ReelVideo[] }) {
           const id = entry.target.getAttribute("data-reel-id");
           if (id) ratiosRef.current.set(id, entry.intersectionRatio);
         }
+        // Ratio estrictamente mayor: en empates (varias tarjetas 100%
+        // visibles a la vez en escritorio) gana la primera de la lista, no
+        // la última en pisar el mapa.
         let bestId: string | null = null;
         let bestRatio = 0.5;
-        ratiosRef.current.forEach((ratio, id) => {
-          if (ratio >= bestRatio) { bestRatio = ratio; bestId = id; }
-        });
-        setActiveId(bestId);
+        for (const video of videos) {
+          const ratio = ratiosRef.current.get(video.id) ?? 0;
+          if (ratio > bestRatio) { bestRatio = ratio; bestId = video.id; }
+        }
+        if (bestId !== lastFocusedRef.current) {
+          lastFocusedRef.current = bestId;
+          const video = bestId ? videos.find((v) => v.id === bestId) : null;
+          setPlayingId(video?.autoplay ? (bestId as string) : null);
+        }
       },
       { threshold: [0, 0.25, 0.5, 0.75, 1] },
     );
@@ -86,7 +96,7 @@ export default function VideoReelsClient({ videos }: { videos: ReelVideo[] }) {
   // DOM, sin llamar setState: es exactamente para esto que sirve un efecto).
   useEffect(() => {
     videoRefs.current.forEach((el, id) => {
-      if (id === effectivePlayingId) {
+      if (id === playingId) {
         el.muted = !soundOn;
         const p = el.play();
         if (p && typeof p.catch === "function") p.catch(() => {});
@@ -94,7 +104,10 @@ export default function VideoReelsClient({ videos }: { videos: ReelVideo[] }) {
         el.pause();
       }
     });
-  }, [effectivePlayingId, soundOn]);
+    // `loadedIds` también es dependencia: si el usuario toca play antes de
+    // que el <video> termine de montarse (carga diferida), este efecto debe
+    // volver a correr apenas el elemento exista para no quedar "colgado".
+  }, [playingId, soundOn, loadedIds]);
 
   const toggleSound = useCallback(() => {
     setSoundOn((prev) => {
@@ -105,7 +118,7 @@ export default function VideoReelsClient({ videos }: { videos: ReelVideo[] }) {
   }, []);
 
   function togglePlay(id: string) {
-    setOverride({ id, playing: id !== effectivePlayingId });
+    setPlayingId((prev) => (prev === id ? null : id));
   }
 
   function scrollByCard(dir: 1 | -1) {
@@ -141,7 +154,7 @@ export default function VideoReelsClient({ videos }: { videos: ReelVideo[] }) {
             key={video.id}
             video={video}
             loaded={loadedIds.has(video.id)}
-            playing={effectivePlayingId === video.id}
+            playing={playingId === video.id}
             soundOn={soundOn}
             onRegisterCard={(el) => { if (el) cardRefs.current.set(video.id, el); else cardRefs.current.delete(video.id); }}
             onRegisterVideo={(el) => { if (el) videoRefs.current.set(video.id, el); else videoRefs.current.delete(video.id); }}
@@ -216,14 +229,11 @@ function ReelCard({
         </span>
       </button>
 
-      {/* Botón de sonido — global, visible en cada tarjeta. suppressHydrationWarning:
-          el estado inicial se lee de sessionStorage (solo disponible en cliente),
-          por lo que puede diferir del render de servidor en la primera pintura. */}
+      {/* Botón de sonido — global, visible en cada tarjeta. */}
       <button
         type="button"
         onClick={onToggleSound}
         aria-label={soundOn ? "Silenciar videos" : "Activar sonido"}
-        suppressHydrationWarning
         className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-black/45 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/60 transition-colors"
       >
         {soundOn ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
