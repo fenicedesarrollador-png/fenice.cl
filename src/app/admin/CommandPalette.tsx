@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   LayoutDashboard, Inbox, Building2, FileText, CalendarDays,
   Tag, Settings, Fuel, Users, ChartColumn, Plus, Search, CornerDownLeft, Globe,
-  DollarSign, BarChart3,
+  DollarSign, BarChart3, Truck,
 } from "lucide-react";
 
 type Cmd = {
@@ -21,6 +21,10 @@ const COMMANDS: Cmd[] = [
   { label: "Solicitudes", hint: "Leads y cotizaciones", icon: Inbox, action: (r) => r.push("/admin/leads"), keywords: "leads cotizaciones contactos" },
   { label: "Cotizaciones", hint: "Gestión + PDF + Excel", icon: DollarSign, action: (r) => r.push("/admin/cotizaciones"), keywords: "pdf excel pipeline presupuestos" },
   { label: "Reportes", hint: "Análisis y descargas", icon: BarChart3, action: (r) => r.push("/admin/reportes"), keywords: "graficos excel xlsx descargas analisis" },
+  { label: "Documentación de flota", hint: "Vehículos y certificados", icon: Truck, action: (r) => r.push("/admin/flota"), keywords: "camiones patentes certificados sec tc10a vencimientos" },
+  { label: "Vehículos de la flota", icon: Truck, action: (r) => r.push("/admin/flota/vehiculos"), keywords: "camiones patentes" },
+  { label: "Nuevo documento de flota", hint: "Crear", icon: Plus, action: (r) => r.push("/admin/flota/documentos/nuevo") },
+  { label: "Nuevo vehículo de flota", hint: "Crear", icon: Plus, action: (r) => r.push("/admin/flota/vehiculos/nuevo") },
   { label: "Precios de combustible", icon: Fuel, action: (r) => r.push("/admin/precios-combustible"), keywords: "diesel kerosene gas" },
   { label: "Clientes", icon: Building2, action: (r) => r.push("/admin/clientes"), keywords: "logos empresas" },
   { label: "Equipo", icon: Users, action: (r) => r.push("/admin/equipo"), keywords: "miembros fotos nosotros" },

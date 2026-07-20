@@ -4,7 +4,7 @@ import Link from "next/link";
 import {
   Inbox, FileText, CalendarDays, Tag, ArrowRight,
   Plus, DollarSign, Users, Activity, Zap, Fuel, Settings,
-  TrendingUp, Sparkles, Clock,
+  TrendingUp, Sparkles, Clock, Truck,
 } from "lucide-react";
 import { ChartCard, TrendChart, DonutChart, RankBars } from "./_components/charts";
 import { dailySeries, countBy, inLastDays, monthDelta, isoDaysAgo, type FechaRow } from "@/lib/admin/stats";
@@ -16,6 +16,7 @@ export default async function AdminDashboard() {
     leads: 0, leadsNuevos: 0, leadsContactados: 0, leadsCerrados: 0,
     cotizaciones: 0, cotizacionesNuevas: 0,
     posts: 0, eventosActivos: 0, promoActivas: 0, clientes: 0,
+    flotaVehiculos: 0,
   };
   let recentLeads: { id: string; nombre: string; estado: string; created_at: string; comuna?: string }[] = [];
   let recentCotizaciones: { id: string; nombre: string; empresa: string; estado: string; created_at: string }[] = [];
@@ -29,7 +30,7 @@ export default async function AdminDashboard() {
     const [
       leadsRes, leadsNuevosRes, leadsContactadosRes, leadsCerradosRes,
       cotRes, cotNuevasRes,
-      blogRes, eventosRes, promosRes, clientesRes,
+      blogRes, eventosRes, promosRes, clientesRes, flotaVehiculosRes,
       recentLeadsRes, recentCotRes,
       cotRowsRes, leadRowsRes,
     ] = await Promise.all([
@@ -43,6 +44,7 @@ export default async function AdminDashboard() {
       supabase.from("eventos").select("id", { count: "exact", head: true }).eq("activo", true),
       supabase.from("promociones").select("id", { count: "exact", head: true }).eq("activo", true),
       supabase.from("clientes").select("id", { count: "exact", head: true }).eq("activo", true),
+      supabase.from("fleet_vehicles").select("id", { count: "exact", head: true }).eq("is_public", true).eq("is_active", true),
       supabase.from("leads").select("id, nombre, estado, created_at, comuna").order("created_at", { ascending: false }).limit(4),
       supabase.from("cotizaciones").select("id, nombre, empresa, estado, created_at").order("created_at", { ascending: false }).limit(3),
       supabase.from("cotizaciones").select("created_at, servicio_solicitado, comuna, estado").gte("created_at", desde90).limit(3000),
@@ -59,6 +61,7 @@ export default async function AdminDashboard() {
       eventosActivos: eventosRes.count ?? 0,
       promoActivas: promosRes.count ?? 0,
       clientes: clientesRes.count ?? 0,
+      flotaVehiculos: flotaVehiculosRes.count ?? 0,
     };
     if (recentLeadsRes.data) recentLeads = recentLeadsRes.data;
     if (recentCotRes.data) recentCotizaciones = recentCotRes.data;
@@ -112,6 +115,7 @@ export default async function AdminDashboard() {
     { label: "Clientes activos", value: stats.clientes, href: "/admin/clientes", icon: Users },
     { label: "Eventos activos", value: stats.eventosActivos, href: "/admin/eventos", icon: CalendarDays },
     { label: "Promociones activas", value: stats.promoActivas, href: "/admin/promociones", icon: Tag },
+    { label: "Vehículos de flota", value: stats.flotaVehiculos, href: "/admin/flota", icon: Truck },
   ];
 
   const quickActions = [
@@ -339,7 +343,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Módulos resumen */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3.5">
         {modules.map((m) => (
           <Link key={m.label} href={m.href} className="admin-card admin-card-hover px-4 py-4 flex items-center gap-3.5 group">
             <div className="w-10 h-10 rounded-xl bg-slate-100 group-hover:bg-[#1a6b3c]/12 flex items-center justify-center shrink-0 transition-colors">
