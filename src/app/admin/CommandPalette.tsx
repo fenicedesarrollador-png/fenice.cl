@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   LayoutDashboard, Inbox, Building2, FileText, CalendarDays,
   Tag, Settings, Fuel, Users, ChartColumn, Plus, Search, CornerDownLeft, Globe,
-  DollarSign, BarChart3, Truck,
+  DollarSign, BarChart3, Truck, Clapperboard,
 } from "lucide-react";
 
 type Cmd = {
@@ -25,6 +25,8 @@ const COMMANDS: Cmd[] = [
   { label: "Vehículos de la flota", icon: Truck, action: (r) => r.push("/admin/flota/vehiculos"), keywords: "camiones patentes" },
   { label: "Nuevo documento de flota", hint: "Crear", icon: Plus, action: (r) => r.push("/admin/flota/documentos/nuevo") },
   { label: "Nuevo vehículo de flota", hint: "Crear", icon: Plus, action: (r) => r.push("/admin/flota/vehiculos/nuevo") },
+  { label: "Videos de la web", hint: "Reels de la Home", icon: Clapperboard, action: (r) => r.push("/admin/videos"), keywords: "reel video mp4 portada" },
+  { label: "Nuevo video", hint: "Crear", icon: Plus, action: (r) => r.push("/admin/videos/nuevo") },
   { label: "Precios de combustible", icon: Fuel, action: (r) => r.push("/admin/precios-combustible"), keywords: "diesel kerosene gas" },
   { label: "Clientes", icon: Building2, action: (r) => r.push("/admin/clientes"), keywords: "logos empresas" },
   { label: "Equipo", icon: Users, action: (r) => r.push("/admin/equipo"), keywords: "miembros fotos nosotros" },
