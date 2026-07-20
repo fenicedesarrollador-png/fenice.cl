@@ -3,13 +3,28 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import {
-  X, ChevronLeft, ChevronRight, FileText, BadgeCheck, Truck,
-  Loader2, AlertTriangle, ShieldQuestion, ZoomIn, ZoomOut,
+  X, ChevronLeft, ChevronRight, FileText, FileCheck2, BadgeCheck, Truck,
+  Loader2, AlertTriangle, ShieldQuestion, ZoomIn, ZoomOut, Calendar,
+  Fuel, Layers, ShieldCheck, Award, ClipboardCheck,
+  MessageCircle, Info,
 } from "lucide-react";
 import type { PDFDocumentProxy } from "pdfjs-dist";
-import type { BadgeTone } from "@/lib/fleet";
-import { DOCUMENT_TYPE_LABELS, formatDateCL } from "@/lib/fleet";
+import type { BadgeTone, DocumentType } from "@/lib/fleet";
+import { DOCUMENT_TYPE_LABELS, formatDateCL, formatLiters } from "@/lib/fleet";
 import type { PublicFleetDocument, PublicFleetVehicle } from "./FlotaVehiculoCard";
+
+const DOCUMENT_TYPE_ICONS: Record<DocumentType, typeof FileText> = {
+  sec_tc10a: ShieldCheck,
+  tank_tc8: Award,
+  hermeticity_test: FileCheck2,
+  periodic_inspection: ClipboardCheck,
+  visual_inspection: ClipboardCheck,
+  manufacturing_certificate: Award,
+  circulation_permit: FileCheck2,
+  technical_revision: ClipboardCheck,
+  insurance: ShieldCheck,
+  other: FileText,
+};
 
 const TONE_CLASSES: Record<BadgeTone, string> = {
   neutral: "bg-slate-100 text-slate-600 border-slate-200",
@@ -282,20 +297,16 @@ export default function FlotaDocumentViewerModal({
         className="relative w-full max-w-6xl h-[94vh] sm:h-[88vh] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col outline-none animate-fade-in"
       >
         {/* Header */}
-        <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3.5 border-b border-slate-200 shrink-0 bg-[#0a1628]">
+        <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3 border-b border-slate-200 shrink-0 bg-[#0a1628]">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-white/10 shrink-0 hidden sm:block">
-              {vehicle.imageUrl ? (
-                <Image src={vehicle.imageUrl} alt="" fill sizes="40px" className="object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center"><Truck className="w-5 h-5 text-white/60" /></div>
-              )}
+            <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+              <ShieldCheck className="w-4 h-4 text-[#f5a623]" />
             </div>
             <div className="min-w-0">
               <p id="flota-doc-modal-title" className="text-sm font-black text-white truncate">
-                {vehicle.plate} <span className="font-medium text-slate-300">· {[vehicle.brand, vehicle.model].filter(Boolean).join(" ")}</span>
+                Documentación verificable
               </p>
-              <p className="text-[11px] text-slate-400">Documentación verificable</p>
+              <p className="text-[11px] text-slate-400">Flota certificada Fenice SPA</p>
             </div>
           </div>
           <button
@@ -311,9 +322,49 @@ export default function FlotaDocumentViewerModal({
         {/* Cuerpo: izquierda info, derecha visor */}
         <div className="flex flex-col md:flex-row flex-1 min-h-0">
           {/* Panel izquierdo */}
-          <div className="w-full md:w-[360px] shrink-0 border-b md:border-b-0 md:border-r border-slate-200 flex flex-col min-h-0 max-h-[38vh] md:max-h-none">
-            <div className="px-4 py-3 border-b border-slate-100 shrink-0">
-              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Documentos disponibles ({vehicle.documents.length})</p>
+          <div className="w-full md:w-[400px] shrink-0 border-b md:border-b-0 md:border-r border-slate-200 flex flex-col min-h-0 max-h-[46vh] md:max-h-none bg-slate-50/60">
+            {/* Resumen del vehículo */}
+            <div className="shrink-0 bg-white">
+              <div className="relative aspect-[16/9]">
+                {vehicle.imageUrl ? (
+                  <Image src={vehicle.imageUrl} alt="" fill sizes="400px" className="object-cover" />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
+                    <Truck className="w-10 h-10 text-slate-400" strokeWidth={1.5} />
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/85 via-[#0a1628]/10 to-transparent" />
+                <span className="absolute top-3 left-3 inline-flex items-center bg-[#0a1628]/85 backdrop-blur-sm text-white text-xs font-black tracking-wider px-2.5 py-1 rounded-lg">
+                  {vehicle.plate}
+                </span>
+                <span className={`absolute top-3 right-3 inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full border ${TONE_CLASSES[vehicle.vehicleStatusTone]}`}>
+                  {vehicle.vehicleStatusLabel}
+                </span>
+                <p className="absolute bottom-3 left-3 right-3 text-white text-[13px] font-bold leading-tight">
+                  {[vehicle.brand, vehicle.model].filter(Boolean).join(" ")}
+                </p>
+              </div>
+              <dl className="grid grid-cols-3 divide-x divide-slate-100 border-b border-slate-100">
+                <div className="flex flex-col items-center gap-1 py-3 text-center">
+                  <Calendar className="w-3.5 h-3.5 text-[#1a6b3c]" />
+                  <dt className="sr-only">Año</dt>
+                  <dd className="text-[11.5px] font-bold text-[#0a1628]">{vehicle.manufacture_year ?? "—"}</dd>
+                </div>
+                <div className="flex flex-col items-center gap-1 py-3 text-center">
+                  <Fuel className="w-3.5 h-3.5 text-[#1a6b3c]" />
+                  <dt className="sr-only">Capacidad</dt>
+                  <dd className="text-[11.5px] font-bold text-[#0a1628]">{formatLiters(vehicle.tank_capacity_liters)}</dd>
+                </div>
+                <div className="flex flex-col items-center gap-1 py-3 text-center">
+                  <Layers className="w-3.5 h-3.5 text-[#1a6b3c]" />
+                  <dt className="sr-only">Compartimientos</dt>
+                  <dd className="text-[11.5px] font-bold text-[#0a1628]">{vehicle.compartments ?? "—"} comp.</dd>
+                </div>
+              </dl>
+            </div>
+
+            <div className="px-4 py-2.5 border-b border-slate-100 shrink-0 flex items-center justify-between">
+              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Documentos ({vehicle.documents.length})</p>
             </div>
 
             {vehicle.documents.length === 0 ? (
@@ -325,12 +376,30 @@ export default function FlotaDocumentViewerModal({
                 </a>
               </div>
             ) : (
-              <div className="flex-1 overflow-y-auto">
+              <div className="flex-1 overflow-y-auto px-3 py-3 space-y-2.5">
                 {vehicle.documents.map((doc) => (
                   <DocumentListItem key={doc.id} doc={doc} selected={doc.id === selectedId} onSelect={() => setSelectedId(doc.id)} />
                 ))}
               </div>
             )}
+
+            {/* Pie: confianza + contacto — evita dejar espacio vacío y refuerza autoridad */}
+            <div className="shrink-0 border-t border-slate-200 bg-white p-4 space-y-3">
+              <div className="flex items-start gap-2">
+                <Info className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
+                <p className="text-[10.5px] text-slate-400 leading-relaxed">
+                  Estos antecedentes tienen fines informativos. Verifica vigencia y autenticidad con los folios y códigos indicados.
+                </p>
+              </div>
+              <a
+                href={waUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full bg-[#1a6b3c] hover:bg-[#0d4a28] text-white font-bold text-[12.5px] px-4 py-2.5 rounded-xl transition-colors"
+              >
+                <MessageCircle className="w-3.5 h-3.5" /> Consultar por esta documentación
+              </a>
+            </div>
           </div>
 
           {/* Panel derecho: visor */}
@@ -350,6 +419,15 @@ export default function FlotaDocumentViewerModal({
   );
 }
 
+function MetaField({ label, value, span }: { label: string; value: string; span?: boolean }) {
+  return (
+    <div className={span ? "col-span-2" : ""}>
+      <dt className="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider">{label}</dt>
+      <dd className="text-[12px] font-semibold text-[#0a1628] leading-snug break-words">{value}</dd>
+    </div>
+  );
+}
+
 function DocumentListItem({
   doc, selected, onSelect,
 }: {
@@ -357,16 +435,31 @@ function DocumentListItem({
   selected: boolean;
   onSelect: () => void;
 }) {
+  const Icon = DOCUMENT_TYPE_ICONS[doc.document_type as DocumentType] ?? FileText;
+  const toneBorder: Record<BadgeTone, string> = {
+    neutral: "border-l-slate-300",
+    green: "border-l-[#1a6b3c]",
+    amber: "border-l-[#f5a623]",
+    red: "border-l-red-400",
+    blue: "border-l-blue-400",
+    purple: "border-l-purple-400",
+  };
+
   return (
-    <div className={`border-b border-slate-100 transition-colors ${selected ? "bg-[#1a6b3c]/[0.06]" : ""}`}>
+    <div
+      className={`rounded-xl border border-slate-200 border-l-4 bg-white overflow-hidden transition-all ${toneBorder[doc.statusTone]} ${selected ? "shadow-sm ring-1 ring-[#1a6b3c]/20" : ""}`}
+    >
       <button
         type="button"
         onClick={onSelect}
         aria-pressed={selected}
-        className="w-full text-left px-4 py-3 flex items-start justify-between gap-2 hover:bg-slate-50 transition-colors"
+        className="w-full text-left px-3.5 py-3 flex items-start gap-2.5 hover:bg-slate-50 transition-colors"
       >
-        <div className="min-w-0">
-          <p className="text-[10px] font-bold text-[#1a6b3c] uppercase tracking-wider">
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${selected ? "bg-[#1a6b3c]/12" : "bg-slate-100"}`}>
+          <Icon className={`w-4 h-4 ${selected ? "text-[#1a6b3c]" : "text-slate-500"}`} />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-[9.5px] font-bold text-[#1a6b3c] uppercase tracking-wider">
             {DOCUMENT_TYPE_LABELS[doc.document_type as keyof typeof DOCUMENT_TYPE_LABELS] ?? "Documento"}
           </p>
           <p className={`text-[13px] leading-snug ${selected ? "font-black text-[#0a1628]" : "font-bold text-[#0a1628]/90"}`}>{doc.title}</p>
@@ -375,30 +468,16 @@ function DocumentListItem({
       </button>
 
       {selected && (
-        <div className="px-4 pb-4 -mt-1">
-          {doc.description && <p className="text-[11.5px] text-slate-500 leading-relaxed mb-2">{doc.description}</p>}
-          <dl className="grid grid-cols-2 gap-x-3 gap-y-1 text-[11px] text-slate-500 mb-3">
-            {doc.issuing_entity && (
-              <div className="col-span-2"><dt className="inline font-semibold text-slate-600">Entidad: </dt><dd className="inline">{doc.issuing_entity}</dd></div>
-            )}
-            {doc.certificate_number && (
-              <div><dt className="inline font-semibold text-slate-600">N° certificado: </dt><dd className="inline">{doc.certificate_number}</dd></div>
-            )}
-            {doc.folio && (
-              <div><dt className="inline font-semibold text-slate-600">Folio: </dt><dd className="inline">{doc.folio}</dd></div>
-            )}
-            {doc.verification_code && (
-              <div className="col-span-2"><dt className="inline font-semibold text-slate-600">Código de verificación: </dt><dd className="inline">{doc.verification_code}</dd></div>
-            )}
-            {doc.issued_at && (
-              <div><dt className="inline font-semibold text-slate-600">Emisión: </dt><dd className="inline">{formatDateCL(doc.issued_at)}</dd></div>
-            )}
-            {doc.expires_at && (
-              <div><dt className="inline font-semibold text-slate-600">Vencimiento: </dt><dd className="inline">{formatDateCL(doc.expires_at)}</dd></div>
-            )}
-            {doc.next_inspection_at && (
-              <div className="col-span-2"><dt className="inline font-semibold text-slate-600">Próxima inspección: </dt><dd className="inline">{formatDateCL(doc.next_inspection_at)}</dd></div>
-            )}
+        <div className="px-3.5 pb-3.5 pt-1 border-t border-slate-100">
+          {doc.description && <p className="text-[11.5px] text-slate-500 leading-relaxed my-2.5">{doc.description}</p>}
+          <dl className="grid grid-cols-2 gap-x-3 gap-y-2.5 bg-slate-50 rounded-lg p-3 my-2.5">
+            {doc.issuing_entity && <MetaField label="Entidad" value={doc.issuing_entity} span />}
+            {doc.certificate_number && <MetaField label="N° certificado" value={doc.certificate_number} />}
+            {doc.folio && <MetaField label="Folio" value={doc.folio} />}
+            {doc.verification_code && <MetaField label="Código de verificación" value={doc.verification_code} span />}
+            {doc.issued_at && <MetaField label="Emisión" value={formatDateCL(doc.issued_at)} />}
+            {doc.expires_at && <MetaField label="Vencimiento" value={formatDateCL(doc.expires_at)} />}
+            {doc.next_inspection_at && <MetaField label="Próxima inspección" value={formatDateCL(doc.next_inspection_at)} span />}
           </dl>
           {doc.verification_url && isSafeExternalUrl(doc.verification_url) && (
             <a
