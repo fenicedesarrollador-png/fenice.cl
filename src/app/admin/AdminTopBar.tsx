@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import CommandPalette from "./CommandPalette";
 import AdminNotifications from "./AdminNotifications";
+import { FEATURE_NOTIFICATIONS } from "@/lib/features";
 
 const ROUTE_LABELS: Record<string, string> = {
   admin: "Dashboard",
@@ -99,7 +100,8 @@ export default function AdminTopBar({ onMenuClick }: { onMenuClick: () => void }
           <Search className="w-4 h-4" />
         </button>
 
-        <AdminNotifications />
+        {/* Notificaciones SUSPENDIDAS hasta autorización/pago (feature flag). */}
+        {FEATURE_NOTIFICATIONS && <AdminNotifications />}
 
         <a
           href="/"

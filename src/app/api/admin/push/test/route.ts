@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/auth";
 import { createServiceClient } from "@/lib/supabase/server";
 import { sendPushToAdmins, getAdminAlertCount, isPushConfigured } from "@/lib/push/webpush";
+import { FEATURE_NOTIFICATIONS } from "@/lib/features";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +15,13 @@ export async function POST() {
   const { user, supabase } = await requireAdmin();
   if (!user || !supabase) {
     return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+  }
+
+  if (!FEATURE_NOTIFICATIONS) {
+    return NextResponse.json(
+      { error: "Las notificaciones están suspendidas hasta autorizar la función." },
+      { status: 503 },
+    );
   }
 
   if (!isPushConfigured()) {
