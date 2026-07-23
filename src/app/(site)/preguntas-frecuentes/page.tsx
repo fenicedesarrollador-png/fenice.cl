@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CTASection from "@/components/CTASection";
+import Breadcrumb from "@/components/Breadcrumb";
 import { ChevronDown } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -91,6 +92,12 @@ export default function FAQPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+
+      <div className="bg-slate-50 border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <Breadcrumb crumbs={[{ name: "Inicio", href: "/" }, { name: "Preguntas frecuentes" }]} />
+        </div>
+      </div>
 
       {/* Hero */}
       <section className="bg-slate-950 text-white py-20 relative overflow-hidden" data-analytics-section="faq_hero">

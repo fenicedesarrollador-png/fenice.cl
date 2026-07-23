@@ -4,6 +4,7 @@ import {
   MapPin, FileText, ChevronRight
 } from "lucide-react";
 import CTASection from "@/components/CTASection";
+import Breadcrumb from "@/components/Breadcrumb";
 import { COMUNAS_DESTACADAS, SITE_CONFIG } from "@/lib/config";
 import { buildMetadata } from "@/lib/seo";
 
@@ -72,6 +73,12 @@ export default function PetroleoADomicilioPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }} />
+
+      <div className="bg-slate-50 border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <Breadcrumb crumbs={[{ name: "Inicio", href: "/" }, { name: "Petróleo a Domicilio" }]} />
+        </div>
+      </div>
 
       {/* Hero */}
       <section className="bg-[#0a1628] py-20 lg:py-28 relative overflow-hidden">

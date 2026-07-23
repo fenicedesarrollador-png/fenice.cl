@@ -6,6 +6,7 @@ import {
   HardHat, Factory, Cpu, Tractor, BarChart3
 } from "lucide-react";
 import CTASection from "@/components/CTASection";
+import Breadcrumb from "@/components/Breadcrumb";
 import { SITE_CONFIG } from "@/lib/config";
 
 export const metadata: Metadata = {
@@ -135,6 +136,12 @@ export default function EmpresasFaenasFlotasPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }} />
+
+      <div className="bg-slate-50 border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <Breadcrumb crumbs={[{ name: "Inicio", href: "/" }, { name: "Empresas, Faenas y Flotas" }]} />
+        </div>
+      </div>
 
       {/* Hero */}
       <section className="relative bg-[#0a1628] overflow-hidden py-20 lg:py-28">

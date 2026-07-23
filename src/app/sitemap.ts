@@ -65,5 +65,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
   } catch {}
 
-  return [...staticRoutes, ...blogDynamic, ...eventosDynamic];
+  // /blog emite noindex mientras no tenga artículos → se EXCLUYE del sitemap
+  // hasta que exista al menos un post publicado (evita listar una URL noindex).
+  const hasBlogPosts = blogDynamic.length > 0;
+  const routes = hasBlogPosts
+    ? staticRoutes
+    : staticRoutes.filter((r) => r.url !== `${BASE_URL}/blog`);
+
+  return [...routes, ...blogDynamic, ...eventosDynamic];
 }
