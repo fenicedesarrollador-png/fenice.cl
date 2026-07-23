@@ -47,6 +47,14 @@ function isStandalone() {
   );
 }
 
+function isMacDesktop() {
+  if (typeof navigator === "undefined") return false;
+  return (
+    /Macintosh|Mac OS X/.test(navigator.userAgent) &&
+    (navigator as { maxTouchPoints?: number }).maxTouchPoints! <= 1
+  );
+}
+
 export default function AdminNotifications() {
   const router = useRouter();
   const [state, setState] = useState<State>({
@@ -259,6 +267,21 @@ export default function AdminNotifications() {
         setToast("No se pudo guardar la suscripción");
         return;
       }
+
+      // Dispara una notificación del SISTEMA al instante: confirma que llega y,
+      // sobre todo en Mac, revela de inmediato si el sistema operativo la está
+      // bloqueando (aunque el permiso del sitio esté concedido).
+      try {
+        await reg.showNotification("✅ Notificaciones activadas", {
+          body: "Así se verán las alertas de nuevas cotizaciones de Fenice.",
+          icon: "/icons/icon-192.png",
+          badge: "/icons/badge-72.png",
+          tag: "fenice-enabled",
+        });
+      } catch {
+        /* si falla el display, el permiso del SO está bloqueando */
+      }
+
       setToast("Notificaciones activadas en este dispositivo");
       await refreshState();
     } catch (err) {
@@ -299,7 +322,15 @@ export default function AdminNotifications() {
     try {
       const res = await fetch("/api/admin/push/test", { method: "POST" });
       const data = await res.json();
-      setToast(data.ok ? "Notificación de prueba enviada" : data.error || "No se pudo enviar la prueba");
+      if (data.ok) {
+        setToast(
+          isMacDesktop()
+            ? `Prueba enviada a ${data.sent} dispositivo(s). Si no ves el banner del sistema en Mac, revisa Ajustes → Notificaciones.`
+            : `Notificación de prueba enviada a ${data.sent} dispositivo(s)`,
+        );
+      } else {
+        setToast(data.error || "No se pudo enviar la prueba");
+      }
     } catch {
       setToast("No se pudo enviar la prueba");
     } finally {
@@ -436,6 +467,19 @@ export default function AdminNotifications() {
                     >
                       <Send className="w-3.5 h-3.5" /> Enviar notificación de prueba
                     </button>
+                  )}
+
+                  {/* En Mac el permiso del sitio no basta: macOS debe permitir
+                      las notificaciones del navegador. Aviso solo cuando aplica. */}
+                  {activo && isMacDesktop() && (
+                    <div className="text-[11px] text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 leading-relaxed">
+                      <span className="font-bold text-[#0a1628]">¿No ves el aviso flotante en Mac?</span>{" "}
+                      Abre <b>Ajustes del Sistema → Notificaciones</b>, elige tu navegador
+                      (<b>Chrome</b>, <b>Safari</b> o <b>Edge</b>), activa <b>Permitir
+                      notificaciones</b> y pon el estilo en <b>Avisos</b> o <b>Franjas</b>.
+                      Desactiva también <b>Concentración / No molestar</b>. El permiso del sitio
+                      ya está concedido; esto es aparte, a nivel del sistema.
+                    </div>
                   )}
                 </>
               )}
