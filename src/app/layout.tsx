@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { SITE_CONFIG } from "@/lib/config";
-import { CORE_KEYWORDS } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({
@@ -18,7 +17,6 @@ export const metadata: Metadata = {
   },
   description:
     "Distribuidor de petróleo diesel a domicilio para empresas en Santiago y la Región Metropolitana. Despacho rápido y cotización por WhatsApp en minutos.",
-  keywords: CORE_KEYWORDS,
   applicationName: "Fenice SPA",
   authors: [{ name: "Fenice SPA", url: SITE_CONFIG.site_url }],
   creator: "Fenice SPA",

@@ -35,7 +35,12 @@ export const SERVICIOS = [
   {
     nombre: "Petróleo a Domicilio Santiago",
     slug: "petroleo-a-domicilio-santiago",
-    descripcion: "Despacho rápido de petróleo para empresas e industria en la RM.",
+    descripcion: "Despacho rápido de petróleo diésel para empresas e industria en la RM.",
+  },
+  {
+    nombre: "Parafina a Domicilio Santiago",
+    slug: "parafina-a-domicilio-santiago",
+    descripcion: "Venta y despacho de parafina (kerosene) para calefacción de edificios, condominios, hoteles y calderas.",
   },
   {
     nombre: "Combustible para Maquinaria Pesada",

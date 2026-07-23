@@ -6,7 +6,7 @@ import { MapPin, Clock, ShieldCheck, FileText, Truck, Phone } from "lucide-react
  * (indexable) bajo el hero.
  */
 const SIGNALS = [
-  { icon: MapPin, value: "12+ comunas", label: "Cobertura en la RM" },
+  { icon: MapPin, value: "52 comunas", label: "Cobertura total en la RM" },
   { icon: Clock, value: "Mismo día", label: "Respuesta a cotizaciones" },
   { icon: ShieldCheck, value: "Normativa SEC", label: "Operación certificada" },
   { icon: Truck, value: "Flota propia", label: "Despacho especializado" },

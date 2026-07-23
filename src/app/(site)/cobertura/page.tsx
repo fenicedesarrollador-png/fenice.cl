@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CTASection from "@/components/CTASection";
+import Breadcrumb from "@/components/Breadcrumb";
 import { COMUNAS_COBERTURA, PROVINCIAS_RM } from "@/lib/comunas";
 import { buildMetadata } from "@/lib/seo";
 import { MapPin, ChevronRight } from "lucide-react";
@@ -48,6 +49,12 @@ function ComunaCard({ nombre, slug, perfil }: { nombre: string; slug: string; pe
 export default function CoberturaPage() {
   return (
     <>
+      <div className="bg-slate-50 border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <Breadcrumb crumbs={[{ name: "Inicio", href: "/" }, { name: "Cobertura" }]} />
+        </div>
+      </div>
+
       {/* Hero */}
       <section className="bg-slate-950 text-white py-20 relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
