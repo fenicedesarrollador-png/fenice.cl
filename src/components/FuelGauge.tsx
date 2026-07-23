@@ -97,15 +97,15 @@ function AnimatedStat({
     };
   }, [active, reduced, stat.value, delay]);
 
-  // Durante la animación mostramos número + "+"; el resto del tiempo, el display real.
-  const suffix = stat.display.replace(/[0-9]/g, "");
-  const text = count === null ? stat.display : `${count}${suffix}`;
+  // Durante la animación: número formateado (separador de miles) + sufijo.
+  // El resto del tiempo: el display real exacto escrito en el HTML.
+  const text = count === null ? stat.display : `${count.toLocaleString("es-CL")}${stat.suffix}`;
 
   return (
-    <div className="flex flex-col items-center gap-1">
+    <div className={`flex flex-col items-center gap-1 ${stat.full ? "col-span-2" : ""}`}>
       <span
         data-count-to={stat.value}
-        className="text-3xl font-black leading-none tabular-nums"
+        className={`font-black leading-none tabular-nums ${stat.full ? "text-4xl" : "text-3xl"}`}
         style={{ color: stat.color }}
       >
         {text}
