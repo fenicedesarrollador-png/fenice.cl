@@ -44,24 +44,32 @@ Copia las 3 variables a **Vercel → Settings → Environment Variables** y a tu
 > Si cambias las claves, todas las suscripciones dejan de funcionar y hay que
 > volver a activar las notificaciones en cada dispositivo.
 
-## 3. WhatsApp (opcional pero recomendado)
+## 3. WhatsApp (cotización con PDF a varios números)
 
 Vía **WhatsApp Business Cloud API** de Meta. Variables:
 
 | Variable | Descripción |
 |---|---|
-| `WHATSAPP_TOKEN` | token de acceso permanente de la app de Meta |
+| `WHATSAPP_TOKEN` | token de acceso permanente de la app de Meta (solo servidor) |
 | `WHATSAPP_PHONE_ID` | *Phone Number ID* del número emisor |
-| `WHATSAPP_TO` | destinatarios separados por coma, formato internacional sin `+` (ej. `56912345678,56987654321`) |
-| `WHATSAPP_TEMPLATE` | *(opcional)* nombre de una plantilla **aprobada** con una variable de cuerpo `{{1}}` |
-| `WHATSAPP_LANG` | *(opcional)* idioma de la plantilla, por defecto `es` |
+| `WHATSAPP_TO` | **uno o varios** destinatarios separados por coma (se limpian `+`, espacios, guiones): `56939579658,56984752936,56998296350` |
+| `WHATSAPP_TEMPLATE` | plantilla **aprobada** de cotización: header tipo **DOCUMENT** (el PDF) + **15 variables** de body |
+| `WHATSAPP_LANG` | *(opcional)* idioma de la plantilla, por defecto `es_CL` |
 | `WHATSAPP_API_VERSION` | *(opcional)* por defecto `v21.0` |
+| `WHATSAPP_TEMPLATE_LEAD` | *(opcional)* plantilla de 1 variable para avisos de contacto/lead; sin ella, los leads no envían WhatsApp |
 
-**Importante:** los mensajes proactivos (fuera de la ventana de 24 h del cliente)
-**exigen una plantilla aprobada**. Crea una plantilla de tipo *Utility* con un
-único parámetro `{{1}}` en el cuerpo y pon su nombre en `WHATSAPP_TEMPLATE`. Sin
-plantilla, el envío usa texto plano (solo funciona dentro de la ventana de 24 h,
-útil para pruebas). Si no configuras nada, WhatsApp simplemente se omite.
+**Plantilla de cotización.** El cuerpo debe tener 15 variables en ESTE orden
+(`{{1}}`…`{{15}}`): folio, nombre, empresa, rut, teléfono, correo, comuna,
+dirección, servicio, combustible, volumen, frecuencia, fecha de entrega, equipo,
+detalles. El header debe ser de tipo **Documento**.
+
+**El PDF.** Al llegar una cotización, el servidor genera el PDF corporativo y lo
+**sube a Meta una sola vez** (`/media`), luego envía la plantilla con ese PDF y
+las 15 variables a **cada número de `WHATSAPP_TO` por separado**. No se expone
+ninguna URL pública del PDF (se envía por `media id`, privado). Si un número
+falla, los demás igual reciben (se registran en el log los que fallan). Si
+`WHATSAPP_TO` está vacío o falta configuración, WhatsApp se omite **sin afectar**
+el guardado de la cotización, el correo ni el push.
 
 ---
 
