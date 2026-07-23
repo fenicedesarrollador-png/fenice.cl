@@ -162,6 +162,10 @@ export default function HomePage() {
           fill
           priority
           fetchPriority="high"
+          // Ya es un webp liviano y pre-optimizado: se sirve DIRECTO (sin el
+          // optimizador `/_next/image`), para que Cloudflare lo cachee y no
+          // dependa de un round-trip lento del origen en la imagen LCP.
+          unoptimized
           sizes="100vw"
           placeholder="blur"
           blurDataURL={BLUR["portada-fenice"]}

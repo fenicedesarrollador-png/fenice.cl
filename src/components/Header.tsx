@@ -22,6 +22,17 @@ export default function Header({ config }: { config: SiteConfig }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Con el menú móvil abierto, bloquea el scroll del fondo para que se desplace
+  // SOLO el menú (que tiene su propio overflow) y no la página detrás.
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
   // Acceso oculto al panel: 5 clics seguidos sobre el logo abren el login de admin.
   // Un clic normal (o con pausas) sigue navegando al inicio con normalidad.
   const tapCountRef = useRef(0);
@@ -183,10 +194,10 @@ export default function Header({ config }: { config: SiteConfig }) {
           </div>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile menu — panel fijo con scroll propio (no mueve el fondo) */}
         {open && (
-          <div className="xl:hidden border-t border-slate-100 bg-white">
-            <div className="max-w-7xl mx-auto px-4 py-4 space-y-1">
+          <div className="xl:hidden fixed inset-x-0 top-16 bottom-0 z-40 bg-white border-t border-slate-100 overflow-y-auto overscroll-contain">
+            <div className="max-w-7xl mx-auto px-4 py-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] space-y-1">
               <Link href="/" data-analytics-id="mobile_nav_inicio" data-analytics-label="Inicio" data-analytics-cta="mobile_navigation" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50" onClick={() => setOpen(false)}>Inicio</Link>
 
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 pt-2 pb-1">Servicios</p>
