@@ -261,6 +261,20 @@ select.admin-input {
 }
 .admin-glow-dot { animation: adminGlowPulse 2s ease-in-out infinite; }
 
+/* Contador rojo de notificaciones — latido para llamar la atención */
+@keyframes adminPulseBadge {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.14); }
+}
+.admin-pulse-badge { animation: adminPulseBadge 1.8s ease-in-out infinite; }
+
+/* Toast de alerta en vivo */
+@keyframes adminToastIn {
+  from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.admin-toast-in { animation: adminToastIn .3s cubic-bezier(0.22,1,0.36,1) both; }
+
 /* Texto que respeta el tema dentro del scope */
 .admin-scope .admin-h { color: var(--a-text); }
 .admin-scope .admin-dim { color: var(--a-text-dim); }

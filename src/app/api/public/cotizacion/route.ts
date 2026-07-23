@@ -6,6 +6,7 @@ import { cotizacionInternaEmail, cotizacionClienteEmail } from "@/lib/email/temp
 import { buildCotizacionPdf } from "@/lib/admin/cotizacionPdf";
 import { hasCompletePhone, normalizePhoneForStorage, normalizeRutForStorage } from "@/lib/contactFormat";
 import { NOTIFY_EMAILS } from "@/lib/config";
+import { notifyNuevaCotizacion } from "@/lib/notify/adminAlert";
 
 function normalizeOptionalText(value: unknown) {
   if (typeof value !== "string") {
@@ -150,6 +151,15 @@ export async function POST(request: Request) {
         to: [payload.email],
         subject: "Recibimos tu solicitud de cotización — Fenice SPA",
         html: cotizacionClienteEmail(emailData),
+      }),
+      // Notificación en tiempo real al panel: Web Push (badge incluido) + WhatsApp.
+      notifyNuevaCotizacion(serviceClient, {
+        id: data.id,
+        nombre: payload.nombre,
+        empresa: payload.empresa,
+        servicio_solicitado: payload.servicio_solicitado,
+        comuna: payload.comuna,
+        telefono: payload.telefono,
       }),
     ]);
 

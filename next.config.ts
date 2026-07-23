@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // web-push usa APIs nativas de Node (crypto) y requires dinámicos: se deja
+  // como paquete externo del servidor para que no lo empaquete el bundler.
+  serverExternalPackages: ["web-push"],
   images: {
     formats: ["image/avif", "image/webp"],
     // Cachea las variantes optimizadas 1 año en el CDN (las fotos no cambian):
