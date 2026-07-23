@@ -119,8 +119,9 @@ export async function POST(request: Request) {
     // Si el PDF falla por cualquier motivo, el correo se envía igual (sin adjunto).
     const folio = data.id.slice(0, 8).toUpperCase();
     let adjuntos: EmailAttachment[] | undefined;
+    let pdfBytes: Uint8Array | undefined;
     try {
-      const pdfBytes = await buildCotizacionPdf({
+      pdfBytes = await buildCotizacionPdf({
         ...payload,
         id: data.id,
         created_at: data.created_at ?? new Date().toISOString(),
@@ -152,15 +153,29 @@ export async function POST(request: Request) {
         subject: "Recibimos tu solicitud de cotización — Fenice SPA",
         html: cotizacionClienteEmail(emailData),
       }),
-      // Notificación en tiempo real al panel: Web Push (badge incluido) + WhatsApp.
-      notifyNuevaCotizacion(serviceClient, {
-        id: data.id,
-        nombre: payload.nombre,
-        empresa: payload.empresa,
-        servicio_solicitado: payload.servicio_solicitado,
-        comuna: payload.comuna,
-        telefono: payload.telefono,
-      }),
+      // Notificación en tiempo real al panel: Web Push (badge incluido) +
+      // WhatsApp con la plantilla de cotización y el MISMO PDF adjunto.
+      notifyNuevaCotizacion(
+        serviceClient,
+        {
+          id: data.id,
+          nombre: payload.nombre,
+          empresa: payload.empresa,
+          servicio_solicitado: payload.servicio_solicitado,
+          comuna: payload.comuna,
+          telefono: payload.telefono,
+          email: payload.email,
+          rut_empresa: payload.rut_empresa,
+          direccion_entrega: payload.direccion_entrega,
+          tipo_combustible: payload.tipo_combustible,
+          volumen_estimado: payload.volumen_estimado,
+          frecuencia: payload.frecuencia,
+          fecha_estimada: payload.fecha_estimada,
+          tipo_instalacion: payload.tipo_instalacion,
+          mensaje: payload.mensaje,
+        },
+        pdfBytes,
+      ),
     ]);
 
     return NextResponse.json({ ok: true, id: data.id });

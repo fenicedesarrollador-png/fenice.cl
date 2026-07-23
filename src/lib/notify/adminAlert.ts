@@ -1,7 +1,7 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { sendPushToAdmins, getAdminAlertCount } from "@/lib/push/webpush";
-import { sendWhatsAppAlert } from "@/lib/whatsapp/send";
+import { sendWhatsAppAlert, sendCotizacionWhatsApp } from "@/lib/whatsapp/send";
 
 /**
  * Notificación multicanal para el equipo cuando entra una nueva solicitud:
@@ -19,6 +19,15 @@ type CotizacionAlert = {
   servicio_solicitado: string;
   comuna?: string | null;
   telefono?: string | null;
+  email?: string | null;
+  rut_empresa?: string | null;
+  direccion_entrega?: string | null;
+  tipo_combustible?: string | null;
+  volumen_estimado?: string | null;
+  frecuencia?: string | null;
+  fecha_estimada?: string | null;
+  tipo_instalacion?: string | null;
+  mensaje?: string | null;
 };
 
 type LeadAlert = {
@@ -32,20 +41,11 @@ type LeadAlert = {
 export async function notifyNuevaCotizacion(
   service: SupabaseClient,
   cot: CotizacionAlert,
+  pdfBytes?: Uint8Array,
 ): Promise<void> {
   try {
     const badgeCount = await getAdminAlertCount(service);
     const folio = cot.id.slice(0, 8).toUpperCase();
-    const detalle = [
-      `Empresa: ${cot.empresa}`,
-      `Contacto: ${cot.nombre}`,
-      cot.servicio_solicitado && `Servicio: ${cot.servicio_solicitado}`,
-      cot.comuna && `Comuna: ${cot.comuna}`,
-      cot.telefono && `Teléfono: ${cot.telefono}`,
-    ]
-      .filter(Boolean)
-      .join("\n");
-
     const body = `${cot.empresa} · ${cot.servicio_solicitado}`;
 
     await Promise.allSettled([
@@ -59,8 +59,27 @@ export async function notifyNuevaCotizacion(
         },
         { supabase: service },
       ),
-      sendWhatsAppAlert(
-        `🔥 *Nueva cotización* (Folio N° ${folio})\n${detalle}\n\nRevísala en el panel: fenice.cl/admin/cotizaciones`,
+      // WhatsApp con la plantilla de cotización + el PDF adjunto, a todos los
+      // destinatarios de WHATSAPP_TO. Se omite solo si no está configurado.
+      sendCotizacionWhatsApp(
+        {
+          folio,
+          nombre: cot.nombre,
+          empresa: cot.empresa,
+          rut: cot.rut_empresa,
+          telefono: cot.telefono ?? "No informado",
+          correo: cot.email ?? "No informado",
+          comuna: cot.comuna,
+          direccion: cot.direccion_entrega,
+          servicio: cot.servicio_solicitado,
+          combustible: cot.tipo_combustible,
+          volumen: cot.volumen_estimado,
+          frecuencia: cot.frecuencia,
+          fechaEntrega: cot.fecha_estimada,
+          equipo: cot.tipo_instalacion,
+          detalles: cot.mensaje,
+        },
+        pdfBytes,
       ),
     ]);
   } catch (err) {
