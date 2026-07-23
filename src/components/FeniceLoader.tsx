@@ -14,9 +14,10 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// El % se ata a la carga real (readyState/'load'); el tiempo solo lo suaviza.
-const BAR_MS = 900;     // avance base hasta ~90% mientras la página termina de cargar
-const HARD_CAP = 1200;  // corte forzado: el overlay nunca dura más que esto
+// Duración fija de la barra 0→100 (experiencia de marca): ~3,4 s + salida ≈ 4 s.
+// El contenido real ya está en el HTML detrás del overlay, así que no bloquea.
+const DURATION = 3400;      // ms que tarda la barra en llegar a 100%
+const SAFETY_MS = DURATION + 900; // red de seguridad: nunca quedarse colgado
 
 const LOADER_CSS = `
 html.fenice-loader-seen #fenice-loader {
@@ -550,38 +551,28 @@ export default function FeniceLoader() {
         fadeTimer = window.setTimeout(() => {
           restoreScroll();
           setActive(false);
-        }, 420);
-      }, 120);
+        }, 450);
+      }, 220);
     };
 
-    // El % se ata a la carga REAL: si la página ya cargó, salta a 100%;
-    // si no, avanza suavemente hasta 90% por tiempo y espera el evento 'load'.
-    let loaded = document.readyState === "complete";
-    const onLoad = () => {
-      loaded = true;
-    };
-    if (!loaded) window.addEventListener("load", onLoad, { once: true });
-
-    let current = 0;
+    // Barra 0→100 con easing sinusoidal sobre una duración fija (~3,4 s).
     const frame = (ts: number) => {
       if (start === null) start = ts;
-      const elapsed = ts - start;
-      const timePct = Math.min(elapsed / BAR_MS, 1) * 90; // techo de 90% por tiempo
-      const target = loaded ? 100 : timePct;
-      current += (target - current) * 0.25; // easing hacia el objetivo real
-      const value = Math.min(100, Math.round(current));
+      const t = Math.min((ts - start) / DURATION, 1);
+      const eased = 0.5 - 0.5 * Math.cos(Math.PI * t); // easeInOutSine
+      const value = Math.round(eased * 100);
       if (barRef.current) barRef.current.style.width = value + "%";
       if (pctRef.current) pctRef.current.textContent = value + "%";
-      if (value >= 100 || elapsed >= HARD_CAP) {
-        finish();
-      } else {
+      if (t < 1) {
         raf = requestAnimationFrame(frame);
+      } else {
+        finish();
       }
     };
     raf = requestAnimationFrame(frame);
 
-    // Corte forzado: pase lo que pase, el overlay se va a los 1200 ms.
-    const safetyTimer = window.setTimeout(finish, HARD_CAP);
+    // Red de seguridad: nunca quedarse colgado más de ~4,3 s.
+    const safetyTimer = window.setTimeout(finish, SAFETY_MS);
 
     return () => {
       window.clearInterval(phraseTimer);
@@ -589,7 +580,6 @@ export default function FeniceLoader() {
       window.clearTimeout(holdTimer);
       window.clearTimeout(fadeTimer);
       window.clearTimeout(safetyTimer);
-      window.removeEventListener("load", onLoad);
       restoreScroll();
     };
   }, []);
