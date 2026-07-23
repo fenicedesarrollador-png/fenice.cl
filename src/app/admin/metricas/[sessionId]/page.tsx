@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { formatDuration } from "@/lib/analytics/admin";
+import { formatDuration, sourceLabel } from "@/lib/analytics/admin";
 
 export const metadata: Metadata = {
   title: "Detalle de sesión | Admin Fenice",
@@ -42,7 +42,16 @@ export default async function SessionDetailPage({
     screen_group: string | null;
     country_code: string | null;
     duration_seconds: number;
+    contact: {
+      name: string | null;
+      email: string | null;
+      phone: string | null;
+      company: string | null;
+      type: string | null;
+    } | null;
   };
+
+  const contact = session.contact;
 
   const identityLinks = (data.identity_links ?? []) as Array<{
     lead_id: string | null;
@@ -65,11 +74,41 @@ export default async function SessionDetailPage({
         </div>
       </div>
 
+      {contact && (contact.name || contact.email || contact.phone) ? (
+        <div className="rounded-2xl border border-[#1a6b3c]/25 bg-[#1a6b3c]/5 p-5">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#1a6b3c]">
+            Contacto {contact.type === "cotizacion" ? "· cotización" : contact.type === "lead" ? "· solicitud" : contact.type === "cliente" ? "· cliente" : ""}
+          </p>
+          <div className="mt-3 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <div>
+              <p className="text-xs text-slate-500">Nombre</p>
+              <p className="text-sm font-bold text-[#0a1628]">{contact.name || "—"}</p>
+            </div>
+            <div>
+              <p className="text-xs text-slate-500">Email</p>
+              {contact.email ? (
+                <a href={`mailto:${contact.email}`} className="text-sm font-semibold text-[#1a6b3c] hover:underline break-all">{contact.email}</a>
+              ) : <p className="text-sm text-slate-400">—</p>}
+            </div>
+            <div>
+              <p className="text-xs text-slate-500">Teléfono</p>
+              {contact.phone ? (
+                <a href={`tel:${contact.phone}`} className="text-sm font-semibold text-[#1a6b3c] hover:underline">{contact.phone}</a>
+              ) : <p className="text-sm text-slate-400">—</p>}
+            </div>
+            <div>
+              <p className="text-xs text-slate-500">Empresa</p>
+              <p className="text-sm font-semibold text-[#0a1628]">{contact.company || "—"}</p>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {[
           { label: "Inicio", value: new Date(session.started_at).toLocaleString("es-CL") },
           { label: "Última actividad", value: new Date(session.last_seen_at).toLocaleString("es-CL") },
-          { label: "Fuente", value: session.source || "direct" },
+          { label: "Fuente", value: sourceLabel(session.source) },
           { label: "Campaña", value: session.campaign || "Sin campaña" },
           { label: "Entrada", value: session.landing_path },
           { label: "Última página", value: session.last_path || session.landing_path },

@@ -50,6 +50,10 @@ export interface AnalyticsDashboardData {
     event_count: number;
     duration_seconds: number;
     conversion: string | null;
+    contact_name: string | null;
+    contact_email: string | null;
+    contact_phone: string | null;
+    contact_type: string | null;
     total_count: number;
   }>;
   totalSessions: number;
@@ -57,6 +61,53 @@ export interface AnalyticsDashboardData {
 
 function firstValue(value: SearchParamValue) {
   return Array.isArray(value) ? value[0] ?? "" : value ?? "";
+}
+
+/**
+ * Traduce el código de fuente (utm_source o referrer) a un nombre legible para
+ * personas no técnicas: "ig" → "Instagram", "google" → "Google", etc.
+ */
+const SOURCE_LABELS: Record<string, string> = {
+  ig: "Instagram",
+  instagram: "Instagram",
+  "instagram.com": "Instagram",
+  fb: "Facebook",
+  facebook: "Facebook",
+  "facebook.com": "Facebook",
+  "m.facebook.com": "Facebook",
+  "l.facebook.com": "Facebook",
+  google: "Google",
+  "google.com": "Google",
+  "google.cl": "Google",
+  bing: "Bing",
+  wa: "WhatsApp",
+  whatsapp: "WhatsApp",
+  "whatsapp.com": "WhatsApp",
+  "l.instagram.com": "Instagram",
+  linkedin: "LinkedIn",
+  "linkedin.com": "LinkedIn",
+  tiktok: "TikTok",
+  "tiktok.com": "TikTok",
+  youtube: "YouTube",
+  "youtube.com": "YouTube",
+  email: "Email",
+  mail: "Email",
+  newsletter: "Newsletter",
+  direct: "Directo",
+  "": "Directo",
+};
+
+export function sourceLabel(source: string | null | undefined): string {
+  const raw = (source ?? "").trim().toLowerCase();
+  if (!raw) return "Directo";
+  if (SOURCE_LABELS[raw]) return SOURCE_LABELS[raw];
+  // Coincidencia parcial por si viene un host completo desconocido.
+  for (const [key, label] of Object.entries(SOURCE_LABELS)) {
+    if (key && raw.includes(key)) return label;
+  }
+  // Si no hay match, capitaliza y limpia el dominio.
+  const clean = raw.replace(/^www\./, "").replace(/\.(com|cl|net|org|co)$/i, "");
+  return clean.charAt(0).toUpperCase() + clean.slice(1);
 }
 
 function startOfToday() {
@@ -72,6 +123,16 @@ function resolveDateRange(period: string, rawFrom: string, rawTo: string) {
         from: today.format("YYYY-MM-DD"),
         to: today.add(1, "day").format("YYYY-MM-DD"),
       };
+    case "this_week": {
+      // Semana en curso de LUNES a DOMINGO. dayjs usa domingo como día 0,
+      // así que calculamos el lunes restando (día+6)%7 días.
+      const dow = today.day(); // 0=domingo … 6=sábado
+      const monday = today.subtract((dow + 6) % 7, "day");
+      return {
+        from: monday.format("YYYY-MM-DD"),
+        to: monday.add(7, "day").format("YYYY-MM-DD"), // exclusivo (lunes siguiente)
+      };
+    }
     case "last_7_days":
       return {
         from: today.subtract(6, "day").format("YYYY-MM-DD"),
@@ -106,7 +167,7 @@ function resolveDateRange(period: string, rawFrom: string, rawTo: string) {
 }
 
 export function resolveAnalyticsFilters(searchParams: Record<string, SearchParamValue>): AnalyticsFilters {
-  const period = firstValue(searchParams.period) || "last_30_days";
+  const period = firstValue(searchParams.period) || "this_week";
   const rawFrom = firstValue(searchParams.date_from);
   const rawTo = firstValue(searchParams.date_to);
   const dates = resolveDateRange(period, rawFrom, rawTo);

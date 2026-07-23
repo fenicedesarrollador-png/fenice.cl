@@ -81,6 +81,7 @@ export default async function MetricasPage({
               defaultValue={filters.period}
               className="admin-input"
             >
+              <option value="this_week">Esta semana (lun–dom)</option>
               <option value="today">Hoy</option>
               <option value="last_7_days">Últimos 7 días</option>
               <option value="last_30_days">Últimos 30 días</option>

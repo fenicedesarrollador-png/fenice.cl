@@ -12,7 +12,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { formatDuration, type AnalyticsDashboardData } from "@/lib/analytics/admin";
+import { formatDuration, sourceLabel, type AnalyticsDashboardData } from "@/lib/analytics/admin";
 
 function EmptyState({ label }: { label: string }) {
   return (
@@ -109,9 +109,9 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data.sources.slice(0, 8)}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(10,22,40,0.08)" />
-                  <XAxis dataKey="source" stroke="#64748b" />
+                  <XAxis dataKey="source" stroke="#64748b" tickFormatter={(value) => sourceLabel(value)} />
                   <YAxis stroke="#64748b" />
-                  <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "0.75rem", color: "#0a1628" }} labelStyle={{ color: "#64748b" }} itemStyle={{ color: "#0a1628" }} />
+                  <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "0.75rem", color: "#0a1628" }} labelStyle={{ color: "#64748b" }} itemStyle={{ color: "#0a1628" }} labelFormatter={(value) => sourceLabel(value as string)} />
                   <Bar dataKey="sessions" fill="#1a6b3c" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
@@ -349,7 +349,7 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
                   data.campaigns.map((campaign) => (
                     <tr key={`${campaign.campaign}-${campaign.source}-${campaign.medium}`} className="border-b border-slate-100">
                       <td className="py-3 pr-4 text-[#0a1628]">{campaign.campaign}</td>
-                      <td className="py-3 pr-4 text-slate-700">{campaign.source}</td>
+                      <td className="py-3 pr-4 text-slate-700">{sourceLabel(campaign.source)}</td>
                       <td className="py-3 pr-4 text-slate-700">{campaign.medium}</td>
                       <td className="py-3 pr-4 text-slate-700">{campaign.sessions}</td>
                       <td className="py-3 text-slate-700">{campaign.conversions}</td>
@@ -383,11 +383,11 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
             <thead>
               <tr className="border-b border-slate-100 text-left text-slate-500">
                 <th className="pb-3 pr-4 font-semibold">Inicio</th>
-                <th className="pb-3 pr-4 font-semibold">Visitante</th>
-                <th className="pb-3 pr-4 font-semibold">Estado</th>
+                <th className="pb-3 pr-4 font-semibold">Contacto</th>
                 <th className="pb-3 pr-4 font-semibold">Fuente</th>
                 <th className="pb-3 pr-4 font-semibold">Entrada</th>
                 <th className="pb-3 pr-4 font-semibold">Última</th>
+                <th className="pb-3 pr-4 font-semibold">Conversión</th>
                 <th className="pb-3 pr-4 font-semibold">Duración</th>
                 <th className="pb-3 font-semibold">Detalle</th>
               </tr>
@@ -396,12 +396,35 @@ export default function MetricasDashboard({ data }: { data: AnalyticsDashboardDa
               {data.recentSessions.length ? (
                 data.recentSessions.map((session) => (
                   <tr key={session.session_id} className="border-b border-slate-100">
-                    <td className="py-3 pr-4 text-slate-700">{new Date(session.started_at).toLocaleString("es-CL")}</td>
-                    <td className="py-3 pr-4 font-medium text-[#0a1628]">{session.visitor_label}</td>
-                    <td className="py-3 pr-4 text-slate-700">{session.identity_state}</td>
-                    <td className="py-3 pr-4 text-slate-700">{session.source}</td>
+                    <td className="py-3 pr-4 text-slate-700 whitespace-nowrap">{new Date(session.started_at).toLocaleString("es-CL")}</td>
+                    <td className="py-3 pr-4">
+                      {session.contact_name || session.contact_email ? (
+                        <div className="min-w-[160px]">
+                          <p className="font-semibold text-[#0a1628]">{session.contact_name || "Contacto"}</p>
+                          {session.contact_email ? (
+                            <a href={`mailto:${session.contact_email}`} className="text-xs text-[#1a6b3c] hover:underline">{session.contact_email}</a>
+                          ) : null}
+                          {session.contact_phone ? (
+                            <p className="text-xs text-slate-500">{session.contact_phone}</p>
+                          ) : null}
+                        </div>
+                      ) : (
+                        <div className="min-w-[120px]">
+                          <p className="font-medium text-slate-600">{session.visitor_label}</p>
+                          <p className="text-xs text-slate-400">Anónimo (sin datos)</p>
+                        </div>
+                      )}
+                    </td>
+                    <td className="py-3 pr-4 text-slate-700">{sourceLabel(session.source)}</td>
                     <td className="py-3 pr-4 text-slate-700">{session.landing_path}</td>
                     <td className="py-3 pr-4 text-slate-700">{session.last_path}</td>
+                    <td className="py-3 pr-4">
+                      {session.conversion ? (
+                        <span className="inline-flex items-center rounded-full bg-[#1a6b3c]/10 px-2.5 py-1 text-xs font-bold text-[#1a6b3c]">{session.conversion}</span>
+                      ) : (
+                        <span className="text-xs text-slate-400">—</span>
+                      )}
+                    </td>
                     <td className="py-3 pr-4 text-slate-700">{formatDuration(session.duration_seconds)}</td>
                     <td className="py-3">
                       <Link href={`/admin/metricas/${session.session_id}`} className="font-semibold text-[#1a6b3c] hover:text-[#0d4a28]">
