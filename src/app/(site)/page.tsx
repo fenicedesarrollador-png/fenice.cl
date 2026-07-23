@@ -24,13 +24,13 @@ export const metadata = buildMetadata({
   title: "Petróleo a Domicilio Santiago | Distribuidor de Combustible RM",
   titleAbsolute: true,
   description:
-    "Distribuidor de petróleo diesel a domicilio para empresas en Santiago y la Región Metropolitana. Despacho rápido, flota especializada y cotización por WhatsApp en minutos.",
+    "Distribuidor de petróleo diésel y parafina (kerosene) a domicilio para empresas en Santiago y la Región Metropolitana. Despacho rápido, flota especializada y cotización por WhatsApp en minutos.",
   path: "/",
   keywords: CORE_KEYWORDS,
 });
 
 const faqItems = [
-  { q: "¿Hacen despacho de petróleo a domicilio en Santiago?", a: "Sí. Realizamos despacho de petróleo diésel y kerosene a domicilio en toda la Región Metropolitana para empresas e instituciones, con despachos programados o urgentes previa coordinación." },
+  { q: "¿Hacen despacho de petróleo a domicilio en Santiago?", a: "Sí. Realizamos despacho de petróleo diésel y parafina (kerosene) a domicilio en toda la Región Metropolitana para empresas e instituciones, con despachos programados o urgentes previa coordinación." },
   { q: "¿Cuál es la cantidad mínima de combustible?", a: "La compra mínima es de 50 litros. Puedes programar abastecimientos semanales o mensuales, o solicitar despachos puntuales según tu operación." },
   { q: "¿En qué comunas trabajan?", a: "Cubrimos las 52 comunas de la Región Metropolitana —incluyendo Santiago, Lampa, Colina, Buin, Melipilla, Curacaví y Talagante— además de Valparaíso, Los Andes, Rancagua y Santa Cruz." },
   { q: "¿Despachan combustible para generadores y calderas?", a: "Sí, son servicios prioritarios: abastecemos generadores eléctricos y calderas de edificios, condominios, clínicas, hoteles e industrias, con despachos programados o urgentes previa coordinación." },
@@ -58,7 +58,7 @@ const SERVICIOS_HOME = [
   {
     icon: Truck,
     title: "Petróleo diesel a domicilio",
-    desc: "Despacho de diesel y kerosene para empresas e instituciones en toda la RM.",
+    desc: "Despacho de diésel y parafina (kerosene) para empresas e instituciones en toda la RM.",
     href: "/servicios/petroleo-a-domicilio-santiago",
   },
   {
@@ -200,7 +200,7 @@ export default function HomePage() {
               </h1>
               <p className="hero-rise-2 text-sm sm:text-base text-slate-300 leading-relaxed mb-7 max-w-xl">
                 Combustible confiable para mantener su operación en movimiento: despachamos
-                petróleo diesel y kerosene directamente en empresas, faenas, edificios y
+                petróleo diésel y parafina (kerosene) directamente en empresas, faenas, edificios y
                 centros de operación de la Región Metropolitana, Valparaíso y O&apos;Higgins.
                 Despachos programados, precios actualizados y comunicación directa.
               </p>
@@ -425,7 +425,7 @@ export default function HomePage() {
             {[
               {
                 src: "/images/operacion-carga-maquinaria.webp",
-                alt: "Operario de Fenice SPA cargando petróleo diesel directamente al estanque de una maquinaria",
+                alt: "Operario de Fenice SPA cargando petróleo diésel directamente al estanque de una maquinaria",
                 cap: "Carga directa a maquinaria",
               },
               {

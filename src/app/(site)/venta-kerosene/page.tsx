@@ -12,20 +12,10 @@ const BASE = SITE_CONFIG.site_url;
 const PAGE_URL = `${BASE}/venta-kerosene`;
 
 export const metadata = buildMetadata({
-  title: "Venta de Kerosene a Domicilio en Santiago | Calefacción e Industrial RM",
+  title: "Venta de Parafina y Kerosene a Domicilio en Santiago | Calefacción RM",
   description:
-    "Venta de kerosene a domicilio en Santiago y la Región Metropolitana para calefacción residencial, comercial e industrial. Despacho directo, factura electrónica y precio conveniente. Cotiza tu kerosene hoy.",
+    "Venta de parafina (kerosene) a domicilio en Santiago y la Región Metropolitana para calefacción residencial, comercial e industrial. Despacho directo, factura electrónica y precio conveniente. Cotiza tu parafina hoy.",
   path: "/venta-kerosene",
-  keywords: [
-    "venta de kerosene santiago",
-    "kerosene a domicilio santiago",
-    "kerosene para calefacción",
-    "comprar kerosene región metropolitana",
-    "distribuidor de kerosene RM",
-    "kerosene domiciliario santiago",
-    "kerosene industrial",
-    "precio kerosene empresas chile",
-  ],
 });
 
 const faqKerosene = [
@@ -135,11 +125,11 @@ export default function VentaKerosenePage() {
                 <span className="text-[#f5a623] text-xs font-bold uppercase tracking-widest">Venta de combustible</span>
               </div>
               <h1 className="text-4xl lg:text-5xl font-extrabold text-white leading-[1.1] mb-5">
-                Venta de <span className="text-[#f5a623]">Kerosene</span><br />
+                Venta de <span className="text-[#f5a623]">Parafina (Kerosene)</span><br />
                 a Domicilio en Santiago
               </h1>
               <p className="text-slate-300 leading-relaxed mb-8 text-base max-w-xl">
-                Despachamos kerosene para calefacción residencial, comercial e industrial en toda la
+                Despachamos parafina (kerosene) para calefacción residencial, comercial e industrial en toda la
                 Región Metropolitana. Entrega directa en tu domicilio o instalación, con factura
                 electrónica y coordinación simple.
               </p>

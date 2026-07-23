@@ -14,7 +14,9 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const DURATION = 3600; // ms que tarda la barra en ir de 0 a 100
+// El % se ata a la carga real (readyState/'load'); el tiempo solo lo suaviza.
+const BAR_MS = 900;     // avance base hasta ~90% mientras la página termina de cargar
+const HARD_CAP = 1200;  // corte forzado: el overlay nunca dura más que esto
 
 const LOADER_CSS = `
 html.fenice-loader-seen #fenice-loader {
@@ -473,6 +475,16 @@ export default function FeniceLoader() {
       sessionStorage.setItem("fenice-loader-shown", "1");
     } catch {}
 
+    // prefers-reduced-motion: no mostrar la animación; salir de inmediato.
+    let reduceMotion = false;
+    try {
+      reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    } catch {}
+    if (reduceMotion) {
+      const t = window.setTimeout(() => setActive(false), 0);
+      return () => window.clearTimeout(t);
+    }
+
     const html = document.documentElement;
     const body = document.body;
     html.style.overflow = "hidden";
@@ -538,27 +550,38 @@ export default function FeniceLoader() {
         fadeTimer = window.setTimeout(() => {
           restoreScroll();
           setActive(false);
-        }, 480);
-      }, 260);
+        }, 420);
+      }, 120);
     };
 
+    // El % se ata a la carga REAL: si la página ya cargó, salta a 100%;
+    // si no, avanza suavemente hasta 90% por tiempo y espera el evento 'load'.
+    let loaded = document.readyState === "complete";
+    const onLoad = () => {
+      loaded = true;
+    };
+    if (!loaded) window.addEventListener("load", onLoad, { once: true });
+
+    let current = 0;
     const frame = (ts: number) => {
       if (start === null) start = ts;
-      const t = Math.min((ts - start) / DURATION, 1);
-      const eased = 0.5 - 0.5 * Math.cos(Math.PI * t); // easeInOutSine
-      const value = Math.round(eased * 100);
+      const elapsed = ts - start;
+      const timePct = Math.min(elapsed / BAR_MS, 1) * 90; // techo de 90% por tiempo
+      const target = loaded ? 100 : timePct;
+      current += (target - current) * 0.25; // easing hacia el objetivo real
+      const value = Math.min(100, Math.round(current));
       if (barRef.current) barRef.current.style.width = value + "%";
       if (pctRef.current) pctRef.current.textContent = value + "%";
-      if (t < 1) {
-        raf = requestAnimationFrame(frame);
-      } else {
+      if (value >= 100 || elapsed >= HARD_CAP) {
         finish();
+      } else {
+        raf = requestAnimationFrame(frame);
       }
     };
     raf = requestAnimationFrame(frame);
 
-    // Red de seguridad: nunca quedarse mas de ~6s
-    const safetyTimer = window.setTimeout(finish, DURATION + 2400);
+    // Corte forzado: pase lo que pase, el overlay se va a los 1200 ms.
+    const safetyTimer = window.setTimeout(finish, HARD_CAP);
 
     return () => {
       window.clearInterval(phraseTimer);
@@ -566,6 +589,7 @@ export default function FeniceLoader() {
       window.clearTimeout(holdTimer);
       window.clearTimeout(fadeTimer);
       window.clearTimeout(safetyTimer);
+      window.removeEventListener("load", onLoad);
       restoreScroll();
     };
   }, []);
@@ -582,9 +606,8 @@ export default function FeniceLoader() {
 
       <div
         id="fenice-loader"
-        role="status"
-        aria-live="polite"
-        aria-label="Cargando Fenice SPA"
+        aria-hidden="true"
+        inert
         className={leaving ? "is-hidden" : undefined}
       >
         <div className="stage">

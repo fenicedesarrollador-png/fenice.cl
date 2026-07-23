@@ -15,7 +15,6 @@ export function buildMetadata({
   titleAbsolute = false,
   description,
   path = "/",
-  keywords,
   image = OG_IMAGE,
   noindex = false,
   type = "website",
@@ -27,6 +26,8 @@ export function buildMetadata({
   titleAbsolute?: boolean;
   description: string;
   path?: string;
+  /** Aceptado por compatibilidad, pero YA NO se emite: la meta keywords se
+   *  eliminó de todo el sitio (Google la ignora desde 2009). */
   keywords?: string[];
   image?: string;
   noindex?: boolean;
@@ -40,7 +41,6 @@ export function buildMetadata({
   return {
     title: titleAbsolute ? { absolute: title } : title,
     description,
-    keywords: keywords?.join(", "),
     alternates: { canonical: url },
     robots: noindex
       ? { index: false, follow: false }

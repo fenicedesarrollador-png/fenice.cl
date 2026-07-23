@@ -13,7 +13,14 @@ export const metadata: Metadata = {
   description:
     "Abastecimiento de petróleo diesel para empresas, faenas industriales y flotas de vehículos en la Región Metropolitana. Contratos de suministro, factura electrónica y atención comercial directa. Cotiza ahora.",
   alternates: { canonical: "https://fenice.cl/empresas-faenas-flotas" },
-  keywords: "combustible empresas santiago, petróleo faenas industriales, abastecimiento flotas, diesel construcción, combustible minería RM",
+  openGraph: {
+    type: "website",
+    url: "https://fenice.cl/empresas-faenas-flotas",
+    title: "Combustible para Empresas, Faenas y Flotas | Fenice SPA",
+    description:
+      "Abastecimiento de petróleo diésel para empresas, faenas industriales y flotas en la RM. Contratos de suministro, factura electrónica y atención comercial directa.",
+    siteName: "Fenice SPA",
+  },
 };
 
 const pageSchema = {

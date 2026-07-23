@@ -6,12 +6,38 @@ import CTASection from "@/components/CTASection";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Blog sobre Petróleo Diésel y Kerosene para Empresas",
-  description:
-    "Artículos y guías sobre abastecimiento de petróleo diésel y kerosene, despachos programados, generadores, calderas y continuidad operacional para empresas en Chile.",
-  alternates: { canonical: "https://fenice.cl/blog" },
-};
+// Metadata dinámica: mientras el blog NO tenga artículos publicados, emite
+// noindex,follow (evita indexar "thin content" con página vacía). En cuanto se
+// publica el primer post desde el admin, la etiqueta se retira sola.
+export async function generateMetadata(): Promise<Metadata> {
+  let hasPosts = false;
+  try {
+    const supabase = await createClient();
+    const { count } = await supabase
+      .from("blog_posts")
+      .select("id", { count: "exact", head: true })
+      .eq("publicado", true);
+    hasPosts = (count ?? 0) > 0;
+  } catch {}
+
+  const title = "Blog sobre Petróleo Diésel, Parafina y Kerosene para Empresas";
+  const description =
+    "Artículos y guías sobre abastecimiento de petróleo diésel, parafina (kerosene), despachos programados, generadores, calderas y continuidad operacional para empresas en Chile.";
+
+  return {
+    title,
+    description,
+    alternates: { canonical: "https://fenice.cl/blog" },
+    ...(hasPosts ? {} : { robots: { index: false, follow: true } }),
+    openGraph: {
+      type: "website",
+      url: "https://fenice.cl/blog",
+      title,
+      description,
+      siteName: "Fenice SPA",
+    },
+  };
+}
 
 type PostCard = {
   slug: string;
