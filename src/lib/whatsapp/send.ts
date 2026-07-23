@@ -1,4 +1,5 @@
 import "server-only";
+import { FEATURE_WHATSAPP } from "@/lib/features";
 
 /**
  * Alertas por WhatsApp vía WhatsApp Business Cloud API (Meta), sin dependencias.
@@ -163,6 +164,11 @@ export async function sendCotizacionWhatsApp(
   data: WhatsAppQuoteData,
   pdfBytes?: Uint8Array,
 ): Promise<WhatsAppResult> {
+  // Suspendido hasta autorización/pago del cliente.
+  if (!FEATURE_WHATSAPP) {
+    return { sent: 0, failed: 0, failedNumbers: [], skipped: "suspendido" };
+  }
+
   const token = process.env.WHATSAPP_TOKEN;
   const phoneId = process.env.WHATSAPP_PHONE_ID;
   const template = process.env.WHATSAPP_TEMPLATE;
@@ -255,6 +261,11 @@ export async function sendCotizacionWhatsApp(
  * siguen recibiendo correo + push). No usa la plantilla de cotización.
  */
 export async function sendWhatsAppAlert(texto: string): Promise<WhatsAppResult> {
+  // Suspendido hasta autorización/pago del cliente.
+  if (!FEATURE_WHATSAPP) {
+    return { sent: 0, failed: 0, failedNumbers: [], skipped: "suspendido" };
+  }
+
   const token = process.env.WHATSAPP_TOKEN;
   const phoneId = process.env.WHATSAPP_PHONE_ID;
   const template = process.env.WHATSAPP_TEMPLATE_LEAD;

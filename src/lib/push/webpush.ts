@@ -2,6 +2,7 @@ import "server-only";
 import webpush from "web-push";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createServiceClient } from "@/lib/supabase/server";
+import { FEATURE_NOTIFICATIONS } from "@/lib/features";
 
 /**
  * Envío de notificaciones Web Push a los administradores.
@@ -87,6 +88,10 @@ export async function sendPushToAdmins(
   payload: PushPayload,
   options?: { supabase?: SupabaseClient },
 ): Promise<{ sent: number; failed: number; pruned: number; skipped?: string }> {
+  // Suspendido hasta autorización/pago del cliente.
+  if (!FEATURE_NOTIFICATIONS) {
+    return { sent: 0, failed: 0, pruned: 0, skipped: "suspendido" };
+  }
   if (!ensureVapid()) {
     console.warn("[push] Claves VAPID no configuradas — push omitido:", payload.title);
     return { sent: 0, failed: 0, pruned: 0, skipped: "vapid_no_configurado" };

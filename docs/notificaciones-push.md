@@ -1,5 +1,14 @@
 # Notificaciones en tiempo real del panel administrativo
 
+> ⏸️ **SUSPENDIDAS** (julio 2026). Las notificaciones push y el envío por WhatsApp
+> están apagadas por defecto hasta autorizar/pagar la función. El código está
+> completo e intacto. Para **reactivar**, setear en Render (Environment):
+> `NEXT_PUBLIC_FEATURE_NOTIFICATIONS=true` y `FEATURE_WHATSAPP=true` (ver
+> `src/lib/features.ts`). Mientras estén apagadas: la campana del panel no
+> aparece, no se envían push ni WhatsApp; el correo y las métricas siguen
+> funcionando normalmente.
+
+
 Alertas de nuevas **cotizaciones** y **solicitudes de contacto** para el equipo
 Fenice. Funcionan **solo en `/admin`** (la web pública no se ve afectada) y llegan
 a **Windows, macOS, Android e iPhone**, incluso con la app o la pestaña cerradas,
