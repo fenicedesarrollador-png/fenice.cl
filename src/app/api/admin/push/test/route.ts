@@ -28,8 +28,8 @@ export async function POST() {
 
   const result = await sendPushToAdmins(
     {
-      title: "🔔 Notificación de prueba — Fenice",
-      body: "¡Las alertas del panel funcionan en este dispositivo!",
+      title: "Notificación de prueba",
+      body: "Las alertas del panel funcionan en este dispositivo.",
       url: "/admin/cotizaciones",
       tag: "fenice-test",
       badgeCount,

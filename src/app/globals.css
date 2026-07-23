@@ -27,6 +27,10 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Recorta cualquier desborde horizontal (evita la franja blanca al alejar en
+     móvil). `clip` NO crea contenedor de scroll, así que el header sticky sigue
+     funcionando (a diferencia de overflow-x: hidden, que sí lo rompería). */
+  overflow-x: clip;
 }
 
 body {
@@ -34,6 +38,8 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   line-height: 1.6;
+  overflow-x: clip;
+  width: 100%;
 }
 
 /* Scrollbar refinada */

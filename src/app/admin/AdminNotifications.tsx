@@ -272,8 +272,8 @@ export default function AdminNotifications() {
       // sobre todo en Mac, revela de inmediato si el sistema operativo la está
       // bloqueando (aunque el permiso del sitio esté concedido).
       try {
-        await reg.showNotification("✅ Notificaciones activadas", {
-          body: "Así se verán las alertas de nuevas cotizaciones de Fenice.",
+        await reg.showNotification("Notificaciones activadas", {
+          body: "Así verás las nuevas cotizaciones que lleguen a Fenice.",
           icon: "/icons/icon-192.png",
           badge: "/icons/badge-72.png",
           tag: "fenice-enabled",
