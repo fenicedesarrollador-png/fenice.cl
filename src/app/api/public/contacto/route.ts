@@ -4,6 +4,7 @@ import { linkAnalyticsIdentity } from "@/lib/analytics/server";
 import { sendEmail } from "@/lib/email/resend";
 import { contactoInternoEmail } from "@/lib/email/templates";
 import { NOTIFY_EMAILS } from "@/lib/config";
+import { notifyNuevoLead } from "@/lib/notify/adminAlert";
 
 function normalizeOptionalText(value: unknown) {
   if (typeof value !== "string") {
@@ -82,6 +83,14 @@ export async function POST(request: Request) {
         subject: `Nuevo contacto — ${payload.nombre} (${payload.tipo_operacion})`,
         html: contactoInternoEmail(payload),
         ...(payload.email ? { replyTo: payload.email } : {}),
+      }),
+      // Notificación en tiempo real al panel: Web Push (badge incluido) + WhatsApp.
+      notifyNuevoLead(serviceClient, {
+        id: data.id,
+        nombre: payload.nombre,
+        comuna: payload.comuna,
+        tipo_operacion: payload.tipo_operacion,
+        telefono: payload.telefono,
       }),
     ]);
 

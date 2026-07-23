@@ -5,6 +5,7 @@ import { Menu, ChevronRight, Home, Search } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import CommandPalette from "./CommandPalette";
+import AdminNotifications from "./AdminNotifications";
 
 const ROUTE_LABELS: Record<string, string> = {
   admin: "Dashboard",
@@ -97,6 +98,8 @@ export default function AdminTopBar({ onMenuClick }: { onMenuClick: () => void }
         >
           <Search className="w-4 h-4" />
         </button>
+
+        <AdminNotifications />
 
         <a
           href="/"
