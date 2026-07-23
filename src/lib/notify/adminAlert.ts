@@ -46,13 +46,13 @@ export async function notifyNuevaCotizacion(
   try {
     const badgeCount = await getAdminAlertCount(service);
     const folio = cot.id.slice(0, 8).toUpperCase();
-    const body = `${cot.empresa} · ${cot.servicio_solicitado}`;
-
+    // Título = el mensaje (en iPhone el sistema ya muestra "Fenice SPA" como
+    // encabezado de la app; poner la marca aquí la duplicaría). Sin emojis.
     await Promise.allSettled([
       sendPushToAdmins(
         {
-          title: "🔥 Nueva cotización — Fenice",
-          body,
+          title: `${cot.nombre} te ha enviado una cotización`,
+          body: cot.empresa ? cot.empresa : "Nueva solicitud de cotización",
           url: `/admin/cotizaciones`,
           tag: `cotizacion-${cot.id}`,
           badgeCount,
@@ -102,13 +102,11 @@ export async function notifyNuevoLead(
       .filter(Boolean)
       .join("\n");
 
-    const body = [lead.nombre, lead.comuna].filter(Boolean).join(" · ");
-
     await Promise.allSettled([
       sendPushToAdmins(
         {
-          title: "📩 Nueva solicitud de contacto — Fenice",
-          body,
+          title: `${lead.nombre} te ha enviado una solicitud`,
+          body: lead.comuna ? `Contacto desde ${lead.comuna}` : "Nueva solicitud de contacto",
           url: `/admin/leads`,
           tag: `lead-${lead.id}`,
           badgeCount,

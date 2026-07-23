@@ -42,7 +42,7 @@ self.addEventListener("push", (event) => {
     data = { title: "Fenice", body: event.data ? event.data.text() : "" };
   }
 
-  const title = data.title || "Fenice — Nueva alerta";
+  const title = data.title || "Fenice SPA";
   const url = data.url || DEFAULT_URL;
   const badgeCount = typeof data.badgeCount === "number" ? data.badgeCount : undefined;
 
