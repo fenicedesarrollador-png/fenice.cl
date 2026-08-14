@@ -4,9 +4,9 @@ import { buildMetadata } from "@/lib/seo";
 import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
 
 export const metadata = buildMetadata({
-  title: "Contacto | Cotiza Petróleo a Domicilio en Santiago",
+  title: "Contacto y Cotización de Combustible en Santiago",
   description:
-    "Contacta a Fenice SPA para cotizar petróleo diesel a domicilio o instalación de estanques en la Región Metropolitana. WhatsApp directo, respuesta en minutos, Lun-Vie 09:00–19:00.",
+    "Contacta a Fenice para cotizar diésel, kerosene o instalación de estanques en la RM. WhatsApp, teléfono y correo, Lun-Vie 09:00–19:00.",
   path: "/contacto",
   keywords: [
     "contacto petróleo a domicilio santiago",
@@ -26,7 +26,7 @@ const contactItems = [
     analyticsCta: "whatsapp",
     color: "text-green-500",
     bgColor: "bg-green-50",
-    note: "Respuesta inmediata",
+    note: "Atención Lun-Vie 09:00–19:00",
   },
   {
     icon: Phone,
@@ -98,7 +98,7 @@ export default function ContactoPage() {
           </h1>
           <p className="text-lg text-slate-300 max-w-2xl">
             Petróleo a domicilio, transporte de combustible e instalación de estanques.
-            Respondemos en minutos por WhatsApp.
+            Confirma precio y disponibilidad por WhatsApp en nuestro horario de atención.
           </p>
         </div>
       </section>
@@ -151,7 +151,7 @@ export default function ContactoPage() {
                 <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current shrink-0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.531 5.856L0 24l6.335-1.509A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.81 9.81 0 01-5.003-1.371l-.359-.214-3.754.894.954-3.652-.234-.374A9.785 9.785 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
                 <div>
                   <p className="font-bold text-sm">Abrir WhatsApp</p>
-                  <p className="text-green-100 text-xs">Cotización urgente — respondemos ahora</p>
+                  <p className="text-green-100 text-xs">Consulta precio y disponibilidad</p>
                 </div>
               </a>
             </div>
@@ -160,7 +160,7 @@ export default function ContactoPage() {
             <div className="lg:col-span-3">
               <div className="bg-slate-50 rounded-2xl border border-slate-100 p-8" data-analytics-section="formulario_contacto">
                 <h2 className="text-xl font-bold text-slate-900 mb-1">Formulario de cotización</h2>
-                <p className="text-slate-500 text-sm mb-6">Te respondemos en máximo 2 horas hábiles.</p>
+                <p className="text-slate-500 text-sm mb-6">Revisamos tu solicitud dentro del horario de atención informado.</p>
                 <ContactForm />
               </div>
             </div>

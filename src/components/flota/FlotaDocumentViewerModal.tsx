@@ -306,7 +306,7 @@ export default function FlotaDocumentViewerModal({
               <p id="flota-doc-modal-title" className="text-sm font-black text-white truncate">
                 Documentación verificable
               </p>
-              <p className="text-[11px] text-slate-400">Flota certificada Fenice SPA</p>
+              <p className="text-[11px] text-slate-400">Documentación de flota Fenice SPA</p>
             </div>
           </div>
           <button

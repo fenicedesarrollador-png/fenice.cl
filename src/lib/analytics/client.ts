@@ -146,23 +146,37 @@ function writeJson(storage: Storage, key: string, value: unknown) {
   }
 }
 
-function normalizeSourceFromHost(host: string) {
-  if (host.includes("google.")) {
-    return "google";
+function deriveSourceFromHost(host: string): { source: string; medium: string } {
+  const normalizedHost = host.toLowerCase().replace(/^www\./, "");
+
+  if (normalizedHost === "fenice.cl" || normalizedHost.endsWith(".fenice.cl")) {
+    return { source: "direct", medium: "none" };
   }
-  if (host.includes("instagram.")) {
-    return "instagram";
+  if (normalizedHost.includes("google.")) {
+    return { source: "google", medium: "organic" };
   }
-  if (host.includes("facebook.") || host.includes("fb.")) {
-    return "facebook";
+  if (normalizedHost.includes("bing.")) {
+    return { source: "bing", medium: "organic" };
   }
-  if (host.includes("linkedin.")) {
-    return "linkedin";
+  if (normalizedHost.includes("duckduckgo.")) {
+    return { source: "duckduckgo", medium: "organic" };
   }
-  if (host.includes("whatsapp.")) {
-    return "whatsapp";
+  if (normalizedHost.includes("search.yahoo.")) {
+    return { source: "yahoo", medium: "organic" };
   }
-  return host;
+  if (normalizedHost.includes("instagram.")) {
+    return { source: "instagram", medium: "social" };
+  }
+  if (normalizedHost.includes("facebook.") || normalizedHost.includes("fb.")) {
+    return { source: "facebook", medium: "social" };
+  }
+  if (normalizedHost.includes("linkedin.")) {
+    return { source: "linkedin", medium: "social" };
+  }
+  if (normalizedHost.includes("whatsapp.")) {
+    return { source: "whatsapp", medium: "messaging" };
+  }
+  return { source: normalizedHost, medium: "referral" };
 }
 
 function deriveAcquisition(pathname: string): SessionAcquisition {
@@ -218,10 +232,12 @@ function deriveAcquisition(pathname: string): SessionAcquisition {
     };
   }
 
+  const derivedSource = deriveSourceFromHost(referrerHost);
+
   return {
     landingPath: currentPath,
-    source: normalizeSourceFromHost(referrerHost),
-    medium: "referral",
+    source: derivedSource.source,
+    medium: derivedSource.medium,
     campaign: "",
     content: "",
     term: "",

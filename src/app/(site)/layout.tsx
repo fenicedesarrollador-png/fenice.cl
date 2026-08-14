@@ -19,6 +19,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       localBusinessSchema({
         telefono: config.telefono,
         email: config.email,
+        direccion: config.direccion,
         instagram_url: config.instagram_url,
         lat: config.lat,
         lng: config.lng,

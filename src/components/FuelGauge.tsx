@@ -243,7 +243,7 @@ export default function FuelGauge() {
 
       {/* Párrafo indexable: da contexto de negocio real al bloque del medidor. */}
       <p className="text-xs text-slate-500 leading-relaxed text-center border-t border-slate-100 pt-4 mt-1">
-        Monitoreamos el nivel de tus estanques certificados SEC para programar la carga
+        Monitoreamos el nivel de tus estanques documentados para programar la carga
         periódica de petróleo diésel y parafina (kerosene) antes de que se agote, asegurando
         la continuidad operacional de empresas, faenas, edificios y condominios en la Región
         Metropolitana, Valparaíso y O&apos;Higgins.

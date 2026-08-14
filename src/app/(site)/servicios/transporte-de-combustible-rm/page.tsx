@@ -2,13 +2,13 @@ import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Link from "next/link";
-import { buildMetadata, serviceSchema as buildServiceSchema } from "@/lib/seo";
+import { buildMetadata, jsonLd, serviceSchema as buildServiceSchema } from "@/lib/seo";
 import { Shield, ClipboardCheck, MapPin, Calendar, FileText, Truck, CheckCircle2 } from "lucide-react";
 
 export const metadata = buildMetadata({
-  title: "Transporte de Combustible RM | Flota Certificada en Santiago",
+  title: "Transporte de Combustible para Empresas en Santiago",
   description:
-    "Transporte de combustible en la Región Metropolitana con flota certificada SEC. Servicio para empresas e industria en Santiago. Coordinación rápida y segura. Cotiza por WhatsApp.",
+    "Transporte de diésel para empresas e industria en la RM, con trazabilidad, documentación de entrega y coordinación directa. Cotiza por WhatsApp.",
   path: "/servicios/transporte-de-combustible-rm",
   keywords: [
     "transporte de combustible santiago",
@@ -20,20 +20,20 @@ export const metadata = buildMetadata({
 
 const serviceSchema = buildServiceSchema({
   name: "Transporte de Combustible RM",
-  description: "Transporte seguro y certificado de combustible para industria y empresas en la Región Metropolitana de Santiago.",
+  description: "Transporte documentado de combustible para industria y empresas en la Región Metropolitana de Santiago.",
   slug: "transporte-de-combustible-rm",
 });
 
 const caracteristicas = [
   {
     icon: Truck,
-    title: "Flota certificada",
-    desc: "Camiones aljibe con certificación para transporte de combustibles peligrosos según normativa chilena.",
+    title: "Flota documentada",
+    desc: "Camiones tanque con documentación técnica, revisiones e inspecciones aplicables vigentes.",
   },
   {
     icon: Shield,
     title: "Conductores capacitados",
-    desc: "Personal con licencia y certificación en manejo de sustancias peligrosas (ADR/Mersan).",
+    desc: "Personal con la licencia profesional correspondiente al vehículo y capacitación documentada para sustancias peligrosas.",
   },
   {
     icon: ClipboardCheck,
@@ -60,14 +60,14 @@ const caracteristicas = [
 export default function TransporteCombustiblePage() {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(serviceSchema)} />
 
       {/* Breadcrumb */}
       <div className="bg-slate-50 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb crumbs={[
             { name: "Inicio", href: "/" },
-            { name: "Servicios", href: "/servicios/petroleo-a-domicilio-santiago" },
+            { name: "Servicios", href: "/petroleo-a-domicilio" },
             { name: "Transporte de Combustible RM" },
           ]} />
         </div>
@@ -86,7 +86,7 @@ export default function TransporteCombustiblePage() {
             Transporte de combustible en la Región Metropolitana
           </h1>
           <p className="text-lg text-slate-300 max-w-2xl mb-8">
-            Fenice SPA opera flota de transporte de combustible certificada para clientes industriales
+            Fenice SPA opera una flota documentada para el transporte de combustible a clientes industriales
             y empresariales en toda la Región Metropolitana de Santiago.
           </p>
           <WhatsAppButton
@@ -150,7 +150,7 @@ export default function TransporteCombustiblePage() {
                 <ul className="space-y-2">
                   {[
                     "Vehículos con revisión técnica y permisos de circulación al día",
-                    "Conductores con licencia clase D y certificación en materiales peligrosos",
+                    "Conductores con licencia profesional acorde al vehículo y capacitación documentada",
                     "Documentación de transporte completa en cada servicio",
                     "Seguro de responsabilidad civil para cargas peligrosas",
                   ].map((item) => (

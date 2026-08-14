@@ -28,7 +28,7 @@ export default function NotFound() {
           <p className="mb-2 font-medium text-gray-600">Nuestros servicios:</p>
           {SERVICIOS.map((s) => (
             <div key={s.slug}>
-              <Link href={`/servicios/${s.slug}`} className="text-orange-600 hover:underline">
+              <Link href={s.href} className="text-orange-600 hover:underline">
                 {s.nombre}
               </Link>
             </div>

@@ -16,7 +16,7 @@ const FIELDS = [
 
 const PATHS_TO_REVALIDATE = [
   "/", "/contacto", "/nosotros", "/clientes",
-  "/servicios/petroleo-a-domicilio-santiago",
+  "/petroleo-a-domicilio", "/venta-kerosene",
   "/servicios/transporte-de-combustible-rm",
   "/servicios/instalacion-de-estanques",
   "/cobertura", "/preguntas-frecuentes", "/blog", "/testimonios",

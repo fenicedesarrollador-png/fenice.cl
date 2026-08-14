@@ -12,37 +12,25 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.site_url),
   title: {
-    default: "Petróleo a Domicilio Santiago | Distribuidor de Combustible RM",
+    default: "Petróleo a Domicilio para Empresas en Santiago | Fenice",
     template: "%s | Fenice SPA",
   },
   description:
-    "Distribuidor de petróleo diesel a domicilio para empresas en Santiago y la Región Metropolitana. Despacho rápido y cotización por WhatsApp en minutos.",
+    "Despacho de diésel y kerosene para empresas, faenas, edificios y generadores en Santiago y la RM. Cotiza por WhatsApp con factura electrónica.",
   applicationName: "Fenice SPA",
   authors: [{ name: "Fenice SPA", url: SITE_CONFIG.site_url }],
   creator: "Fenice SPA",
   publisher: "Fenice SPA",
   category: "Distribución de combustible",
-  alternates: { canonical: "/" },
   formatDetection: { telephone: true, email: true, address: true },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
-    },
-  },
   openGraph: {
     type: "website",
     locale: "es_CL",
     url: SITE_CONFIG.site_url,
     siteName: SITE_CONFIG.nombre,
-    title: "Petróleo a Domicilio Santiago | Distribuidor de Combustible RM",
+    title: "Petróleo a Domicilio para Empresas en Santiago | Fenice",
     description:
-      "Despacho de petróleo diesel a domicilio para empresas e industria en toda la Región Metropolitana. Cotiza por WhatsApp y recibe respuesta en minutos.",
+      "Despacho de diésel y kerosene para empresas, faenas, edificios y generadores en Santiago y la RM. Cotiza por WhatsApp.",
     images: [
       {
         url: "/opengraph-image",
@@ -54,13 +42,14 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Petróleo a Domicilio Santiago | Fenice SPA",
+    title: "Petróleo a Domicilio para Empresas en Santiago | Fenice",
     description:
-      "Distribuidor de combustible a domicilio para empresas en la Región Metropolitana. Despacho rápido y cotización por WhatsApp.",
+      "Diésel y kerosene para empresas, faenas, edificios y generadores en Santiago y la Región Metropolitana.",
     images: ["/opengraph-image"],
   },
-  // Cuando tengas el código de Google Search Console, pégalo aquí:
-  // verification: { google: "TU_CODIGO_DE_VERIFICACION" },
+  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+    : undefined,
 };
 
 export const viewport: Viewport = {

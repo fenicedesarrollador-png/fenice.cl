@@ -128,10 +128,10 @@ export default async function FlotaDocumentacion() {
             <p className="text-xs font-bold text-[#f5a623] uppercase tracking-widest">Transparencia operacional</p>
           </div>
           <h2 id="documentacion-flota-heading" className="text-3xl font-extrabold text-[#0a1628] leading-tight">
-            Flota certificada y documentación verificable
+            Flota documentada y antecedentes verificables
           </h2>
           <p className="mt-3 text-slate-600 leading-relaxed">
-            Consulta la documentación técnica y certificaciones vigentes de nuestros vehículos destinados
+            Consulta la documentación técnica, inspecciones y certificados vigentes de nuestros vehículos destinados
             al transporte y distribución de combustibles.
           </p>
           <p className="mt-3 text-sm text-slate-500 leading-relaxed">
@@ -142,7 +142,7 @@ export default async function FlotaDocumentacion() {
         </div>
 
         {showSkeleton ? (
-          <div className="flex flex-wrap justify-center gap-5" aria-busy="true" aria-label="Cargando flota certificada">
+          <div className="flex flex-wrap justify-center gap-5" aria-busy="true" aria-label="Cargando documentación de flota">
             {[0, 1, 2].map((i) => (
               <div key={i} className="w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.834rem)] max-w-sm bg-white border border-slate-200 rounded-2xl overflow-hidden">
                 <div className="aspect-[16/10] bg-slate-100 admin-skeleton" />
@@ -178,7 +178,7 @@ export default async function FlotaDocumentacion() {
               <FileCheck2 className="w-4.5 h-4.5 text-[#1a6b3c]" aria-hidden="true" />
             </div>
             <p className="text-sm text-slate-500 leading-relaxed">
-              El transporte seguro de combustibles de nuestra flota certificada se respalda con folios,
+              El transporte seguro de combustibles de nuestra flota se respalda con folios,
               códigos y canales oficiales de verificación disponibles en cada certificado.
             </p>
           </div>

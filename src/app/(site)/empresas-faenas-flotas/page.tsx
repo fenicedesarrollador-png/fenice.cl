@@ -8,11 +8,12 @@ import {
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import { SITE_CONFIG } from "@/lib/config";
+import { jsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Combustible para Empresas, Faenas y Flotas",
   description:
-    "Abastecimiento de petróleo diesel para empresas, faenas industriales y flotas de vehículos en la Región Metropolitana. Contratos de suministro, factura electrónica y atención comercial directa. Cotiza ahora.",
+    "Abastecimiento de diésel para empresas, faenas y flotas en la Región Metropolitana. Despachos coordinados, factura electrónica y atención directa.",
   alternates: { canonical: "https://fenice.cl/empresas-faenas-flotas" },
   openGraph: {
     type: "website",
@@ -135,7 +136,7 @@ export default function EmpresasFaenasFlotasPage() {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(pageSchema)} />
 
       <div className="bg-slate-50 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">

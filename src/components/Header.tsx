@@ -115,7 +115,7 @@ export default function Header({ config }: { config: SiteConfig }) {
                       return (
                         <Link
                           key={s.slug}
-                          href={`/servicios/${s.slug}`}
+                          href={s.href}
                           data-analytics-id={`header_service_${s.slug}`}
                           data-analytics-label={s.nombre}
                           data-analytics-cta="service_navigation"
@@ -206,7 +206,7 @@ export default function Header({ config }: { config: SiteConfig }) {
                 return (
                   <Link
                     key={s.slug}
-                    href={`/servicios/${s.slug}`}
+                href={s.href}
                     data-analytics-id={`mobile_service_${s.slug}`}
                     data-analytics-label={s.nombre}
                     data-analytics-cta="mobile_service_navigation"

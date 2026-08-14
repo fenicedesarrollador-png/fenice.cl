@@ -596,6 +596,7 @@ export default function FeniceLoader() {
 
       <div
         id="fenice-loader"
+        data-nosnippet
         aria-hidden="true"
         inert
         className={leaving ? "is-hidden" : undefined}
@@ -632,7 +633,15 @@ export default function FeniceLoader() {
               <div className="truck-shadow" />
               <div className="truck-wrap">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="truck-img" src="/loader/truck.webp" alt="Camion cisterna FENICE SpA" />
+                <img
+                  className="truck-img"
+                  src="/loader/truck.webp"
+                  alt=""
+                  width="820"
+                  height="339"
+                  fetchPriority="high"
+                  decoding="async"
+                />
                 <div className="wheel front"><div className="wheel-spin" /></div>
                 <div className="wheel rear-one"><div className="wheel-spin" /></div>
                 <div className="wheel rear-two"><div className="wheel-spin" /></div>

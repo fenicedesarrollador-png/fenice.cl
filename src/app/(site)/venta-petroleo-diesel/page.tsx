@@ -11,18 +11,18 @@ import { buildMetadata, faqSchema, jsonLd } from "@/lib/seo";
 const BASE = SITE_CONFIG.site_url;
 const PAGE_URL = `${BASE}/venta-petroleo-diesel`;
 
-// Intención diferenciada: COMPRA / PRECIO / CALIDAD certificada (no "a domicilio" genérico).
+// Intención diferenciada: COMPRA / PRECIO / SUMINISTRO (no "a domicilio" genérico).
 export const metadata = buildMetadata({
-  title: "Venta de Petróleo Diésel para Empresas en Santiago | Precio y Distribución RM",
+  title: "Venta de Petróleo Diésel para Empresas",
   description:
-    "Venta de petróleo diésel para empresas en Santiago y la Región Metropolitana. Distribución directa a faenas, plantas y flotas, factura electrónica, calidad certificada y precio competitivo por volumen. Cotiza tu diésel hoy.",
+    "Compra diésel por volumen para flotas, plantas y faenas en Santiago. Despacho programado, factura electrónica y contratos de suministro.",
   path: "/venta-petroleo-diesel",
   keywords: [
     "venta de petróleo diesel santiago",
     "venta de diesel para empresas",
     "comprar petróleo diesel RM",
     "precio petróleo diesel empresa chile",
-    "distribuidor de petróleo diesel certificado",
+    "distribuidor de petróleo diesel con documentación",
     "diesel industrial santiago",
     "petróleo diesel para maquinaria y generadores",
     "proveedor de diesel región metropolitana",
@@ -36,64 +36,53 @@ const faqVenta = [
   },
   {
     q: "¿Qué tipos de diésel venden?",
-    a: "Distribuimos petróleo diésel grado B (diésel A1/A2) para uso industrial, maquinaria, transporte de carga y generación eléctrica. Consulta por disponibilidad de grados y volúmenes especiales para tu faena.",
+    a: "Distribuimos petróleo diésel para uso industrial, maquinaria, transporte de carga y generación eléctrica. Consulta la especificación, disponibilidad y volumen requeridos para tu operación.",
   },
   {
     q: "¿Entregan factura electrónica en la venta de diésel?",
-    a: "Sí. Emitimos factura electrónica en cada venta de petróleo diésel, con todos los datos que tu área de compras y contabilidad requiere, y compatible con tu sistema ERP.",
+    a: "Sí. Emitimos factura electrónica en cada venta de petróleo diésel, con los antecedentes necesarios para compras y contabilidad.",
   },
   {
     q: "¿Hay un volumen mínimo para comprar petróleo diésel?",
-    a: "Atendemos desde despachos puntuales hasta contratos de suministro periódico. Para clientes recurrentes coordinamos entregas sin mínimos rígidos, ajustadas al consumo real de tu operación.",
+    a: "El pedido mínimo informado es de 50 litros. El volumen final y las condiciones de entrega se confirman según comuna, acceso y disponibilidad operacional.",
   },
   {
     q: "¿En cuánto tiempo despachan el diésel?",
-    a: "Coordinamos el despacho de petróleo diésel desde el mismo día para requerimientos urgentes en Santiago y la Región Metropolitana, según disponibilidad de flota y zona de entrega.",
+    a: "Los despachos se coordinan según volumen, comuna, acceso y disponibilidad de flota. Para requerimientos urgentes evaluamos la alternativa más rápida dentro del horario de atención.",
   },
   {
     q: "¿Cómo compro petróleo diésel para mi empresa?",
-    a: "Contáctanos por WhatsApp o mediante el formulario de cotización indicando volumen, comuna y frecuencia. Te respondemos el mismo día con precio, disponibilidad y condiciones de entrega.",
+    a: "Contáctanos por WhatsApp o mediante el formulario de cotización indicando volumen, comuna, fecha y frecuencia. Confirmamos precio, disponibilidad y condiciones dentro del horario de atención.",
   },
 ];
 
-// Grafo JSON-LD: Producto + Oferta enriquecidos y FAQPage (rich results).
+// Grafo JSON-LD: servicio comercial real + preguntas frecuentes.
 const pageSchema = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "Product",
-      "@id": `${PAGE_URL}/#product`,
+      "@type": "Service",
+      "@id": `${PAGE_URL}/#service`,
       name: "Petróleo Diésel para Empresas",
       description:
         "Venta y distribución de petróleo diésel para industria, construcción, minería, transporte y generación eléctrica en la Región Metropolitana de Chile.",
-      category: "Combustible / Petróleo diésel",
-      brand: { "@type": "Brand", name: "Fenice SPA" },
+      serviceType: "Venta y despacho de petróleo diésel para empresas",
+      provider: { "@id": `${BASE}/#localbusiness` },
       image: `${BASE}/images/operacion-central.webp`,
       url: PAGE_URL,
-      offers: {
-        "@type": "Offer",
-        priceCurrency: "CLP",
-        availability: "https://schema.org/InStock",
-        url: `${BASE}/cotizacion`,
-        areaServed: { "@type": "AdministrativeArea", name: "Región Metropolitana de Santiago" },
-        seller: { "@id": `${BASE}/#localbusiness` },
-      },
-      additionalProperty: [
-        { "@type": "PropertyValue", name: "Uso", value: "Industrial, maquinaria, generadores y flotas" },
-        { "@type": "PropertyValue", name: "Documentación", value: "Factura electrónica en cada entrega" },
-        { "@type": "PropertyValue", name: "Cobertura", value: "Santiago y Región Metropolitana" },
-      ],
+      areaServed: { "@type": "AdministrativeArea", name: "Región Metropolitana de Santiago" },
+      termsOfService: `${BASE}/cotizacion`,
     },
     faqSchema(faqVenta),
   ],
 };
 
 const VENTAJAS = [
-  { icon: Fuel, title: "Diesel de calidad certificada", desc: "Combustible estándar para uso industrial, con documentación de origen y cumplimiento normativo." },
+  { icon: Fuel, title: "Diésel con documentación", desc: "Combustible para uso industrial, con respaldo de origen y documentación disponible según la entrega." },
   { icon: FileText, title: "Factura electrónica", desc: "Emitimos factura en cada venta. Integración simple con tu área de compras y sistema ERP." },
-  { icon: Shield, title: "Certificación SEC", desc: "Operación bajo normativa de la Superintendencia de Electricidad y Combustibles." },
+  { icon: Shield, title: "Cumplimiento normativo", desc: "Operación con los registros y antecedentes aplicables ante la SEC." },
   { icon: Truck, title: "Entrega en tu punto", desc: "Llevamos el diesel directamente a tu faena, planta, bodega o flota." },
-  { icon: Zap, title: "Respuesta rápida", desc: "Coordinamos despacho desde el mismo día para requerimientos urgentes en la RM." },
+  { icon: Zap, title: "Coordinación directa", desc: "Evaluamos requerimientos programados o urgentes según zona y disponibilidad de flota." },
   { icon: TrendingUp, title: "Contratos de suministro", desc: "Precio y volumen acordado mensual o trimestralmente para tu planificación financiera." },
 ];
 
@@ -135,7 +124,7 @@ export default function VentaPetroleoPage() {
                 en Santiago
               </h1>
               <p className="text-slate-300 leading-relaxed mb-8 text-base max-w-xl">
-                Distribuimos petróleo diesel de calidad certificada para industria, construcción,
+                Distribuimos petróleo diesel con documentación de respaldo para industria, construcción,
                 generación eléctrica y flotas en toda la Región Metropolitana. Factura electrónica
                 en cada entrega.
               </p>
@@ -149,7 +138,7 @@ export default function VentaPetroleoPage() {
                 </a>
               </div>
               <div className="flex flex-wrap gap-x-5 gap-y-2">
-                {["Diesel certificado", "Factura electrónica", "Despacho RM", "Trato directo"].map((t) => (
+                {["Diésel documentado", "Factura electrónica", "Despacho RM", "Trato directo"].map((t) => (
                   <span key={t} className="flex items-center gap-1.5 text-xs text-slate-400 font-medium">
                     <CheckCircle2 className="w-3.5 h-3.5 text-[#1a6b3c] shrink-0" /> {t}
                   </span>
@@ -223,7 +212,7 @@ export default function VentaPetroleoPage() {
               En <strong className="text-[#0a1628]">Fenice SPA</strong> nos especializamos en la
               <strong className="text-[#0a1628]"> venta de petróleo diésel</strong> para empresas, faenas y
               flotas en Santiago y toda la Región Metropolitana. Distribuimos combustible de calidad
-              certificada directamente en tu punto de operación, con documentación completa y factura
+              documentada directamente en tu punto de operación, con respaldo de entrega y factura
               electrónica en cada entrega, para que tu área de compras trabaje sin fricciones.
             </p>
             <p>
@@ -239,7 +228,7 @@ export default function VentaPetroleoPage() {
               despachos programados o urgentes y, si tu consumo es recurrente, cerrar un
               <strong className="text-[#0a1628]"> contrato de suministro</strong> con precio y volumen
               acordados para planificar tu operación. Complementamos la venta con
-              <Link href="/servicios/instalacion-de-estanques" className="text-[#1a6b3c] font-semibold hover:underline"> instalación de estanques certificados SEC</Link> y
+              <Link href="/servicios/instalacion-de-estanques" className="text-[#1a6b3c] font-semibold hover:underline"> instalación y declaración de estanques</Link> y
               <Link href="/petroleo-a-domicilio" className="text-[#1a6b3c] font-semibold hover:underline"> despacho de petróleo a domicilio</Link> con
               carga periódica según tu necesidad.
             </p>
