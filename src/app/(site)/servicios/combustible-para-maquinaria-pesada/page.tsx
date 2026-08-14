@@ -11,9 +11,9 @@ import {
 } from "lucide-react";
 
 export const metadata = buildMetadata({
-  title: "Diésel para Maquinaria Pesada | Combustible en Faena y Terreno",
+  title: "Diésel para Maquinaria Pesada en Faena",
   description:
-    "Despacho de petróleo diésel para maquinaria pesada directamente en faena: excavadoras, retroexcavadoras, cargadores frontales y equipos de movimiento de tierra en Santiago, la Región Metropolitana, Valparaíso y O'Higgins.",
+    "Despacho de diésel en faena para excavadoras, cargadores y equipos de movimiento de tierra en Santiago, Valparaíso y O'Higgins.",
   path: "/servicios/combustible-para-maquinaria-pesada",
   keywords: [
     "diesel para maquinaria pesada",
@@ -83,7 +83,7 @@ export default function MaquinariaPesadaPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb crumbs={[
             { name: "Inicio", href: "/" },
-            { name: "Servicios", href: "/servicios/petroleo-a-domicilio-santiago" },
+            { name: "Servicios", href: "/petroleo-a-domicilio" },
             { name: "Combustible para Maquinaria Pesada" },
           ]} />
         </div>

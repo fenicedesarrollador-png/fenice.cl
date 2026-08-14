@@ -6,9 +6,9 @@ import { buildMetadata } from "@/lib/seo";
 import { MapPin, ChevronRight } from "lucide-react";
 
 export const metadata = buildMetadata({
-  title: "Cobertura de Petróleo a Domicilio | Todas las Comunas de la RM",
+  title: "Cobertura de Petróleo a Domicilio en la RM",
   description:
-    "Fenice SPA despacha petróleo diesel a domicilio en las 52 comunas de la Región Metropolitana de Santiago, además de Valparaíso y Rancagua. Encuentra tu comuna y cotiza por WhatsApp.",
+    "Consulta despacho de petróleo diésel en las 52 comunas de la Región Metropolitana y cobertura adicional en Valparaíso y O'Higgins.",
   path: "/cobertura",
   keywords: [
     "cobertura petróleo a domicilio santiago",
@@ -77,7 +77,7 @@ export default function CoberturaPage() {
             {[
               { val: `${totalRM}`, label: "Comunas de la RM" },
               { val: "6", label: "Provincias cubiertas" },
-              { val: "24h", label: "Despacho urgente" },
+              { val: "L–V", label: "09:00–19:00" },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-3">
                 <span className="text-2xl font-bold text-orange-400">{s.val}</span>

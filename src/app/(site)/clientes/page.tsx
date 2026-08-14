@@ -13,9 +13,9 @@ import { buildMetadata, jsonLd } from "@/lib/seo";
 export const revalidate = 60;
 
 export const metadata = buildMetadata({
-  title: "Clientes y Proyectos | Empresas que Confían en Fenice SPA",
+  title: "Clientes y Proyectos de Abastecimiento",
   description:
-    "Conoce las empresas, faenas y flotas que abastecemos con petróleo diesel a domicilio e instalación de estanques certificados SEC en la Región Metropolitana. Trabajos realizados y experiencia comprobable.",
+    "Conoce los sectores, servicios y proyectos que Fenice atiende con diésel, kerosene, abastecimiento programado e instalación de estanques en la RM.",
   path: "/clientes",
   keywords: [
     "clientes fenice spa",
@@ -91,7 +91,7 @@ export default async function ClientesPage() {
             </h1>
             <p className="hero-rise-2 text-slate-300 leading-relaxed text-sm sm:text-base max-w-2xl">
               Abastecemos con petróleo diesel a empresas, faenas y flotas de la Región
-              Metropolitana, e instalamos estanques certificados SEC con carga periódica
+              Metropolitana, e instalamos estanques con respaldo técnico y carga periódica
               según la necesidad de cada operación. Estos son algunos de los trabajos
               y relaciones comerciales que respaldan nuestra experiencia.
             </p>
@@ -270,7 +270,7 @@ export default async function ClientesPage() {
           </div>
           <p className="text-center text-sm text-slate-500 mt-8 max-w-2xl mx-auto" data-reveal>
             ¿Tu rubro no está en la lista? Atendemos cualquier operación que requiera
-            petróleo diesel, estanques certificados o abastecimiento periódico en{" "}
+            petróleo diesel, instalación de estanques o abastecimiento periódico en{" "}
             {SITE_CONFIG.region}, Valparaíso y Rancagua.
           </p>
         </div>

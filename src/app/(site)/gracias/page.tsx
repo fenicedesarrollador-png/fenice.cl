@@ -5,7 +5,8 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 export const metadata: Metadata = {
   title: "Gracias por tu mensaje",
   description: "Recibimos tu cotización. Te contactaremos a la brevedad.",
-  robots: { index: false, follow: false },
+  alternates: { canonical: "https://fenice.cl/gracias" },
+  robots: { index: false, follow: true },
 };
 
 export default function GraciasPage() {

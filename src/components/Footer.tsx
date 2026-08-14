@@ -20,7 +20,7 @@ export default function Footer({ config }: { config: SiteConfig }) {
               <BrandLogo className="h-14 w-[186px]" onDark />
             </Link>
             <p className="text-sm leading-relaxed mb-6 max-w-xs">
-              Distribución de petróleo diesel e instalación de estanques certificados para empresas
+              Distribución de petróleo diesel e instalación documentada de estanques para empresas
               e industria en la Región Metropolitana.
             </p>
             <ul className="space-y-3 text-sm">
@@ -68,7 +68,7 @@ export default function Footer({ config }: { config: SiteConfig }) {
             <ul className="space-y-2.5">
               {SERVICIOS.map((s) => (
                 <li key={s.slug}>
-                  <Link href={`/servicios/${s.slug}`} data-analytics-id={`footer_service_${s.slug}`} data-analytics-label={s.nombre} data-analytics-cta="footer_navigation" className="flex items-center gap-1.5 text-sm hover:text-[#f5a623] transition-colors group">
+                  <Link href={s.href} data-analytics-id={`footer_service_${s.slug}`} data-analytics-label={s.nombre} data-analytics-cta="footer_navigation" className="flex items-center gap-1.5 text-sm hover:text-[#f5a623] transition-colors group">
                     <span className="w-1 h-1 rounded-full bg-[#f5a623]/40 group-hover:bg-[#f5a623] transition-colors" />
                     {s.nombre}
                   </Link>
@@ -170,9 +170,9 @@ export default function Footer({ config }: { config: SiteConfig }) {
       <div className="border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-wrap items-center justify-center gap-x-8 gap-y-2">
           {[
-            "Estanques certificados SEC",
-            "TC4 instalaciones",
-            "TC10A camiones estanque",
+            "Estanques con respaldo técnico",
+            "Declaración TC4",
+            "Declaración TC10A",
             "Cumplimiento DS 160",
           ].map((cert) => (
             <span key={cert} className="flex items-center gap-2 text-xs text-slate-500 font-medium">

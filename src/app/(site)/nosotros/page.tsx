@@ -36,9 +36,9 @@ import Certificaciones from "@/components/Certificaciones";
 export const revalidate = 60;
 
 export const metadata = buildMetadata({
-  title: "Nosotros | Empresa de Petróleo Diesel y Estanques Certificados SEC",
+  title: "Empresa de Diésel y Kerosene en Santiago",
   description:
-    "Conoce a Fenice SPA: empresa de distribución de petróleo diesel a domicilio e instalación de estanques certificados SEC para empresas, faenas y flotas en Santiago y la Región Metropolitana. Equipo, valores y certificaciones.",
+    "Conoce al equipo de Fenice: distribución de diésel y kerosene, transporte documentado e instalación de estanques para empresas y faenas en la RM.",
   path: "/nosotros",
   keywords: [
     "distribuidor de combustible santiago",
@@ -352,7 +352,7 @@ export default async function NosotrosPage() {
             </h1>
             <p className="hero-rise-1 mt-6 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
               En Fenice SPA distribuimos petróleo diesel a domicilio para empresas, faenas
-              y flotas, e instalamos estanques certificados SEC con carga periódica según
+              y flotas, e instalamos estanques con documentación técnica y carga periódica según
               la necesidad de cada operación. Complementamos con kerosene en Santiago y
               toda la Región Metropolitana.
             </p>

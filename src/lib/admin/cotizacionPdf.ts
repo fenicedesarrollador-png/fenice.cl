@@ -119,7 +119,7 @@ export async function buildCotizacionPdf(data: CotizacionPdfData): Promise<Uint8
   /* ── Pie de página ──────────────────────────────────────────── */
   function drawFooter(p: PDFPage, pageNum: number, totalHint: number) {
     p.drawLine({ start: { x: MARGIN, y: 64 }, end: { x: PAGE_W - MARGIN, y: 64 }, thickness: 0.75, color: LINE });
-    p.drawText("FENICE SpA · Calle La Granja 8396, San Ramón, Región Metropolitana · Estanques certificados SEC · TC4 · TC10A · DS 160", {
+    p.drawText("FENICE SpA · Calle La Granja 8396, San Ramón, Región Metropolitana · Declaraciones TC4 / TC10A · DS 160", {
       x: MARGIN, y: 50, size: 7.5, font: helv, color: MUTED,
     });
     p.drawText("Documento generado desde el panel administrativo de fenice.cl — uso interno y comercial.", {

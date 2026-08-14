@@ -7,8 +7,8 @@ import { MapPin, Clock, ShieldCheck, FileText, Truck, Phone } from "lucide-react
  */
 const SIGNALS = [
   { icon: MapPin, value: "52 comunas", label: "Cobertura total en la RM" },
-  { icon: Clock, value: "Mismo día", label: "Respuesta a cotizaciones" },
-  { icon: ShieldCheck, value: "Normativa SEC", label: "Operación certificada" },
+  { icon: Clock, value: "Lun–Vie", label: "Atención 09:00–19:00" },
+  { icon: ShieldCheck, value: "Normativa SEC", label: "Operación documentada" },
   { icon: Truck, value: "Flota propia", label: "Despacho especializado" },
   { icon: FileText, value: "Factura electrónica", label: "Para empresas" },
   { icon: Phone, value: "Trato directo", label: "Sin call centers" },

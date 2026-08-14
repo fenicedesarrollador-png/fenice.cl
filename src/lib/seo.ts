@@ -43,7 +43,7 @@ export function buildMetadata({
     description,
     alternates: { canonical: url },
     robots: noindex
-      ? { index: false, follow: false }
+      ? { index: false, follow: true }
       : {
           index: true,
           follow: true,
@@ -94,7 +94,7 @@ export const CORE_KEYWORDS = [
   "petróleo diesel para faenas",
   "combustible a domicilio Santiago",
   "instalación de estanques de combustible SEC",
-  "estanques certificados SEC",
+  "instalación de estanques de combustible DS 160",
   "carga periódica de estanques de combustible",
   "camiones estanque TC10A",
   "petróleo a domicilio para empresas",
@@ -174,16 +174,10 @@ export function organizationSchema() {
       "Petróleo diesel a domicilio",
       "Transporte de combustible",
       "Abastecimiento industrial de combustible",
-      "Instalación de estanques de combustible certificados SEC",
+      "Instalación de estanques de combustible conforme al DS 160",
       "Carga periódica de estanques",
       "Cumplimiento normativo SEC, TC4, TC10A y DS 160",
       "Transporte de carga peligrosa",
-    ],
-    hasCredential: [
-      { "@type": "EducationalOccupationalCredential", name: "Estanques certificados SEC", credentialCategory: "certification" },
-      { "@type": "EducationalOccupationalCredential", name: "Certificación TC4 para instalaciones de combustibles", credentialCategory: "certification" },
-      { "@type": "EducationalOccupationalCredential", name: "Certificación TC10A para camiones estanque", credentialCategory: "certification" },
-      { "@type": "EducationalOccupationalCredential", name: "Cumplimiento DS 160 — transporte de carga peligrosa", credentialCategory: "certification" },
     ],
   };
 }
@@ -212,7 +206,7 @@ export function teamSchema(
   };
 }
 
-// WebSite con SearchAction (sitelinks searchbox)
+// WebSite. SearchAction se omite hasta que exista un buscador interno real.
 export function websiteSchema() {
   return {
     "@context": "https://schema.org",
@@ -222,11 +216,6 @@ export function websiteSchema() {
     name: SITE_CONFIG.nombre,
     inLanguage: "es-CL",
     publisher: { "@id": `${BASE}/#organization` },
-    potentialAction: {
-      "@type": "SearchAction",
-      target: { "@type": "EntryPoint", urlTemplate: `${BASE}/blog?q={search_term_string}` },
-      "query-input": "required name=search_term_string",
-    },
   };
 }
 
@@ -241,6 +230,10 @@ export function localBusinessSchema(config?: {
 }) {
   const telefono = config?.telefono ?? SITE_CONFIG.telefono;
   const email = config?.email ?? SITE_CONFIG.email;
+  const direccion = config?.direccion ?? SITE_CONFIG.direccion;
+  const [streetAddress, addressLocality = SITE_CONFIG.comuna] = direccion
+    .split(",")
+    .map((part) => part.trim());
   const instagram = config?.instagram_url ?? SITE_CONFIG.instagram_url;
   const lat = config?.lat ?? SITE_CONFIG.lat;
   const lng = config?.lng ?? SITE_CONFIG.lng;
@@ -252,7 +245,7 @@ export function localBusinessSchema(config?: {
     name: SITE_CONFIG.nombre,
     legalName: SITE_CONFIG.razon_social,
     description:
-      "Distribuidor de petróleo diesel y combustible a domicilio para empresas e industria en la Región Metropolitana de Santiago. Despacho rápido, flota especializada y cumplimiento normativo SEC.",
+      "Distribuidor de petróleo diésel y kerosene a domicilio para empresas, edificios y operaciones en la Región Metropolitana de Santiago.",
     url: `${BASE}/`,
     image: `${BASE}${BRAND_IMAGE}`,
     logo: `${BASE}${BRAND_IMAGE}`,
@@ -263,8 +256,8 @@ export function localBusinessSchema(config?: {
     paymentAccepted: "Transferencia bancaria, Tarjeta de débito, Tarjeta de crédito, Cheque (previa evaluación), Factura electrónica",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Calle La Granja 8396",
-      addressLocality: "San Ramón",
+      streetAddress,
+      addressLocality,
       addressRegion: SITE_CONFIG.region,
       addressCountry: "CL",
     },
@@ -289,7 +282,7 @@ export function localBusinessSchema(config?: {
           "@type": "Service",
           name: s.nombre,
           description: s.descripcion,
-          url: `${BASE}/servicios/${s.slug}`,
+          url: `${BASE}${s.href}`,
         },
       })),
     },
@@ -367,5 +360,5 @@ export function faqSchema(items: { q: string; a: string }[]) {
 
 // Helper para inyectar JSON-LD en JSX
 export function jsonLd(schema: object) {
-  return { __html: JSON.stringify(schema) };
+  return { __html: JSON.stringify(schema).replace(/</g, "\\u003c") };
 }

@@ -1,5 +1,11 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Fenice operations
+
+- [SEO local, Search Console y autoridad comercial](docs/seo-autoridad-local.md)
+- [Analítica y atribución](docs/metricas-analytics.md)
+- [Documentación de flota](docs/flota-documentacion.md)
+
 ## Getting Started
 
 First, run the development server:

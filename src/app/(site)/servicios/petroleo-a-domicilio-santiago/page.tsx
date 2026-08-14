@@ -3,13 +3,13 @@ import Breadcrumb from "@/components/Breadcrumb";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Link from "next/link";
 import { COMUNAS_DESTACADAS } from "@/lib/config";
-import { buildMetadata, serviceSchema as buildServiceSchema } from "@/lib/seo";
+import { buildMetadata, jsonLd, serviceSchema as buildServiceSchema } from "@/lib/seo";
 import { CheckCircle2, MapPin, Clock, FileText, Truck, Building2 } from "lucide-react";
 
 export const metadata = buildMetadata({
-  title: "Petróleo a Domicilio Santiago | Despacho de Diesel para Empresas",
+  title: "Petróleo Diésel a Domicilio en Santiago",
   description:
-    "Despacho de petróleo diesel a domicilio en Santiago para empresas e industria. Coordinación por WhatsApp, despacho rápido y cobertura en toda la Región Metropolitana. Cotiza ahora.",
+    "Despacho programado de diésel para empresas, faenas, generadores y maquinaria en la RM. Indica comuna, litros y fecha para cotizar.",
   path: "/servicios/petroleo-a-domicilio-santiago",
   keywords: [
     "petróleo a domicilio santiago",
@@ -36,7 +36,7 @@ const clientes = [
 
 const pasos = [
   { icon: FileText, text: "Cotiza por WhatsApp o formulario indicando tu comuna, volumen requerido y fecha." },
-  { icon: Clock, text: "Te respondemos con precio y disponibilidad en minutos (Lun-Vie 09:00–19:00)." },
+  { icon: Clock, text: "Confirmamos precio y disponibilidad dentro del horario Lun-Vie 09:00–19:00." },
   { icon: CheckCircle2, text: "Confirmamos la orden y coordinamos el horario de entrega." },
   { icon: Truck, text: "Nuestro camión despacha el petróleo directamente a tu instalación." },
   { icon: FileText, text: "Emitimos factura electrónica para tu contabilidad." },
@@ -45,14 +45,14 @@ const pasos = [
 export default function PetroleoSantiagoPage() {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(serviceSchema)} />
 
       {/* Breadcrumb */}
       <div className="bg-slate-50 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb crumbs={[
             { name: "Inicio", href: "/" },
-            { name: "Servicios", href: "/servicios/petroleo-a-domicilio-santiago" },
+            { name: "Servicios", href: "/petroleo-a-domicilio" },
             { name: "Petróleo a Domicilio Santiago" },
           ]} />
         </div>
