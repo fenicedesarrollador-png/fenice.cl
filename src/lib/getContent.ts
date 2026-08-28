@@ -2,6 +2,10 @@ import { createClient } from "@/lib/supabase/public";
 import { hasUsableSupabasePublicConfig } from "@/lib/supabase/config";
 import { fetchWithTimeout } from "@/lib/getSiteConfig";
 import { EQUIPO_FALLBACK } from "@/lib/config";
+import {
+  PUBLIC_COLLABORATOR_COLUMNS,
+  type PublicCollaborator,
+} from "@/lib/collaborators";
 
 export type MiembroEquipo = {
   id: string;
@@ -59,6 +63,33 @@ export async function getClientes(): Promise<ClienteEmpresa[]> {
       2500,
     );
     return (result?.data as ClienteEmpresa[]) ?? [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Colaboradores / empresas asociadas activas — tabla `collaborators`.
+ * Alimenta el carrusel "Colaboradores que trabajan con nosotros" de la Home.
+ *
+ * Sólo trae las columnas que el carrusel necesita y sólo registros activos
+ * (además, la RLS del sitio público ya restringe a is_active = true).
+ * Se cachea con el `revalidate` de la página que la consume.
+ */
+export async function getCollaborators(): Promise<PublicCollaborator[]> {
+  if (!hasUsableSupabasePublicConfig()) return [];
+  try {
+    const supabase = await createClient();
+    const result = await fetchWithTimeout(
+      supabase
+        .from("collaborators")
+        .select(PUBLIC_COLLABORATOR_COLUMNS)
+        .eq("is_active", true)
+        .order("display_order", { ascending: true })
+        .order("created_at", { ascending: true }),
+      2500,
+    );
+    return (result?.data as PublicCollaborator[] | undefined) ?? [];
   } catch {
     return [];
   }

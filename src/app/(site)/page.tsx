@@ -7,6 +7,7 @@ import Certificaciones from "@/components/Certificaciones";
 import ClientesShowcase from "@/components/ClientesShowcase";
 import FlotaDocumentacion from "@/components/flota/FlotaDocumentacion";
 import VideoReels from "@/components/reels/VideoReels";
+import CollaboratorsSection from "@/components/colaboradores/CollaboratorsSection";
 import {
   Truck, ArrowRight, Phone, CheckCircle2,
   MapPin, Clock, Building2, ShieldCheck, FileText,
@@ -528,6 +529,9 @@ export default function HomePage() {
 
       {/* ── CERTIFICACIONES Y CUMPLIMIENTO NORMATIVO ─────────────────────────── */}
       <Certificaciones />
+
+      {/* ── COLABORADORES (carrusel de logos, editable en /admin/colaboradores) ── */}
+      <CollaboratorsSection />
 
       {/* ── COBERTURA ────────────────────────────────────────────────────────── */}
       <section className="py-20 bg-[#0a1628]" data-analytics-section="cobertura">
