@@ -255,11 +255,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── COLABORADORES (carrusel de logos, editable en /admin/colaboradores) ── */}
-      <CollaboratorsSection />
-
       {/* ── SEÑALES DE CONFIANZA ─────────────────────────────────────────────── */}
       <TrustSignals />
+
+      {/* ── COLABORADORES (carrusel de logos, editable en /admin/colaboradores) ── */}
+      <CollaboratorsSection />
 
       {/* ── EMPRESAS QUE CONFÍAN (logos, editable en /admin/clientes) ────────── */}
       <ClientesShowcase />
