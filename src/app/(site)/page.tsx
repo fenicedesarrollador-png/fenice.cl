@@ -255,6 +255,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── COLABORADORES (carrusel de logos, editable en /admin/colaboradores) ── */}
+      <CollaboratorsSection />
+
       {/* ── SEÑALES DE CONFIANZA ─────────────────────────────────────────────── */}
       <TrustSignals />
 
@@ -529,9 +532,6 @@ export default function HomePage() {
 
       {/* ── CERTIFICACIONES Y CUMPLIMIENTO NORMATIVO ─────────────────────────── */}
       <Certificaciones />
-
-      {/* ── COLABORADORES (carrusel de logos, editable en /admin/colaboradores) ── */}
-      <CollaboratorsSection />
 
       {/* ── COBERTURA ────────────────────────────────────────────────────────── */}
       <section className="py-20 bg-[#0a1628]" data-analytics-section="cobertura">

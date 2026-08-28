@@ -28,6 +28,9 @@ export default function ColaboradoresManager({ initial }: { initial: Collaborato
   const [rows, setRows] = useState<Collaborator[]>(() => sortCollaborators(initial));
   const [editing, setEditing] = useState<Collaborator | null>(null);
   const [busy, setBusy] = useState(false);
+  // Se incrementa tras cada alta correcta: cambia la `key` del formulario y
+  // React lo remonta vacío, listo para el siguiente registro.
+  const [formSeq, setFormSeq] = useState(0);
   const [busyLabel, setBusyLabel] = useState("Guardando…");
   const [formError, setFormError] = useState("");
   const [toast, setToast] = useState<Toast>(null);
@@ -125,6 +128,7 @@ export default function ColaboradoresManager({ initial }: { initial: Collaborato
         }
 
         setRows((prev) => sortCollaborators([...prev, data as Collaborator]));
+        setFormSeq((n) => n + 1);
         setToast({ kind: "ok", text: "Colaborador agregado correctamente." });
       }
 
@@ -328,7 +332,7 @@ export default function ColaboradoresManager({ initial }: { initial: Collaborato
       {/* ── Formulario ──────────────────────────────────────────────────── */}
       <div ref={formRef} className="mb-5 scroll-mt-6">
         <ColaboradorForm
-          key={editing?.id ?? "nuevo"}
+          key={editing ? editing.id : `nuevo-${formSeq}`}
           editing={editing}
           busy={busy}
           busyLabel={busyLabel}
