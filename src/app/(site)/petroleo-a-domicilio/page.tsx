@@ -6,17 +6,17 @@ import {
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import { COMUNAS_DESTACADAS, SITE_CONFIG } from "@/lib/config";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, jsonLd } from "@/lib/seo";
 
 // Intención diferenciada de la home: despacho URGENTE/PROGRAMADO (no compite con la genérica).
 export const metadata = buildMetadata({
   title: "Despacho Urgente de Petróleo a Domicilio en Santiago",
   description:
-    "Despacho urgente y programado de petróleo diesel a domicilio para empresas en Santiago y la RM. Coordinación directa por WhatsApp, entregas el mismo día y factura electrónica.",
+    "Despacho urgente y programado de petróleo diesel a domicilio para empresas en Santiago y la RM. Coordinación por WhatsApp y factura electrónica.",
   path: "/petroleo-a-domicilio",
   keywords: [
     "despacho urgente de petróleo santiago",
-    "petróleo a domicilio mismo día RM",
+    "petróleo a domicilio urgente RM",
     "diesel a domicilio empresas urgente",
     "despacho programado de combustible santiago",
   ],
@@ -39,12 +39,12 @@ const pageSchema = {
 
 const faqDomicilio = [
   {
-    q: "¿Hacen despacho de petróleo a domicilio el mismo día?",
-    a: "Sí. Para requerimientos urgentes en la RM coordinamos despacho el mismo día hábil, sujeto a disponibilidad y horario. Contáctanos antes de las 14:00.",
+    q: "¿Atienden despachos urgentes de petróleo a domicilio?",
+    a: "Sí. Evaluamos requerimientos urgentes en la RM según comuna, volumen, acceso, horario y disponibilidad de flota. Contáctanos para confirmar la alternativa posible.",
   },
   {
     q: "¿Cuánto demora el despacho de petróleo a domicilio?",
-    a: "Para pedidos programados, acordamos fecha y horario de entrega con 24-48 horas de anticipación. Para urgentes, evaluamos disponibilidad al momento de la solicitud.",
+    a: "Para pedidos programados acordamos fecha y horario de entrega. Para urgentes, evaluamos disponibilidad al momento de la solicitud.",
   },
   {
     q: "¿Qué necesito para recibir el despacho en mi empresa?",
@@ -52,7 +52,7 @@ const faqDomicilio = [
   },
   {
     q: "¿Cuál es el volumen mínimo para despacho a domicilio?",
-    a: "El volumen mínimo de despacho es de 200 litros. Para contratos recurrentes, adaptamos el volumen a tus necesidades operacionales.",
+    a: "La compra mínima informada por Fenice es de 50 litros. El volumen final se confirma según comuna, acceso y disponibilidad de despacho.",
   },
   {
     q: "¿En qué comunas de Santiago hacen despacho a domicilio?",
@@ -61,7 +61,7 @@ const faqDomicilio = [
 ];
 
 const PASOS = [
-  { n: "01", title: "Solicita tu cotización", desc: "Por WhatsApp, teléfono o formulario web. Respondemos en minutos con precio y disponibilidad." },
+  { n: "01", title: "Solicita tu cotización", desc: "Por WhatsApp, teléfono o formulario web. Indica comuna, litros y fecha requerida." },
   { n: "02", title: "Confirmamos el despacho", desc: "Coordinamos fecha, horario y punto de entrega. Sin burocracia ni call centers." },
   { n: "03", title: "Despacho en tu punto", desc: "Nuestra flota lleva el diesel directamente a tu faena, planta o flota." },
   { n: "04", title: "Documentación completa", desc: "Recibes guía de despacho y factura electrónica para tu registro y contabilidad." },
@@ -72,7 +72,7 @@ export default function PetroleoADomicilioPage() {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(pageSchema)} />
 
       <div className="bg-slate-50 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">

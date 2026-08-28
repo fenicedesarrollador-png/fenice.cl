@@ -2,13 +2,13 @@ import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Link from "next/link";
-import { buildMetadata, serviceSchema as buildServiceSchema } from "@/lib/seo";
+import { buildMetadata, jsonLd, serviceSchema as buildServiceSchema } from "@/lib/seo";
 import { Shield, AlertTriangle, CheckCircle2, Wrench, ClipboardCheck, BookOpen, RotateCcw } from "lucide-react";
 
 export const metadata = buildMetadata({
-  title: "Instalación de Estanques de Petróleo Certificados SEC | Santiago",
+  title: "Instalación de Estanques de Combustible en Santiago",
   description:
-    "Instalación de estanques de petróleo certificados por la SEC en Santiago y la Región Metropolitana. Cumplimiento normativo, seguridad y calidad garantizada para tu empresa. Cotiza ahora.",
+    "Diseño, montaje y declaración TC4 de estanques de combustible en la RM, con cumplimiento del DS 160 y documentación técnica aplicable.",
   path: "/servicios/instalacion-de-estanques",
   keywords: [
     "instalación de estanques de combustible santiago",
@@ -20,14 +20,14 @@ export const metadata = buildMetadata({
 
 const serviceSchema = buildServiceSchema({
   name: "Instalación de Estanques de Petróleo",
-  description: "Instalación de estanques de almacenamiento de petróleo certificados por la Superintendencia de Electricidad y Combustibles (SEC) para empresas en la Región Metropolitana.",
+  description: "Instalación de estanques de combustible conforme al DS 160 y gestión de declaración TC4 cuando corresponde, para empresas en la Región Metropolitana.",
   slug: "instalacion-de-estanques",
 });
 
 const incluye = [
   { icon: ClipboardCheck, text: "Asesoría en selección de capacidad y tipo de estanque según tu consumo" },
-  { icon: Wrench, text: "Instalación por técnicos certificados cumpliendo normas SEC y NCh" },
-  { icon: Shield, text: "Tramitación y registro ante la Superintendencia de Electricidad y Combustibles" },
+  { icon: Wrench, text: "Instalación conforme al DS 160 y las normas técnicas aplicables" },
+  { icon: Shield, text: "Gestión de declaración TC4 ante la SEC cuando corresponde" },
   { icon: Shield, text: "Sistema de contención secundaria y válvulas de seguridad" },
   { icon: CheckCircle2, text: "Pruebas de hermeticidad y puesta en marcha" },
   { icon: BookOpen, text: "Capacitación al personal responsable del manejo" },
@@ -37,14 +37,14 @@ const incluye = [
 export default function InstalacionEstanquesPage() {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(serviceSchema)} />
 
       {/* Breadcrumb */}
       <div className="bg-slate-50 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb crumbs={[
             { name: "Inicio", href: "/" },
-            { name: "Servicios", href: "/servicios/petroleo-a-domicilio-santiago" },
+            { name: "Servicios", href: "/petroleo-a-domicilio" },
             { name: "Instalación de Estanques" },
           ]} />
         </div>
@@ -60,14 +60,14 @@ export default function InstalacionEstanquesPage() {
             <span className="text-orange-400 text-xs font-semibold uppercase tracking-widest">Servicio</span>
           </div>
           <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight max-w-3xl">
-            Instalación de estanques de petróleo certificados por la SEC
+            Instalación de estanques de combustible conforme al DS 160
           </h1>
           <p className="text-lg text-slate-300 max-w-2xl mb-8">
-            Fenice SPA instala estanques de almacenamiento de combustible para empresas e industria
-            en la Región Metropolitana, cumpliendo con toda la normativa de la SEC.
+            Diseñamos e instalamos sistemas de almacenamiento de combustible para empresas e industria
+            en la Región Metropolitana, con documentación técnica y declaración TC4 cuando corresponde.
           </p>
           <WhatsAppButton
-            mensaje="Hola, necesito información sobre instalación de estanques de petróleo certificados."
+            mensaje="Hola, necesito información sobre instalación y declaración de un estanque de combustible."
             className="bg-orange-500 hover:bg-orange-600 text-white"
           />
         </div>
@@ -80,7 +80,7 @@ export default function InstalacionEstanquesPage() {
             <div className="lg:col-span-2 space-y-10">
               <div>
                 <h2 className="text-2xl font-bold text-slate-900 mb-4">
-                  Estanques de petróleo certificados para tu empresa
+                  Estanques de combustible documentados para tu empresa
                 </h2>
                 <p className="text-slate-600 leading-relaxed mb-4">
                   Contar con un <strong className="text-slate-800">estanque de petróleo instalado correctamente</strong> es fundamental
@@ -90,7 +90,7 @@ export default function InstalacionEstanquesPage() {
                   debe respetar.
                 </p>
                 <p className="text-slate-600 leading-relaxed">
-                  En Fenice SPA realizamos la <strong className="text-slate-800">instalación de estanques de petróleo certificados</strong>{" "}
+                  En Fenice SPA realizamos la <strong className="text-slate-800">instalación de estanques de combustible</strong>{" "}
                   en la Región Metropolitana, desde el diseño y selección del estanque adecuado hasta la
                   tramitación de documentación ante la SEC y la puesta en marcha del sistema.
                 </p>
@@ -119,7 +119,7 @@ export default function InstalacionEstanquesPage() {
                 <p className="text-slate-600 leading-relaxed mb-4 text-sm">
                   La instalación de estanques de combustible en Chile está regulada por el Decreto N° 160
                   del Ministerio de Economía y la NCh 2597. Estos marcos normativos establecen requisitos
-                  de ubicación, distancias de seguridad, materiales, señalética y certificación profesional
+                  de ubicación, distancias de seguridad, materiales, señalética y responsabilidad profesional
                   para la instalación.
                 </p>
                 <p className="text-slate-600 leading-relaxed text-sm">
@@ -133,10 +133,10 @@ export default function InstalacionEstanquesPage() {
                 <div className="flex items-start gap-3">
                   <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-bold text-amber-900 mb-2">¿Tienes un estanque sin certificar?</h3>
+                    <h3 className="font-bold text-amber-900 mb-2">¿Tienes un estanque sin declarar o regularizar?</h3>
                     <p className="text-amber-800 text-sm leading-relaxed">
-                      Si ya cuentas con un estanque instalado pero sin la certificación SEC correspondiente,
-                      podemos asesorarte en el proceso de regularización. Contáctanos para evaluar tu caso.
+                      Si ya cuentas con un estanque instalado pero no conoces el estado de su declaración o
+                      documentación, podemos evaluar los antecedentes y orientarte sobre la regularización aplicable.
                     </p>
                   </div>
                 </div>
@@ -148,13 +148,13 @@ export default function InstalacionEstanquesPage() {
               <div className="bg-slate-900 text-white rounded-2xl p-6">
                 <h3 className="font-semibold mb-5 flex items-center gap-2">
                   <Shield className="w-4 h-4 text-orange-400" />
-                  Certificación SEC
+                  Cumplimiento y documentación
                 </h3>
                 <ul className="space-y-4">
                   {[
                     { label: "Marco legal", val: "Decreto N° 160 + NCh 2597" },
                     { label: "Fiscaliza", val: "SEC Chile" },
-                    { label: "Tramitación", val: "Incluida en el servicio" },
+                    { label: "Declaración", val: "TC4 cuando corresponde" },
                     { label: "Zona de servicio", val: "Región Metropolitana" },
                     { label: "Mantención", val: "Servicio continuo disponible" },
                   ].map((item) => (
@@ -172,7 +172,7 @@ export default function InstalacionEstanquesPage() {
                   Cuéntanos tu caso y te asesoramos en capacidad, tipo y proceso de instalación.
                 </p>
                 <WhatsAppButton
-                  mensaje="Hola, necesito información sobre instalación de estanques de petróleo certificados."
+                  mensaje="Hola, necesito información sobre instalación y declaración de un estanque de combustible."
                   className="w-full justify-center"
                 />
                 <Link
@@ -187,7 +187,7 @@ export default function InstalacionEstanquesPage() {
         </div>
       </section>
 
-      <CTASection heading="¿Necesitas instalar un estanque de petróleo?" mensaje="Hola, quiero cotizar la instalación de un estanque de petróleo certificado." />
+      <CTASection heading="¿Necesitas instalar un estanque de petróleo?" mensaje="Hola, quiero cotizar la instalación y declaración de un estanque de combustible." />
     </>
   );
 }

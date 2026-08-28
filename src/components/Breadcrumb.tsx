@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { jsonLd } from "@/lib/seo";
 import { ChevronRight, Home } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/config";
 
@@ -31,7 +32,7 @@ export default function Breadcrumb({ crumbs, dark = false }: { crumbs: Crumb[]; 
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        dangerouslySetInnerHTML={jsonLd(schema)}
       />
       <nav aria-label="Breadcrumb" className="text-sm mb-4">
         <ol className="flex flex-wrap items-center gap-1.5">

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import { ChevronDown } from "lucide-react";
+import { jsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Preguntas Frecuentes sobre Petróleo a Domicilio",
@@ -91,7 +92,7 @@ const faqSchema = {
 export default function FAQPage() {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(faqSchema)} />
 
       <div className="bg-slate-50 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
@@ -147,7 +148,7 @@ export default function FAQPage() {
 
           <div className="mt-10 bg-orange-50 border border-orange-100 rounded-xl p-6 text-center">
             <p className="font-semibold text-slate-900 mb-1">¿No encontraste lo que buscabas?</p>
-            <p className="text-slate-600 text-sm mb-4">Escríbenos directamente y respondemos en minutos.</p>
+            <p className="text-slate-600 text-sm mb-4">Escríbenos con tu comuna, volumen y fecha requerida.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
                 href={`https://wa.me/56939579658?text=${encodeURIComponent("Hola, tengo una consulta sobre petróleo a domicilio.")}`}

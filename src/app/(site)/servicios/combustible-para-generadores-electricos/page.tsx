@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 
 export const metadata = buildMetadata({
-  title: "Combustible para Generadores Eléctricos | Diésel a Domicilio",
+  title: "Diésel para Generadores Eléctricos",
   description:
-    "Abastecimiento de petróleo diésel para generadores eléctricos de edificios, condominios, clínicas, hoteles e industrias en Santiago y la Región Metropolitana. Despachos programados y atención de urgencias previa coordinación.",
+    "Diésel para generadores de edificios, clínicas, hoteles e industrias en Santiago y la RM. Despachos programados o urgentes según disponibilidad.",
   path: "/servicios/combustible-para-generadores-electricos",
   keywords: [
     "combustible para generadores eléctricos",
@@ -80,7 +80,7 @@ export default function GeneradoresPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb crumbs={[
             { name: "Inicio", href: "/" },
-            { name: "Servicios", href: "/servicios/petroleo-a-domicilio-santiago" },
+            { name: "Servicios", href: "/petroleo-a-domicilio" },
             { name: "Combustible para Generadores Eléctricos" },
           ]} />
         </div>

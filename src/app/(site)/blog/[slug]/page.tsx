@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/public";
 import { fetchWithTimeout } from "@/lib/getSiteConfig";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, jsonLd } from "@/lib/seo";
 import { SITE_CONFIG } from "@/lib/config";
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -93,7 +93,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(blogSchema)} />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Breadcrumb crumbs={[

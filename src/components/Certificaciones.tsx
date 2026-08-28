@@ -11,7 +11,7 @@ const CERT_ICONS: Record<string, LucideIcon> = {
 };
 
 /**
- * Certificaciones y cumplimiento normativo — señal de autoridad (E-E-A-T).
+ * Documentación y cumplimiento normativo — señal de confianza verificable.
  * Se usa en Home y Nosotros. `variant="dark"` para fondos navy.
  */
 export default function Certificaciones({ variant = "light" }: { variant?: "light" | "dark" }) {
@@ -30,20 +30,20 @@ export default function Certificaciones({ variant = "light" }: { variant?: "ligh
             <div className="flex items-center gap-2 mb-3">
               <span className="h-px w-8 bg-[#f5a623]" />
               <p className="text-xs font-bold text-[#f5a623] uppercase tracking-widest">
-                Certificaciones
+                Documentación
               </p>
             </div>
             <h2
               id="certificaciones-heading"
               className={`text-3xl sm:text-4xl font-extrabold leading-tight mb-5 ${dark ? "text-white" : "text-[#0a1628]"}`}
             >
-              Operación certificada y{" "}
+              Operación documentada y{" "}
               <span className="text-[#f5a623]">cumplimiento normativo</span>
             </h2>
             <p className={`leading-relaxed mb-6 ${dark ? "text-slate-400" : "text-slate-600"}`}>
-              En Fenice SPA cada instalación de estanques y cada despacho de petróleo diesel
-              se realiza bajo la normativa vigente en Chile: certificación SEC, autorizaciones
-              TC4 y TC10A, y cumplimiento del DS 160 para el transporte de carga peligrosa.
+              En Fenice SPA respaldamos instalaciones y despachos con la documentación aplicable:
+              declaraciones TC4 y TC10A cuando corresponden, certificados técnicos de los equipos
+              y cumplimiento del DS 160.
             </p>
             <ul className="space-y-2.5 mb-8">
               {CERTIFICACIONES.map((c) => (
@@ -58,11 +58,11 @@ export default function Certificaciones({ variant = "light" }: { variant?: "ligh
             <Link
               href="/servicios/instalacion-de-estanques"
               data-analytics-id="certificaciones_estanques"
-              data-analytics-label="Instalación de estanques certificados"
+              data-analytics-label="Instalación y declaración de estanques"
               data-analytics-cta="service_navigation"
               className="inline-flex items-center gap-2 text-sm font-bold text-[#f5a623] hover:text-[#d4891a] transition-colors"
             >
-              Instalación de estanques certificados <ArrowRight className="w-4 h-4" />
+              Instalación y declaración de estanques <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 

@@ -10,7 +10,7 @@ interface Props {
 
 export default async function CTASection({
   heading = "¿Necesitas petróleo a domicilio para tu empresa?",
-  subheading = "Respondemos en minutos. Coordinamos a tu horario. Despacho RM, Valparaíso y Rancagua.",
+  subheading = "Confirmamos precio y disponibilidad en horario Lun-Vie 09:00–19:00. Cobertura RM, Valparaíso y Rancagua.",
   mensaje = "Hola, quiero cotizar petróleo a domicilio para mi empresa.",
 }: Props) {
   const config = await getSiteConfig();

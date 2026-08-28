@@ -22,10 +22,10 @@ import { BLUR } from "@/lib/imageBlur";
 export const revalidate = 60;
 
 export const metadata = buildMetadata({
-  title: "Petróleo a Domicilio Santiago | Distribuidor de Combustible RM",
+  title: "Petróleo a Domicilio para Empresas en Santiago | Fenice",
   titleAbsolute: true,
   description:
-    "Distribuidor de petróleo diésel y parafina (kerosene) a domicilio para empresas en Santiago y la Región Metropolitana. Despacho rápido, flota especializada y cotización por WhatsApp en minutos.",
+    "Despacho de diésel y kerosene para empresas, faenas, edificios y generadores en Santiago y la RM. Cotiza por WhatsApp con factura electrónica.",
   path: "/",
   keywords: CORE_KEYWORDS,
 });
@@ -36,23 +36,23 @@ const faqItems = [
   { q: "¿En qué comunas trabajan?", a: "Cubrimos las 52 comunas de la Región Metropolitana —incluyendo Santiago, Lampa, Colina, Buin, Melipilla, Curacaví y Talagante— además de Valparaíso, Los Andes, Rancagua y Santa Cruz." },
   { q: "¿Despachan combustible para generadores y calderas?", a: "Sí, son servicios prioritarios: abastecemos generadores eléctricos y calderas de edificios, condominios, clínicas, hoteles e industrias, con despachos programados o urgentes previa coordinación." },
   { q: "¿Qué formas de pago aceptan?", a: "Transferencia bancaria, tarjetas de débito, tarjetas de crédito y cheque previa evaluación. Emitimos factura electrónica por cada despacho. Los precios se confirman antes de cada entrega según el mercado." },
-  { q: "¿Cómo cotizo el precio del petróleo?", a: "Por WhatsApp al +56 9 3957 9658, mediante el formulario de cotización o al correo notifica@fenice.cl. Respondemos en minutos Lun-Vie 09:00–19:00." },
+  { q: "¿Cómo cotizo el precio del petróleo?", a: "Por WhatsApp al +56 9 3957 9658, mediante el formulario de cotización o al correo notifica@fenice.cl. Confirmamos precio y disponibilidad dentro del horario Lun-Vie 09:00–19:00." },
 ];
 
 const homeFaqSchema = faqSchema(faqItems);
 
 const STATS = [
   { value: "52", label: "Comunas RM", icon: MapPin },
-  { value: "24h", label: "Tiempo respuesta", icon: Clock },
+  { value: "L–V", label: "09:00–19:00", icon: Clock },
   { value: "B2B", label: "Especialistas", icon: Building2 },
-  { value: "SEC", label: "Certificado", icon: Award },
+  { value: "SEC", label: "Normativa", icon: Award },
 ];
 
 const TRUST_BADGES = [
   "Despacho toda la RM",
   "Factura electrónica",
-  "Estanques SEC",
-  "Respuesta en minutos",
+  "Instalaciones DS 160",
+  "Coordinación directa",
 ];
 
 const SERVICIOS_HOME = [
@@ -60,7 +60,7 @@ const SERVICIOS_HOME = [
     icon: Truck,
     title: "Petróleo diesel a domicilio",
     desc: "Despacho de diésel y parafina (kerosene) para empresas e instituciones en toda la RM.",
-    href: "/servicios/petroleo-a-domicilio-santiago",
+    href: "/petroleo-a-domicilio",
   },
   {
     icon: Construction,
@@ -82,8 +82,8 @@ const SERVICIOS_HOME = [
   },
   {
     icon: Container,
-    title: "Instalación de estanques SEC",
-    desc: "Instalación y mantención de estanques con carga periódica según tu operación.",
+    title: "Instalación de estanques",
+    desc: "Diseño, instalación, mantención y declaración TC4 cuando corresponde.",
     href: "/servicios/instalacion-de-estanques",
   },
   {
@@ -343,7 +343,7 @@ export default function HomePage() {
           </div>
 
           <div className="text-center mt-10">
-            <Link href="/servicios/petroleo-a-domicilio-santiago" data-analytics-id="home_ver_servicios" data-analytics-label="Ver todos los servicios" data-analytics-cta="service_navigation" className="inline-flex items-center gap-2 text-sm font-semibold text-[#f5a623] hover:text-[#d4891a] transition-colors">
+            <Link href="/petroleo-a-domicilio" data-analytics-id="home_ver_servicios" data-analytics-label="Ver todos los servicios" data-analytics-cta="service_navigation" className="inline-flex items-center gap-2 text-sm font-semibold text-[#f5a623] hover:text-[#d4891a] transition-colors">
               Ver todos los servicios <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -478,7 +478,7 @@ export default function HomePage() {
             <figcaption className="absolute inset-y-0 left-0 flex max-w-md flex-col justify-center gap-2 p-6 sm:p-10 text-white">
               <span className="text-xs font-bold uppercase tracking-widest text-[#f5a623]">Flota propia</span>
               <p className="text-xl sm:text-2xl font-extrabold leading-tight">
-                Camiones estanque con certificación TC10A
+                Camiones tanque con declaración TC10A y documentación vigente
               </p>
               <p className="text-sm text-slate-200">Carga controlada y trazabilidad en cada despacho.</p>
             </figcaption>

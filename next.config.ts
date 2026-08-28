@@ -20,14 +20,19 @@ const nextConfig: NextConfig = {
       { source: "/index.html", destination: "/", permanent: true },
       { source: "/index", destination: "/", permanent: true },
       { source: "/home", destination: "/", permanent: true },
-      { source: "/service.html", destination: "/servicios/petroleo-a-domicilio-santiago", permanent: true },
-      { source: "/service", destination: "/servicios/petroleo-a-domicilio-santiago", permanent: true },
-      { source: "/servicios", destination: "/servicios/petroleo-a-domicilio-santiago", permanent: true },
+      { source: "/service.html", destination: "/petroleo-a-domicilio", permanent: true },
+      { source: "/service", destination: "/petroleo-a-domicilio", permanent: true },
+      { source: "/servicios", destination: "/petroleo-a-domicilio", permanent: true },
+      // Consolidación SEO: una URL por intención evita canibalización.
+      { source: "/servicios/petroleo-a-domicilio-santiago", destination: "/petroleo-a-domicilio", permanent: true },
+      { source: "/servicios/parafina-a-domicilio-santiago", destination: "/venta-kerosene", permanent: true },
       { source: "/contacto.html", destination: "/contacto", permanent: true },
       { source: "/contact", destination: "/contacto", permanent: true },
       { source: "/contact.html", destination: "/contacto", permanent: true },
       { source: "/about.html", destination: "/nosotros", permanent: true },
       { source: "/about", destination: "/nosotros", permanent: true },
+      // La prueba social se concentra en una sola URL para evitar dos páginas débiles.
+      { source: "/testimonios", destination: "/clientes", permanent: true },
       // Sección de productos retirada → redirigir a inicio (evita 404 e indexación muerta).
       { source: "/productos", destination: "/", permanent: true },
       { source: "/productos/:slug", destination: "/", permanent: true },

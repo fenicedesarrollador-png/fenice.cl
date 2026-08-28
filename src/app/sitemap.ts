@@ -4,35 +4,33 @@ import { fetchWithTimeout } from "@/lib/getSiteConfig";
 import { COMUNAS, SERVICIOS, SITE_CONFIG } from "@/lib/config";
 
 const BASE_URL = SITE_CONFIG.site_url;
-const NOW = new Date();
 
 const staticRoutes: MetadataRoute.Sitemap = [
-  { url: BASE_URL, lastModified: NOW, changeFrequency: "weekly", priority: 1.0 },
-  { url: `${BASE_URL}/petroleo-a-domicilio`, lastModified: NOW, changeFrequency: "weekly", priority: 0.95 },
-  { url: `${BASE_URL}/venta-petroleo-diesel`, lastModified: NOW, changeFrequency: "weekly", priority: 0.95 },
-  { url: `${BASE_URL}/venta-kerosene`, lastModified: NOW, changeFrequency: "weekly", priority: 0.95 },
-  { url: `${BASE_URL}/empresas-faenas-flotas`, lastModified: NOW, changeFrequency: "weekly", priority: 0.9 },
-  { url: `${BASE_URL}/cotizacion`, lastModified: NOW, changeFrequency: "weekly", priority: 0.95 },
-  { url: `${BASE_URL}/contacto`, lastModified: NOW, changeFrequency: "monthly", priority: 0.9 },
-  { url: `${BASE_URL}/cobertura`, lastModified: NOW, changeFrequency: "monthly", priority: 0.85 },
-  { url: `${BASE_URL}/preguntas-frecuentes`, lastModified: NOW, changeFrequency: "monthly", priority: 0.8 },
-  { url: `${BASE_URL}/blog`, lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
-  { url: `${BASE_URL}/nosotros`, lastModified: NOW, changeFrequency: "monthly", priority: 0.7 },
-  { url: `${BASE_URL}/clientes`, lastModified: NOW, changeFrequency: "weekly", priority: 0.75 },
-  { url: `${BASE_URL}/testimonios`, lastModified: NOW, changeFrequency: "monthly", priority: 0.6 },
-  { url: `${BASE_URL}/politica-de-privacidad`, lastModified: NOW, changeFrequency: "yearly", priority: 0.2 },
-  { url: `${BASE_URL}/aviso-legal`, lastModified: NOW, changeFrequency: "yearly", priority: 0.2 },
-  ...SERVICIOS.map((service) => ({
-    url: `${BASE_URL}/servicios/${service.slug}`,
-    lastModified: NOW,
+  // No se inventa lastModified en cada build. Las rutas dinámicas sí usan
+  // updated_at real desde Supabase más abajo.
+  { url: BASE_URL, changeFrequency: "weekly", priority: 1.0 },
+  { url: `${BASE_URL}/petroleo-a-domicilio`, changeFrequency: "weekly", priority: 0.9 },
+  { url: `${BASE_URL}/venta-petroleo-diesel`, changeFrequency: "weekly", priority: 0.95 },
+  { url: `${BASE_URL}/venta-kerosene`, changeFrequency: "weekly", priority: 0.95 },
+  { url: `${BASE_URL}/empresas-faenas-flotas`, changeFrequency: "weekly", priority: 0.9 },
+  { url: `${BASE_URL}/cotizacion`, changeFrequency: "weekly", priority: 0.95 },
+  { url: `${BASE_URL}/contacto`, changeFrequency: "monthly", priority: 0.9 },
+  { url: `${BASE_URL}/cobertura`, changeFrequency: "monthly", priority: 0.85 },
+  { url: `${BASE_URL}/preguntas-frecuentes`, changeFrequency: "monthly", priority: 0.8 },
+  { url: `${BASE_URL}/blog`, changeFrequency: "weekly", priority: 0.8 },
+  { url: `${BASE_URL}/nosotros`, changeFrequency: "monthly", priority: 0.7 },
+  { url: `${BASE_URL}/clientes`, changeFrequency: "monthly", priority: 0.75 },
+  { url: `${BASE_URL}/politica-de-privacidad`, changeFrequency: "yearly", priority: 0.2 },
+  { url: `${BASE_URL}/aviso-legal`, changeFrequency: "yearly", priority: 0.2 },
+  ...SERVICIOS.filter((service) => service.href.startsWith("/servicios/")).map((service) => ({
+    url: `${BASE_URL}${service.href}`,
     changeFrequency: "monthly" as const,
     priority: 0.9,
   })),
   ...COMUNAS.map((comuna) => ({
     url: `${BASE_URL}/cobertura/petroleo-a-domicilio-${comuna.slug}`,
-    lastModified: NOW,
     changeFrequency: "monthly" as const,
-    priority: 0.85,
+    priority: 0.7,
   })),
 ];
 

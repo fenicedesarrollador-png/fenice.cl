@@ -4,9 +4,9 @@ import { SITE_CONFIG } from "@/lib/config";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Cotizar Petróleo y Combustible para Empresas | Santiago RM",
+  title: "Cotizar Diésel o Kerosene a Domicilio",
   description:
-    "Cotiza petróleo diesel a domicilio para tu empresa, faena o flota en la Región Metropolitana. Respuesta el mismo día, factura electrónica y trato directo. Completa el formulario y te contactamos en minutos.",
+    "Solicita precio y disponibilidad para diésel o kerosene en Santiago. Indica comuna, litros y fecha; respuesta dentro del horario informado.",
   path: "/cotizacion",
   keywords: [
     "cotizar petróleo diesel empresas",
@@ -17,7 +17,7 @@ export const metadata = buildMetadata({
 });
 
 const GARANTIAS = [
-  { icon: Clock, text: "Respuesta en el mismo día hábil" },
+  { icon: Clock, text: "Atención Lun–Vie 09:00–19:00" },
   { icon: CheckCircle2, text: "Factura electrónica incluida" },
   { icon: Shield, text: "Operación bajo normativa SEC" },
   { icon: Phone, text: "Coordinación directa sin call center" },

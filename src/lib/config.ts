@@ -3,7 +3,8 @@ export const SITE_CONFIG = {
   nombre: "Fenice SPA",
   razon_social: "Sociedad de Transportes y Diesel SpA",
   rut: "76.710.961-K",
-  fundacion: "2010",
+  // Año de constitución de la razón social vigente.
+  fundacion: "2023",
   whatsapp_numero: "56939579658",
   telefono: "+56939579658",
   email: "notifica@fenice.cl",
@@ -35,37 +36,44 @@ export const SERVICIOS = [
   {
     nombre: "Petróleo a Domicilio Santiago",
     slug: "petroleo-a-domicilio-santiago",
+    href: "/petroleo-a-domicilio",
     descripcion: "Despacho rápido de petróleo diésel para empresas e industria en la RM.",
   },
   {
     nombre: "Parafina a Domicilio Santiago",
     slug: "parafina-a-domicilio-santiago",
+    href: "/venta-kerosene",
     descripcion: "Venta y despacho de parafina (kerosene) para calefacción de edificios, condominios, hoteles y calderas.",
   },
   {
     nombre: "Combustible para Maquinaria Pesada",
     slug: "combustible-para-maquinaria-pesada",
+    href: "/servicios/combustible-para-maquinaria-pesada",
     descripcion: "Diésel en terreno para excavadoras, retroexcavadoras, cargadores y faenas de movimiento de tierra.",
   },
   {
     nombre: "Combustible para Generadores Eléctricos",
     slug: "combustible-para-generadores-electricos",
+    href: "/servicios/combustible-para-generadores-electricos",
     descripcion: "Abastecimiento programado o urgente de diésel para generadores de edificios, clínicas, industrias y hoteles.",
   },
   {
     nombre: "Combustible para Calderas",
     slug: "combustible-para-calderas",
+    href: "/servicios/combustible-para-calderas",
     descripcion: "Suministro de combustible para calderas de edificios, condominios, centros de salud e industrias.",
   },
   {
     nombre: "Instalación de Estanques",
     slug: "instalacion-de-estanques",
-    descripcion: "Instalación y mantención de estanques de combustible certificados por la SEC.",
+    href: "/servicios/instalacion-de-estanques",
+    descripcion: "Instalación y mantención de estanques conforme al DS 160 y declaración TC4 cuando corresponde.",
   },
   {
     nombre: "Transporte de Combustible RM",
     slug: "transporte-de-combustible-rm",
-    descripcion: "Transporte seguro y certificado de combustible en la Región Metropolitana.",
+    href: "/servicios/transporte-de-combustible-rm",
+    descripcion: "Transporte de combustible con documentación y cumplimiento normativo en la Región Metropolitana.",
   },
 ] as const;
 
@@ -113,21 +121,21 @@ export const EQUIPO_FALLBACK = [
 export const CERTIFICACIONES = [
   {
     sigla: "SEC",
-    titulo: "Estanques certificados SEC",
+    titulo: "Estanques con respaldo técnico",
     descripcion:
-      "Trabajamos con estanques de combustible certificados por la Superintendencia de Electricidad y Combustibles, garantizando instalaciones seguras y normadas.",
+      "Trabajamos con estanques que cuentan con los certificados de fabricación o inspección aplicables y documentación técnica verificable.",
   },
   {
     sigla: "TC4",
     titulo: "TC4 para instalaciones",
     descripcion:
-      "Contamos con certificación TC4 para la instalación de tanques y sistemas de almacenamiento de combustibles líquidos.",
+      "Gestionamos la declaración de instalaciones de combustibles líquidos mediante el trámite TC4, cuando corresponde.",
   },
   {
     sigla: "TC10A",
     titulo: "TC10A para camiones estanque",
     descripcion:
-      "Nuestra flota de camiones estanque opera con certificación TC10A, exigida para el transporte de combustibles en Chile.",
+      "Nuestra flota mantiene la declaración TC10A y la documentación técnica aplicable a camiones tanque.",
   },
   {
     sigla: "DS 160",

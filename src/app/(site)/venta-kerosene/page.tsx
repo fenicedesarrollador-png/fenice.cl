@@ -12,9 +12,9 @@ const BASE = SITE_CONFIG.site_url;
 const PAGE_URL = `${BASE}/venta-kerosene`;
 
 export const metadata = buildMetadata({
-  title: "Venta de Parafina y Kerosene a Domicilio en Santiago | Calefacción RM",
+  title: "Kerosene y Parafina a Domicilio en Santiago",
   description:
-    "Venta de parafina (kerosene) a domicilio en Santiago y la Región Metropolitana para calefacción residencial, comercial e industrial. Despacho directo, factura electrónica y precio conveniente. Cotiza tu parafina hoy.",
+    "Kerosene para hogares, edificios, comercios e industria en la RM. Pedido desde 50 litros, factura electrónica y coordinación por WhatsApp.",
   path: "/venta-kerosene",
 });
 
@@ -29,7 +29,7 @@ const faqKerosene = [
   },
   {
     q: "¿Cuánto cuesta el kerosene?",
-    a: "El precio del kerosene varía según el volumen, la frecuencia de despacho y la zona de entrega. Cotiza directamente con nosotros y te entregamos el valor más conveniente para tu hogar o empresa en la Región Metropolitana.",
+    a: "El precio del kerosene varía según el volumen, la frecuencia de despacho y la zona de entrega. Cotiza directamente para confirmar el valor vigente y las condiciones para tu hogar o empresa.",
   },
   {
     q: "¿Entregan factura electrónica por la venta de kerosene?",
@@ -37,41 +37,30 @@ const faqKerosene = [
   },
   {
     q: "¿Hay volumen mínimo para comprar kerosene?",
-    a: "Atendemos desde requerimientos domiciliarios hasta abastecimientos comerciales e industriales recurrentes. Coordinamos el despacho según tu consumo, sin mínimos rígidos para clientes frecuentes.",
+    a: "La compra mínima informada por Fenice es de 50 litros. Indica comuna, cantidad y fecha para confirmar disponibilidad y condiciones de entrega.",
   },
   {
     q: "¿Cómo compro kerosene para mi hogar o empresa?",
-    a: "Contáctanos por WhatsApp o mediante el formulario de cotización indicando la cantidad, tu comuna y la fecha estimada. Te respondemos el mismo día con precio, disponibilidad y condiciones de entrega.",
+    a: "Contáctanos por WhatsApp o mediante el formulario indicando cantidad, comuna y fecha estimada. Confirmamos precio, disponibilidad y condiciones dentro del horario de atención.",
   },
 ];
 
-// Grafo JSON-LD: Producto + Oferta enriquecidos y FAQPage (rich results).
+// Grafo JSON-LD: servicio comercial real + preguntas frecuentes.
 const pageSchema = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "Product",
-      "@id": `${PAGE_URL}/#product`,
+      "@type": "Service",
+      "@id": `${PAGE_URL}/#service`,
       name: "Kerosene a Domicilio para Calefacción e Industria",
       description:
         "Venta y despacho de kerosene a domicilio para calefacción residencial, comercial e industrial en Santiago y la Región Metropolitana de Chile.",
-      category: "Combustible / Kerosene",
-      brand: { "@type": "Brand", name: "Fenice SPA" },
+      serviceType: "Venta y despacho de kerosene a domicilio",
+      provider: { "@id": `${BASE}/#localbusiness` },
       image: `${BASE}/images/operacion-despacho-flota.webp`,
       url: PAGE_URL,
-      offers: {
-        "@type": "Offer",
-        priceCurrency: "CLP",
-        availability: "https://schema.org/InStock",
-        url: `${BASE}/cotizacion`,
-        areaServed: { "@type": "AdministrativeArea", name: "Región Metropolitana de Santiago" },
-        seller: { "@id": `${BASE}/#localbusiness` },
-      },
-      additionalProperty: [
-        { "@type": "PropertyValue", name: "Uso", value: "Calefacción residencial, comercial e industrial" },
-        { "@type": "PropertyValue", name: "Documentación", value: "Factura electrónica en cada entrega" },
-        { "@type": "PropertyValue", name: "Cobertura", value: "Santiago y Región Metropolitana" },
-      ],
+      areaServed: { "@type": "AdministrativeArea", name: "Región Metropolitana de Santiago" },
+      termsOfService: `${BASE}/cotizacion`,
     },
     faqSchema(faqKerosene),
   ],
@@ -157,7 +146,7 @@ export default function VentaKerosenePage() {
                 <ul className="space-y-4">
                   {[
                     "Despacho a domicilio en toda la Región Metropolitana",
-                    "Precio conveniente para hogar, comercio o industria",
+                    "Precio confirmado según volumen, comuna y fecha",
                     "Factura electrónica en cada entrega",
                     "Entregas periódicas coordinadas para el invierno",
                     "Atención directa por WhatsApp, sin call center",
@@ -252,8 +241,8 @@ export default function VentaKerosenePage() {
               y locales comerciales. También tiene aplicaciones industriales y agrícolas de proceso y secado.
             </p>
             <p>
-              Comprar kerosene con un distribuidor directo te asegura
-              <strong className="text-[#0a1628]"> precio conveniente</strong>, disponibilidad y la posibilidad
+              Comprar kerosene con un distribuidor directo permite confirmar
+              <strong className="text-[#0a1628]"> precio y disponibilidad</strong>, además de la posibilidad
               de coordinar <strong className="text-[#0a1628]">entregas periódicas</strong> para no quedarte sin
               calefacción cuando más la necesitas. Atendemos desde pedidos domiciliarios hasta abastecimientos
               comerciales e industriales recurrentes.

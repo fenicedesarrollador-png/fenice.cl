@@ -8,7 +8,8 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin/", "/api/", "/login", "/gracias"],
+        // /gracias debe poder rastrearse para que Google procese su meta noindex.
+        disallow: ["/admin/", "/api/", "/login"],
       },
     ],
     sitemap: `${base}/sitemap.xml`,

@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 
 export const metadata = buildMetadata({
-  title: "Combustible para Calderas | Suministro a Edificios e Industrias",
+  title: "Combustible para Calderas en Santiago",
   description:
-    "Suministro de combustible para calderas de edificios, condominios, clínicas, hoteles e industrias en Santiago y la Región Metropolitana. Despachos programados para mantener su operación térmica sin interrupciones.",
+    "Suministro de combustible para calderas de edificios, clínicas, hoteles e industrias en Santiago y la RM, con despachos programados.",
   path: "/servicios/combustible-para-calderas",
   keywords: [
     "combustible para calderas",
@@ -80,7 +80,7 @@ export default function CalderasPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb crumbs={[
             { name: "Inicio", href: "/" },
-            { name: "Servicios", href: "/servicios/petroleo-a-domicilio-santiago" },
+            { name: "Servicios", href: "/petroleo-a-domicilio" },
             { name: "Combustible para Calderas" },
           ]} />
         </div>
