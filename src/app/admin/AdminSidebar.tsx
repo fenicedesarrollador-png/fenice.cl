@@ -9,7 +9,7 @@ import {
   LayoutDashboard, Inbox, Building2, FileText,
   CalendarDays, Tag, Settings, Globe, LogOut, Fuel,
   Users, ChartColumn, X, ArrowUpRight, ChevronRight,
-  DollarSign, BarChart3, Truck, Clapperboard,
+  DollarSign, BarChart3, Truck, Clapperboard, Handshake,
 } from "lucide-react";
 
 const links = [
@@ -21,6 +21,7 @@ const links = [
   { href: "/admin/flota", label: "Documentación de flota", icon: Truck },
   { href: "/admin/videos", label: "Videos de la web", icon: Clapperboard },
   { href: "/admin/clientes", label: "Clientes", icon: Building2 },
+  { href: "/admin/colaboradores", label: "Colaboradores", icon: Handshake },
   { href: "/admin/equipo", label: "Equipo", icon: Users },
   { href: "/admin/blog", label: "Blog", icon: FileText },
   { href: "/admin/eventos", label: "Eventos", icon: CalendarDays },

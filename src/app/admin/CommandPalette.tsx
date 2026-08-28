@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   LayoutDashboard, Inbox, Building2, FileText, CalendarDays,
   Tag, Settings, Fuel, Users, ChartColumn, Plus, Search, CornerDownLeft, Globe,
-  DollarSign, BarChart3, Truck, Clapperboard,
+  DollarSign, BarChart3, Truck, Clapperboard, Handshake,
 } from "lucide-react";
 
 type Cmd = {
@@ -29,6 +29,7 @@ const COMMANDS: Cmd[] = [
   { label: "Nuevo video", hint: "Crear", icon: Plus, action: (r) => r.push("/admin/videos/nuevo") },
   { label: "Precios de combustible", icon: Fuel, action: (r) => r.push("/admin/precios-combustible"), keywords: "diesel kerosene gas" },
   { label: "Clientes", icon: Building2, action: (r) => r.push("/admin/clientes"), keywords: "logos empresas" },
+  { label: "Colaboradores", hint: "Carrusel de la Home", icon: Handshake, action: (r) => r.push("/admin/colaboradores"), keywords: "colaboradores empresas asociadas logos carrusel alianzas proveedores" },
   { label: "Equipo", icon: Users, action: (r) => r.push("/admin/equipo"), keywords: "miembros fotos nosotros" },
   { label: "Blog", icon: FileText, action: (r) => r.push("/admin/blog"), keywords: "posts articulos" },
   { label: "Eventos", icon: CalendarDays, action: (r) => r.push("/admin/eventos") },
