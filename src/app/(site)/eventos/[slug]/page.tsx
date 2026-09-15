@@ -4,7 +4,6 @@ import Image from "next/image";
 import { createClient } from "@/lib/supabase/public";
 import Breadcrumb from "@/components/Breadcrumb";
 import CTASection from "@/components/CTASection";
-import { jsonLd } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -51,7 +50,7 @@ export default async function EventoPage({ params }: Props) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(eventSchema)} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(eventSchema) }} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Breadcrumb crumbs={[{ name: "Inicio", href: "/" }, { name: evento.titulo }]} />
       </div>
