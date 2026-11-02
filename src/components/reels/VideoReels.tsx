@@ -33,7 +33,7 @@ export default async function VideoReels() {
       <section className="py-20 bg-white border-y border-slate-100" aria-busy="true" aria-label="Cargando videos">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader />
-          <div className="flex gap-4 overflow-hidden">
+          <div className="mx-auto flex w-fit max-w-full gap-4 overflow-hidden">
             {[0, 1, 2, 3].map((i) => (
               <div key={i} className="shrink-0 w-[210px] sm:w-[240px] aspect-[9/16] rounded-2xl admin-skeleton" />
             ))}
@@ -48,7 +48,7 @@ export default async function VideoReels() {
       <section className="py-16 bg-white border-y border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader />
-          <div className="flex items-center gap-2.5 text-slate-400 text-sm">
+          <div className="flex items-center justify-center gap-2.5 text-slate-400 text-sm text-center">
             <AlertTriangle className="w-4 h-4" /> No pudimos cargar los videos en este momento.
           </div>
         </div>
@@ -61,7 +61,7 @@ export default async function VideoReels() {
       <section className="py-16 bg-white border-y border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader />
-          <div className="flex items-center gap-2.5 text-slate-400 text-sm">
+          <div className="flex items-center justify-center gap-2.5 text-slate-400 text-sm text-center">
             <Film className="w-4 h-4" /> Muy pronto compartiremos contenido en video de nuestra operación.
           </div>
         </div>
@@ -96,8 +96,8 @@ export default async function VideoReels() {
 
 function SectionHeader() {
   return (
-    <div className="max-w-2xl mb-8" data-reveal>
-      <div className="flex items-center gap-2 mb-3">
+    <div className="max-w-2xl mx-auto mb-8 text-center" data-reveal>
+      <div className="flex items-center justify-center gap-2 mb-3">
         <span className="h-px w-8 bg-[#f5a623]" />
         <p className="text-xs font-bold text-[#f5a623] uppercase tracking-widest flex items-center gap-1.5">
           <Clapperboard className="w-3.5 h-3.5" /> En video

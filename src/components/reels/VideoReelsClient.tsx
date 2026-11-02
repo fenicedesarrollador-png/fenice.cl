@@ -39,10 +39,32 @@ export default function VideoReelsClient({ videos }: { videos: ReelVideo[] }) {
   }, []);
 
   const trackRef = useRef<HTMLDivElement>(null);
+  const [navigation, setNavigation] = useState({ previous: false, next: false });
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const videoRefs = useRef<Map<string, HTMLVideoElement>>(new Map());
   const ratiosRef = useRef<Map<string, number>>(new Map());
   const lastFocusedRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const updateNavigation = () => {
+      const next = {
+        previous: track.scrollLeft > 1,
+        next: track.scrollLeft + track.clientWidth < track.scrollWidth - 1,
+      };
+      setNavigation((current) => current.previous === next.previous && current.next === next.next ? current : next);
+    };
+    const observer = new ResizeObserver(updateNavigation);
+    observer.observe(track);
+    track.addEventListener("scroll", updateNavigation, { passive: true });
+    updateNavigation();
+    return () => {
+      observer.disconnect();
+      track.removeEventListener("scroll", updateNavigation);
+    };
+  }, [videos.length]);
 
   // Observadores: uno decide cuándo "acercar" (cargar) el <video>, otro cuál
   // tarjeta está más visible para aplicarle su comportamiento por defecto
@@ -122,32 +144,34 @@ export default function VideoReelsClient({ videos }: { videos: ReelVideo[] }) {
   }
 
   function scrollByCard(dir: 1 | -1) {
-    trackRef.current?.scrollBy({ left: dir * 260, behavior: "smooth" });
+    const track = trackRef.current;
+    const card = track?.firstElementChild;
+    if (!track || !card) return;
+    track.scrollBy({ left: dir * (card.getBoundingClientRect().width + 16), behavior: "smooth" });
   }
 
   return (
-    <div className="relative">
-      {/* Flechas de navegación — solo escritorio */}
-      <button
+    <div className="relative mx-auto w-full" style={{ maxWidth: Math.min(videos.length * 256 - 8, 1016) }}>
+      {navigation.previous && <button
         type="button"
         onClick={() => scrollByCard(-1)}
         aria-label="Ver videos anteriores"
         className="hidden lg:flex absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-lg border border-slate-200 items-center justify-center text-[#0a1628] hover:bg-slate-50 transition-colors"
       >
         <ChevronLeft className="w-5 h-5" />
-      </button>
-      <button
+      </button>}
+      {navigation.next && <button
         type="button"
         onClick={() => scrollByCard(1)}
         aria-label="Ver más videos"
         className="hidden lg:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-lg border border-slate-200 items-center justify-center text-[#0a1628] hover:bg-slate-50 transition-colors"
       >
         <ChevronRight className="w-5 h-5" />
-      </button>
+      </button>}
 
       <div
         ref={trackRef}
-        className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 px-1 scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 px-[max(4px,calc((100%_-_210px)/2))] sm:px-1 scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
       >
         {videos.map((video) => (
           <ReelCard
@@ -183,7 +207,7 @@ function ReelCard({
     <div
       ref={onRegisterCard}
       data-reel-id={video.id}
-      className="relative shrink-0 w-[210px] sm:w-[240px] aspect-[9/16] snap-center rounded-2xl overflow-hidden bg-slate-900 shadow-lg ring-1 ring-black/5"
+      className="relative shrink-0 first:ml-auto last:mr-auto w-[210px] sm:w-[240px] aspect-[9/16] snap-center rounded-2xl overflow-hidden bg-slate-900 shadow-lg ring-1 ring-black/5"
     >
       {!loaded && (
         video.posterUrl ? (
