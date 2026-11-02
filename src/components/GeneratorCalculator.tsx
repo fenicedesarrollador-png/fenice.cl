@@ -39,20 +39,20 @@ export default function GeneratorCalculator() {
         <p className="text-sm text-slate-600 mb-6">Usa el consumo en litros por hora de la ficha del equipo para la carga prevista, o un consumo medido.</p>
         <div className="grid sm:grid-cols-2 gap-5">
           <div>
-            <label htmlFor="generator-consumption" className="block text-sm font-semibold mb-2">Consumo del equipo (L/h)</label>
+            <label htmlFor="generator-consumption" className="block text-sm font-semibold mb-2 sm:min-h-10 sm:flex sm:items-end">Consumo del equipo (L/h)</label>
             <input id="generator-consumption" name="consumption" type="number" inputMode="decimal" required min="0.001" max="10000" step="0.001" placeholder="Ej.: 12" aria-describedby="generator-consumption-help" className="w-full border border-slate-300 rounded-xl px-3 py-3 text-base" />
             <p id="generator-consumption-help" className="text-xs text-slate-500 mt-2">Los kVA por sí solos no indican el consumo.</p>
           </div>
           <div>
-            <label htmlFor="generator-hours" className="block text-sm font-semibold mb-2">Horas que necesitas operar</label>
+            <label htmlFor="generator-hours" className="block text-sm font-semibold mb-2 sm:min-h-10 sm:flex sm:items-end">Horas que necesitas operar</label>
             <input id="generator-hours" name="hours" type="number" inputMode="decimal" required min="0.001" max="8760" step="0.001" placeholder="Ej.: 8" className="w-full border border-slate-300 rounded-xl px-3 py-3 text-base" />
           </div>
           <div>
-            <label htmlFor="generator-available" className="block text-sm font-semibold mb-2">Combustible disponible (L)</label>
+            <label htmlFor="generator-available" className="block text-sm font-semibold mb-2 sm:min-h-10 sm:flex sm:items-end">Combustible disponible (L)</label>
             <input id="generator-available" name="available" type="number" inputMode="decimal" required min="0" max="1000000" step="0.001" placeholder="Ej.: 100" className="w-full border border-slate-300 rounded-xl px-3 py-3 text-base" />
           </div>
           <div>
-            <label htmlFor="generator-reserve" className="block text-sm font-semibold mb-2">Reserva que deseas conservar (L)</label>
+            <label htmlFor="generator-reserve" className="block text-sm font-semibold mb-2 sm:min-h-10 sm:flex sm:items-end">Reserva a conservar (L)</label>
             <input id="generator-reserve" name="reserve" type="number" inputMode="decimal" required min="0" max="1000000" step="0.001" defaultValue="0" aria-describedby="generator-reserve-help" className="w-full border border-slate-300 rounded-xl px-3 py-3 text-base" />
             <p id="generator-reserve-help" className="text-xs text-slate-500 mt-2">Define esta reserva con el responsable del equipo.</p>
           </div>
