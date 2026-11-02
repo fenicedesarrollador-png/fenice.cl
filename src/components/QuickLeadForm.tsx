@@ -81,7 +81,7 @@ export default function QuickLeadForm() {
           <label htmlFor="quick-service" className="block text-sm font-semibold mb-1.5">¿Qué necesitas?</label>
           <select id="quick-service" name="tipo_operacion" required defaultValue="" className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm">
             <option value="" disabled>Seleccionar servicio</option>
-            <option>Petróleo diésel a domicilio</option><option>Kerosene / parafina a domicilio</option>
+            <option>Petróleo diésel a domicilio</option><option>Parafina (kerosene) a domicilio</option>
             <option>Combustible para generador</option><option>Combustible para maquinaria o flota</option>
             <option>Combustible para caldera</option><option>Instalación de estanque</option>
           </select>

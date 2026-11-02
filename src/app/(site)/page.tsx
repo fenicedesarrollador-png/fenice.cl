@@ -272,7 +272,7 @@ export default function HomePage() {
 
       <div className="bg-[#f0faf4] border-b border-[#1a6b3c]/10 py-5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-3">
-          <p className="text-sm text-slate-700"><strong>Parafina y kerosene a domicilio:</strong> consulta despachos en Santiago, Maipú, Puente Alto y la RM.</p>
+          <p className="text-sm text-slate-700"><strong>Parafina (kerosene) a domicilio:</strong> consulta despachos en Santiago, Maipú, Puente Alto y la RM.</p>
           <Link href="/venta-kerosene" data-analytics-id="home_parafina" data-analytics-cta="service_navigation" className="text-sm font-bold text-[#1a6b3c]">Consultar parafina a domicilio →</Link>
         </div>
       </div>

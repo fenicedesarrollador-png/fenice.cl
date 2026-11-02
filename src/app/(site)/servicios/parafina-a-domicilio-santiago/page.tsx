@@ -174,7 +174,7 @@ export default function ParafinaPage() {
               <div className="bg-slate-50 border border-slate-100 rounded-xl p-6">
                 <h3 className="font-bold text-slate-900 mb-3">Servicios relacionados</h3>
                 <div className="flex flex-wrap gap-3 text-sm">
-                  <Link href="/venta-kerosene" className="text-orange-600 hover:underline font-medium">Venta de parafina y kerosene →</Link>
+                  <Link href="/venta-kerosene" className="text-orange-600 hover:underline font-medium">Venta de parafina (kerosene) →</Link>
                   <Link href="/servicios/combustible-para-calderas" className="text-orange-600 hover:underline font-medium">Combustible para calderas →</Link>
                   <Link href="/servicios/instalacion-de-estanques" className="text-orange-600 hover:underline font-medium">Instalación y mantención de estanques →</Link>
                 </div>
