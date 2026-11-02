@@ -1,136 +1,61 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Newspaper } from "lucide-react";
-import { createClient } from "@/lib/supabase/public";
+import { getPublishedPosts } from "@/lib/blog";
+import { buildMetadata, jsonLd } from "@/lib/seo";
+import { SITE_CONFIG } from "@/lib/config";
+import BlogCards from "@/components/blog/BlogCards";
+import Breadcrumb from "@/components/Breadcrumb";
 import CTASection from "@/components/CTASection";
 
 export const revalidate = 60;
 
-// Metadata dinámica: mientras el blog NO tenga artículos publicados, emite
-// noindex,follow (evita indexar "thin content" con página vacía). En cuanto se
-// publica el primer post desde el admin, la etiqueta se retira sola.
 export async function generateMetadata(): Promise<Metadata> {
-  let hasPosts = false;
-  try {
-    const supabase = await createClient();
-    const { count } = await supabase
-      .from("blog_posts")
-      .select("id", { count: "exact", head: true })
-      .eq("publicado", true);
-    hasPosts = (count ?? 0) > 0;
-  } catch {}
-
-  const title = "Blog sobre Petróleo Diésel, Parafina y Kerosene para Empresas";
-  const description =
-    "Artículos y guías sobre abastecimiento de petróleo diésel, parafina (kerosene), despachos programados, generadores, calderas y continuidad operacional para empresas en Chile.";
-
-  return {
-    title,
-    description,
-    alternates: { canonical: "https://fenice.cl/blog" },
-    ...(hasPosts ? {} : { robots: { index: false, follow: true } }),
-    openGraph: {
-      type: "website",
-      url: "https://fenice.cl/blog",
-      title,
-      description,
-      siteName: "Fenice SPA",
-    },
-  };
+  const posts = await getPublishedPosts();
+  return buildMetadata({
+    title: "Guías de Diésel y Combustible para Empresas",
+    description: "Planifica tu compra de diésel y kerosene en Santiago: cotizaciones, consumo de generadores, abastecimiento en faena y despachos para empresas.",
+    path: "/blog",
+    noindex: posts.length === 0,
+  });
 }
 
-type PostCard = {
-  slug: string;
-  titulo: string;
-  extracto: string | null;
-  fecha_publicacion: string | null;
-  categoria: string | null;
-};
-
-// El blog se administra exclusivamente desde /admin/blog (tabla blog_posts en
-// Supabase). No mantener artículos estáticos en el código: todo contenido
-// publicado debe ser creado y validado por el equipo de Fenice.
 export default async function BlogPage() {
-  let posts: PostCard[] = [];
-  try {
-    const supabase = await createClient();
-    const { data } = await supabase
-      .from("blog_posts")
-      .select("slug, titulo, extracto, fecha_publicacion, categoria")
-      .eq("publicado", true)
-      .order("fecha_publicacion", { ascending: false });
-    if (data) posts = data;
-  } catch {}
-
+  const posts = await getPublishedPosts();
+  const schema = {
+    "@context": "https://schema.org", "@type": "Blog",
+    "@id": `${SITE_CONFIG.site_url}/blog/#blog`, url: `${SITE_CONFIG.site_url}/blog`,
+    name: "Guías de abastecimiento de combustible de Fenice SPA", inLanguage: "es-CL",
+    publisher: { "@id": `${SITE_CONFIG.site_url}/#organization` },
+    blogPost: posts.map((post) => ({ "@type": "BlogPosting", headline: post.titulo, url: `${SITE_CONFIG.site_url}/blog/${post.slug}` })),
+  };
   return (
     <>
-      <section className="bg-gray-900 text-white py-16">
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)} />
+      <section className="bg-[#0a1628] text-white py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl lg:text-5xl font-extrabold mb-4">Blog de Fenice SPA</h1>
-          <p className="text-xl text-gray-300 max-w-3xl">
-            Guías prácticas sobre abastecimiento de petróleo diésel y kerosene,
-            despachos programados y continuidad operacional para empresas e instituciones.
-          </p>
+          <Breadcrumb dark crumbs={[{ name: "Inicio", href: "/" }, { name: "Blog" }]} />
+          <h1 className="text-3xl lg:text-5xl font-extrabold mt-6 mb-4">Guías de combustible para empresas</h1>
+          <p className="text-lg text-slate-300 max-w-3xl">Cotizaciones, consumo y planificación de diésel y kerosene para generadores, maquinaria, flotas y calefacción en Santiago y la Región Metropolitana.</p>
+          <div className="flex flex-wrap gap-3 mt-7 text-sm">
+            <Link className="rounded-full border border-white/30 px-4 py-2 hover:bg-white/10" href="/venta-petroleo-diesel">Diésel para empresas</Link>
+            <Link className="rounded-full border border-white/30 px-4 py-2 hover:bg-white/10" href="/servicios/combustible-para-generadores-electricos">Generadores</Link>
+            <Link className="rounded-full border border-white/30 px-4 py-2 hover:bg-white/10" href="/venta-kerosene">Kerosene y parafina</Link>
+          </div>
         </div>
       </section>
-
-      <section className="py-14 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          {posts.length === 0 ? (
-            <div className="text-center py-16">
-              <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center mx-auto mb-5">
-                <Newspaper className="w-7 h-7 text-[#1a6b3c]" />
-              </div>
-              <h2 className="text-xl font-bold text-gray-900 mb-2">Muy pronto publicaremos contenido</h2>
-              <p className="text-gray-500 text-sm max-w-md mx-auto mb-8">
-                Estamos preparando artículos sobre abastecimiento de combustible,
-                despachos programados y continuidad operacional. Mientras tanto,
-                puedes cotizar tu combustible o resolver dudas en nuestras preguntas frecuentes.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Link href="/cotizacion" className="inline-flex items-center justify-center gap-2 bg-[#f5a623] hover:bg-[#d4891a] text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors">
-                  Solicitar cotización
-                </Link>
-                <Link href="/preguntas-frecuentes" className="inline-flex items-center justify-center gap-2 border border-slate-200 hover:border-[#1a6b3c]/40 text-slate-700 font-semibold px-6 py-3 rounded-xl text-sm transition-colors">
-                  Ver preguntas frecuentes
-                </Link>
-              </div>
-            </div>
-          ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {posts.map((post) => (
-                <Link
-                  key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  className="group bg-gray-50 hover:bg-orange-50 border border-gray-100 hover:border-orange-200 rounded-2xl p-6 transition-all flex flex-col"
-                >
-                  {post.categoria && (
-                    <span className="text-xs font-semibold text-orange-600 uppercase tracking-wider mb-2">
-                      {post.categoria}
-                    </span>
-                  )}
-                  <h2 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-orange-700 leading-snug">
-                    {post.titulo}
-                  </h2>
-                  {post.extracto && (
-                    <p className="text-gray-500 text-sm leading-relaxed flex-1">{post.extracto}</p>
-                  )}
-                  {post.fecha_publicacion && (
-                    <p className="text-xs text-gray-400 mt-4">
-                      {new Date(post.fecha_publicacion).toLocaleDateString("es-CL", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </p>
-                  )}
-                </Link>
-              ))}
+      <section className="py-14 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {posts.length ? <BlogCards posts={posts} /> : (
+            <div className="text-center py-12">
+              <Newspaper className="mx-auto h-10 w-10 text-[#1a6b3c] mb-5" />
+              <h2 className="text-xl font-bold mb-3">Guías de abastecimiento en preparación</h2>
+              <p className="text-slate-600 mb-6">Resuelve tus dudas de despacho o solicita una propuesta para tu operación.</p>
+              <Link href="/cotizacion" className="inline-block rounded-xl bg-[#1a6b3c] text-white font-bold px-6 py-3">Solicitar cotización</Link>
             </div>
           )}
         </div>
       </section>
-
       <CTASection />
     </>
   );

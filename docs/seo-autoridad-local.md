@@ -1,6 +1,8 @@
 # Operación SEO local y autoridad comercial
 
-Última revisión: 12 de agosto de 2026.
+Última revisión: 02-11-2026.
+
+La propiedad de dominio `sc-domain:fenice.cl` está accesible en Search Console. El sitemap figura como correcto, con última lectura el 01-11-2026. La línea base, las correcciones técnicas y el calendario editorial están en [SEO y captación comercial](auditoria-seo-captacion.md).
 
 Este documento separa las tareas que puede resolver el código de las que requieren
 acceso del representante legal o del propietario de cada perfil. El objetivo es
@@ -27,7 +29,7 @@ social, nombre comercial, teléfono y dirección; reclamar o corregir la existen
 ## Prioridad 1: despliegue y Google Search Console
 
 1. Desplegar la rama SEO.
-2. Configurar `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` con el token de la propiedad.
+2. Conservar la verificación de la propiedad de dominio existente. `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` solo es necesario si se utiliza adicionalmente el método de metaetiqueta para una propiedad de prefijo de URL.
 3. Comprobar mediante inspección en vivo que `https://fenice.cl/sitemap.xml` responde.
 4. Enviar `sitemap.xml` en Search Console.
 5. Solicitar indexación de estas URL en este orden:

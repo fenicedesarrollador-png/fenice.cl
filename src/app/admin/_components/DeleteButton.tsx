@@ -13,12 +13,19 @@ interface Props {
 export default function DeleteButton({ table, id }: Props) {
   const [confirming, setConfirming] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
 
   async function handleDelete() {
     setLoading(true);
     const supabase = createClient();
-    await supabase.from(table).delete().eq("id", id);
+    const { error: dbError } = await supabase.from(table).delete().eq("id", id);
+    if (dbError) { setError("No se pudo eliminar."); setLoading(false); return; }
+    if (table === "blog_posts") {
+      await Promise.all(["/", "/blog", "/blog/[slug]"].map((path) =>
+        fetch(`/api/revalidate?path=${encodeURIComponent(path)}`, { method: "POST" }).catch(() => {}),
+      ));
+    }
     setLoading(false);
     setConfirming(false);
     router.refresh();
@@ -27,6 +34,7 @@ export default function DeleteButton({ table, id }: Props) {
   if (confirming) {
     return (
       <div className="flex items-center gap-1.5 bg-red-50 border border-red-200 rounded-xl px-2.5 py-1.5">
+        {error && <span role="alert" className="text-xs text-red-700">{error}</span>}
         <AlertTriangle className="w-3 h-3 text-red-500 shrink-0" />
         <button
           onClick={handleDelete}

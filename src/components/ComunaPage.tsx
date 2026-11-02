@@ -43,7 +43,7 @@ export function buildComunaSchema(c: ComunaConfig) {
     availableChannel: {
       "@type": "ServiceChannel",
       serviceUrl: `${base}/cotizacion`,
-      servicePhone: SITE_CONFIG.telefono,
+      servicePhone: { "@type": "ContactPoint", telephone: SITE_CONFIG.telefono, contactType: "sales" },
     },
   };
 }
@@ -90,6 +90,14 @@ export default function ComunaPage({ config }: { config: ComunaConfig }) {
             disponibilidad y condiciones de acceso. Confirma por WhatsApp el volumen, dirección y fecha
             requerida; emitimos factura electrónica para tu departamento de compras.
           </p>
+
+          {["maipu", "puente-alto"].includes(config.slug) && (
+            <aside className="rounded-xl border border-[#1a6b3c]/20 bg-[#f0faf4] p-6 my-8">
+              <h2 className="text-xl font-bold text-[#0a1628] mb-3">Parafina a domicilio en {config.nombre}</h2>
+              <p className="text-sm text-slate-600 leading-relaxed mb-3">También puedes consultar parafina y kerosene para calefacción en {config.nombre}. Confirma el combustible compatible con tu equipo e informa litros, dirección y fecha; coordinamos precio, disponibilidad y condiciones de acceso antes de la entrega.</p>
+              <Link href="/venta-kerosene" className="font-bold text-sm text-[#1a6b3c] underline">Ver parafina y kerosene a domicilio</Link>
+            </aside>
+          )}
 
           <h2 className="text-2xl font-bold text-gray-900 mb-4 mt-8">
             Operaciones que pueden requerir combustible en {config.nombre}

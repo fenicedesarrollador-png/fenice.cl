@@ -1,3 +1,4 @@
+import ServiceGuides from "@/components/blog/ServiceGuides";
 import Link from "next/link";
 import {
   ArrowRight, CheckCircle2, Fuel, Shield, FileText,
@@ -12,6 +13,8 @@ const BASE = SITE_CONFIG.site_url;
 const PAGE_URL = `${BASE}/venta-petroleo-diesel`;
 
 // Intención diferenciada: COMPRA / PRECIO / SUMINISTRO (no "a domicilio" genérico).
+export const revalidate = 60;
+
 export const metadata = buildMetadata({
   title: "Venta de Petróleo Diésel para Empresas",
   description:
@@ -297,6 +300,7 @@ export default function VentaPetroleoPage() {
         </div>
       </section>
 
+      <ServiceGuides categories={["Compras de combustible"]} />
       <CTASection />
     </>
   );

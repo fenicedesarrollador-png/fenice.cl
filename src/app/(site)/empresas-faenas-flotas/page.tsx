@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import ServiceGuides from "@/components/blog/ServiceGuides";
 import Link from "next/link";
 import {
   ArrowRight, CheckCircle2, Truck, Building2, Shield,
@@ -8,22 +8,15 @@ import {
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import { SITE_CONFIG } from "@/lib/config";
-import { jsonLd } from "@/lib/seo";
+import { jsonLd, buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const revalidate = 60;
+
+export const metadata = buildMetadata({
   title: "Combustible para Empresas, Faenas y Flotas",
-  description:
-    "Abastecimiento de diésel para empresas, faenas y flotas en la Región Metropolitana. Despachos coordinados, factura electrónica y atención directa.",
-  alternates: { canonical: "https://fenice.cl/empresas-faenas-flotas" },
-  openGraph: {
-    type: "website",
-    url: "https://fenice.cl/empresas-faenas-flotas",
-    title: "Combustible para Empresas, Faenas y Flotas | Fenice SPA",
-    description:
-      "Abastecimiento de petróleo diésel para empresas, faenas industriales y flotas en la RM. Contratos de suministro, factura electrónica y atención comercial directa.",
-    siteName: "Fenice SPA",
-  },
-};
+  description: "Abastecimiento de diésel para empresas, faenas y flotas en Santiago y la RM. Coordina despachos periódicos y cotiza según tu consumo y ubicación.",
+  path: "/empresas-faenas-flotas",
+});
 
 const pageSchema = {
   "@context": "https://schema.org",
@@ -304,6 +297,7 @@ export default function EmpresasFaenasFlotasPage() {
         </div>
       </section>
 
+      <ServiceGuides categories={["Faenas y maquinaria", "Flotas y transporte", "Gestión de abastecimiento"]} />
       <CTASection />
     </>
   );

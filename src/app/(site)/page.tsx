@@ -5,7 +5,8 @@ import TrustSignals from "@/components/TrustSignals";
 import FuelGauge from "@/components/FuelGauge";
 import Certificaciones from "@/components/Certificaciones";
 import ClientesShowcase from "@/components/ClientesShowcase";
-import FlotaDocumentacion from "@/components/flota/FlotaDocumentacion";
+import LatestArticles from "@/components/blog/LatestArticles";
+import QuickLeadForm from "@/components/QuickLeadForm";
 import VideoReels from "@/components/reels/VideoReels";
 import CollaboratorsSection from "@/components/colaboradores/CollaboratorsSection";
 import {
@@ -258,6 +259,24 @@ export default function HomePage() {
       {/* ── SEÑALES DE CONFIANZA ─────────────────────────────────────────────── */}
       <TrustSignals />
 
+      <section className="py-12 bg-slate-50 border-b border-slate-200" data-analytics-section="solicitud_rapida">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-[1fr_1.4fr] gap-8 items-center">
+          <div>
+            <h2 className="text-2xl font-extrabold text-[#0a1628] mb-3">¿Necesitas precio y disponibilidad?</h2>
+            <p className="text-slate-600 text-sm leading-relaxed">Indica tu comuna y el combustible que necesitas. Te contactamos para confirmar litros, acceso y fecha de despacho. Atención de lunes a viernes, de 09:00 a 19:00.</p>
+            <Link href="/cotizacion" className="inline-block mt-4 text-sm font-bold text-[#1a6b3c]">Cotizar con el detalle completo →</Link>
+          </div>
+          <QuickLeadForm />
+        </div>
+      </section>
+
+      <div className="bg-[#f0faf4] border-b border-[#1a6b3c]/10 py-5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-3">
+          <p className="text-sm text-slate-700"><strong>Parafina y kerosene a domicilio:</strong> consulta despachos en Santiago, Maipú, Puente Alto y la RM.</p>
+          <Link href="/venta-kerosene" data-analytics-id="home_parafina" data-analytics-cta="service_navigation" className="text-sm font-bold text-[#1a6b3c]">Consultar parafina a domicilio →</Link>
+        </div>
+      </div>
+
       {/* ── COLABORADORES (carrusel de logos, editable en /admin/colaboradores) ── */}
       <CollaboratorsSection />
 
@@ -489,8 +508,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── FLOTA CERTIFICADA Y DOCUMENTACIÓN VERIFICABLE ────────────────────── */}
-      <FlotaDocumentacion />
 
       {/* ── VIDEOS CORTOS TIPO REEL ───────────────────────────────────────────── */}
       <VideoReels />
@@ -598,6 +615,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <LatestArticles />
 
       {/* ── CTA FINAL ────────────────────────────────────────────────────────── */}
       <section className="py-16 bg-gradient-to-br from-[#0a1628] via-[#0d2040] to-[#0a1628] relative overflow-hidden" data-analytics-section="contacto">

@@ -1,3 +1,4 @@
+import ServiceGuides from "@/components/blog/ServiceGuides";
 import Link from "next/link";
 import {
   ArrowRight, CheckCircle2, Flame, Shield, FileText,
@@ -11,14 +12,24 @@ import { buildMetadata, faqSchema, jsonLd } from "@/lib/seo";
 const BASE = SITE_CONFIG.site_url;
 const PAGE_URL = `${BASE}/venta-kerosene`;
 
+export const revalidate = 60;
+
 export const metadata = buildMetadata({
-  title: "Kerosene y Parafina a Domicilio en Santiago",
+  title: "Parafina a Domicilio en Santiago | Kerosene",
   description:
-    "Kerosene para hogares, edificios, comercios e industria en la RM. Pedido desde 50 litros, factura electrónica y coordinación por WhatsApp.",
+    "Parafina y kerosene a domicilio en Santiago, Maipú, Puente Alto y la RM. Desde 50 litros. Consulta precio, disponibilidad y despacho por WhatsApp.",
   path: "/venta-kerosene",
 });
 
 const faqKerosene = [
+  {
+    q: "¿Despachan parafina a domicilio en Maipú y Puente Alto?",
+    a: "Sí. Coordinamos pedidos de parafina o kerosene en Maipú, Puente Alto y las demás comunas de la Región Metropolitana. Indica dirección, litros y fecha para confirmar precio, acceso y disponibilidad de despacho.",
+  },
+  {
+    q: "¿Parafina y kerosene son lo mismo?",
+    a: "En Chile se usa habitualmente el nombre parafina para el kerosene destinado a calefacción. Antes de comprar, confirma la especificación y compatibilidad indicada por el fabricante de tu estufa, caldera o equipo.",
+  },
   {
     q: "¿Venden kerosene a domicilio en Santiago?",
     a: "Sí. Realizamos venta y despacho de kerosene a domicilio en Santiago y en la Región Metropolitana, tanto para hogares como para empresas, con coordinación por WhatsApp o formulario de cotización.",
@@ -312,6 +323,7 @@ export default function VentaKerosenePage() {
         </div>
       </section>
 
+      <ServiceGuides categories={["Calefacción y edificios"]} />
       <CTASection />
     </>
   );

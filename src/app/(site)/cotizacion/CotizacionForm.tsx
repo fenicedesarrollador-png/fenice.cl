@@ -169,13 +169,13 @@ export default function CotizacionForm() {
         </div>
         <h3 className="text-2xl font-extrabold text-[#0a1628] mb-3">¡Cotización enviada!</h3>
         <p className="text-slate-600 leading-relaxed max-w-md mx-auto">
-          Recibimos tu solicitud y ya fue notificada a nuestro equipo comercial.
+          Tu solicitud quedó registrada para nuestro equipo comercial.
           Un asesor de Fenice SPA se comunicará contigo a la brevedad en el horario
           Lun-Vie 09:00–19:00.
         </p>
         <p className="inline-flex items-center gap-2 text-sm text-slate-500 bg-white border border-slate-200 rounded-xl px-4 py-2.5 mt-5">
           <Mail className="w-4 h-4 text-[#1a6b3c] shrink-0" />
-          Te enviamos un correo de confirmación con el resumen de tu solicitud.
+          Conserva tus datos de contacto disponibles para coordinar la propuesta.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-7">
           <a
