@@ -36,7 +36,7 @@ export default function NuevoUsuarioForm() {
         <Field label="Nombre completo" required>
           <div className="relative">
             <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-            <input name="nombre" type="text" required placeholder="Ej: Erika Pierattini" className="admin-input !pl-9" />
+            <input name="nombre" type="text" required placeholder="Nombre y apellido" className="admin-input !pl-9" />
           </div>
         </Field>
         <Field label="Correo electrónico" required>
