@@ -94,8 +94,8 @@ export default function ComunaPage({ config }: { config: ComunaConfig }) {
           {["maipu", "puente-alto"].includes(config.slug) && (
             <aside className="rounded-xl border border-[#1a6b3c]/20 bg-[#f0faf4] p-6 my-8">
               <h2 className="text-xl font-bold text-[#0a1628] mb-3">Parafina a domicilio en {config.nombre}</h2>
-              <p className="text-sm text-slate-600 leading-relaxed mb-3">También puedes consultar parafina y kerosene para calefacción en {config.nombre}. Confirma el combustible compatible con tu equipo e informa litros, dirección y fecha; coordinamos precio, disponibilidad y condiciones de acceso antes de la entrega.</p>
-              <Link href="/venta-kerosene" className="font-bold text-sm text-[#1a6b3c] underline">Ver parafina y kerosene a domicilio</Link>
+              <p className="text-sm text-slate-600 leading-relaxed mb-3">También puedes consultar parafina (kerosene) para calefacción en {config.nombre}. Confirma el combustible compatible con tu equipo e informa litros, dirección y fecha; coordinamos precio, disponibilidad y condiciones de acceso antes de la entrega.</p>
+              <Link href="/venta-kerosene" className="font-bold text-sm text-[#1a6b3c] underline">Ver parafina (kerosene) a domicilio</Link>
             </aside>
           )}
 

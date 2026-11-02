@@ -40,7 +40,7 @@ export default async function BlogPage() {
           <div className="flex flex-wrap gap-3 mt-7 text-sm">
             <Link className="rounded-full border border-white/30 px-4 py-2 hover:bg-white/10" href="/venta-petroleo-diesel">Diésel para empresas</Link>
             <Link className="rounded-full border border-white/30 px-4 py-2 hover:bg-white/10" href="/servicios/combustible-para-generadores-electricos">Generadores</Link>
-            <Link className="rounded-full border border-white/30 px-4 py-2 hover:bg-white/10" href="/venta-kerosene">Kerosene y parafina</Link>
+            <Link className="rounded-full border border-white/30 px-4 py-2 hover:bg-white/10" href="/venta-kerosene">Parafina (kerosene)</Link>
           </div>
         </div>
       </section>
