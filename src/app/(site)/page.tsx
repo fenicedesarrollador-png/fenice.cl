@@ -158,29 +158,35 @@ export default function HomePage() {
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#0a1628]" data-analytics-section="hero">
 
-        {/* Imagen de fondo — desktop centrada al camión, móvil apuntada a izquierda */}
-        <Image
-          src="/images/portada-fenice.webp"
-          alt="Camión de despacho de petróleo a domicilio de Fenice SPA en Santiago, con la cordillera de fondo"
-          fill
-          priority
-          fetchPriority="high"
-          // Ya es un webp liviano y pre-optimizado: se sirve DIRECTO (sin el
-          // optimizador `/_next/image`), para que Cloudflare lo cachee y no
-          // dependa de un round-trip lento del origen en la imagen LCP.
-          unoptimized
-          sizes="100vw"
-          placeholder="blur"
-          blurDataURL={BLUR["portada-fenice"]}
-          className="object-cover sm:object-[55%_center] object-[35%_center]"
-        />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Image
+            src="/images/portada-fenice-santiago.webp"
+            alt="Camión de despacho de petróleo a domicilio de Fenice SPA en Santiago, con la cordillera de fondo"
+            width={1600}
+            height={900}
+            priority
+            fetchPriority="high"
+            // Ya es un webp liviano y pre-optimizado: se sirve DIRECTO (sin el
+            // optimizador `/_next/image`), para que Cloudflare lo cachee y no
+            // dependa de un round-trip lento del origen en la imagen LCP.
+            unoptimized
+            sizes="100vw"
+            placeholder="blur"
+            blurDataURL={BLUR["portada-fenice"]}
+            className="h-auto w-auto max-h-full max-w-full"
+            style={{
+              maskImage: "linear-gradient(to right, transparent, #000 8%, #000 92%, transparent), linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent)",
+              maskComposite: "intersect",
+            }}
+          />
+        </div>
 
         {/* Overlay desktop: oscuro solo en la franja izquierda donde va el texto; el resto se ve claro */}
         <div className="absolute inset-0 hidden sm:block bg-gradient-to-r from-[#0a1628]/80 via-[#0a1628]/30 to-transparent" />
 
-        {/* Overlay móvil: apenas oscurece la parte superior (texto) y deja ver la foto clara abajo */}
+        {/* El degradado móvil mantiene el contraste del texto sobre la fotografía. */}
         <div className="absolute inset-0 sm:hidden"
-          style={{ background: "linear-gradient(to bottom, rgba(10,22,40,0.82) 0%, rgba(10,22,40,0.5) 48%, rgba(10,22,40,0.05) 100%)" }}
+          style={{ background: "linear-gradient(to bottom, rgba(10,22,40,0.82) 0%, rgba(10,22,40,0.62) 55%, rgba(10,22,40,0.35) 100%)" }}
         />
 
         {/* Línea inferior */}
