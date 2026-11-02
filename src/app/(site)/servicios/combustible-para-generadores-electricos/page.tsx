@@ -1,3 +1,5 @@
+import ServiceInquiry from "@/components/ServiceInquiry";
+import GeneratorToolLink from "@/components/GeneratorToolLink";
 import ServiceGuides from "@/components/blog/ServiceGuides";
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -40,7 +42,7 @@ const faqItems = [
   },
   {
     q: "¿Puedo programar el abastecimiento del generador de forma periódica?",
-    a: "Sí. Puedes programar abastecimientos semanales o mensuales según el consumo de tu generador, de modo que el estanque nunca quede bajo el nivel de respaldo que necesitas.",
+    a: "Sí. Puedes programar abastecimientos semanales o mensuales según el consumo real y la reserva definida para tu generador. Coordinamos volumen y frecuencia para planificar la reposición.",
   },
   {
     q: "¿Atienden urgencias si el generador se está quedando sin combustible?",
@@ -64,7 +66,7 @@ const instalaciones = [
 ];
 
 const beneficios = [
-  { icon: ShieldCheck, text: "Respaldo eléctrico asegurado: su generador siempre con combustible disponible" },
+  { icon: ShieldCheck, text: "Planificación del abastecimiento según consumo y reserva del generador" },
   { icon: CalendarCheck, text: "Despachos programados semanales o mensuales según el consumo real" },
   { icon: PhoneCall, text: "Atención de requerimientos urgentes, previa coordinación y sujeta a disponibilidad" },
   { icon: CheckCircle2, text: "Coordinación directa con administradores, mayordomos o encargados de mantención" },
@@ -83,7 +85,7 @@ export default function GeneradoresPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb crumbs={[
             { name: "Inicio", href: "/" },
-            { name: "Servicios", href: "/servicios/petroleo-a-domicilio-santiago" },
+            { name: "Servicios", href: "/petroleo-a-domicilio" },
             { name: "Combustible para Generadores Eléctricos" },
           ]} />
         </div>
@@ -103,8 +105,8 @@ export default function GeneradoresPage() {
           </h1>
           <p className="text-lg text-slate-300 max-w-2xl mb-8">
             Abastecemos con petróleo diésel los generadores de edificios, condominios, clínicas,
-            hoteles e industrias en Santiago y la Región Metropolitana. Que un corte de energía
-            nunca detenga su operación.
+            hoteles e industrias en Santiago y la Región Metropolitana. Planifique el combustible
+            de su sistema de respaldo según consumo y horas de operación.
           </p>
           <WhatsAppButton
             mensaje="Hola, necesito cotizar diésel para un generador eléctrico."
@@ -113,6 +115,8 @@ export default function GeneradoresPage() {
         </div>
       </section>
 
+      <ServiceInquiry service="generador" heading="Coordina el diésel para tu generador" />
+
       {/* Content */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -120,14 +124,14 @@ export default function GeneradoresPage() {
             <div className="lg:col-span-2 space-y-10">
               <div>
                 <h2 className="text-2xl font-bold text-slate-900 mb-4">
-                  Su generador siempre listo para responder
+                  Planifique el combustible de su generador
                 </h2>
                 <p className="text-slate-600 leading-relaxed mb-4">
                   Un generador eléctrico sin combustible es un respaldo que no respalda. En FENICE
                   entregamos <strong className="text-slate-800">petróleo diésel para generadores eléctricos</strong> directamente
                   en su edificio, clínica, hotel o planta, con despachos coordinados en fecha,
                   horario y cantidad, para que su instalación mantenga energía de respaldo
-                  disponible en todo momento.
+                  con una reposición planificada para las horas de operación previstas.
                 </p>
                 <p className="text-slate-600 leading-relaxed">
                   Trabajamos con administradores de edificios y condominios, encargados de
@@ -224,14 +228,14 @@ export default function GeneradoresPage() {
                 <h3 className="font-bold text-slate-900 mb-2">Programe su abastecimiento</h3>
                 <p className="text-slate-600 text-sm mb-4 leading-relaxed">
                   Indíquenos el consumo de su generador y le proponemos un plan de abastecimiento
-                  periódico para no quedar nunca sin respaldo.
+                  periódico según el consumo real y la reserva de su equipo.
                 </p>
                 <WhatsAppButton
                   mensaje="Hola, quiero programar el abastecimiento de diésel para un generador eléctrico."
                   className="w-full justify-center"
                 />
                 <Link
-                  href="/cotizacion"
+                  href="/cotizacion?servicio=generador"
                   className="mt-3 block text-center text-sm text-slate-600 hover:text-orange-600 font-medium transition-colors"
                 >
                   O solicite una cotización →
@@ -242,8 +246,9 @@ export default function GeneradoresPage() {
         </div>
       </section>
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12"><GeneratorToolLink /></div>
       <ServiceGuides categories={["Generadores eléctricos"]} />
-      <CTASection heading="Evite interrupciones por falta de combustible" mensaje="Hola, quiero cotizar diésel para un generador eléctrico." />
+      <CTASection service="generador" heading="Evite interrupciones por falta de combustible" mensaje="Hola, quiero cotizar diésel para un generador eléctrico." />
     </>
   );
 }

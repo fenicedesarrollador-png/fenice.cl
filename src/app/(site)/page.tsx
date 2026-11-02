@@ -7,6 +7,7 @@ import Certificaciones from "@/components/Certificaciones";
 import ClientesShowcase from "@/components/ClientesShowcase";
 import LatestArticles from "@/components/blog/LatestArticles";
 import QuickLeadForm from "@/components/QuickLeadForm";
+import GeneratorToolLink from "@/components/GeneratorToolLink";
 import VideoReels from "@/components/reels/VideoReels";
 import CollaboratorsSection from "@/components/colaboradores/CollaboratorsSection";
 import {
@@ -616,6 +617,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"><GeneratorToolLink /></div>
       <LatestArticles />
 
       {/* ── CTA FINAL ────────────────────────────────────────────────────────── */}

@@ -10,6 +10,7 @@ import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import BlogContent from "@/components/blog/BlogContent";
 import BlogCards from "@/components/blog/BlogCards";
+import GeneratorToolLink from "@/components/GeneratorToolLink";
 
 export const revalidate = 60;
 type Props = { params: Promise<{ slug: string }> };
@@ -83,6 +84,7 @@ export default async function BlogPostPage({ params }: Props) {
           <Link href="/cotizacion" data-analytics-id="blog_inline_quote" data-analytics-cta="quote" className="text-sm font-bold text-[#1a6b3c] underline underline-offset-4">Cotizar con FENICE →</Link>
         </aside>
         <BlogContent content={post.contenido} />
+        {slug === "calcular-consumo-diesel-generador-electrico" && <div className="mt-8"><GeneratorToolLink /></div>}
         <div className="mt-10 border-t border-slate-200 pt-6"><Link href="/blog" className="text-[#1a6b3c] font-semibold">← Ver todas las guías</Link></div>
       </article>
       {related.length > 0 && <section className="bg-slate-50 py-14"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><h2 className="text-2xl font-extrabold text-[#0a1628] mb-7">Sigue planificando tu abastecimiento</h2><BlogCards posts={related} /></div></section>}

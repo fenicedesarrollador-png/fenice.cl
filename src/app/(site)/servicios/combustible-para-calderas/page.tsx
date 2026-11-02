@@ -1,3 +1,4 @@
+import ServiceInquiry from "@/components/ServiceInquiry";
 import ServiceGuides from "@/components/blog/ServiceGuides";
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -83,7 +84,7 @@ export default function CalderasPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb crumbs={[
             { name: "Inicio", href: "/" },
-            { name: "Servicios", href: "/servicios/petroleo-a-domicilio-santiago" },
+            { name: "Servicios", href: "/petroleo-a-domicilio" },
             { name: "Combustible para Calderas" },
           ]} />
         </div>
@@ -112,6 +113,8 @@ export default function CalderasPage() {
           />
         </div>
       </section>
+
+      <ServiceInquiry service="caldera" heading="Coordina el combustible para tu caldera" />
 
       {/* Content */}
       <section className="py-16 bg-white">
@@ -230,7 +233,7 @@ export default function CalderasPage() {
                   className="w-full justify-center"
                 />
                 <Link
-                  href="/cotizacion"
+                  href="/cotizacion?servicio=caldera"
                   className="mt-3 block text-center text-sm text-slate-600 hover:text-orange-600 font-medium transition-colors"
                 >
                   O solicite una cotización →
@@ -242,7 +245,7 @@ export default function CalderasPage() {
       </section>
 
       <ServiceGuides categories={["Calefacción y edificios"]} />
-      <CTASection heading="Programe su próximo abastecimiento" mensaje="Hola, quiero cotizar combustible para una caldera." />
+      <CTASection service="caldera" heading="Programe su próximo abastecimiento" mensaje="Hola, quiero cotizar combustible para una caldera." />
     </>
   );
 }

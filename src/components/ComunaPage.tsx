@@ -1,3 +1,4 @@
+import ServiceInquiry from "@/components/ServiceInquiry";
 import type { Metadata } from "next";
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -158,7 +159,9 @@ export default function ComunaPage({ config }: { config: ComunaConfig }) {
         </div>
       </section>
 
-      <CTASection
+      <ServiceInquiry service="diesel" heading={`Consulta precio y despacho en ${config.nombre}`} comuna={config.nombre} />
+
+      <CTASection service="diesel"
         heading={`¿Necesitas petróleo a domicilio en ${config.nombre}?`}
         mensaje={`Hola, quiero cotizar petróleo a domicilio en ${config.nombre}.`}
       />
