@@ -312,3 +312,147 @@ select.admin-input {
 .blog-content th { background: #f1f5f9; color: #0a1628; }
 .blog-content blockquote { border-left: 4px solid #f5a623; padding: 1rem 1.25rem; margin: 1.5rem 0; background: #f8fafc; }
 .blog-content img { max-width: 100%; height: auto; border-radius: 1rem; }
+
+/* ============================================
+   HOME — superficies y motion de la portada
+   <HomeMotion /> escribe --p (progreso 0→1 en viewport), --mx/--my (puntero)
+   y --home-scroll. Los valores por defecto representan el estado final:
+   sin JS o con reduced-motion todo se ve completo y estático.
+   ============================================ */
+.home-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 3px;
+  z-index: 60;
+  pointer-events: none;
+  transform-origin: 0 50%;
+  transform: scaleX(var(--home-scroll, 0));
+  background: linear-gradient(90deg, #1a6b3c, #f5a623 60%, #ffd27a);
+  box-shadow: 0 0 12px rgba(245, 166, 35, 0.6);
+}
+
+.home-grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 70% at 30% 40%, #000 20%, transparent 75%);
+}
+.home-grid-bg--light {
+  background-image:
+    linear-gradient(rgba(10, 22, 40, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 22, 40, 0.05) 1px, transparent 1px);
+}
+
+.home-glass {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: 0 30px 80px -24px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.home-gradient-text {
+  background: linear-gradient(100deg, #ffd27a 0%, #f5a623 45%, #e08a0a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Botón primario con destello al pasar el cursor */
+.home-btn-shine { position: relative; overflow: hidden; isolation: isolate; }
+.home-btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.home-btn-shine:hover::after { transform: translateX(120%); }
+
+/* Tarjetas con brillo que sigue al puntero */
+.home-card { position: relative; isolation: isolate; }
+.home-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(460px circle at var(--mx, 50%) var(--my, 0%), rgba(245, 166, 35, 0.16), transparent 45%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.home-card:hover::before { opacity: 1; }
+.home-card--light::before {
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgba(26, 107, 60, 0.1), transparent 50%);
+}
+
+/* Línea de proceso que se llena con el scroll */
+.home-rail-fill {
+  transform-origin: 50% 0;
+  transform: scaleY(var(--p, 1));
+}
+.home-step__node { transition: background-color 0.5s ease, color 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease; }
+.home-step.is-revealed .home-step__node {
+  background: #1a6b3c;
+  border-color: #1a6b3c;
+  color: #fff;
+  box-shadow: 0 0 0 8px rgba(26, 107, 60, 0.12);
+}
+
+/* Revelado tipo zoom: el recorte se abre y la imagen se asienta */
+.home-clip {
+  --c: calc(1 - clamp(0, var(--p, 1) * 2.4, 1));
+  clip-path: inset(calc(var(--c) * 9%) calc(var(--c) * 9%) calc(var(--c) * 9%) calc(var(--c) * 9%) round 1.5rem);
+}
+.home-clip__img { transform: scale(calc(1 + var(--c, 0) * 0.18)); }
+.home-clip--wide {
+  --c: calc(1 - clamp(0, var(--p, 1) * 2, 1));
+  clip-path: inset(0 calc(var(--c) * 7%) round 1.5rem);
+}
+
+/* El texto del hero acompaña el desplazamiento; la fotografía conserva su encuadre. */
+.home-hero__content {
+  opacity: calc(1 - var(--p, 0) * 1.7);
+  transform: translate3d(0, calc(var(--p, 0) * -70px), 0);
+}
+
+.home-line { display: block; overflow: hidden; padding-bottom: 0.06em; margin-bottom: -0.06em; }
+.home-line > span { display: block; }
+
+/* FAQ con apertura suave (mejora progresiva) */
+.home-faq { interpolate-size: allow-keywords; }
+.home-faq details::details-content {
+  height: 0;
+  overflow: hidden;
+  transition: height 0.45s cubic-bezier(0.22, 1, 0.36, 1), content-visibility 0.45s allow-discrete;
+}
+.home-faq details[open]::details-content { height: auto; }
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes homeLineUp { from { transform: translateY(105%); } to { transform: none; } }
+  .home-line > span { animation: homeLineUp 1s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: calc(var(--i, 0) * 110ms + 120ms); }
+
+  @keyframes homeFlow { to { stroke-dashoffset: -40; } }
+  .home-flow { stroke-dasharray: 4 6; animation: homeFlow 1.6s linear infinite; }
+
+  @keyframes homeSpin { to { transform: rotate(360deg); } }
+  .home-radar-sweep { animation: homeSpin 7s linear infinite; }
+
+  @keyframes homeFloat {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(4%, -6%, 0) scale(1.08); }
+  }
+  .home-orb { animation: homeFloat 14s ease-in-out infinite; }
+
+  @keyframes homeCue { 0% { transform: translateY(-100%); } 100% { transform: translateY(200%); } }
+  .home-cue { animation: homeCue 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-network-pulse,
+  .home-signals [aria-hidden="true"] { display: none; }
+  .home-signals .logo-marquee { gap: 1rem 2rem; }
+}
