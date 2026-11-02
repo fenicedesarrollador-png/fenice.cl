@@ -62,7 +62,7 @@ export function buildMetadata({
       description,
       siteName: SITE_CONFIG.nombre,
       locale: "es_CL",
-      images: [{ url: absImage, width: 1200, height: 630, alt: title }],
+      images: [{ url: absImage, ...(image === OG_IMAGE ? { width: 1200, height: 630 } : {}), alt: title }],
       ...(publishedTime ? { publishedTime } : {}),
       ...(modifiedTime ? { modifiedTime } : {}),
     },
@@ -125,7 +125,8 @@ export function comunaKeywords(comuna: string): string[] {
    ============================================================ */
 
 // Organización (knowledge panel)
-export function organizationSchema() {
+export function organizationSchema(config?: { telefono?: string; email?: string; direccion?: string; instagram_url?: string }) {
+  const [streetAddress, addressLocality = SITE_CONFIG.comuna] = (config?.direccion ?? SITE_CONFIG.direccion).split(",").map((part) => part.trim());
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -135,18 +136,18 @@ export function organizationSchema() {
     url: `${BASE}/`,
     logo: { "@type": "ImageObject", url: `${BASE}${BRAND_IMAGE}`, width: 1491, height: 1055 },
     image: `${BASE}${BRAND_IMAGE}`,
-    email: SITE_CONFIG.email,
-    telephone: SITE_CONFIG.telefono,
+    email: config?.email ?? SITE_CONFIG.email,
+    telephone: config?.telefono ?? SITE_CONFIG.telefono,
     taxID: SITE_CONFIG.rut,
     foundingDate: SITE_CONFIG.fundacion,
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Calle La Granja 8396",
-      addressLocality: "San Ramón",
+      streetAddress,
+      addressLocality,
       addressRegion: SITE_CONFIG.region,
       addressCountry: "CL",
     },
-    sameAs: [SITE_CONFIG.instagram_url],
+    sameAs: [config?.instagram_url ?? SITE_CONFIG.instagram_url],
     areaServed: [
       { "@type": "AdministrativeArea", name: "Región Metropolitana de Santiago" },
       { "@type": "AdministrativeArea", name: "Región de Valparaíso" },
@@ -156,8 +157,8 @@ export function organizationSchema() {
       {
         "@type": "ContactPoint",
         contactType: "sales",
-        email: SITE_CONFIG.email,
-        telephone: SITE_CONFIG.telefono,
+        email: config?.email ?? SITE_CONFIG.email,
+        telephone: config?.telefono ?? SITE_CONFIG.telefono,
         areaServed: "CL",
         availableLanguage: "es",
       },
@@ -324,7 +325,7 @@ export function serviceSchema({
     availableChannel: {
       "@type": "ServiceChannel",
       serviceUrl: `${BASE}/cotizacion`,
-      servicePhone: SITE_CONFIG.telefono,
+      servicePhone: { "@type": "ContactPoint", telephone: SITE_CONFIG.telefono, contactType: "sales" },
     },
   };
 }

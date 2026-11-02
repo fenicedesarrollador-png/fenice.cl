@@ -2,6 +2,9 @@ import type { MetadataRoute } from "next";
 import { createClient } from "@/lib/supabase/public";
 import { fetchWithTimeout } from "@/lib/getSiteConfig";
 import { COMUNAS, SERVICIOS, SITE_CONFIG } from "@/lib/config";
+import { getPublishedPosts } from "@/lib/blog";
+
+export const revalidate = 60;
 
 const BASE_URL = SITE_CONFIG.site_url;
 
@@ -41,13 +44,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     const supabase = await createClient();
-    // Timeout corto: si Supabase tarda, el sitemap igual responde con lo estático.
-    const [blogRes, eventosRes] = await Promise.all([
-      fetchWithTimeout(supabase.from("blog_posts").select("slug, updated_at").eq("publicado", true), 3000),
+    // Los eventos tienen un plazo acotado; un error del blog conserva el sitemap previo.
+    const [posts, eventosRes] = await Promise.all([
+      getPublishedPosts(),
       fetchWithTimeout(supabase.from("eventos").select("slug, updated_at").eq("activo", true), 3000),
     ]);
 
-    blogDynamic = (blogRes?.data || [])
+    blogDynamic = posts
       .map((post) => ({
         url: `${BASE_URL}/blog/${post.slug}`,
         lastModified: post.updated_at ? new Date(post.updated_at) : undefined,
@@ -61,7 +64,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly" as const,
       priority: 0.6,
     }));
-  } catch {}
+  } catch (error) {
+    // Conserva el sitemap anterior si falla una consulta de artículos publicados.
+    throw error;
+  }
 
   // /blog emite noindex mientras no tenga artículos → se EXCLUYE del sitemap
   // hasta que exista al menos un post publicado (evita listar una URL noindex).

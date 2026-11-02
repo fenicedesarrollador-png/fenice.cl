@@ -9,13 +9,16 @@ export type SiteConfig = typeof SITE_CONFIG & Record<string, string>;
  * Si tarda más de `ms`, resuelve a null para no dejar páginas SEO esperando.
  */
 export async function fetchWithTimeout<T>(promise: PromiseLike<T>, ms = 2500): Promise<T | null> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
   try {
     return await Promise.race([
       Promise.resolve(promise),
-      new Promise<null>((resolve) => setTimeout(() => resolve(null), ms)),
+      new Promise<null>((resolve) => { timer = setTimeout(() => resolve(null), ms); }),
     ]);
   } catch {
     return null;
+  } finally {
+    clearTimeout(timer);
   }
 }
 

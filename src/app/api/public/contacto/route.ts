@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { linkAnalyticsIdentity } from "@/lib/analytics/server";
 import { sendEmail } from "@/lib/email/resend";
@@ -35,6 +35,8 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as Record<string, unknown>;
 
+    if (body.website) return NextResponse.json({ error: "Solicitud no válida." }, { status: 400 });
+
     const payload = {
       nombre: normalizeRequiredText(body.nombre),
       telefono: normalizeOptionalText(body.telefono),
@@ -60,6 +62,14 @@ export async function POST(request: Request) {
       );
     }
 
+    const phoneDigits = (payload.telefono ?? "").replace(/\D/g, "");
+    if ((!payload.email && !payload.telefono) || (payload.telefono && (phoneDigits.length < 8 || phoneDigits.length > 15))) {
+      return NextResponse.json({ error: "Indica un teléfono o correo válido para poder contactarte." }, { status: 400 });
+    }
+    if (Object.values(payload).some((value) => typeof value === "string" && value.length > 5000)) {
+      return NextResponse.json({ error: "La solicitud supera el largo permitido." }, { status: 400 });
+    }
+
     const serviceClient = await createServiceClient();
     const { data, error } = await serviceClient
       .from("leads")
@@ -69,30 +79,32 @@ export async function POST(request: Request) {
 
     if (error || !data?.id) {
       return NextResponse.json(
-        { error: error?.message ?? "No se pudo crear el lead." },
+        { error: "No se pudo registrar tu solicitud. Intenta nuevamente o contáctanos por WhatsApp." },
         { status: 500 },
       );
     }
 
     await linkAnalyticsIdentity(serviceClient, request, { leadId: data.id });
 
-    // Notificación interna por correo (Resend) — no bloquea la respuesta.
-    await Promise.allSettled([
-      sendEmail({
-        to: [...NOTIFY_EMAILS],
-        subject: `Nuevo contacto — ${payload.nombre} (${payload.tipo_operacion})`,
-        html: contactoInternoEmail(payload),
-        ...(payload.email ? { replyTo: payload.email } : {}),
-      }),
-      // Notificación en tiempo real al panel: Web Push (badge incluido) + WhatsApp.
-      notifyNuevoLead(serviceClient, {
-        id: data.id,
-        nombre: payload.nombre,
-        comuna: payload.comuna,
-        tipo_operacion: payload.tipo_operacion,
-        telefono: payload.telefono,
-      }),
-    ]);
+    after(async () => {
+      // Notificación interna por correo (Resend) — no bloquea la respuesta.
+      await Promise.allSettled([
+        sendEmail({
+          to: [...NOTIFY_EMAILS],
+          subject: `Nuevo contacto — ${payload.nombre} (${payload.tipo_operacion})`,
+          html: contactoInternoEmail(payload),
+          ...(payload.email ? { replyTo: payload.email } : {}),
+        }),
+        // Notificación en tiempo real al panel: Web Push (badge incluido) + WhatsApp.
+        notifyNuevoLead(serviceClient, {
+          id: data.id,
+          nombre: payload.nombre,
+          comuna: payload.comuna,
+          tipo_operacion: payload.tipo_operacion,
+          telefono: payload.telefono,
+        }),
+      ]);
+    });
 
     return NextResponse.json({ ok: true, id: data.id });
   } catch (error) {

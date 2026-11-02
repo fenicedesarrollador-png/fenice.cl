@@ -1,3 +1,4 @@
+import ServiceGuides from "@/components/blog/ServiceGuides";
 import Link from "next/link";
 import {
   ArrowRight, Truck, Shield, Clock,
@@ -9,6 +10,8 @@ import { COMUNAS_DESTACADAS, SITE_CONFIG } from "@/lib/config";
 import { buildMetadata, jsonLd } from "@/lib/seo";
 
 // Intención diferenciada de la home: despacho URGENTE/PROGRAMADO (no compite con la genérica).
+export const revalidate = 60;
+
 export const metadata = buildMetadata({
   title: "Despacho Urgente de Petróleo a Domicilio en Santiago",
   description:
@@ -207,6 +210,7 @@ export default function PetroleoADomicilioPage() {
         </div>
       </section>
 
+      <ServiceGuides categories={["Compras de combustible", "Gestión de abastecimiento"]} />
       <CTASection />
     </>
   );

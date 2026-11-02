@@ -1,3 +1,4 @@
+import ServiceGuides from "@/components/blog/ServiceGuides";
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -7,6 +8,8 @@ import {
   Flame, Building2, CheckCircle2, CalendarCheck, ShieldCheck, ThermometerSun,
   Hospital, Hotel, Factory, ChevronRight,
 } from "lucide-react";
+
+export const revalidate = 60;
 
 export const metadata = buildMetadata({
   title: "Combustible para Calderas | Suministro a Edificios e Industrias",
@@ -238,6 +241,7 @@ export default function CalderasPage() {
         </div>
       </section>
 
+      <ServiceGuides categories={["Calefacción y edificios"]} />
       <CTASection heading="Programe su próximo abastecimiento" mensaje="Hola, quiero cotizar combustible para una caldera." />
     </>
   );

@@ -1,3 +1,4 @@
+import ServiceGuides from "@/components/blog/ServiceGuides";
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -7,6 +8,8 @@ import {
   Zap, Building2, CheckCircle2, CalendarCheck, PhoneCall, ShieldCheck,
   Hospital, Hotel, GraduationCap, Factory, Home, ChevronRight,
 } from "lucide-react";
+
+export const revalidate = 60;
 
 export const metadata = buildMetadata({
   title: "Combustible para Generadores Eléctricos | Diésel a Domicilio",
@@ -239,6 +242,7 @@ export default function GeneradoresPage() {
         </div>
       </section>
 
+      <ServiceGuides categories={["Generadores eléctricos"]} />
       <CTASection heading="Evite interrupciones por falta de combustible" mensaje="Hola, quiero cotizar diésel para un generador eléctrico." />
     </>
   );

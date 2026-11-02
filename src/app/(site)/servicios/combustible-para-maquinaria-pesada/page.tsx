@@ -1,3 +1,4 @@
+import ServiceGuides from "@/components/blog/ServiceGuides";
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -9,6 +10,8 @@ import {
   Truck, CheckCircle2, CalendarCheck, ShieldCheck, Tractor,
   Construction, Mountain, Factory, ChevronRight, Fuel,
 } from "lucide-react";
+
+export const revalidate = 60;
 
 export const metadata = buildMetadata({
   title: "Diésel para Maquinaria Pesada | Combustible en Faena y Terreno",
@@ -260,6 +263,7 @@ export default function MaquinariaPesadaPage() {
         </div>
       </section>
 
+      <ServiceGuides categories={["Faenas y maquinaria"]} />
       <CTASection heading="Mantenga su faena en movimiento" mensaje="Hola, quiero cotizar diésel para maquinaria pesada." />
     </>
   );

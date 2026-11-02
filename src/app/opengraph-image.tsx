@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 // Imagen Open Graph generada 1200x630 con identidad de marca Fenice.
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const alt = "Fenice SPA — Petróleo a domicilio para empresas en la Región Metropolitana";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";

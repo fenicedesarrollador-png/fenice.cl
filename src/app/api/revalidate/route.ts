@@ -8,7 +8,11 @@ export async function POST(request: NextRequest) {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const path = request.nextUrl.searchParams.get("path") || "/";
-  revalidatePath(path);
+  if (!path.startsWith("/") || path.startsWith("//") || path.length > 1024) {
+    return NextResponse.json({ error: "Ruta no válida." }, { status: 400 });
+  }
+  if (path === "/blog/[slug]") revalidatePath(path, "page");
+  else revalidatePath(path);
   revalidatePath("/sitemap.xml");
   return NextResponse.json({ revalidated: true, path });
 }

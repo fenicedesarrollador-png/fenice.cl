@@ -178,7 +178,7 @@ create policy "lectura_publica_clientes" on clientes
   for select using (activo = true);
 
 create policy "lectura_publica_blog" on blog_posts
-  for select using (publicado = true);
+  for select to anon using (publicado = true and (fecha_publicacion is null or fecha_publicacion <= now()));
 
 create policy "lectura_publica_eventos" on eventos
   for select using (activo = true);

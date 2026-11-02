@@ -37,6 +37,7 @@ export async function sendEmail({ to, subject, html, replyTo, attachments }: Ema
   try {
     const response = await fetch(RESEND_ENDPOINT, {
       method: "POST",
+      signal: AbortSignal.timeout(6000),
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",

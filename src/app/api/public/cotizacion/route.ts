@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { linkAnalyticsIdentity } from "@/lib/analytics/server";
 import { sendEmail, type EmailAttachment } from "@/lib/email/resend";
@@ -115,68 +115,71 @@ export async function POST(request: Request) {
 
     await linkAnalyticsIdentity(serviceClient, request, { cotizacionId: data.id });
 
-    // PDF corporativo de la solicitud, adjunto en la notificación interna.
-    // Si el PDF falla por cualquier motivo, el correo se envía igual (sin adjunto).
-    const folio = data.id.slice(0, 8).toUpperCase();
-    let adjuntos: EmailAttachment[] | undefined;
-    let pdfBytes: Uint8Array | undefined;
-    try {
-      pdfBytes = await buildCotizacionPdf({
-        ...payload,
-        id: data.id,
-        created_at: data.created_at ?? new Date().toISOString(),
-      });
-      adjuntos = [
-        {
-          filename: `Cotizacion-${folio}-${payload.empresa.replace(/[^\p{L}\p{N}]+/gu, "-").slice(0, 40)}.pdf`,
-          content: Buffer.from(pdfBytes).toString("base64"),
-          contentType: "application/pdf",
-        },
-      ];
-    } catch (pdfError) {
-      console.error("[cotizacion] No se pudo generar el PDF adjunto:", pdfError);
-    }
+    const savedQuote = data;
+    after(async () => {
+      // PDF corporativo de la solicitud, adjunto en la notificación interna.
+      // Si el PDF falla por cualquier motivo, el correo se envía igual (sin adjunto).
+      const folio = savedQuote.id.slice(0, 8).toUpperCase();
+      let adjuntos: EmailAttachment[] | undefined;
+      let pdfBytes: Uint8Array | undefined;
+      try {
+        pdfBytes = await buildCotizacionPdf({
+          ...payload,
+          id: savedQuote.id,
+          created_at: savedQuote.created_at ?? new Date().toISOString(),
+        });
+        adjuntos = [
+          {
+            filename: `Cotizacion-${folio}-${payload.empresa.replace(/[^\p{L}\p{N}]+/gu, "-").slice(0, 40)}.pdf`,
+            content: Buffer.from(pdfBytes).toString("base64"),
+            contentType: "application/pdf",
+          },
+        ];
+      } catch (pdfError) {
+        console.error("[cotizacion] No se pudo generar el PDF adjunto:", pdfError);
+      }
 
-    // Notificaciones por correo (Resend). Nunca bloquean la respuesta:
-    // la cotización ya quedó registrada en el panel administrativo.
-    const emailData = { ...payload, id: data.id };
-    await Promise.allSettled([
-      sendEmail({
-        to: [...NOTIFY_EMAILS],
-        subject: `Nueva cotización — ${payload.empresa} (${payload.servicio_solicitado})`,
-        html: cotizacionInternaEmail(emailData),
-        replyTo: payload.email,
-        attachments: adjuntos,
-      }),
-      sendEmail({
-        to: [payload.email],
-        subject: "Recibimos tu solicitud de cotización — Fenice SPA",
-        html: cotizacionClienteEmail(emailData),
-      }),
-      // Notificación en tiempo real al panel: Web Push (badge incluido) +
-      // WhatsApp con la plantilla de cotización y el MISMO PDF adjunto.
-      notifyNuevaCotizacion(
-        serviceClient,
-        {
-          id: data.id,
-          nombre: payload.nombre,
-          empresa: payload.empresa,
-          servicio_solicitado: payload.servicio_solicitado,
-          comuna: payload.comuna,
-          telefono: payload.telefono,
-          email: payload.email,
-          rut_empresa: payload.rut_empresa,
-          direccion_entrega: payload.direccion_entrega,
-          tipo_combustible: payload.tipo_combustible,
-          volumen_estimado: payload.volumen_estimado,
-          frecuencia: payload.frecuencia,
-          fecha_estimada: payload.fecha_estimada,
-          tipo_instalacion: payload.tipo_instalacion,
-          mensaje: payload.mensaje,
-        },
-        pdfBytes,
-      ),
-    ]);
+      // Notificaciones por correo (Resend). Nunca bloquean la respuesta:
+      // la cotización ya quedó registrada en el panel administrativo.
+      const emailData = { ...payload, id: savedQuote.id };
+      await Promise.allSettled([
+        sendEmail({
+          to: [...NOTIFY_EMAILS],
+          subject: `Nueva cotización — ${payload.empresa} (${payload.servicio_solicitado})`,
+          html: cotizacionInternaEmail(emailData),
+          replyTo: payload.email,
+          attachments: adjuntos,
+        }),
+        sendEmail({
+          to: [payload.email],
+          subject: "Recibimos tu solicitud de cotización — Fenice SPA",
+          html: cotizacionClienteEmail(emailData),
+        }),
+        // Notificación en tiempo real al panel: Web Push (badge incluido) +
+        // WhatsApp con la plantilla de cotización y el MISMO PDF adjunto.
+        notifyNuevaCotizacion(
+          serviceClient,
+          {
+            id: savedQuote.id,
+            nombre: payload.nombre,
+            empresa: payload.empresa,
+            servicio_solicitado: payload.servicio_solicitado,
+            comuna: payload.comuna,
+            telefono: payload.telefono,
+            email: payload.email,
+            rut_empresa: payload.rut_empresa,
+            direccion_entrega: payload.direccion_entrega,
+            tipo_combustible: payload.tipo_combustible,
+            volumen_estimado: payload.volumen_estimado,
+            frecuencia: payload.frecuencia,
+            fecha_estimada: payload.fecha_estimada,
+            tipo_instalacion: payload.tipo_instalacion,
+            mensaje: payload.mensaje,
+          },
+          pdfBytes,
+        ),
+      ]);
+    });
 
     return NextResponse.json({ ok: true, id: data.id });
   } catch (error) {
