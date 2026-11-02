@@ -38,7 +38,7 @@ export const revalidate = 60;
 export const metadata = buildMetadata({
   title: "Empresa de Diésel y Kerosene en Santiago",
   description:
-    "Conoce al equipo de Fenice: distribución de diésel y kerosene, transporte documentado e instalación de estanques para empresas y faenas en la RM.",
+    "Conoce Fenice: distribución de diésel y kerosene, transporte documentado e instalación de estanques para empresas y faenas en la RM.",
   path: "/nosotros",
   keywords: [
     "distribuidor de combustible santiago",
@@ -191,8 +191,7 @@ const principles: IconCard[] = [
   },
 ];
 
-/* El equipo se administra desde /admin/equipo (tabla `equipo` en Supabase).
-   Las fotos se cargan por URL. Fallback estático en EQUIPO_FALLBACK (config). */
+/* El equipo se administra desde /admin/equipo (tabla `equipo` en Supabase). */
 
 const processSteps = [
   {
@@ -328,7 +327,9 @@ export default async function NosotrosPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(aboutPageSchema())} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(teamSchema(equipo))} />
+      {equipo.length > 0 && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(teamSchema(equipo))} />
+      )}
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#0a1628] text-white" data-analytics-section="nosotros_hero">
@@ -382,7 +383,7 @@ export default async function NosotrosPage() {
         className="sticky top-16 z-30 border-b border-slate-100 bg-white/90 backdrop-blur lg:top-[70px]"
       >
         <div className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-3 py-2 sm:px-6 lg:px-8 scrollbar-none">
-          {sectionNav.map((s) => (
+          {sectionNav.filter((s) => s.href !== "#equipo" || equipo.length > 0).map((s) => (
             <a
               key={s.href}
               href={s.href}
@@ -650,36 +651,38 @@ export default async function NosotrosPage() {
       </section>
 
       {/* ── EQUIPO ────────────────────────────────────────────────────────── */}
-      <section id="equipo" className="scroll-mt-32 border-y border-slate-100 bg-slate-50 py-16 sm:py-20" data-analytics-section="equipo">
-        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-          <div className="mx-auto mb-12 max-w-3xl text-center" data-reveal>
-            <div className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#1a6b3c]">
-              Equipo Fenice
+      {equipo.length > 0 && (
+        <section id="equipo" className="scroll-mt-32 border-y border-slate-100 bg-slate-50 py-16 sm:py-20" data-analytics-section="equipo">
+          <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+            <div className="mx-auto mb-12 max-w-3xl text-center" data-reveal>
+              <div className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#1a6b3c]">
+                Equipo Fenice
+              </div>
+              <h2 className="text-3xl font-extrabold text-[#0a1628] sm:text-4xl">
+                Las personas detrás de Fenice
+              </h2>
+              <p className="mt-5 text-base leading-relaxed text-slate-600">
+                Un equipo directivo con experiencia en distribución de combustible, gestión
+                comercial y administración, comprometido con la continuidad operacional de
+                cada cliente: desde el primer contacto hasta la carga periódica de su estanque.
+              </p>
             </div>
-            <h2 className="text-3xl font-extrabold text-[#0a1628] sm:text-4xl">
-              Las personas detrás de Fenice
-            </h2>
-            <p className="mt-5 text-base leading-relaxed text-slate-600">
-              Un equipo directivo con experiencia en distribución de combustible, gestión
-              comercial y administración, comprometido con la continuidad operacional de
-              cada cliente: desde el primer contacto hasta la carga periódica de su estanque.
-            </p>
-          </div>
-          {featuredMember && <TeamCard member={featuredMember} featured />}
-          <div className="mx-auto mt-8 grid max-w-5xl gap-8 lg:grid-cols-2">
-            {secondaryMembers.map((member, i) => (
-              <TeamCard key={member.id} member={member} revealDelay={i * 120} />
-            ))}
-          </div>
-          {additionalMembers.length > 0 && (
-            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {additionalMembers.map((member, i) => (
-                <TeamCard key={member.id} member={member} revealDelay={i * 100} />
+            {featuredMember && <TeamCard member={featuredMember} featured />}
+            <div className="mx-auto mt-8 grid max-w-5xl gap-8 lg:grid-cols-2">
+              {secondaryMembers.map((member, i) => (
+                <TeamCard key={member.id} member={member} revealDelay={i * 120} />
               ))}
             </div>
-          )}
-        </div>
-      </section>
+            {additionalMembers.length > 0 && (
+              <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {additionalMembers.map((member, i) => (
+                  <TeamCard key={member.id} member={member} revealDelay={i * 100} />
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* ── CERTIFICACIONES ───────────────────────────────────────────────── */}
       <div id="certificaciones" className="scroll-mt-32">

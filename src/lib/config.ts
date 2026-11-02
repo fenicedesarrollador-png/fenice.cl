@@ -86,37 +86,6 @@ export const NOTIFY_EMAILS = [
   "erika.pierattini@fenice.cl",
 ] as const;
 
-// Equipo — fallback si la tabla `equipo` está vacía. Editable desde /admin/equipo.
-export const EQUIPO_FALLBACK = [
-  {
-    id: "ruben-pierattini",
-    nombre: "Rubén Pierattini",
-    cargo: "CEO",
-    email: "ruben.pierattini@fenice.cl",
-    foto_url: "",
-    bio: "Lidera la dirección estratégica y comercial de Fenice SPA, asegurando que cada operación de abastecimiento de combustible cumpla los más altos estándares de servicio, seguridad y confiabilidad.",
-    orden: 1,
-  },
-  {
-    id: "cecilia-moya",
-    nombre: "Cecilia Moya",
-    cargo: "Ejecutiva de Negocios",
-    email: "cecilia.moya@fenice.cl",
-    foto_url: "",
-    bio: "Gestiona la relación comercial con empresas, faenas y flotas: cotizaciones, contratos de suministro y acompañamiento permanente a cada cliente para asegurar continuidad operacional.",
-    orden: 2,
-  },
-  {
-    id: "erika-pierattini",
-    nombre: "Erika Pierattini",
-    cargo: "Gerente de Administración y Finanzas",
-    email: "erika.pierattini@fenice.cl",
-    foto_url: "",
-    bio: "Responsable de la gestión administrativa y financiera: facturación electrónica, respaldo documental y procesos claros que dan confianza y trazabilidad a cada despacho.",
-    orden: 3,
-  },
-] as const;
-
 // Certificaciones y cumplimiento normativo
 export const CERTIFICACIONES = [
   {

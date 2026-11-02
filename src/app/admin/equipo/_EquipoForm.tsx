@@ -51,7 +51,7 @@ export default function EquipoForm({ miembro }: { miembro?: Miembro }) {
       <FormSection title="Datos del miembro">
         <div className="grid sm:grid-cols-2 gap-4">
           <Field label="Nombre completo" required>
-            <input name="nombre" type="text" required defaultValue={miembro?.nombre} className="admin-input" placeholder="Ej: Rubén Pierattini" />
+            <input name="nombre" type="text" required defaultValue={miembro?.nombre} className="admin-input" placeholder="Nombre y apellido" />
           </Field>
           <Field label="Cargo" required>
             <input name="cargo" type="text" required defaultValue={miembro?.cargo} className="admin-input" placeholder="Ej: CEO" />

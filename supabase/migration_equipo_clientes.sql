@@ -47,33 +47,6 @@ create trigger set_equipo_updated_at
   before update on equipo
   for each row execute function update_updated_at_column();
 
--- Miembros iniciales (solo si la tabla está vacía)
-insert into equipo (nombre, cargo, email, bio, orden, activo)
-select * from (values
-  (
-    'Rubén Pierattini',
-    'CEO',
-    'ruben.pierattini@fenice.cl',
-    'Lidera la dirección estratégica y comercial de Fenice SPA, asegurando que cada operación de abastecimiento de combustible cumpla los más altos estándares de servicio, seguridad y confiabilidad.',
-    1, true
-  ),
-  (
-    'Cecilia Moya',
-    'Ejecutiva de Negocios',
-    'cecilia.moya@fenice.cl',
-    'Gestiona la relación comercial con empresas, faenas y flotas: cotizaciones, contratos de suministro y acompañamiento permanente a cada cliente para asegurar continuidad operacional.',
-    2, true
-  ),
-  (
-    'Erika Pierattini',
-    'Gerente de Administración y Finanzas',
-    'erika.pierattini@fenice.cl',
-    'Responsable de la gestión administrativa y financiera: facturación electrónica, respaldo documental y procesos claros que dan confianza y trazabilidad a cada despacho.',
-    3, true
-  )
-) as v(nombre, cargo, email, bio, orden, activo)
-where not exists (select 1 from equipo);
-
 -- ============================================================
 -- 3) CLIENTES — campos para la sección de autoridad
 --    (sector + descripción de trabajos realizados)

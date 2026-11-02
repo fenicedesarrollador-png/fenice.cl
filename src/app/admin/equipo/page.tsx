@@ -53,7 +53,7 @@ export default async function AdminEquipoPage() {
         <EmptyState
           icon={Users}
           title="Aún no hay miembros del equipo"
-          description="Ejecuta la migración migration_equipo_clientes.sql en Supabase o agrega el primer miembro."
+          description="Agrega miembros del equipo para mostrarlos en la sección Nosotros."
           action={{ href: "/admin/equipo/nuevo", label: "Agregar miembro" }}
         />
       ) : (

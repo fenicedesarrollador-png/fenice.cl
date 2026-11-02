@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/public";
 import { hasUsableSupabasePublicConfig } from "@/lib/supabase/config";
 import { fetchWithTimeout } from "@/lib/getSiteConfig";
-import { EQUIPO_FALLBACK } from "@/lib/config";
 import {
   PUBLIC_COLLABORATOR_COLUMNS,
   type PublicCollaborator,
@@ -30,7 +29,7 @@ export type ClienteEmpresa = {
   orden: number;
 };
 
-/** Equipo visible en /nosotros — tabla `equipo`, con fallback estático. */
+/** Solo publica miembros activos de la tabla administrada desde /admin/equipo. */
 export async function getEquipo(): Promise<MiembroEquipo[]> {
   if (hasUsableSupabasePublicConfig()) {
     try {
@@ -43,10 +42,10 @@ export async function getEquipo(): Promise<MiembroEquipo[]> {
           .order("orden"),
         2500,
       );
-      if (result?.data && result.data.length > 0) return result.data as MiembroEquipo[];
+      if (result?.data && !result.error) return result.data as MiembroEquipo[];
     } catch {}
   }
-  return EQUIPO_FALLBACK.map((m) => ({ ...m, linkedin_url: null }));
+  return [];
 }
 
 /** Empresas cliente (sección de autoridad) — tabla `clientes`. */
