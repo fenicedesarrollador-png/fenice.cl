@@ -21,6 +21,7 @@ const staticRoutes: MetadataRoute.Sitemap = [
   { url: `${BASE_URL}/cobertura`, changeFrequency: "monthly", priority: 0.85 },
   { url: `${BASE_URL}/preguntas-frecuentes`, changeFrequency: "monthly", priority: 0.8 },
   { url: `${BASE_URL}/blog`, changeFrequency: "weekly", priority: 0.8 },
+  { url: `${BASE_URL}/herramientas/calculadora-consumo-generador`, changeFrequency: "monthly", priority: 0.8 },
   { url: `${BASE_URL}/nosotros`, changeFrequency: "monthly", priority: 0.7 },
   { url: `${BASE_URL}/clientes`, changeFrequency: "monthly", priority: 0.75 },
   { url: `${BASE_URL}/politica-de-privacidad`, changeFrequency: "yearly", priority: 0.2 },

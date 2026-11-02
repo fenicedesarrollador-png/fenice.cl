@@ -143,11 +143,11 @@ export const COMUNAS_COBERTURA: Comuna[] = [
   },
   {
     nombre: "La Granja", slug: "la-granja", region: RM, provincia: "Provincia de Santiago",
-    sector: "sur", perfil: "base operativa de Fenice SPA",
+    sector: "sur", perfil: "pymes, talleres e industria ligera",
     contexto:
-      "La Granja es la base operativa de Fenice SPA, desde donde coordinamos el despacho de petróleo a domicilio hacia toda la Región Metropolitana. Al estar en la comuna, ofrecemos a las empresas locales tiempos de respuesta especialmente ágiles para pedidos programados o urgentes.",
+      "Desde nuestra base en San Ramón coordinamos el despacho de petróleo diésel a empresas, talleres y edificios de La Granja. La ruta, el volumen y el acceso se revisan antes de confirmar cada entrega, tanto para pedidos puntuales como para abastecimientos programados.",
     beneficios: [
-      "Tiempos de despacho mínimos por cercanía a nuestra base",
+      "Coordinación de rutas y accesos para entregas en La Granja",
       "Pymes, talleres e industria ligera del sector sur",
       "Empresas de transporte y logística local",
       "Constructoras y condominios con generadores de respaldo",

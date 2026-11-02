@@ -1,3 +1,4 @@
+import ServiceInquiry from "@/components/ServiceInquiry";
 import ServiceGuides from "@/components/blog/ServiceGuides";
 import Link from "next/link";
 import {
@@ -120,7 +121,7 @@ const FAQ_B2B = [
   },
   {
     q: "¿Cuál es el volumen mínimo de despacho para empresas?",
-    a: "El volumen mínimo para empresas es de 200 litros por despacho. Para contratos de suministro regular, definimos el volumen según las necesidades de tu operación.",
+    a: "La compra mínima general informada es de 50 litros. Para empresas y contratos de suministro regular, confirmamos el volumen y las condiciones según comuna, acceso y necesidades de la operación.",
   },
 ];
 
@@ -160,7 +161,7 @@ export default function EmpresasFaenasFlotasPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
-                href="/cotizacion"
+                href="/cotizacion?servicio=contrato"
                 className="inline-flex items-center justify-center gap-2 bg-[#f5a623] hover:bg-[#d4891a] text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg shadow-[#f5a623]/20 text-sm"
               >
                 Cotizar abastecimiento <ArrowRight className="w-4 h-4" />
@@ -178,6 +179,8 @@ export default function EmpresasFaenasFlotasPage() {
           </div>
         </div>
       </section>
+
+      <ServiceInquiry service="contrato" heading="Planifica el suministro de combustible de tu empresa" />
 
       {/* Sectores */}
       <section className="py-20 bg-white">
@@ -287,7 +290,7 @@ export default function EmpresasFaenasFlotasPage() {
             </div>
             <div className="flex justify-center sm:justify-end">
               <Link
-                href="/cotizacion"
+                href="/cotizacion?servicio=contrato"
                 className="inline-flex items-center gap-2 bg-[#f5a623] hover:bg-[#d4891a] text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-md text-sm"
               >
                 Solicitar cotización <ArrowRight className="w-4 h-4" />
@@ -298,7 +301,7 @@ export default function EmpresasFaenasFlotasPage() {
       </section>
 
       <ServiceGuides categories={["Faenas y maquinaria", "Flotas y transporte", "Gestión de abastecimiento"]} />
-      <CTASection />
+      <CTASection service="contrato" />
     </>
   );
 }

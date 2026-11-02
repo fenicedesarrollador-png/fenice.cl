@@ -5,6 +5,7 @@ import Link from "next/link";
 import { CheckCircle2, AlertCircle, ArrowRight, Loader2, Mail, Home } from "lucide-react";
 import { useAnalytics } from "@/components/analytics/AnalyticsProvider";
 import { COMUNAS, whatsappUrl } from "@/lib/config";
+import { QUOTE_SERVICE_OPTIONS, type QuoteDefaults } from "@/lib/supplyPlanning";
 import {
   formatPhoneInput,
   formatRutInput,
@@ -13,19 +14,7 @@ import {
   normalizeRutForStorage,
 } from "@/lib/contactFormat";
 
-const SERVICIOS_OPS = [
-  "Petróleo diésel a domicilio (empresa)",
-  "Kerosene a domicilio",
-  "Combustible para maquinaria pesada / faena",
-  "Combustible para generador eléctrico",
-  "Combustible para caldera",
-  "Abastecimiento para flota",
-  "Instalación o mantención de estanque",
-  "Contrato de suministro periódico",
-  "Otro",
-];
-
-const COMBUSTIBLES = ["Petróleo diésel", "Kerosene", "No estoy seguro"];
+const COMBUSTIBLES = ["Petróleo diésel", "Parafina (kerosene)", "No estoy seguro"];
 
 const VOLUMENES = [
   "50 – 500 litros (compra mínima: 50 L)",
@@ -44,7 +33,7 @@ const FRECUENCIAS = [
   "Trimestral o según necesidad",
 ];
 
-export default function CotizacionForm() {
+export default function CotizacionForm({ defaults }: { defaults: QuoteDefaults }) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -209,28 +198,31 @@ export default function CotizacionForm() {
         </h3>
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Nombre completo <span className="text-red-500">*</span></label>
+            <label htmlFor="quote-nombre" className="block text-xs font-semibold text-slate-600 mb-1.5">Nombre completo <span className="text-red-500">*</span></label>
             <input
+              id="quote-nombre"
               name="nombre"
               type="text"
               required
               placeholder="Juan Pérez"
-              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors"
+              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-base sm:text-sm outline-none transition-colors"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Empresa u organización <span className="text-red-500">*</span></label>
+            <label htmlFor="quote-empresa" className="block text-xs font-semibold text-slate-600 mb-1.5">Empresa u organización <span className="text-red-500">*</span></label>
             <input
+              id="quote-empresa"
               name="empresa"
               type="text"
               required
               placeholder="Constructora XYZ Ltda."
-              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors"
+              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-base sm:text-sm outline-none transition-colors"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">RUT empresa (opcional)</label>
+            <label htmlFor="quote-rut_empresa" className="block text-xs font-semibold text-slate-600 mb-1.5">RUT empresa (opcional)</label>
             <input
+              id="quote-rut_empresa"
               name="rut_empresa"
               type="text"
               value={rutEmpresa}
@@ -238,12 +230,13 @@ export default function CotizacionForm() {
               placeholder="76.XXX.XXX-X"
               autoComplete="off"
               maxLength={12}
-              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors"
+              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-base sm:text-sm outline-none transition-colors"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Teléfono <span className="text-red-500">*</span></label>
+            <label htmlFor="quote-telefono" className="block text-xs font-semibold text-slate-600 mb-1.5">Teléfono <span className="text-red-500">*</span></label>
             <input
+              id="quote-telefono"
               name="telefono"
               type="tel"
               required
@@ -255,39 +248,42 @@ export default function CotizacionForm() {
               autoComplete="tel"
               inputMode="numeric"
               maxLength={15}
-              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors"
+              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-base sm:text-sm outline-none transition-colors"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Correo electrónico <span className="text-red-500">*</span></label>
+            <label htmlFor="quote-email" className="block text-xs font-semibold text-slate-600 mb-1.5">Correo electrónico <span className="text-red-500">*</span></label>
             <input
+              id="quote-email"
               name="email"
               type="email"
               required
               placeholder="contacto@empresa.cl"
-              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors"
+              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-base sm:text-sm outline-none transition-colors"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Comuna / Zona de entrega</label>
+            <label htmlFor="quote-comuna" className="block text-xs font-semibold text-slate-600 mb-1.5">Comuna / Zona de entrega</label>
             <input
+              id="quote-comuna"
               name="comuna"
               type="text"
               list="comunas-cobertura"
               placeholder="Maipú, Pudahuel, Quilicura…"
-              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors"
+              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-base sm:text-sm outline-none transition-colors"
             />
             <datalist id="comunas-cobertura">
               {COMUNAS.map((c) => <option key={c.slug} value={c.nombre} />)}
             </datalist>
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Dirección exacta del despacho</label>
+            <label htmlFor="quote-direccion_entrega" className="block text-xs font-semibold text-slate-600 mb-1.5">Dirección exacta del despacho</label>
             <input
+              id="quote-direccion_entrega"
               name="direccion_entrega"
               type="text"
               placeholder="Calle, número, referencia de acceso…"
-              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors"
+              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-base sm:text-sm outline-none transition-colors"
             />
           </div>
         </div>
@@ -300,9 +296,9 @@ export default function CotizacionForm() {
           Tipo de servicio requerido <span className="text-red-500">*</span>
         </h3>
         <div className="grid sm:grid-cols-2 gap-2">
-          {SERVICIOS_OPS.map((s) => (
+          {QUOTE_SERVICE_OPTIONS.map((s) => (
             <label key={s} className="flex items-center gap-3 border border-slate-200 hover:border-[#1a6b3c]/40 rounded-xl px-4 py-3 cursor-pointer transition-colors group has-[:checked]:border-[#1a6b3c] has-[:checked]:bg-[#f0faf4]">
-              <input type="radio" name="servicio_solicitado" value={s} required className="accent-[#1a6b3c]" />
+              <input type="radio" name="servicio_solicitado" value={s} defaultChecked={s === defaults.service} required className="accent-[#1a6b3c]" />
               <span className="text-sm text-slate-700 font-medium">{s}</span>
             </label>
           ))}
@@ -317,50 +313,57 @@ export default function CotizacionForm() {
         </h3>
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Tipo de combustible</label>
+            <label htmlFor="quote-tipo_combustible" className="block text-xs font-semibold text-slate-600 mb-1.5">Tipo de combustible</label>
             <select
+              id="quote-tipo_combustible"
               name="tipo_combustible"
-              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors bg-white"
+              defaultValue={defaults.fuel}
+              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-base sm:text-sm outline-none transition-colors bg-white"
             >
               <option value="">Seleccionar…</option>
               {COMBUSTIBLES.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Volumen estimado por despacho</label>
+            <label htmlFor="quote-volumen_estimado" className="block text-xs font-semibold text-slate-600 mb-1.5">Volumen estimado por despacho</label>
             <select
+              id="quote-volumen_estimado"
               name="volumen_estimado"
-              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors bg-white"
+              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-base sm:text-sm outline-none transition-colors bg-white"
             >
               <option value="">Seleccionar…</option>
               {VOLUMENES.map((v) => <option key={v} value={v}>{v}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Frecuencia de despacho</label>
+            <label htmlFor="quote-frecuencia" className="block text-xs font-semibold text-slate-600 mb-1.5">Frecuencia de despacho</label>
             <select
+              id="quote-frecuencia"
               name="frecuencia"
-              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors bg-white"
+              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-base sm:text-sm outline-none transition-colors bg-white"
             >
               <option value="">Seleccionar…</option>
               {FRECUENCIAS.map((f) => <option key={f} value={f}>{f}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Fecha estimada de entrega</label>
+            <label htmlFor="quote-fecha_estimada" className="block text-xs font-semibold text-slate-600 mb-1.5">Fecha estimada de entrega</label>
             <input
+              id="quote-fecha_estimada"
               name="fecha_estimada"
               type="date"
-              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors bg-white"
+              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-base sm:text-sm outline-none transition-colors bg-white"
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Instalación, equipo o maquinaria a abastecer</label>
+            <label htmlFor="quote-tipo_instalacion" className="block text-xs font-semibold text-slate-600 mb-1.5">Instalación, equipo o maquinaria a abastecer</label>
             <input
+              id="quote-tipo_instalacion"
               name="tipo_instalacion"
+              defaultValue={defaults.installation}
               type="text"
               placeholder="Generador eléctrico, caldera, excavadora, estanque, flota…"
-              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors"
+              className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-base sm:text-sm outline-none transition-colors"
             />
           </div>
         </div>
@@ -368,12 +371,14 @@ export default function CotizacionForm() {
 
       {/* Mensaje */}
       <div>
-        <label className="block text-xs font-semibold text-slate-600 mb-1.5">Información adicional o detalles de la operación</label>
-        <textarea
-          name="mensaje"
+        <label htmlFor="quote-mensaje" className="block text-xs font-semibold text-slate-600 mb-1.5">Información adicional o detalles de la operación</label>
+            <textarea
+              id="quote-mensaje"
+              name="mensaje"
+          defaultValue={defaults.message}
           rows={4}
           placeholder="Describe brevemente tu operación, necesidades específicas, dirección de entrega, tipo de maquinaria, etc."
-          className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-sm outline-none transition-colors resize-none"
+          className="w-full border border-slate-200 focus:border-[#1a6b3c] rounded-xl px-4 py-3 text-base sm:text-sm outline-none transition-colors resize-none"
         />
       </div>
 
@@ -395,7 +400,7 @@ export default function CotizacionForm() {
 
       <p className="text-xs text-slate-400">
         Al enviar este formulario aceptas que Fenice SPA procese tu información para responder a tu solicitud.
-        Consultamos en el horario Lun-Vie 09:00–19:00.
+        Atención de lunes a viernes, de 09:00 a 19:00. <Link href="/politica-de-privacidad" className="underline">Política de privacidad</Link>.
       </p>
     </form>
   );

@@ -137,6 +137,7 @@ export default function Footer({ config }: { config: SiteConfig }) {
                 { href: "/empresas-faenas-flotas", label: "Empresas / Faenas / Flotas" },
                 { href: "/cobertura", label: "Cobertura" },
                 { href: "/blog", label: "Blog técnico" },
+                { href: "/herramientas/calculadora-consumo-generador", label: "Calculadora de consumo de generadores" },
                 { href: "/preguntas-frecuentes", label: "Preguntas frecuentes" },
                 { href: "/contacto", label: "Contacto" },
                 { href: "/cotizacion", label: "Solicitar cotización" },

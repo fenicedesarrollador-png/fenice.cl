@@ -1,17 +1,20 @@
 import { Phone, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { getSiteConfig } from "@/lib/getSiteConfig";
+import type { QuoteService } from "@/lib/supplyPlanning";
 
 interface Props {
   heading?: string;
   subheading?: string;
   mensaje?: string;
+  service?: QuoteService;
 }
 
 export default async function CTASection({
   heading = "¿Necesitas petróleo a domicilio para tu empresa?",
   subheading = "Confirmamos precio y disponibilidad en horario Lun-Vie 09:00–19:00. Cobertura RM, Valparaíso y Rancagua.",
   mensaje = "Hola, quiero cotizar petróleo a domicilio para mi empresa.",
+  service,
 }: Props) {
   const config = await getSiteConfig();
 
@@ -43,7 +46,7 @@ export default async function CTASection({
                 WhatsApp
               </a>
               <Link
-                href="/cotizacion"
+                href={service ? `/cotizacion?servicio=${service}` : "/cotizacion"}
                 data-analytics-id="cta_formulario"
                 data-analytics-label="Cotizar"
                 data-analytics-cta="quote"

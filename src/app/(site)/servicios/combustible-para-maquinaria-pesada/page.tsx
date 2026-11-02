@@ -1,3 +1,4 @@
+import ServiceInquiry from "@/components/ServiceInquiry";
 import ServiceGuides from "@/components/blog/ServiceGuides";
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -86,7 +87,7 @@ export default function MaquinariaPesadaPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb crumbs={[
             { name: "Inicio", href: "/" },
-            { name: "Servicios", href: "/servicios/petroleo-a-domicilio-santiago" },
+            { name: "Servicios", href: "/petroleo-a-domicilio" },
             { name: "Combustible para Maquinaria Pesada" },
           ]} />
         </div>
@@ -115,6 +116,8 @@ export default function MaquinariaPesadaPage() {
           />
         </div>
       </section>
+
+      <ServiceInquiry service="maquinaria" heading="Cotiza el abastecimiento de tu maquinaria" />
 
       {/* Content */}
       <section className="py-16 bg-white">
@@ -252,7 +255,7 @@ export default function MaquinariaPesadaPage() {
                   className="w-full justify-center"
                 />
                 <Link
-                  href="/cotizacion"
+                  href="/cotizacion?servicio=maquinaria"
                   className="mt-3 block text-center text-sm text-slate-600 hover:text-orange-600 font-medium transition-colors"
                 >
                   O solicite una cotización →
@@ -264,7 +267,7 @@ export default function MaquinariaPesadaPage() {
       </section>
 
       <ServiceGuides categories={["Faenas y maquinaria"]} />
-      <CTASection heading="Mantenga su faena en movimiento" mensaje="Hola, quiero cotizar diésel para maquinaria pesada." />
+      <CTASection service="maquinaria" heading="Mantenga su faena en movimiento" mensaje="Hola, quiero cotizar diésel para maquinaria pesada." />
     </>
   );
 }

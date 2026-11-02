@@ -1,3 +1,4 @@
+import ServiceInquiry from "@/components/ServiceInquiry";
 import ServiceGuides from "@/components/blog/ServiceGuides";
 import Link from "next/link";
 import {
@@ -132,7 +133,7 @@ export default function VentaPetroleoPage() {
                 en cada entrega.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 mb-8">
-                <Link href="/cotizacion" className="inline-flex items-center justify-center gap-2 bg-[#f5a623] hover:bg-[#d4891a] text-white font-bold px-8 py-4 rounded-xl text-sm transition-all shadow-lg shadow-[#f5a623]/20">
+                <Link href="/cotizacion?servicio=diesel" className="inline-flex items-center justify-center gap-2 bg-[#f5a623] hover:bg-[#d4891a] text-white font-bold px-8 py-4 rounded-xl text-sm transition-all shadow-lg shadow-[#f5a623]/20">
                   Cotizar diesel <ArrowRight className="w-4 h-4" />
                 </Link>
                 <a href={WA_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#1a6b3c] hover:bg-[#145530] text-white font-semibold px-8 py-4 rounded-xl text-sm transition-all border border-[#1a6b3c]/50">
@@ -172,6 +173,8 @@ export default function VentaPetroleoPage() {
           </div>
         </div>
       </section>
+
+      <ServiceInquiry service="diesel" heading="Solicita precio para tu compra de diésel" />
 
       {/* Ventajas */}
       <section className="py-20 bg-white">
@@ -301,7 +304,7 @@ export default function VentaPetroleoPage() {
       </section>
 
       <ServiceGuides categories={["Compras de combustible"]} />
-      <CTASection />
+      <CTASection service="diesel" />
     </>
   );
 }

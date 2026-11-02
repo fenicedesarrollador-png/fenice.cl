@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/public";
 import { hasUsableSupabasePublicConfig } from "@/lib/supabase/config";
 import { SITE_CONFIG } from "@/lib/config";
 import { getSiteConfig, fetchWithTimeout } from "@/lib/getSiteConfig";
+import { formatBusinessDateTime } from "@/lib/dates";
 import { Fuel, Flame, Home, ArrowRight, Clock, CheckCircle2, AlertCircle, Tag } from "lucide-react";
 
 type FuelPrice = {
@@ -43,14 +44,7 @@ function formatPrice(price: number): string {
 }
 
 function formatUpdatedAt(iso: string): string {
-  const d = new Date(iso);
-  const now = new Date();
-  const isToday =
-    d.getDate() === now.getDate() &&
-    d.getMonth() === now.getMonth() &&
-    d.getFullYear() === now.getFullYear();
-  const time = d.toLocaleTimeString("es-CL", { hour: "2-digit", minute: "2-digit" });
-  return isToday ? `Actualizado hoy, ${time}` : `Actualizado ${d.toLocaleDateString("es-CL", { day: "numeric", month: "short" })}, ${time}`;
+  return `Actualizado ${formatBusinessDateTime(iso)}`;
 }
 
 /** Precio con descuento aplicado, o null si el descuento no reduce el precio. */

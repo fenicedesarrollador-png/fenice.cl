@@ -1,3 +1,4 @@
+import ServiceInquiry from "@/components/ServiceInquiry";
 import CTASection from "@/components/CTASection";
 import Breadcrumb from "@/components/Breadcrumb";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -44,7 +45,7 @@ export default function InstalacionEstanquesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb crumbs={[
             { name: "Inicio", href: "/" },
-            { name: "Servicios", href: "/servicios/petroleo-a-domicilio-santiago" },
+            { name: "Servicios", href: "/petroleo-a-domicilio" },
             { name: "Instalación de Estanques" },
           ]} />
         </div>
@@ -72,6 +73,8 @@ export default function InstalacionEstanquesPage() {
           />
         </div>
       </section>
+
+      <ServiceInquiry service="estanque" heading="Consulta la instalación o mantención de tu estanque" />
 
       {/* Content */}
       <section className="py-16 bg-white">
@@ -187,7 +190,7 @@ export default function InstalacionEstanquesPage() {
         </div>
       </section>
 
-      <CTASection heading="¿Necesitas instalar un estanque de petróleo?" mensaje="Hola, quiero cotizar la instalación de un estanque de petróleo certificado." />
+      <CTASection service="estanque" heading="¿Necesitas instalar un estanque de petróleo?" mensaje="Hola, quiero cotizar la instalación de un estanque de petróleo certificado." />
     </>
   );
 }

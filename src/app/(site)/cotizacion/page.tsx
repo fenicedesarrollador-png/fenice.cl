@@ -2,6 +2,7 @@ import { CheckCircle2, Phone, Clock, Shield } from "lucide-react";
 import CotizacionForm from "./CotizacionForm";
 import { SITE_CONFIG } from "@/lib/config";
 import { buildMetadata } from "@/lib/seo";
+import { quoteDefaults } from "@/lib/supplyPlanning";
 
 export const metadata = buildMetadata({
   title: "Cotizar Diésel o Kerosene a Domicilio",
@@ -23,7 +24,10 @@ const GARANTIAS = [
   { icon: Phone, text: "Coordinación directa sin call center" },
 ];
 
-export default function CotizacionPage() {
+export default async function CotizacionPage({ searchParams }: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const defaults = quoteDefaults(await searchParams);
   return (
     <>
       {/* Hero strip */}
@@ -50,7 +54,7 @@ export default function CotizacionPage() {
           <div className="grid lg:grid-cols-3 gap-10">
             {/* Form */}
             <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-8" data-analytics-section="formulario_cotizacion">
-              <CotizacionForm />
+              <CotizacionForm key={JSON.stringify(defaults)} defaults={defaults} />
             </div>
 
             {/* Sidebar */}
