@@ -258,8 +258,8 @@ export default function HomePage() {
         data-analytics-section="hero"
         data-progress="exit"
       >
-        {/* Fotografía completa y centrada detrás del contenido en todos los tamaños. */}
-        <div className="absolute inset-0 -z-20 overflow-hidden">
+        {/* Fondo de escritorio; el encuadre móvil se integra antes de los botones. */}
+        <div className="absolute inset-0 -z-20 hidden overflow-hidden sm:block">
           <div className="absolute inset-0 flex items-center justify-center">
             <Image
               src="/images/portada-fenice-santiago.webp"
@@ -292,7 +292,7 @@ export default function HomePage() {
         <div className="absolute -left-40 -top-40 h-[520px] w-[520px] rounded-full bg-[#1a6b3c]/25 blur-[120px] -z-10" />
 
         <div className="home-hero__content relative max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 xl:gap-16 items-center min-h-[calc(100svh-4rem)] lg:min-h-[min(880px,calc(100svh-106px))] pt-12 pb-28 sm:pt-20 sm:pb-36 lg:pt-14 lg:pb-28">
+          <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 xl:gap-16 items-center min-h-[calc(100svh-4rem)] lg:min-h-[min(880px,calc(100svh-106px))] pt-12 pb-12 sm:pt-20 sm:pb-36 lg:pt-14 lg:pb-28">
 
             <div>
               <div className="hero-rise inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.06] pl-1.5 pr-4 py-1.5 mb-7 backdrop-blur-md">
@@ -306,12 +306,25 @@ export default function HomePage() {
                 <span className="home-line"><span style={{ "--i": 2 } as React.CSSProperties} className="home-gradient-text">Empresas e Industrias</span></span>
               </h1>
 
-              <p className="hero-rise-2 text-[15px] sm:text-[17px] text-slate-300 leading-relaxed mb-9 max-w-xl">
+              <p className="hero-rise-2 text-[15px] sm:text-[17px] text-slate-300 leading-relaxed mb-0 sm:mb-9 max-w-xl">
                 Combustible confiable para mantener su operación en movimiento: despachamos
                 petróleo diésel y parafina (kerosene) directamente en empresas, faenas, edificios y
                 centros de operación de la Región Metropolitana, Valparaíso y O&apos;Higgins.
                 Despachos programados, precios actualizados y comunicación directa.
               </p>
+
+              <div className="home-hero__mobile-truck sm:hidden" aria-hidden="true">
+                <Image
+                  src="/images/portada-fenice-santiago.webp"
+                  alt=""
+                  width={1600}
+                  height={900}
+                  priority
+                  unoptimized
+                  sizes="155vw"
+                  className="home-hero__mobile-truck-image"
+                />
+              </div>
 
               <div className="hero-rise-3 flex flex-col sm:flex-row gap-3 mb-10">
                 <Link href="/cotizacion" data-analytics-id="hero_cotizar" data-analytics-label="Solicitar cotización" data-analytics-cta="quote" className="home-btn-shine group inline-flex items-center justify-center gap-2 bg-[#f5a623] hover:bg-[#ffb83d] text-[#0a1628] font-bold px-7 py-4 rounded-2xl transition-colors shadow-[0_18px_40px_-12px_rgba(245,166,35,0.7)] text-sm">
